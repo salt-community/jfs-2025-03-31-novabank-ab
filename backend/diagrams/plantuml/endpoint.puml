@@ -1,0 +1,48 @@
+@startuml
+
+rectangle endpoints {
+    rectangle GET {
+        rectangle getUser as "getUsers -> (list of userIds)"
+        rectangle getUser as "getUser(userId) -> (user data)"
+        rectangle getAccounts as "getAccounts(userId) -> (list of accountIds)"
+        rectangle getBalance as "getBalance(accountId) -> (account balance)"
+        rectangle getTransactions as "getTransactions(accountId) -> (list of transactionIds)"
+        rectangle getTransaction as "getTransaction(transactionId) -> (transaction data)"
+    }
+
+    rectangle POST {
+        rectangle addUser as "addUser(userData) -> Void"
+        rectangle addAccount as "addAccount(userId, currency) -> Void"
+        rectangle makeTransaction as "makeTransaction(accountId, otherAccountId, value) -> Void"
+        rectangle scheduleTransaction as "scheduleTransaction(accountId, otherAccountId, value, date) -> Void"
+    }
+
+    rectangle PUT {
+        rectangle updateUser as "updateUser(userData) -> Void"
+    }
+
+    rectangle PATCH {
+        rectangle deposit as "deposit(accountId, amount, depositedCurrency) -> Void"
+        rectangle withdrawal as "withdrawal(accountId, amount) -> Void"
+    }
+
+    rectangle DELETE {
+        rectangle deleteUser as "deleteUser(userId) -> Void"
+        rectangle deleteAccount as "deleteAccount(accountId) -> Void"
+        rectangle cancelScheduledTransaction as "deleteScheduledTransaction(scheduledTransactionId) -> Void"
+    }
+}
+
+
+GET -[hidden]right- POST
+POST -[hidden]right- PATCH
+PATCH -[hidden]right- PUT
+PUT -[hidden]right- DELETE
+
+getUser -[hidden]down- getUser
+getUser -[hidden]down- getAccounts
+getAccounts -[hidden]down- getBalance
+getBalance -[hidden]down- getTransactions
+getTransactions -[hidden]down- getTransaction
+
+@enduml
