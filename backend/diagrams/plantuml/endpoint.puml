@@ -18,7 +18,7 @@ rectangle endpoints {
     }
 
     rectangle PUT {
-        rectangle empty3 as "empty"
+        rectangle updateUser as "updateUser(userData) -> Void"
     }
 
     rectangle PATCH {
