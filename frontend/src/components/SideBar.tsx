@@ -11,7 +11,7 @@ export default function SideBar() {
         <li>Transaction</li>
       </ul>
       <div className="px-2 font-bold content-end">
-        <Link to="/">Settings</Link>
+        <Link to="/settings">Settings</Link>
       </div>
     </aside>
   )
