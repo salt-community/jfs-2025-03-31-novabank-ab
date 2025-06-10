@@ -7,9 +7,10 @@ import com.example.backend.model.Transaction;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping({"/api/transaction", "/api/transaction/"})
@@ -41,7 +42,9 @@ public class TransactionController {
     public ResponseEntity<?> addTransaction( @RequestBody TransactionRequestDto dto){
         Account from = accountService.getAccount(dto.from().getId());
         Account to = accountService.getAccount(dto.to().getId());
+        LocalDateTime date = dto.date();
         Transaction transaction = new Transaction();
+        transaction.setCreatedAt(date);
         transaction.setFromAccount(from);
         transaction.setToAccount(to);
         transaction.setAmount(dto.amount());
@@ -51,8 +54,15 @@ public class TransactionController {
 
     @PostMapping("/scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto){
-
-        transactionService.addScheduledTransaction(dto);
+        Account from = accountService.getAccount(dto.from().getId());
+        Account to = accountService.getAccount(dto.to().getId());
+        LocalDateTime date = dto.date();
+        Transaction transaction = new Transaction();
+        transaction.setCreatedAt(date);
+        transaction.setFromAccount(from);
+        transaction.setToAccount(to);
+        transaction.setAmount(dto.amount());
+        transactionService.addScheduledTransaction(transaction);
         return null;
     }
 
