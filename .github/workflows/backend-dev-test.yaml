@@ -17,9 +17,7 @@ jobs:
 
       - name: Install Maven
         run: |
-          curl -fsSL https://apache.org/dist/maven/binaries/apache-maven-3.8.6-bin.tar.gz | tar -xvf -
-          export M2_HOME=/path/to/apache-maven-3.8.6
-          export PATH=$M2_HOME/bin:$PATH
+          curl -fsSL https://get.maven.net/download.cgi | sh
 
       - name: Run Maven test
         run: mvn test
