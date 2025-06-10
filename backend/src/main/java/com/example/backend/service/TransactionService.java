@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class TransactionService {
@@ -18,7 +19,7 @@ public class TransactionService {
     }
 
     public Transaction getTransaction(long id) {
-        return transactionRepository.findById(id).orElse(null);
+        return transactionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No such transaction"));
     }
 
     public void addTransaction(Transaction transaction) {
