@@ -5,9 +5,11 @@ import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.dto.DepositRequestDto;
 import com.example.backend.dto.WithdrawalRequestDto;
 import com.example.backend.model.Account;
+import com.example.backend.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -22,27 +24,32 @@ public class AccountController {
 
     @GetMapping("/{accountId}")
     public ResponseEntity<Account> getAccount(@PathVariable long accountId) {
-        return null;
+        Account account = accountService.getAccount(accountId);
+        return ResponseEntity.ok(account);
     }
 
     @GetMapping("/{userId}/accounts")
     public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable long userId) {
-        return null;
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        return ResponseEntity.ok(accounts);
     }
 
     // Do we need this?
     @GetMapping
     public ResponseEntity<List<Account>> getAllAccounts() {
-        return null;
+        return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @GetMapping("/{accountId}/balance")
     public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable long accountId) {
-        return null;
+        BalanceResponseDto response = new BalanceResponseDto(
+                accountService.getBalance(accountId), LocalDateTime.now()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<Void> addAccount(@RequestBody CreateAccountRequestDto dto) {
+    public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
         return null;
     }
 

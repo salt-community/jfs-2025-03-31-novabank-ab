@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.model.enums.UserStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -18,7 +20,8 @@ public class User {
 
     private String email;
 
-    private String phoneNumber;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     private LocalDateTime createdAt;
 
@@ -50,14 +53,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public List<Account> getAccounts() {
