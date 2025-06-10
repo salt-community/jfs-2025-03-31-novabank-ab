@@ -29,7 +29,8 @@ public class AccountController {
 
     @GetMapping("/{userId}/accounts")
     public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable long userId) {
-        return null;
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        return ResponseEntity.ok(accounts);
     }
 
     // Do we need this?
