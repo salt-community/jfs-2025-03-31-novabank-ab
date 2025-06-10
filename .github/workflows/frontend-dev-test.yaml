@@ -1,7 +1,10 @@
-name: Dev Frontend Tests
+name: Frontend Tests
 on:
   pull_request:
     branches: ['dev']
+  push:
+    branches:
+      - frontend
   workflow_dispatch:
 jobs:
   build-and-test:
