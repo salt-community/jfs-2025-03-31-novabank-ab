@@ -17,26 +17,25 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-
-    public Transaction getTransaction() {
-        return null;
+    public Transaction getTransaction(long id) {
+        return transactionRepository.findById(id).orElse(null);
     }
 
-    public void addTransaction() {
-
+    public void addTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
     }
 
-    public void addScheduledTransaction() {
+    public void addScheduledTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
 
     }
 
     public List<Transaction> getAllTransactions() {
-        return null;
+        return (List<Transaction>) transactionRepository.findAll();
     }
 
-    public void deleteScheduledTransaction() {
-
+    public void deleteScheduledTransaction(long id) {
+        transactionRepository.deleteById(id);
     }
-
 
 }
