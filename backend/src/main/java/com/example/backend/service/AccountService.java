@@ -10,6 +10,8 @@ import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AccountService {
@@ -33,5 +35,11 @@ public class AccountService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         return accountRepository.findAccountsByUser(user);
+    }
+
+    public List<Account> getAllAccounts() {
+        Iterable<Account> iterable = accountRepository.findAll();
+        return StreamSupport.stream(iterable.spliterator(), false)
+                .collect(Collectors.toList());
     }
 }

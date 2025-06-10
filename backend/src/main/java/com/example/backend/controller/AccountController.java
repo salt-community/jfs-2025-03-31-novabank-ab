@@ -36,7 +36,7 @@ public class AccountController {
     // Do we need this?
     @GetMapping
     public ResponseEntity<List<Account>> getAllAccounts() {
-        return null;
+        return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @GetMapping("/{accountId}/balance")
