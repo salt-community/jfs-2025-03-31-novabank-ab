@@ -50,7 +50,8 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        return null;
+        Account account = accountService.createAccount(dto.toAccount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{accountId}/deposit")

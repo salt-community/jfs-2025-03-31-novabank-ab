@@ -50,4 +50,8 @@ public class AccountService {
 
         return balanceRepository.findByAccount(account);
     }
+
+    public Account createAccount(Account account) {
+        return accountRepository.save(account);
+    }
 }
