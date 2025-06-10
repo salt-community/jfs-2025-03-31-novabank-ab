@@ -20,27 +20,32 @@ public class TransactionController {
 
 
     @GetMapping("/account/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable int transactionId){
+    public ResponseEntity<?> getTransaction(@PathVariable long transactionId){
+        transactionService.getTransaction(transactionId);
         return null;
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<?> getTransactions(@PathVariable int accountId){
+    public ResponseEntity<?> getTransactions(@PathVariable long accountId){
+        transactionService.getAllTransactions();
         return null;
     }
 
     @PostMapping
     public ResponseEntity<?> addTransaction( @RequestBody TransactionRequestDto dto){
+        transactionService.addTransaction(dto);
         return null;
     }
 
     @PostMapping("/scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto){
+        transactionService.addScheduledTransaction(dto);
         return null;
     }
 
     @DeleteMapping("/{transactionId}")
-    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable int transactionId){
+    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable long transactionId){
+        transactionService.deleteScheduledTransaction(transactionId);
         return null;
     }
 
