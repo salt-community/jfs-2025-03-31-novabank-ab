@@ -1,7 +1,6 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.RegisterUserDto;
-import com.example.backend.model.User;
 import com.example.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/add-user")
+    @PostMapping("/addUser")
     public ResponseEntity<User> addUser(@RequestBody RegisterUserDto dto) {
         User user = userService.addUser(dto.toUser());
         return ResponseEntity.ok(user);
@@ -27,8 +26,8 @@ public class UserController {
 
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable long id) {
+    @GetMapping
+    public ResponseEntity<User> getUser() {
         return ResponseEntity.badRequest().build();
     }
 

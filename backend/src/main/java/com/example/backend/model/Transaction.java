@@ -1,6 +1,5 @@
 package com.example.backend.model;
 
-import com.example.backend.model.enums.TransactionStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -23,12 +22,6 @@ public class Transaction {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TransactionStatus status;
-
-    private String description;
 
     public Long getId() {
         return id;
@@ -70,19 +63,4 @@ public class Transaction {
         this.createdAt = createdAt;
     }
 
-    public TransactionStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(TransactionStatus status) {
-        this.status = status;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 }
