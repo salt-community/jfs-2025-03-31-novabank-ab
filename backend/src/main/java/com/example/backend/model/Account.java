@@ -20,7 +20,8 @@ public class Account {
 
     private LocalDate createdAt;
 
-    private double balance;
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Balance balance;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
@@ -55,11 +56,11 @@ public class Account {
         this.createdAt = createdAt;
     }
 
-    public double getBalance() {
+    public Balance getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Balance balance) {
         this.balance = balance;
     }
 
