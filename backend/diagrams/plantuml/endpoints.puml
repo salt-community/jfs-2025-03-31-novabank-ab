@@ -1,0 +1,71 @@
+@startuml
+
+!$unimplemented_color = "#db7767"
+!$implementing_color = "#faf6a7"
+!$done_color = "#75e67b"
+
+!$get_color = "#bdffc0"
+!$post_color = "#ffe9bd"
+!$put_color = "#f8fcd2"
+!$patch_color = "#f8fcd2"
+!$delete_color = "#d4d4d4"
+
+title <size:16>Red = Unimplemented\n<size:16>Yellow = Currently implementing\n<size:16>Green = Done
+
+rectangle <size:20>endpoints {
+    rectangle GET $get_color {
+        rectangle getUsers as "getUsers -> (list of userIds)" $unimplemented_color
+        rectangle getUser as "getUser(userId) -> (user data)" $unimplemented_color
+        rectangle getAccounts as "getAccounts(userId) -> (list of accountIds)" $unimplemented_color
+        rectangle getBalance as "getBalance(accountId) -> (account balance)" $unimplemented_color
+        rectangle getTransactions as "getTransactions(accountId) -> (list of transactionIds)" $unimplemented_color
+        rectangle getTransaction as "getTransaction(transactionId) -> (transaction data)" $unimplemented_color
+    }
+
+    rectangle POST $post_color {
+        rectangle addUser as "addUser(userData) -> Void" $unimplemented_color
+        rectangle addAccount as "addAccount(userId, currency) -> Void" $unimplemented_color
+        rectangle makeTransaction as "makeTransaction(accountId, otherAccountId, value) -> Void" $unimplemented_color
+        rectangle scheduleTransaction as "scheduleTransaction(accountId, otherAccountId, value, date) -> Void" $unimplemented_color
+    }
+
+    rectangle PUT $put_color {
+        rectangle updateUser as "updateUser(userData) -> Void" $unimplemented_color
+    }
+
+    rectangle PATCH $patch_color {
+        rectangle deposit as "deposit(accountId, amount, depositedCurrency) -> Void" $unimplemented_color
+        rectangle withdrawal as "withdrawal(accountId, amount) -> Void" $unimplemented_color
+    }
+
+    rectangle DELETE $delete_color {
+        rectangle deleteUser as "deleteUser(userId) -> Void" $unimplemented_color
+        rectangle deleteAccount as "deleteAccount(accountId) -> Void" $unimplemented_color
+        rectangle cancelScheduledTransaction as "cancelScheduledTransaction(scheduledTransactionId) -> Void" $unimplemented_color
+    }
+}
+
+
+GET -[hidden]right- POST
+POST -[hidden]right- PATCH
+POST -[hidden]right- PUT
+PUT -[hidden]right- DELETE
+
+getUser -[hidden]down- getUser
+getUser -[hidden]down- getAccounts
+getAccounts -[hidden]down- getBalance
+getBalance -[hidden]down- getTransactions
+getTransactions -[hidden]down- getTransaction
+
+addUser -[hidden]down- addAccount
+addAccount -[hidden]down- makeTransaction
+makeTransaction -[hidden]down- scheduleTransaction
+
+deposit -[hidden]down- withdrawal
+
+deleteUser -[hidden]down- deleteAccount
+deleteAccount -[hidden]down- cancelScheduledTransaction
+
+PUT -[hidden]down- PATCH
+
+@enduml
