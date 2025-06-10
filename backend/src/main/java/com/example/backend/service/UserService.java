@@ -21,20 +21,20 @@ public class UserService {
     }
 
 
-    public User getUser(long id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
-    }
-
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
+//    public User getUser(long id) {
+//        Optional<User> user = userRepository.findById(id);
+//        return user.orElse(null);
+//    }
+//
+//    public List<User> getAllUsers() {
+//        return userRepository.findAll();
+//    }
+//
+//    public void deleteUser(long id) {
+//        userRepository.deleteById(id);
+//    }
+//
+//    public User updateUser(User user) {
+//        return userRepository.save(user);
+//    }
 }
