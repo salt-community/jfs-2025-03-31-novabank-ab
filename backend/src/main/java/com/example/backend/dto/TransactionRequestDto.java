@@ -1,4 +1,10 @@
 package com.example.backend.dto;
 
-public record TransactionRequestDto() {
+import com.example.backend.model.Account;
+import javax.validation.constraints.NotNull;
+
+public record TransactionRequestDto(Account from,
+                                    Account to,
+                                    @NotNull
+                                    double amount) {
 }
