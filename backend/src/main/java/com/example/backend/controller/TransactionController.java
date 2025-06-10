@@ -31,5 +31,15 @@ public class TransactionController {
         return null;
     }
 
+    @PostMapping("/scheduled")
+    public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto){
+        return null;
+    }
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable int transactionId){
+        return null;
+    }
+
 
 }
