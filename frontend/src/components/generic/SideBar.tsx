@@ -7,6 +7,7 @@ export default function SideBar() {
         <Link to="/">Home</Link>
       </div>
       <ul className="list-none content-center">
+        <li>Dashboard</li>
         <li>Account</li>
         <li>Transaction</li>
       </ul>
