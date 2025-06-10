@@ -1,4 +1,4 @@
-name: Build and Deploy Frontend to GCP
+name: Main Build Frontend Deploy
 
 on:
   push:
