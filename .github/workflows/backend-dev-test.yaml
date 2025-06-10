@@ -4,16 +4,17 @@ on:
     branches: ['dev']
   workflow_dispatch:
 jobs:
-  Sanity-Location-Check:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "You are currently at:" && pwd
-
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Location check
+        run: pwd
 
       - name: Install Maven
         run: |
