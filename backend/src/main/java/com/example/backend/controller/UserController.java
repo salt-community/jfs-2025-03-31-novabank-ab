@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.RegisterUserDto;
+import com.example.backend.model.User;
 import com.example.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,26 +27,34 @@ public class UserController {
 
 
 
-    @GetMapping
-    public ResponseEntity<User> getUser() {
-        return ResponseEntity.badRequest().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable long id) {
+        User user = userService.getUser(id);
+        return ResponseEntity.ok(user);
     }
 
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.badRequest().build();
+        List<User> users = userService.getAllUsers();
+
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable int id,
+    public ResponseEntity<User> updateUser(@PathVariable long id,
                                            @RequestBody User user) {
-        return ResponseEntity.badRequest().build();
+        User updatedUser = userService.updateUser(id, user);
+
+        return ResponseEntity.ok(updatedUser)  ;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable int id) {
-        return ResponseEntity.badRequest().build();
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+
+        userService.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
