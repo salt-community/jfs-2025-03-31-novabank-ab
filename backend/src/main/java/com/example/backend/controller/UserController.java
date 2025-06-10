@@ -27,8 +27,8 @@ public class UserController {
 
 
 
-    @GetMapping
-    public ResponseEntity<User> getUser() {
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable long id) {
         return ResponseEntity.badRequest().build();
     }
 
