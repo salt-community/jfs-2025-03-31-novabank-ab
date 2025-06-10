@@ -9,6 +9,7 @@ import com.example.backend.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -41,7 +42,10 @@ public class AccountController {
 
     @GetMapping("/{accountId}/balance")
     public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable long accountId) {
-        return null;
+        BalanceResponseDto response = new BalanceResponseDto(
+                accountService.getBalance(accountId), LocalDateTime.now()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping

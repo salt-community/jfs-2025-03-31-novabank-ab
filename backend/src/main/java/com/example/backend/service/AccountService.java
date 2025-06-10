@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Account;
+import com.example.backend.model.Balance;
 import com.example.backend.model.User;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.BalanceRepository;
@@ -41,5 +42,12 @@ public class AccountService {
         Iterable<Account> iterable = accountRepository.findAll();
         return StreamSupport.stream(iterable.spliterator(), false)
                 .collect(Collectors.toList());
+    }
+
+    public Balance getBalance(long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(AccountNotFoundException::new);
+
+        return balanceRepository.findByAccount(account);
     }
 }
