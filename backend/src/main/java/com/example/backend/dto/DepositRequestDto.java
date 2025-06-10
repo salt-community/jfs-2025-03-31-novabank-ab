@@ -1,6 +1,6 @@
 package com.example.backend.dto;
 
-public record DepositDto(
+public record DepositRequestDto(
 
 ) {
 }
