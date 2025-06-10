@@ -5,6 +5,7 @@ import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.dto.DepositRequestDto;
 import com.example.backend.dto.WithdrawalRequestDto;
 import com.example.backend.model.Account;
+import com.example.backend.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,8 @@ public class AccountController {
 
     @GetMapping("/{accountId}")
     public ResponseEntity<Account> getAccount(@PathVariable long accountId) {
-        return null;
+        Account account = accountService.getAccount(accountId);
+        return ResponseEntity.ok(account);
     }
 
     @GetMapping("/{userId}/accounts")
@@ -42,7 +44,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addAccount(@RequestBody CreateAccountRequestDto dto) {
+    public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
         return null;
     }
 
