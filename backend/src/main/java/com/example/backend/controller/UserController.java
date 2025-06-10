@@ -19,7 +19,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/addUser")
+    @PostMapping("/add-user")
     public ResponseEntity<User> addUser(@RequestBody RegisterUserDto dto) {
         User user = userService.addUser(dto.toUser());
         return ResponseEntity.ok(user);
