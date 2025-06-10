@@ -1,6 +1,7 @@
 package com.example.backend.exception;
 
 import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.exception.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleAccountNotFound(AccountNotFoundException e) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserNotFound(UserNotFoundException e) {
         ErrorResponseDto error = new ErrorResponseDto(
                 e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now()
         );
