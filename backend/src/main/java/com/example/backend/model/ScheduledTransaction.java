@@ -23,7 +23,7 @@ public class ScheduledTransaction {
     private double amount;
 
     @Column(nullable = false)
-    private LocalDateTime scheduledTime;
+    private LocalDateTime scheduledDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -63,12 +63,12 @@ public class ScheduledTransaction {
         this.status = status;
     }
 
-    public LocalDateTime getScheduledTime() {
-        return scheduledTime;
+    public LocalDateTime getScheduledDate() {
+        return scheduledDate;
     }
 
-    public void setScheduledTime(LocalDateTime scheduledTime) {
-        this.scheduledTime = scheduledTime;
+    public void setScheduledDate(LocalDateTime scheduledDate) {
+        this.scheduledDate = scheduledDate;
     }
 
     public double getAmount() {
