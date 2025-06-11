@@ -23,8 +23,6 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
 
-    private final int startBalance = 0;
-
     public AccountService(AccountRepository accountRepository,
                           UserRepository userRepository) {
         this.accountRepository = accountRepository;
@@ -56,8 +54,8 @@ public class AccountService {
     }
 
     public Account createAccount(CreateAccountRequestDto account) {
-
-        userRepository.findById(account.userId()).orElseThrow(UserNotFoundException::new);
+        int startBalance = 0;
+        userRepository.findById(String.valueOf(account.userId())).orElseThrow(UserNotFoundException::new);
         Account createdAccount = new Account();
         createdAccount.setCreatedAt(LocalDate.now());
         createdAccount.setStatus(AccountStatus.ACTIVE);
