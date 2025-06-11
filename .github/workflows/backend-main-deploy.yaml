@@ -45,4 +45,4 @@ jobs:
           region: ${{ vars.GC_REGION }}
           service: ${{ vars.GC_SERVICE_BACKEND_NAME }}
           image: ${{ env.IMAGE_URL }}
-          #env_vars: DB_URL=${{ vars.DB_URL }},DB_USER=${{ vars.DB_USER }},DB_PASS=${{ vars.DB_PASS }},JWT_PROVIDER_URI=${{ vars.JWT_PROVIDER_URI }}
+          env_vars: CLERK_ISSUER_URL=${{ secrets.CLERK_ISSUER_URL }},SPRING_DATASOURCE_PASSWORD=${{ secrets.SPRING_DATASOURCE_PASSWORD}},SPRING_DATASOURCE_URL=${{ secrets.SPRING_DATASOURCE_URL }},SPRING_DATASOURCE_USERNAME=${{ secrets.SPRING_DATASOURCE_USERNAME }}
