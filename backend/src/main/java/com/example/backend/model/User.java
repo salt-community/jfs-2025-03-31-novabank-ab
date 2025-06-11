@@ -24,15 +24,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @Column(nullable = false)
     private String fullName;
+
     private String email;
+
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime lastLogin;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts = new ArrayList<>();
