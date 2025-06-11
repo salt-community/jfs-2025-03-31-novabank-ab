@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { SignOutButton } from "@clerk/clerk-react";
+import { SignOutButton } from '@clerk/clerk-react'
 import homeicon from '../../assets/homeicon.svg'
 import accounticon from '../../assets/accounticon.svg'
 import transactionicon from '../../assets/transactionicon.svg'
@@ -14,9 +14,12 @@ export default function SideBar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="fixed top-0 left-0 z-50 w-1/5 h-screen bg-[#151515] text-white p-10 justify-between flex flex-col">
+    <aside className="fixed top-0 left-0 z-50 h-full bg-[#151515] text-white p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
-        <img src={novabankicon} className="w-20 h-20 mx-auto hover:cursor-pointer" />
+        <img
+          src={novabankicon}
+          className="w-20 h-20 mx-auto hover:cursor-pointer"
+        />
       </a>
 
       <div className="flex gap-8 flex-col list-none mx-auto">
