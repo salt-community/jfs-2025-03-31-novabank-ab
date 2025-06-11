@@ -1,30 +1,37 @@
 import { Link } from '@tanstack/react-router'
+import AccountCard from './AccountCard'
 
 const bankAccounts = [
   {
+    accountName: 'Savings',
+    accountNumber: '**** 2201',
+    balance: 4465.23,
+  },
+  {
     accountName: 'Personal',
-    accountNumber: 'SE3550000000054910000001',
-    balance: 25600.75,
+    accountNumber: '**** 7654',
+    balance: 532.78,
   },
   {
-    accountName: 'SavingsAccount',
-    accountNumber: 'SE3550000000054910000002',
-    balance: 105000.5,
-  },
-  {
-    accountName: 'Vacation',
-    accountNumber: 'SE3550000000054910000003',
-    balance: 7200.0,
+    accountName: 'Family',
+    accountNumber: '**** 4720',
+    balance: 66004.65,
   },
 ]
 
 export default function AccountGallery() {
   return (
     <div>
-      <h1>My Accounts</h1>
+      <h1 className="text-center">My Accounts ({bankAccounts.length})</h1>
 
-      <div>
-        <Link to="/account/$id" params={}></Link>
+      <div className="flex flex-row items-center gap-6">
+        {bankAccounts.map((account) => (
+          <div key={account.accountNumber}>
+            <Link to="/account/$id" params={{ id: account.accountNumber }}>
+              <AccountCard account={account} />
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   )

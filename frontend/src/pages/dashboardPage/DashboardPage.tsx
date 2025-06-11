@@ -1,5 +1,9 @@
-import SideBar from '@/components/generic/SideBar'
+import AccountGallery from '@/components/dashboard/AccountGallery'
 
 export default function DashboardPage() {
-  return <SideBar />
+  return (
+    <>
+      <AccountGallery />
+    </>
+  )
 }
