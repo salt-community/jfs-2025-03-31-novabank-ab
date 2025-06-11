@@ -36,7 +36,7 @@ public class AccountService {
                 .orElseThrow(AccountNotFoundException::new);
     }
 
-    public List<Account> getAllUserAccounts(UUID userId) {
+    public List<Account> getAllUserAccounts(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         return accountRepository.findAccountsByUser(user);

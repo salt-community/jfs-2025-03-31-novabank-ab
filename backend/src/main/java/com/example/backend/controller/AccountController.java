@@ -32,7 +32,7 @@ public class AccountController {
     }
 
     @GetMapping("/{userId}/accounts")
-    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable UUID userId) {
+    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         return ResponseEntity.ok(accounts);
     }

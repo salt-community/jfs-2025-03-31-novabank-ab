@@ -1,7 +1,8 @@
 @startuml
 
 !$unimplemented_color = "#db7767"
-!$implementing_color = "#faf6a7"
+!$implementing_color = "#93b8f5"
+!$unstable_color = "#faf6a7"
 !$done_color = "#75e67b"
 
 !$get_color = "#bdffc0"
@@ -14,38 +15,38 @@
 !$account_base_url = "/api/accounts/"
 !$transaction_base_url = "/api/transaction/"
 
-title <size:16>Red = Unimplemented\n<size:16>Yellow = Currently implementing\n<size:16>Green = Done
+title <size:16>Red = Unimplemented\n<size:16>Blue = Currently implementing\n<size:16>Yellow = Unstable\n<size:16>Green = Done
 
 rectangle <size:20>endpoints {
     rectangle GET $get_color {
-        rectangle getUsers as "<B>GET USERS\n$user_base_url -> (list of userIds)" $unimplemented_color
-        rectangle getUser as "<B>GET USER\n$user_base_url {userId} -> (user data)" $unimplemented_color
-        rectangle getAccounts as "<B>GET ACCOUNTS\n$account_base_url {userId} -> (list of accountIds)" $unimplemented_color
-        rectangle getAccount as "<B>GET ACCOUNT\n$account_base_url {accountId} -> (account data)" $unimplemented_color
-        rectangle getBalance as "<B>GET BALANCE\n$account_base_url {accountId} -> (account balance)" $unimplemented_color
+        rectangle getUsers as "<B>GET USERS\n$user_base_url -> (list of userIds)" $unstable_color
+        rectangle getUser as "<B>GET USER\n$user_base_url {userId} -> (user data)" $unstable_color
+        rectangle getAccounts as "<B>GET ACCOUNTS\n$account_base_url {userId} -> (list of accountIds)" $implementing_color
+        rectangle getAccount as "<B>GET ACCOUNT\n$account_base_url {accountId} -> (account data)" $implementing_color
+        rectangle getBalance as "<B>GET BALANCE\n$account_base_url {accountId} -> (account balance)" $implementing_color
         rectangle getTransactions as "<B>GET TRANSACTIONS\n$transaction_base_url {accountId} -> (list of transactionIds)" $unimplemented_color
         rectangle getTransaction as "<B>GET TRANSACTION\n$transaction_base_url {transactionId} -> (transaction data)" $unimplemented_color
     }
 
     rectangle POST $post_color {
-        rectangle addUser as "<B>CREATE USER\n$user_base_url {userData} -> Void" $unimplemented_color
-        rectangle addAccount as "<B>CREATE ACCOUNT\n$account_base_url {userId, currency} -> Void" $unimplemented_color
+        rectangle addUser as "<B>CREATE USER\n$user_base_url {userData} -> Void" $unstable_color
+        rectangle addAccount as "<B>CREATE ACCOUNT\n$account_base_url {userId, currency} -> Void" $implementing_color
         rectangle makeTransaction as "<B>MAKE TRANSACTION\n$transaction_base_url {accountId, otherAccountId, value} -> Void" $unimplemented_color
         rectangle scheduleTransaction as "<B>SCHEDULE TRANSACTION\n$transaction_base_url {accountId, otherAccountId, value, date} -> Void" $unimplemented_color
     }
 
     rectangle PUT $put_color {
-        rectangle updateUser as "<B>UPDATE USER\n$user_base_url {userData} -> Void" $unimplemented_color
+        rectangle updateUser as "<B>UPDATE USER\n$user_base_url {userData} -> Void" $implementing_color
     }
 
     rectangle PATCH $patch_color {
-        rectangle deposit as "<B>DEPOSIT\n$account_base_url {accountId, amount, depositedCurrency} -> Void" $unimplemented_color
-        rectangle withdrawal as "<B>WITHDRAWAL\n$account_base_url {accountId, amount} -> Void" $unimplemented_color
+        rectangle deposit as "<B>DEPOSIT\n$account_base_url {accountId, amount, depositedCurrency} -> Void" $implementing_color
+        rectangle withdrawal as "<B>WITHDRAWAL\n$account_base_url {accountId, amount} -> Void" $implementing_color
     }
 
     rectangle DELETE $delete_color {
-        rectangle deleteUser as "<B>DELETE USER\n$user_base_url {userId} -> Void" $unimplemented_color
-        rectangle deleteAccount as "<B>DELETE ACCOUNT\n$account_base_url {accountId} -> Void" $unimplemented_color
+        rectangle deleteUser as "<B>DELETE USER\n$user_base_url {userId} -> Void" $unstable_color
+        rectangle deleteAccount as "<B>DELETE ACCOUNT\n$account_base_url {accountId} -> Void" $implementing_color
         rectangle cancelScheduledTransaction as "<B>CANCEL SCHEDULED TRANSACTION\n$transaction_base_url {scheduledTransactionId} -> Void" $unimplemented_color
     }
 }
