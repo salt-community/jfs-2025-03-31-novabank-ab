@@ -21,7 +21,7 @@ export default function SideBar() {
 
       <div className="flex gap-8 flex-col list-none mx-auto">
         <a
-          onClick={() => navigate({ to: '?' })}
+          onClick={() => navigate({ to: '/dashboard' })}
           className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
         >
           <img src={homeicon} />
@@ -29,7 +29,7 @@ export default function SideBar() {
         </a>
 
         <a
-          onClick={() => navigate({ to: '?' })}
+          onClick={() => navigate({ to: '/accounts' })}
           className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
         >
           <img src={accounticon} />
@@ -37,7 +37,7 @@ export default function SideBar() {
         </a>
 
         <a
-          onClick={() => navigate({ to: '?' })}
+          onClick={() => navigate({ to: '/transactions' })}
           className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
         >
           <img src={transactionicon} />
@@ -45,7 +45,7 @@ export default function SideBar() {
         </a>
 
         <a
-          onClick={() => navigate({ to: '?' })}
+          onClick={() => navigate({ to: '/transfer' })}
           className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
         >
           <img src={transfericon} />
