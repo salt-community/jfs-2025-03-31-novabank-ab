@@ -1,14 +1,16 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.InsufficientFundsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
+import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -20,6 +22,8 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+
+    private final int startBalance = 0;
 
     public AccountService(AccountRepository accountRepository,
                           UserRepository userRepository) {
@@ -51,11 +55,20 @@ public class AccountService {
         return account.getBalance();
     }
 
-    public Account createAccount(Account account) {
-        return accountRepository.save(account);
+    public Account createAccount(CreateAccountRequestDto account) {
+
+        userRepository.findById(account.userId()).orElseThrow(UserNotFoundException::new);
+        Account createdAccount = new Account();
+        createdAccount.setCreatedAt(LocalDate.now());
+        createdAccount.setStatus(AccountStatus.ACTIVE);
+        createdAccount.setCurrency(account.currency());
+        createdAccount.setType(account.type());
+        createdAccount.setBalance(startBalance);
+        createdAccount.setAccountNumber(generateUniqueAccountNumber());
+        return accountRepository.save(createdAccount);
     }
 
-/*
+
     private String generateUniqueAccountNumber() {
         String prefix = "1337-";
         String accountNumber;
@@ -65,7 +78,7 @@ public class AccountService {
         } while (accountRepository.existsByAccountNumber(accountNumber));
 
         return accountNumber;
-    }*/
+    }
 
     private String generateRandomDigits(int length) {
         Random random = new Random();
@@ -79,11 +92,9 @@ public class AccountService {
     }
 
     public void addDeposit(UUID accountId, double amount) {
-        if (amount > 0) {
             Account account = getAccount(accountId);
             account.setBalance(account.getBalance() + amount);
             accountRepository.save(account);
-        }
     }
 
     public void makeWithdrawal(UUID accountId, double amount) {
@@ -94,5 +105,11 @@ public class AccountService {
         account.setBalance(account.getBalance() - amount);
         accountRepository.save(account);
 
+    }
+
+    public void makeAccountSuspend(UUID accountId) {
+        Account account = getAccount(accountId);
+        account.setStatus(AccountStatus.SUSPENDED);
+        accountRepository.save(account);
     }
 }

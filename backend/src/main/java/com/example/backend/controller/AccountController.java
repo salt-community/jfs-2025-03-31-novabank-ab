@@ -53,7 +53,7 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        Account created = accountService.createAccount(dto.toAccount());
+        Account created = accountService.createAccount(dto);
         URI location = URI.create("api/account/" + created.getId());
         return ResponseEntity.created(location).build();
     }
@@ -72,7 +72,8 @@ public class AccountController {
 
     @PatchMapping("/suspend/{accountId}")
     public ResponseEntity<Void> suspendAccount(@PathVariable UUID accountId) {
-        return null;
+        accountService.makeAccountSuspend(accountId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{accountId}")
