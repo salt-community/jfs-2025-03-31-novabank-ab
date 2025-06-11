@@ -38,8 +38,7 @@ public class UserService {
     }
 
     public User updateUser(UUID id, User user) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+        User existingUser = getUser(id);
 
         existingUser.setFullName(user.getFullName());
         existingUser.setEmail(user.getEmail());
