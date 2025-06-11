@@ -6,12 +6,14 @@ import com.example.backend.dto.DepositRequestDto;
 import com.example.backend.dto.WithdrawalRequestDto;
 import com.example.backend.model.Account;
 import com.example.backend.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/account")
@@ -24,13 +26,13 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<Account> getAccount(@PathVariable long accountId) {
+    public ResponseEntity<Account> getAccount(@PathVariable UUID accountId) {
         Account account = accountService.getAccount(accountId);
         return ResponseEntity.ok(account);
     }
 
     @GetMapping("/{userId}/accounts")
-    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable long userId) {
+    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         return ResponseEntity.ok(accounts);
     }
@@ -42,7 +44,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/balance")
-    public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable long accountId) {
+    public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable UUID accountId) {
         BalanceResponseDto response = new BalanceResponseDto(
                 accountService.getBalance(accountId), LocalDateTime.now()
         );
@@ -51,28 +53,31 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        Account created = accountService.createAccount(dto.toAccount());
+        Account created = accountService.createAccount(dto);
         URI location = URI.create("api/account/" + created.getId());
         return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{accountId}/deposit")
-    public ResponseEntity<Void> deposit(@PathVariable long accountId, @RequestBody DepositRequestDto dto) {
-        return null;
+    public ResponseEntity<Void> deposit(@Valid @PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
+        accountService.addDeposit(accountId, dto.amount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(@PathVariable long accountId, @RequestBody WithdrawalRequestDto dto) {
-        return null;
+    public ResponseEntity<Void> withdrawal(@Valid @PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
+        accountService.makeWithdrawal(accountId, dto.amount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/suspend/{accountId}")
-    public ResponseEntity<Void> suspendAccount(@PathVariable long accountId) {
-        return null;
+    public ResponseEntity<Void> suspendAccount(@PathVariable UUID accountId) {
+        accountService.makeAccountSuspend(accountId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable long accountId) {
+    public ResponseEntity<Void> deleteAccount(@PathVariable UUID accountId) {
         return null;
     }
 }

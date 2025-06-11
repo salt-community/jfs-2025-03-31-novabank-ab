@@ -1,17 +1,19 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.InsufficientFundsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Account;
-import com.example.backend.model.Balance;
 import com.example.backend.model.User;
+import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.repository.AccountRepository;
-import com.example.backend.repository.BalanceRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -19,23 +21,20 @@ import java.util.stream.StreamSupport;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final BalanceRepository balanceRepository;
     private final UserRepository userRepository;
 
     public AccountService(AccountRepository accountRepository,
-                          BalanceRepository balanceRepository,
                           UserRepository userRepository) {
         this.accountRepository = accountRepository;
-        this.balanceRepository = balanceRepository;
         this.userRepository = userRepository;
     }
 
-    public Account getAccount(long accountId) {
+    public Account getAccount(UUID accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(AccountNotFoundException::new);
     }
 
-    public List<Account> getAllUserAccounts(long userId) {
+    public List<Account> getAllUserAccounts(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         return accountRepository.findAccountsByUser(user);
@@ -47,15 +46,24 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
-    public Balance getBalance(long accountId) {
+    public double getBalance(UUID accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(AccountNotFoundException::new);
 
-        return balanceRepository.findByAccount(account);
+        return account.getBalance();
     }
 
-    public Account createAccount(Account account) {
-        return accountRepository.save(account);
+    public Account createAccount(CreateAccountRequestDto account) {
+        int startBalance = 0;
+        userRepository.findById(String.valueOf(account.userId())).orElseThrow(UserNotFoundException::new);
+        Account createdAccount = new Account();
+        createdAccount.setCreatedAt(LocalDate.now());
+        createdAccount.setStatus(AccountStatus.ACTIVE);
+        createdAccount.setCurrency(account.currency());
+        createdAccount.setType(account.type());
+        createdAccount.setBalance(startBalance);
+        createdAccount.setAccountNumber(generateUniqueAccountNumber());
+        return accountRepository.save(createdAccount);
     }
 
 
@@ -79,5 +87,27 @@ public class AccountService {
         }
 
         return sb.toString();
+    }
+
+    public void addDeposit(UUID accountId, double amount) {
+            Account account = getAccount(accountId);
+            account.setBalance(account.getBalance() + amount);
+            accountRepository.save(account);
+    }
+
+    public void makeWithdrawal(UUID accountId, double amount) {
+        Account account = getAccount(accountId);
+        if (account.getBalance() < amount) {
+            throw new InsufficientFundsException();
+        }
+        account.setBalance(account.getBalance() - amount);
+        accountRepository.save(account);
+
+    }
+
+    public void makeAccountSuspend(UUID accountId) {
+        Account account = getAccount(accountId);
+        account.setStatus(AccountStatus.SUSPENDED);
+        accountRepository.save(account);
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping({"/api/transaction", "/api/transaction/"})
 public class TransactionController {
@@ -23,13 +25,13 @@ public class TransactionController {
 
 
     @GetMapping("/account/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable long transactionId){
+    public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId){
         transactionService.getTransaction(transactionId);
         return null;
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<?> getTransactions(@PathVariable long accountId){
+    public ResponseEntity<?> getTransactions(@PathVariable UUID accountId){
         transactionService.getAllTransactions();
         return null;
     }
@@ -49,7 +51,7 @@ public class TransactionController {
     }
 
     @DeleteMapping("/{transactionId}")
-    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable long transactionId){
+    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID transactionId){
         transactionService.deleteScheduledTransaction(transactionId);
         return null;
     }
