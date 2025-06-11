@@ -1,5 +1,9 @@
-import SideBar from '@/components/generic/SideBar'
+import TransactionList from '@/components/dashboard/TransactionList'
 
 export default function DashboardPage() {
-  return <SideBar />
+  return (
+    <>
+      <TransactionList />
+    </>
+  )
 }
