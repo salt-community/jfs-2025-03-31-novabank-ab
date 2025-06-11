@@ -7,16 +7,10 @@ import SideBar from '@/components/generic/SideBar'
 export const Route = createRootRoute({
   component: () => (
     <>
+    <SignedIn>
       <SideBar />
-      <div className='flex justify-center align-center text-black'><SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn></div>
-      
+    </SignedIn>
       <Outlet />
-      <TanStackRouterDevtools />
     </>
   ),
 })

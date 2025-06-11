@@ -11,15 +11,37 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TransferImport } from './routes/transfer'
+import { Route as TransactionsImport } from './routes/transactions'
 import { Route as SettingsImport } from './routes/settings'
+import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
-import { Route as AccountIdImport } from './routes/account/$id'
+import { Route as AccountsIndexImport } from './routes/accounts/index'
+import { Route as AccountsIdImport } from './routes/accounts/$id'
 
 // Create/Update Routes
+
+const TransferRoute = TransferImport.update({
+  id: '/transfer',
+  path: '/transfer',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TransactionsRoute = TransactionsImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SettingsRoute = SettingsImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DashboardRoute = DashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -29,9 +51,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AccountIdRoute = AccountIdImport.update({
-  id: '/account/$id',
-  path: '/account/$id',
+const AccountsIndexRoute = AccountsIndexImport.update({
+  id: '/accounts/',
+  path: '/accounts/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AccountsIdRoute = AccountsIdImport.update({
+  id: '/accounts/$id',
+  path: '/accounts/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -46,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
@@ -53,11 +88,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsImport
       parentRoute: typeof rootRoute
     }
-    '/account/$id': {
-      id: '/account/$id'
-      path: '/account/$id'
-      fullPath: '/account/$id'
-      preLoaderRoute: typeof AccountIdImport
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsImport
+      parentRoute: typeof rootRoute
+    }
+    '/transfer': {
+      id: '/transfer'
+      path: '/transfer'
+      fullPath: '/transfer'
+      preLoaderRoute: typeof TransferImport
+      parentRoute: typeof rootRoute
+    }
+    '/accounts/$id': {
+      id: '/accounts/$id'
+      path: '/accounts/$id'
+      fullPath: '/accounts/$id'
+      preLoaderRoute: typeof AccountsIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/accounts/': {
+      id: '/accounts/'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -67,42 +123,84 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/settings': typeof SettingsRoute
-  '/account/$id': typeof AccountIdRoute
+  '/transactions': typeof TransactionsRoute
+  '/transfer': typeof TransferRoute
+  '/accounts/$id': typeof AccountsIdRoute
+  '/accounts': typeof AccountsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/settings': typeof SettingsRoute
-  '/account/$id': typeof AccountIdRoute
+  '/transactions': typeof TransactionsRoute
+  '/transfer': typeof TransferRoute
+  '/accounts/$id': typeof AccountsIdRoute
+  '/accounts': typeof AccountsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/settings': typeof SettingsRoute
-  '/account/$id': typeof AccountIdRoute
+  '/transactions': typeof TransactionsRoute
+  '/transfer': typeof TransferRoute
+  '/accounts/$id': typeof AccountsIdRoute
+  '/accounts/': typeof AccountsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/settings' | '/account/$id'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/settings'
+    | '/transactions'
+    | '/transfer'
+    | '/accounts/$id'
+    | '/accounts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings' | '/account/$id'
-  id: '__root__' | '/' | '/settings' | '/account/$id'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/settings'
+    | '/transactions'
+    | '/transfer'
+    | '/accounts/$id'
+    | '/accounts'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/settings'
+    | '/transactions'
+    | '/transfer'
+    | '/accounts/$id'
+    | '/accounts/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   SettingsRoute: typeof SettingsRoute
-  AccountIdRoute: typeof AccountIdRoute
+  TransactionsRoute: typeof TransactionsRoute
+  TransferRoute: typeof TransferRoute
+  AccountsIdRoute: typeof AccountsIdRoute
+  AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   SettingsRoute: SettingsRoute,
-  AccountIdRoute: AccountIdRoute,
+  TransactionsRoute: TransactionsRoute,
+  TransferRoute: TransferRoute,
+  AccountsIdRoute: AccountsIdRoute,
+  AccountsIndexRoute: AccountsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -116,18 +214,34 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/dashboard",
         "/settings",
-        "/account/$id"
+        "/transactions",
+        "/transfer",
+        "/accounts/$id",
+        "/accounts/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/dashboard": {
+      "filePath": "dashboard.tsx"
+    },
     "/settings": {
       "filePath": "settings.tsx"
     },
-    "/account/$id": {
-      "filePath": "account/$id.tsx"
+    "/transactions": {
+      "filePath": "transactions.tsx"
+    },
+    "/transfer": {
+      "filePath": "transfer.tsx"
+    },
+    "/accounts/$id": {
+      "filePath": "accounts/$id.tsx"
+    },
+    "/accounts/": {
+      "filePath": "accounts/index.tsx"
     }
   }
 }
