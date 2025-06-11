@@ -3,15 +3,14 @@ package com.example.backend.service;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Account;
-import com.example.backend.model.Balance;
 import com.example.backend.model.User;
 import com.example.backend.repository.AccountRepository;
-import com.example.backend.repository.BalanceRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -19,23 +18,20 @@ import java.util.stream.StreamSupport;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final BalanceRepository balanceRepository;
     private final UserRepository userRepository;
 
     public AccountService(AccountRepository accountRepository,
-                          BalanceRepository balanceRepository,
                           UserRepository userRepository) {
         this.accountRepository = accountRepository;
-        this.balanceRepository = balanceRepository;
         this.userRepository = userRepository;
     }
 
-    public Account getAccount(long accountId) {
+    public Account getAccount(UUID accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(AccountNotFoundException::new);
     }
 
-    public List<Account> getAllUserAccounts(long userId) {
+    public List<Account> getAllUserAccounts(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
         return accountRepository.findAccountsByUser(user);
@@ -47,11 +43,11 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
-    public Balance getBalance(long accountId) {
+    public double getBalance(UUID accountId) {
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(AccountNotFoundException::new);
 
-        return balanceRepository.findByAccount(account);
+        return account.getBalance();
     }
 
     public Account createAccount(Account account) {
