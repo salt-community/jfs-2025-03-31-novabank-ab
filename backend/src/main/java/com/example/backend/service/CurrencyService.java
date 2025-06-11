@@ -43,12 +43,12 @@ public class CurrencyService {
 
     public double convertSekToEur(double sek) {
         double rate = fetchSekEurPmiRate();
-        return sek * rate;
+        return sek/rate;
     }
 
     public double convertEurToSek(double eur) {
         double rate = fetchSekEurPmiRate();
-        return eur/rate;
+        return eur * rate;
     }
 
 }
