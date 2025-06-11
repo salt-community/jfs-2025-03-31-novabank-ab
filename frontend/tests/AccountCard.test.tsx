@@ -27,4 +27,10 @@ describe('AccountCard', () => {
     expect(accountNumber).toBeInTheDocument()
     expect(accountNumber).toHaveTextContent(testAccount.accountNumber)
   })
+  it('should verify that the correct balance is displayed', () => {
+    render(<AccountCard account={testAccount} />)
+    const balance = screen.getByTestId('account-balance')
+    expect(balance).toBeInTheDocument()
+    expect(balance).toHaveTextContent(testAccount.balance.toString())
+  })
 })
