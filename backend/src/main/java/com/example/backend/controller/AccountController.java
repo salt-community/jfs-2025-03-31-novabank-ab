@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/account")
@@ -24,13 +25,13 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<Account> getAccount(@PathVariable long accountId) {
+    public ResponseEntity<Account> getAccount(@PathVariable UUID accountId) {
         Account account = accountService.getAccount(accountId);
         return ResponseEntity.ok(account);
     }
 
     @GetMapping("/{userId}/accounts")
-    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable long userId) {
+    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable UUID userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         return ResponseEntity.ok(accounts);
     }
@@ -42,7 +43,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/balance")
-    public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable long accountId) {
+    public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable UUID accountId) {
         BalanceResponseDto response = new BalanceResponseDto(
                 accountService.getBalance(accountId), LocalDateTime.now()
         );
@@ -57,22 +58,22 @@ public class AccountController {
     }
 
     @PatchMapping("/{accountId}/deposit")
-    public ResponseEntity<Void> deposit(@PathVariable long accountId, @RequestBody DepositRequestDto dto) {
+    public ResponseEntity<Void> deposit(@PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
         return null;
     }
 
     @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(@PathVariable long accountId, @RequestBody WithdrawalRequestDto dto) {
+    public ResponseEntity<Void> withdrawal(@PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
         return null;
     }
 
     @PatchMapping("/suspend/{accountId}")
-    public ResponseEntity<Void> suspendAccount(@PathVariable long accountId) {
+    public ResponseEntity<Void> suspendAccount(@PathVariable UUID accountId) {
         return null;
     }
 
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable long accountId) {
+    public ResponseEntity<Void> deleteAccount(@PathVariable UUID accountId) {
         return null;
     }
 }

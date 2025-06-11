@@ -24,8 +24,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
-
     @PostMapping("/addUser")
     public ResponseEntity<User> addUser(@RequestBody RegisterUserDto dto, @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
@@ -44,14 +42,11 @@ public class UserController {
         return ResponseEntity.ok(userService.addUser(user));
     }
 
-
-
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable long id) {
+    public ResponseEntity<User> getUser(@PathVariable String id) {
         User user = userService.getUser(id);
         return ResponseEntity.ok(user);
     }
-
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -61,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id,
+    public ResponseEntity<User> updateUser(@PathVariable String id,
                                            @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
 
@@ -69,7 +64,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable String id) {
 
         userService.deleteUser(id);
 

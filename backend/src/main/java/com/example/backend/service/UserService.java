@@ -21,7 +21,7 @@ public class UserService {
     }
 
 
-    public User getUser(long id) {
+    public User getUser(String id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);
     }
@@ -30,11 +30,11 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
-    public void deleteUser(long id) {
+    public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(long id, User user) {
+    public User updateUser(String id, User user) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
