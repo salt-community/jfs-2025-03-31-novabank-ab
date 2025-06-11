@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 public class TransactionService {
@@ -18,7 +19,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public Transaction getTransaction(long id) {
+    public Transaction getTransaction(UUID id) {
         return transactionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No such transaction"));
     }
 
@@ -35,7 +36,7 @@ public class TransactionService {
         return (List<Transaction>) transactionRepository.findAll();
     }
 
-    public void deleteScheduledTransaction(long id) {
+    public void deleteScheduledTransaction(UUID id) {
         transactionRepository.deleteById(id);
     }
 

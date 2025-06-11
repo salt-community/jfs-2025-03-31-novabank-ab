@@ -54,7 +54,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-
+/*
     private String generateUniqueAccountNumber() {
         String prefix = "1337-";
         String accountNumber;
@@ -64,7 +64,7 @@ public class AccountService {
         } while (accountRepository.existsByAccountNumber(accountNumber));
 
         return accountNumber;
-    }
+    }*/
 
     private String generateRandomDigits(int length) {
         Random random = new Random();

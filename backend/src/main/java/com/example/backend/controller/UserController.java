@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -28,7 +29,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable long id) {
+    public ResponseEntity<User> getUser(@PathVariable UUID id) {
         User user = userService.getUser(id);
         return ResponseEntity.ok(user);
     }
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id,
+    public ResponseEntity<User> updateUser(@PathVariable UUID id,
                                            @RequestBody User user) {
         User updatedUser = userService.updateUser(id, user);
 
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+    public ResponseEntity<User> deleteUser(@PathVariable UUID id) {
 
         userService.deleteUser(id);
 
