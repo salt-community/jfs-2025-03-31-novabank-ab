@@ -21,7 +21,9 @@ public class AccountService {
     private final BalanceRepository balanceRepository;
     private final UserRepository userRepository;
 
-    public AccountService(AccountRepository accountRepository, BalanceRepository balanceRepository, UserRepository userRepository) {
+    public AccountService(AccountRepository accountRepository,
+                          BalanceRepository balanceRepository,
+                          UserRepository userRepository) {
         this.accountRepository = accountRepository;
         this.balanceRepository = balanceRepository;
         this.userRepository = userRepository;
