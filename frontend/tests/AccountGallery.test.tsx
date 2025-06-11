@@ -60,4 +60,14 @@ describe('AccountGallery', () => {
     const accountCards = screen.getAllByTestId('account-card')
     expect(accountCards.length).toBe(3)
   })
+  it('should render correct account names for the accounts', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountCards = screen.getAllByTestId('account-card')
+    for (let i = 0; i < accountCards.length; i++) {
+      expect(accountCards[i]).toHaveTextContent(testAccounts[i].accountName)
+    }
+  })
 })
