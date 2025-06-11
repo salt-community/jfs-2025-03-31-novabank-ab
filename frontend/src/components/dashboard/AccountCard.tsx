@@ -16,7 +16,7 @@ export default function AccountCard({ account }: AccountCardProps) {
         data-testid="account-card"
       >
         <h1 data-testid="account-name">{account.accountName}</h1>
-        <p>{account.accountNumber}</p>
+        <p data-testid="account-number">{account.accountNumber}</p>
         <h4>{account.balance} SEK</h4>
         <p>Total balance</p>
       </div>
