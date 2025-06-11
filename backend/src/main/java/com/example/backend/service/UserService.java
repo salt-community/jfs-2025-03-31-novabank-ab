@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ public class UserService {
 
     public User getUser(UUID id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        if (user.isEmpty()) throw new UserNotFoundException();
+        return user.get();
     }
 
     public List<User> getAllUsers() {
