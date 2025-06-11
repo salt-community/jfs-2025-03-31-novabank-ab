@@ -23,6 +23,7 @@ public class CurrencyService {
         this.objectMapper = new ObjectMapper();
     }
 
+    //TODO consider adding caching in future
     public double fetchSekEurPmiRate() {
         try {
             String response = webClient.get()
@@ -38,9 +39,16 @@ public class CurrencyService {
         } catch (Exception e) {
             throw new RuntimeException("Error fetching exchange rate.");
         }
-
     }
 
+    public double convertSekToEur(double sek) {
+        double rate = fetchSekEurPmiRate();
+        return sek * rate;
+    }
 
+    public double convertEurToSek(double eur) {
+        double rate = fetchSekEurPmiRate();
+        return eur/rate;
+    }
 
 }
