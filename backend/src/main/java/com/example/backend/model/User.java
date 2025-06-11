@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -20,13 +21,16 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
     private String fullName;
 
     private String email;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
@@ -34,8 +38,5 @@ public class User {
     private LocalDateTime createdAt;
 
     private LocalDateTime lastLogin;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Account> accounts = new ArrayList<>();
 
 }

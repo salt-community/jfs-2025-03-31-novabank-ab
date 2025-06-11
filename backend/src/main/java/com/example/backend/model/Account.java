@@ -35,12 +35,13 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    private UUID accountNumber;
+    private String accountNumber;
 
-/*    @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactionsFrom = new ArrayList<>();
 
     @OneToMany(mappedBy = "toAccount", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Transaction> transactionsTo = new ArrayList<>();*/
+    private List<Transaction> transactionsTo = new ArrayList<>();
+
 
 }
