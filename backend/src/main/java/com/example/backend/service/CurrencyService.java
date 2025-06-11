@@ -11,6 +11,7 @@ public class CurrencyService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
+    // TODO sync with env
     private final String API_URL = "";
     private final String API_KEY = "";
 
@@ -50,5 +51,4 @@ public class CurrencyService {
         double rate = fetchSekEurPmiRate();
         return eur * rate;
     }
-
 }
