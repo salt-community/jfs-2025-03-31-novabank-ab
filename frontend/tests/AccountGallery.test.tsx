@@ -52,4 +52,12 @@ describe('AccountGallery', () => {
     const accountgallery = screen.getByTestId('account-gallery')
     expect(accountgallery).toBeInTheDocument()
   })
+  it('should render three AccountCard s', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountCards = screen.getAllByTestId('account-card')
+    expect(accountCards.length).toBe(3)
+  })
 })
