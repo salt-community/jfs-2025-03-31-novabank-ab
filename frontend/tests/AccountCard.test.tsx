@@ -4,9 +4,9 @@ import AccountCard from '../src/components/dashboard/AccountCard'
 import '@testing-library/jest-dom'
 
 const testAccount = {
-  accountName: 'Savings',
-  accountNumber: '**** 2201',
-  balance: 4465.23,
+  accountName: 'Test Account',
+  accountNumber: '**** 1818',
+  balance: 1803.98,
 }
 
 describe('AccountCard', () => {
