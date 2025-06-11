@@ -2,15 +2,11 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
-import com.example.backend.model.Account;
-import com.example.backend.model.Transaction;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping({"/api/transaction", "/api/transaction/"})
@@ -40,29 +36,15 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<?> addTransaction( @RequestBody TransactionRequestDto dto){
-        Account from = accountService.getAccount(dto.from().getId());
-        Account to = accountService.getAccount(dto.to().getId());
-        LocalDateTime date = dto.date();
-        Transaction transaction = new Transaction();
-        transaction.setCreatedAt(date);
-        transaction.setFromAccount(from);
-        transaction.setToAccount(to);
-        transaction.setAmount(dto.amount());
-        transactionService.addTransaction(transaction);
+        transactionService.addTransaction(dto.convertToTransaction());
         return null;
     }
 
     @PostMapping("/scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto){
-        Account from = accountService.getAccount(dto.from().getId());
-        Account to = accountService.getAccount(dto.to().getId());
-        LocalDateTime date = dto.date();
-        Transaction transaction = new Transaction();
-        transaction.setCreatedAt(date);
-        transaction.setFromAccount(from);
-        transaction.setToAccount(to);
-        transaction.setAmount(dto.amount());
-        transactionService.addScheduledTransaction(transaction);
+
+        //Transaction repository can't save the typ of scheduledTransaction
+       // transactionService.addScheduledTransaction(dto.toScheduledTransaction());
         return null;
     }
 

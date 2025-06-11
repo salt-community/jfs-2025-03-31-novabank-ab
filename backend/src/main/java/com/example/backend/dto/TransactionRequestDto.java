@@ -1,13 +1,16 @@
 package com.example.backend.dto;
 
 import com.example.backend.model.Account;
+import com.example.backend.model.Transaction;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
 
 public record TransactionRequestDto(Account from,
                                     Account to,
                                     @NotNull
-                                    double amount,
-                                    LocalDateTime date) {
+                                    double amount) {
+    public Transaction convertToTransaction(){
+        return new Transaction();
+
+    }
 }
