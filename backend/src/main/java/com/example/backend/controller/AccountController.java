@@ -6,6 +6,7 @@ import com.example.backend.dto.DepositRequestDto;
 import com.example.backend.dto.WithdrawalRequestDto;
 import com.example.backend.model.Account;
 import com.example.backend.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,13 +59,13 @@ public class AccountController {
     }
 
     @PatchMapping("/{accountId}/deposit")
-    public ResponseEntity<Void> deposit(@PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
+    public ResponseEntity<Void> deposit(@Valid @PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
         accountService.addDeposit(accountId, dto.amount());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(@PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
+    public ResponseEntity<Void> withdrawal(@Valid @PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
         accountService.makeWithdrawal(accountId, dto.amount());
         return ResponseEntity.ok().build();
     }

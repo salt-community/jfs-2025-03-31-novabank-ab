@@ -79,9 +79,11 @@ public class AccountService {
     }
 
     public void addDeposit(UUID accountId, double amount) {
-        Account account = getAccount(accountId);
-        account.setBalance(account.getBalance() + amount);
-        accountRepository.save(account);
+        if (amount > 0) {
+            Account account = getAccount(accountId);
+            account.setBalance(account.getBalance() + amount);
+            accountRepository.save(account);
+        }
     }
 
     public void makeWithdrawal(UUID accountId, double amount) {
