@@ -34,6 +34,7 @@ public class UserService {
     }
 
     public void deleteUser(UUID id) {
+        getUser(id); // makes sure to check if user exists
         userRepository.deleteById(id);
     }
 
