@@ -1,7 +1,6 @@
-import { useNavigate } from "@tanstack/react-router";
+
 
 export default function Header() {
-  const navigate = useNavigate();
   return (
     <header className="bg-black w-full border-b-1 border-white">
       <div className="flex items-center justify-center">

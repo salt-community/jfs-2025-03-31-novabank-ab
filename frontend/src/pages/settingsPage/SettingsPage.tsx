@@ -1,4 +1,4 @@
-import SideBar from '@/components/generic/SideBar'
+
 
 export default function SettingsPage() {
   return (
