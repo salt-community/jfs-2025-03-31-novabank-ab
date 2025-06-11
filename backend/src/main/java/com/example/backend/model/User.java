@@ -29,9 +29,11 @@ public class User {
     private String fullName;
 
     private String email;
+
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
