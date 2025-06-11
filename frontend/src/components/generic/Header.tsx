@@ -1,6 +1,20 @@
 import novabankicon from '../../assets/NovaBankTransparentLogo.png'
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react'
+import { useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
+function RedirectOnSignIn() {
+  const { user } = useUser()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) {
+      navigate({ to: '/dashboard' })
+    }
+  }, [user, navigate])
+
+  return null
+}
 
 export default function Header() {
   return (
@@ -19,7 +33,7 @@ export default function Header() {
         </SignInButton>
       </SignedOut>
       <SignedIn>
-        <UserButton />
+        <RedirectOnSignIn />
       </SignedIn>
       </div>
     </header>
