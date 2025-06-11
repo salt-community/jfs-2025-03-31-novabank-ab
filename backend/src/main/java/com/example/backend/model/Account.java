@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import com.example.backend.model.enums.AccountStatus;
+import com.example.backend.model.enums.BankAccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id")
     private Currency currency;
     private LocalDate createdAt;
     private double balance;

@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
