@@ -26,23 +26,17 @@ function LandingPage() {
   return (
     <>
     <Header />
-    <div className="min-h-screen flex flex-col items-center justify-center bg-blue-500 text-white text-[calc(10px+2vmin)]">
-      <h1>Welcome to the Landing Page!</h1>
-      <p>Please sign in to continue.</p>
-      <div className="mx-auto mt-30 mb-25 flex justify-center items-center ">
-        <SignedOut>
-          <SignInButton>
-            <button className="text-center ml-2 bg-black mr-2 text-white hover:cursor-pointer px-4 pb-1 border-2 border-white rounded-2xl">
-              Sign In
-            </button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <RedirectOnSignIn />
-        </SignedIn>
+    <div className="flex justify-between text-black">
+    <div className="flex flex-col justify-center">
+        <h1 className="text-left mt-20 ml-5 underline underline-offset-6 text-4xl pb-10 pt-3 rounded-4xl" style={{ fontFamily: "'Lato', sans-serif" }}>Welcome to the future of finance - Nova Bank</h1>
+        <h2 className="ml-5 text-2xl pb-5 pt-3 leading-12 rounded-4xl" style={{ fontFamily: "'Lato', sans-serif" }}>Let us take your banking to the next level<br></br>Register for free today</h2>
       </div>
+      <img
+        src="Manhattan.jpg"
+        alt="Manhattan"
+        className="w-[40%] mt-20 rounded-l-4xl"
+      />
     </div>
-          
       </>
   )
 }

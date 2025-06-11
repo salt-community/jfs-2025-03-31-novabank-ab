@@ -1,21 +1,40 @@
+import novabankicon from '../../assets/NovaBankTransparentLogo.png'
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react'
+import { useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
+function RedirectOnSignIn() {
+  const { user } = useUser()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user) {
+      navigate({ to: '/dashboard' })
+    }
+  }, [user, navigate])
+
+  return null
+}
 
 export default function Header() {
   return (
-    <header className="bg-black w-full border-b-1 border-white">
-      <div className="flex items-center justify-center">
-        <h1
-          className="text-4xl m-10 text-white underline decoration-blue-500 underline-offset-5"
-        >
-          {" "}
-          Nova Bank
-        </h1>
-
-        <img
-          src="/NovaBankRoundedLogo.png"
-          alt="Nova Bank Logo"
-          className="h-16 border-2 border-blue-500 rounded-4xl w-16 ml-4"
-        />
+    <header className="bg-black w-full">
+      <div className="flex items-center justify-between px-8">
+      <img
+        src={novabankicon}
+        alt="Nova Bank Logo"
+        className="h-30 bg-black rounded-4xl w-30 my-1"
+      />
+      <SignedOut>
+        <SignInButton>
+          <button className="text-center ml-2 mr-2 text-white hover:cursor-pointer px-4 py-1 border-2 border-white rounded-4xl">
+                    Sign In
+          </button>
+        </SignInButton>
+      </SignedOut>
+      <SignedIn>
+        <RedirectOnSignIn />
+      </SignedIn>
       </div>
     </header>
   );
