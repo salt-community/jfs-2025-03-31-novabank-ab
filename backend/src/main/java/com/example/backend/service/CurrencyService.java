@@ -12,6 +12,7 @@ public class CurrencyService {
     private final ObjectMapper objectMapper;
 
     // TODO sync with env
+    // TODO secondly work with scalability for other currencies
     private final String API_URL = "";
     private final String API_KEY = "";
 
