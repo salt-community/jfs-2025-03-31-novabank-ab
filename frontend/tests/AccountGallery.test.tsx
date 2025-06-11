@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import AccountCard from '../src/components/dashboard/AccountCard'
 import '@testing-library/jest-dom'
+import { act } from 'react'
+import {
+  Outlet,
+  RootRoute,
+  Route,
+  RouterProvider,
+  createMemoryHistory,
+  createRouter,
+} from '@tanstack/react-router'
+import AccountGallery from '../src/components/dashboard/AccountGallery'
 
 const testAccounts = [
   {
@@ -21,28 +30,26 @@ const testAccounts = [
   },
 ]
 
-describe('AccountCard', () => {
-  it('should render an AccountCard', () => {
-    render(<AccountCard account={testAccount} />)
-    const card = screen.getByTestId('account-card')
-    expect(card).toBeInTheDocument()
-  })
-  it('should verify the correct accountName is displayed', () => {
-    render(<AccountCard account={testAccount} />)
-    const accountName = screen.getByTestId('account-name')
-    expect(accountName).toBeInTheDocument()
-    expect(accountName).toHaveTextContent(testAccount.accountName)
-  })
-  it('should verify that the correct accountNumber is displayed', () => {
-    render(<AccountCard account={testAccount} />)
-    const accountNumber = screen.getByTestId('account-number')
-    expect(accountNumber).toBeInTheDocument()
-    expect(accountNumber).toHaveTextContent(testAccount.accountNumber)
-  })
-  it('should verify that the correct balance is displayed', () => {
-    render(<AccountCard account={testAccount} />)
-    const balance = screen.getByTestId('account-balance')
-    expect(balance).toBeInTheDocument()
-    expect(balance).toHaveTextContent(testAccount.balance.toString())
+const rootRoute = new RootRoute({
+  component: Outlet,
+})
+const route = new Route({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  component: () => <AccountGallery bankAccounts={testAccounts} />,
+})
+const router = createRouter({
+  routeTree: rootRoute.addChildren([route]),
+  history: createMemoryHistory(),
+})
+
+describe('AccountGallery', () => {
+  it('should render an AccountGallery', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountgallery = screen.getByTestId('account-gallery')
+    expect(accountgallery).toBeInTheDocument()
   })
 })
