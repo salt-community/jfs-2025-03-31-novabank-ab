@@ -9,6 +9,7 @@ import com.example.backend.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,8 +51,9 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        Account account = accountService.createAccount(dto.toAccount());
-        return ResponseEntity.ok().build();
+        Account created = accountService.createAccount(dto.toAccount());
+        URI location = URI.create("api/account/" + created.getId());
+        return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{accountId}/deposit")
