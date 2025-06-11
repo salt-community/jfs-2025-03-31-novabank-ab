@@ -6,9 +6,9 @@ export const Route = createFileRoute('/settings')({
 })
 
 function RouteComponent() {
-  return(
-  <>
-  <SettingsPage />
-  </>
+  return (
+    <>
+      <SettingsPage />
+    </>
   )
 }
