@@ -59,12 +59,14 @@ public class AccountController {
 
     @PatchMapping("/{accountId}/deposit")
     public ResponseEntity<Void> deposit(@PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
-        return null;
+        accountService.addDeposit(accountId, dto.amount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{accountId}/withdrawal")
     public ResponseEntity<Void> withdrawal(@PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
-        return null;
+        accountService.makeWithdrawal(accountId, dto.amount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/suspend/{accountId}")

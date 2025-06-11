@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.InsufficientFundsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
@@ -75,5 +76,21 @@ public class AccountService {
         }
 
         return sb.toString();
+    }
+
+    public void addDeposit(UUID accountId, double amount) {
+        Account account = getAccount(accountId);
+        account.setBalance(account.getBalance() + amount);
+        accountRepository.save(account);
+    }
+
+    public void makeWithdrawal(UUID accountId, double amount) {
+        Account account = getAccount(accountId);
+        if (account.getBalance() < amount) {
+            throw new InsufficientFundsException();
+        }
+        account.setBalance(account.getBalance() - amount);
+        accountRepository.save(account);
+
     }
 }
