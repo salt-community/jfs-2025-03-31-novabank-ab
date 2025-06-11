@@ -11,8 +11,10 @@ public class CurrencyService {
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
-    // TODO sync with env
-    // TODO secondly work with scalability for other currencies
+    /* TODO sync with env
+    TODO secondly work with scalability for other currencies
+    TODO check whether to add each currency or fix fancy formula
+     */
     private final String API_URL = "";
     private final String API_KEY = "";
 
