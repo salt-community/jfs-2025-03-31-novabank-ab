@@ -39,7 +39,7 @@ public class UserService {
 
     public User updateUser(UUID id, User user) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         existingUser.setFullName(user.getFullName());
         existingUser.setEmail(user.getEmail());
