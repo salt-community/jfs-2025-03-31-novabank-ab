@@ -1,5 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { SignOutButton } from "@clerk/clerk-react";
 import homeicon from '../../assets/homeicon.svg'
 import accounticon from '../../assets/accounticon.svg'
 import transactionicon from '../../assets/transactionicon.svg'
@@ -59,6 +60,7 @@ export default function SideBar() {
         <img src={settingsicon} />
         {t('settings')}
       </a>
+      <SignOutButton />
     </aside>
   )
 }
