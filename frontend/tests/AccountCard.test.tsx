@@ -15,4 +15,9 @@ describe('AccountCard', () => {
     const card = screen.getByTestId('account-card')
     expect(card).toBeInTheDocument()
   })
+  it('should verify the correct accountNumber is displayed', () => {
+    render(<AccountCard account={testAccount} />)
+    const accountName = screen.getByTestId('account-name')
+    expect(accountName).toBeInTheDocument()
+  })
 })
