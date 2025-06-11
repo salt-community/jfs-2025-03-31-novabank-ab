@@ -21,17 +21,21 @@ const bankAccounts = [
 
 export default function AccountGallery() {
   return (
-    <div>
-      <h1 className="text-center">My Accounts ({bankAccounts.length})</h1>
+    <div className="flex flex-col items-center p-10 gap-10">
+      <div>
+        <h1 className="text-center font-semibold text-xl mb-4">
+          My Accounts ({bankAccounts.length})
+        </h1>
 
-      <div className="flex flex-row items-center gap-6">
-        {bankAccounts.map((account) => (
-          <div key={account.accountNumber}>
-            <Link to="/account/$id" params={{ id: account.accountNumber }}>
-              <AccountCard account={account} />
-            </Link>
-          </div>
-        ))}
+        <div className="flex flex-wrap justify-center gap-6">
+          {bankAccounts.map((account) => (
+            <div key={account.accountNumber}>
+              <Link to="/account/$id" params={{ id: account.accountNumber }}>
+                <AccountCard account={account} />
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )
