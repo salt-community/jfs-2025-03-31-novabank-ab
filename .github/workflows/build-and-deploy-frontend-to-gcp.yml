@@ -42,3 +42,4 @@ jobs:
           region: ${{ vars.GC_REGION }}
           service: ${{ vars.GC_SERVICE_FRONTEND_NAME }}
           image: ${{ env.IMAGE_URL }}
+          env_vars: VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
