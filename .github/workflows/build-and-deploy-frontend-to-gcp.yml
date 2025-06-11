@@ -31,7 +31,7 @@ jobs:
         run: gcloud auth configure-docker ${{ vars.GC_REGION }}-docker.pkg.dev
 
       - name: Docker Build
-        run: docker build --no-cache -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile frontend
+        run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile frontend
 
       - name: Docker Push
         run: docker push $IMAGE_URL
@@ -42,4 +42,3 @@ jobs:
           region: ${{ vars.GC_REGION }}
           service: ${{ vars.GC_SERVICE_FRONTEND_NAME }}
           image: ${{ env.IMAGE_URL }}
-          env_vars: VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }}
