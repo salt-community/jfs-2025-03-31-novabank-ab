@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -7,6 +9,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class CurrencyService {
 
     private final WebClient webClient;
+    private final ObjectMapper objectMapper;
+
     private final String API_URL = "";
     private final String API_KEY = "";
 
@@ -15,9 +19,25 @@ public class CurrencyService {
                 .baseUrl("https://api.riksbank.se")
                 .defaultHeader("Ocp-Apim-Subscription-Key", API_KEY)
                 .build();
+
+        this.objectMapper = new ObjectMapper();
     }
 
-    public double fetchSekEurPmi() {
+    public double fetchSekEurPmiRate() {
+        try {
+            String response = webClient.get()
+                    .uri(API_URL)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            JsonNode root = objectMapper.readTree(response);
+
+            return root.get("value").asDouble();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching exchange rate.");
+        }
 
     }
 
