@@ -2,11 +2,17 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.RegisterUserDto;
 import com.example.backend.model.User;
+import com.example.backend.model.enums.Role;
 import com.example.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -19,10 +25,23 @@ public class UserController {
     }
 
 
+
     @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody RegisterUserDto dto) {
-        User user = userService.addUser(dto.toUser());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<User> addUser(@RequestBody RegisterUserDto dto, @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+
+        String roleString = Optional.ofNullable(jwt.getClaim("metadata"))
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(m -> (String) m.get("role"))
+                .orElse("user");
+
+        Role role = Role.valueOf(roleString.toUpperCase());
+
+        User user = dto.toUser(userId, role);
+
+        System.out.println("user = " + user);
+        return ResponseEntity.ok(userService.addUser(user));
     }
 
 
