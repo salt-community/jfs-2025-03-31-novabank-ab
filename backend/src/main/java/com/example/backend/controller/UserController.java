@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.RegisterUserDto;
+import com.example.backend.dto.UpdateUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +45,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable UUID id,
-                                           @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
+                                           @RequestBody UpdateUserRequestDto dto) {
+        User updatedUser = userService.updateUser(id, dto.toUser());
 
         return ResponseEntity.ok(updatedUser)  ;
     }
