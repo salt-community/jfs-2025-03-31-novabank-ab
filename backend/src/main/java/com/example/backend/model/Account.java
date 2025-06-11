@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Account {
 
     private String accountNumber;
 
-  @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fromAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactionsFrom = new ArrayList<>();
 
     @OneToMany(mappedBy = "toAccount", cascade = CascadeType.ALL, orphanRemoval = true)
