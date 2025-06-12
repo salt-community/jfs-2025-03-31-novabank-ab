@@ -1,9 +1,9 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ClerkProvider } from '@clerk/clerk-react'
-import "./i18n";
-
+import './i18n'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -20,6 +20,8 @@ const router = createRouter({
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
 })
+
+const queryClient = new QueryClient()
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -40,8 +42,10 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/'>
-        <RouterProvider router={router} />
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </ClerkProvider>
     </StrictMode>,
   )
