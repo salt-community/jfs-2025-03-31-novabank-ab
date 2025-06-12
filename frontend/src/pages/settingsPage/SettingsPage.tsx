@@ -1,9 +1,9 @@
+import { UserButton } from '@clerk/clerk-react'
+
 export default function SettingsPage() {
   return (
     <>
-      <div className="">
-        Hello "/settings"!
-      </div>
+      <UserButton />
     </>
   )
 }
