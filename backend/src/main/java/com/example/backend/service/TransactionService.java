@@ -101,17 +101,27 @@ public class TransactionService {
         return  transactionRepository.findByFromAccount_IdOrToAccount_Id(id, id);
     }
 
-    public void deleteScheduledTransaction(UUID id) {
-        ScheduledTransaction transaction = scheduledTransactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+    public void deleteScheduledTransaction(UUID accountId, UUID transactionId) {
+        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
+        ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId).orElseThrow(TransactionNotFoundException::new);
         scheduledTransactionRepository.delete(transaction);
     }
 
-    public ScheduledTransaction getScheduledTransaction(UUID id) {
-        return scheduledTransactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+    public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId) {
+        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
+        ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId)
+                .orElseThrow(TransactionNotFoundException::new);
+
+        if (!transaction.getFromAccount().getId().equals(accountId)) {
+            throw new AccessDeniedException("Transaction does not belong to this account");
+        }
+
+        return transaction;
     }
 
-    public List<ScheduledTransaction> getScheduledTransactions(UUID id) {
-       return scheduledTransactionRepository.findByFromAccount_Id(id);
+    public List<ScheduledTransaction> getScheduledTransactions(UUID accountId) {
+        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
+       return scheduledTransactionRepository.findByFromAccount_Id(accountId);
     }
 
 }
