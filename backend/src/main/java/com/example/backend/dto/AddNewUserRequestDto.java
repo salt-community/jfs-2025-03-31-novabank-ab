@@ -26,6 +26,6 @@ public record AddNewUserRequestDto(
                 LocalDateTime.now(),
                 null,
                 new ArrayList<>()
-        )
+        );
     }
 }
