@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.TransactionNotFoundException;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
 import com.example.backend.repository.ScheduledTransactionRepository;
@@ -22,7 +23,7 @@ public class TransactionService {
     }
 
     public Transaction getTransaction(UUID id) {
-        return transactionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
     }
 
     public void addTransaction(Transaction transaction) {
