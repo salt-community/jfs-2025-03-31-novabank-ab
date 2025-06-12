@@ -28,10 +28,13 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/account/**").permitAll()
-            )
-            .authorizeHttpRequests(auth -> auth
-                    .anyRequest().authenticated()
+                .requestMatchers(
+                        "/api/account/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+                .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2
                     .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())

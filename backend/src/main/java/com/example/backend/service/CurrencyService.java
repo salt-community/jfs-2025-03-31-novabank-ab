@@ -2,13 +2,17 @@ package com.example.backend.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpHeaders;
 
 @Service
 public class CurrencyService {
 
-    private final WebClient webClient;
+    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
     /* TODO sync with env
@@ -19,29 +23,30 @@ public class CurrencyService {
     private final String API_KEY = "";
 
     public CurrencyService() {
-        this.webClient = WebClient.builder()
-                .baseUrl("https://api.riksbank.se")
-                .defaultHeader("Ocp-Apim-Subscription-Key", API_KEY)
-                .build();
-
+        this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
     }
 
     //TODO consider adding caching in future
     public double fetchSekEurPmiRate() {
         try {
-            String response = webClient.get()
-                    .uri(API_URL)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Ocp-Apim-Subscription-Key", API_KEY);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            JsonNode root = objectMapper.readTree(response);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    API_URL,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+            );
 
-            return root.get("value").asDouble();
+            JsonNode root = objectMapper.readTree(response.getBody());
+
+            return root.get("value").asDouble(); // justera efter riktig responsstruktur
 
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching exchange rate.");
+            throw new RuntimeException("Error fetching exchange rate.", e);
         }
     }
 

@@ -26,6 +26,5 @@ spring:
 
 logging:
   level:
-    org:
-      springframework:
-        boot: ${SPRING_LOGGING_LEVEL:INFO}
+    org.springdoc: ${SPRING_LOGGING_LEVEL:INFO}
+    org.springframework.web: ${SPRING_LOGGING_LEVEL:INFO}

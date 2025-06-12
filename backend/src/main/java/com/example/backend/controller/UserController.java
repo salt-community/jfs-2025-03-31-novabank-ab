@@ -4,12 +4,15 @@ import com.example.backend.dto.RegisterUserDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Parameter;
 
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,22 +27,23 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody RegisterUserDto dto, @AuthenticationPrincipal Jwt jwt) {
+    @Operation(description = "Add new User")
+    @PostMapping("/add-user")
+    public ResponseEntity<Void> addUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+            @RequestBody RegisterUserDto dto) {
         String userId = jwt.getSubject();
 
-        String roleString = Optional.ofNullable(jwt.getClaim("metadata"))
+        String userRole = Optional.ofNullable(jwt.getClaim("metadata"))
                 .filter(Map.class::isInstance)
                 .map(Map.class::cast)
                 .map(m -> (String) m.get("role"))
                 .orElse("user");
 
-        Role role = Role.valueOf(roleString.toUpperCase());
-
-        User user = dto.toUser(userId, role);
-
-        System.out.println("user = " + user);
-        return ResponseEntity.ok(userService.addUser(user));
+        Role role = Role.valueOf(userRole.toUpperCase());
+        User created = userService.addUser(dto.toUser(userId, role));
+        URI location = URI.create("api/user/" + created.getId());
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/{id}")
