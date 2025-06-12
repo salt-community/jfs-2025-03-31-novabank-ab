@@ -2,8 +2,6 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
-import com.example.backend.model.Account;
-import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,12 +16,10 @@ import java.util.UUID;
 public class TransactionController {
 
     private final TransactionService transactionService;
-    private final AccountService accountService;
 
     @Autowired
-    public TransactionController(TransactionService service, AccountService accountService) {
+    public TransactionController(TransactionService service) {
         this.transactionService = service;
-        this.accountService = accountService;
     }
 
     @Operation(
@@ -50,8 +46,7 @@ public class TransactionController {
     )
     @PostMapping
     public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto, @PathVariable UUID accountId) {
-        Account ownAccount = accountService.getAccount(accountId);
-        transactionService.addTransaction(dto.convertToTransaction(ownAccount));
+        transactionService.addTransaction( accountId,dto);
         return ResponseEntity.ok().build();
     }
     @Operation(
