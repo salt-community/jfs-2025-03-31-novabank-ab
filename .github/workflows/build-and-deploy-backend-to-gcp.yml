@@ -28,6 +28,9 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
+      - name: Enter the backend
+        run: cd backend
+
       - name: Build with Maven
         run: mvn clean package
 
