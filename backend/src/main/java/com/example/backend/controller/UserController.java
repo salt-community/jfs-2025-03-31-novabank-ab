@@ -29,31 +29,34 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Add new User", description = "Creates new User from Clerk userId, returns User location")
+    @Operation(summary = "Register new User", description = "Creates new User from Clerk userId, returns User location in header")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
-    @PostMapping("/add-user")
+    @PostMapping("/register")
     public ResponseEntity<Void> addUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestBody RegisterUserDto dto) {
+
         String userId = jwt.getSubject();
+        Role role = extractRoleFromJWT(jwt);
 
-        String userRole = Optional.ofNullable(jwt.getClaim("metadata"))
-                .filter(Map.class::isInstance)
-                .map(Map.class::cast)
-                .map(m -> (String) m.get("role"))
-                .orElse("user");
-
-        Role role = Role.valueOf(userRole.toUpperCase());
         User created = userService.addUser(dto.toUser(userId, role));
         URI location = URI.create("api/user/" + created.getId());
+
         return ResponseEntity.created(location).build();
     }
 
+    @Operation(summary = "Get a user by id", description = "Returns a user as per the id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable String id) {
+    public ResponseEntity<User> getUser(
+            @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
+    ) {
         User user = userService.getUser(id);
         return ResponseEntity.ok(user);
     }
@@ -82,4 +85,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    private Role extractRoleFromJWT(Jwt jwt) {
+        String userRole = Optional.ofNullable(jwt.getClaim("metadata"))
+                .filter(Map.class::isInstance)
+                .map(Map.class::cast)
+                .map(m -> (String) m.get("role"))
+                .orElse("user");
+
+        return Role.valueOf(userRole.toUpperCase());
+    }
 }
