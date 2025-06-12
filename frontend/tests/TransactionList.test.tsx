@@ -12,17 +12,6 @@ import {
 } from '@tanstack/react-router'
 import TransactionList from '../src/components/dashboard/TransactionList'
 
-type Transaction = {
-  id: number
-  name: string
-  category: string
-  amount: number
-  time: string
-}
-type TransactionListProps = {
-  transactions: Array<Transaction>
-}
-
 const testTransactions = [
   {
     id: 18031998,
