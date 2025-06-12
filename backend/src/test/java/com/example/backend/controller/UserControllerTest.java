@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Map;
 import java.util.UUID;
 
-import com.example.backend.dto.RegisterUserDto;
+import com.example.backend.dto.RegisterUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
@@ -61,7 +61,7 @@ class UserControllerTest {
         stubUser.setId(returnedId.toString());
         when(userService.addUser(any(User.class))).thenReturn(stubUser);
 
-        RegisterUserDto dto = new RegisterUserDto(
+        RegisterUserRequestDto dto = new RegisterUserRequestDto(
                 "alice@example.com",
                 "555-1234",
                 "Alice",

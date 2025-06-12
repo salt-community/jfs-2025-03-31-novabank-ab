@@ -50,7 +50,7 @@ public class SecurityConfig {
     public JwtAuthenticationConverter jwtAuthenticationConverter(SecurityUtil securityUtil) {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
-        converter.setPrincipalClaimName("sub");
+        converter.setPrincipalClaimName("sub"); // Clerk userId
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
             Role role = securityUtil.extractRoleFromJWT(jwt);
             return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
