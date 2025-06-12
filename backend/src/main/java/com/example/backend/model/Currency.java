@@ -14,6 +14,8 @@ import java.util.UUID;
 @Table(name = "currencies")
 public class Currency {
 
+    public Currency() {}
+
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")

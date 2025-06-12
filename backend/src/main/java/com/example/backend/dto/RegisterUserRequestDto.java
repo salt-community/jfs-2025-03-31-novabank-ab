@@ -6,7 +6,7 @@ import com.example.backend.model.enums.UserStatus;
 
 import java.time.LocalDateTime;
 
-public record RegisterUserDto(
+public record RegisterUserRequestDto(
         String email,
         String phoneNumber,
         String firstName,
