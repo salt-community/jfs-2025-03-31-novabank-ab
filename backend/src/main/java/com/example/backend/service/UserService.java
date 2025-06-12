@@ -46,6 +46,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User activateUser(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        user.setStatus(UserStatus.ACTIVE);
+        return userRepository.save(user);
+    }
+
     public void deleteUser(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
