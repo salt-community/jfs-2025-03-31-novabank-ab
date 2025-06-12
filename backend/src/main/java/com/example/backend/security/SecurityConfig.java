@@ -3,9 +3,9 @@ package com.example.backend.security;
 import com.example.backend.model.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
@@ -23,16 +23,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    //TODO review deprecated frameOptions() and h2 console below
     @Bean
     public SecurityFilterChain defaultFilterChain(
             HttpSecurity http,
-            JwtAuthenticationConverter jwtAuthenticationConverter,
-            Environment env
+            JwtAuthenticationConverter jwtAuthenticationConverter
     ) throws Exception {
-
-        http
+        return http
                 .cors(withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+                .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -46,14 +46,8 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
-                );
-
-        // Enable frames (iframe) only for dev profile TODO fix frameOptions() alternative
-        if (List.of(env.getActiveProfiles()).contains("dev")) {
-            http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
-        }
-
-        return http.build();
+                )
+                .build();
     }
 
     @Bean
