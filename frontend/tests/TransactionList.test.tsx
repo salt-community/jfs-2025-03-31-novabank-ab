@@ -62,7 +62,7 @@ describe('Transaction List', () => {
     const transactionList = screen.getByTestId('transaction-list')
     expect(transactionList).toBeInTheDocument()
   })
-  it('should render two transaction items', async () => {
+  it('should render two transaction items.', async () => {
     render(<RouterProvider router={router} />)
     await act(async () => {
       await router.navigate({ to: '/' })
