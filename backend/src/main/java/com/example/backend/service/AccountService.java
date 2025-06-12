@@ -106,4 +106,9 @@ public class AccountService {
         account.setStatus(AccountStatus.SUSPENDED);
         accountRepository.save(account);
     }
+
+    public void deleteAccount(UUID accountId) {
+        Account account = getAccount(accountId);
+        accountRepository.delete(account);
+    }
 }

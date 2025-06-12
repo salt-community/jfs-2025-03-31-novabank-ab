@@ -7,6 +7,7 @@ import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,6 +86,7 @@ public class AccountController {
 
     @DeleteMapping("/{accountId}")
     public ResponseEntity<Void> deleteAccount(@PathVariable UUID accountId) {
-        return null;
+        accountService.deleteAccount(accountId);
+        return ResponseEntity.noContent().build();
     }
 }
