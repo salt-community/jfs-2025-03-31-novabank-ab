@@ -7,8 +7,39 @@ on:
   workflow_dispatch:
 
 jobs:
+  build-artifact-and-push-to-gh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Maven Local Repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: "21"
+          distribution: "temurin"
+
+      - name: Build with Maven
+        run: |
+          cd backend
+          mvn clean package
+
+      - name: Upload artifact to gh
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: backend-jar
+          path: backend/target/backend-0.0.1-SNAPSHOT.jar
+
   docker-img-build-and-push:
     runs-on: ubuntu-latest
+    needs: build-artifact-and-push-to-gh
     defaults:
       run:
         working-directory: backend
@@ -27,6 +58,12 @@ jobs:
 
       - name: Configure Docker to use gcloud as a credential helper
         run: gcloud auth configure-docker ${{ vars.GC_REGION }}-docker.pkg.dev
+
+      - name: Download JAR artifact from gh
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-jar
+          path: backend
 
       - name: Docker Build
         run: docker build --no-cache -t ${{ env.IMAGE_URL }} . -f Dockerfile
