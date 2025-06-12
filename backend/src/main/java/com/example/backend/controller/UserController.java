@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.AddNewUserRequestDto;
-import com.example.backend.dto.RegisterUserDto;
+import com.example.backend.dto.RegisterUserRequestDto;
 import com.example.backend.dto.UpdateUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<Void> registerNewUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
-            @RequestBody RegisterUserDto dto) {
+            @RequestBody RegisterUserRequestDto dto) {
 
         String userId = jwt.getSubject();
         Role role = extractRoleFromJWT(jwt);
@@ -97,7 +97,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);

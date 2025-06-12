@@ -72,10 +72,19 @@ public class TransactionController {
                     @ApiResponse(responseCode = "400", description = "Invalid transaction ID format")
             }
     )
-    @DeleteMapping("/delete-scheduled/{transactionId}")
-    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID transactionId, @PathVariable String accountId) {
-        transactionService.deleteScheduledTransaction(transactionId);
+    @DeleteMapping("/delete-scheduled/{accountId}/{transactionId}")
+    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
+        transactionService.deleteScheduledTransaction(accountId, transactionId);
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/scheduled-transaction/{accountId}/{transactionId}")
+    public ResponseEntity<?> getScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
+        return ResponseEntity.ok(transactionService.getScheduledTransaction(accountId, transactionId));
+    }
+
+    @GetMapping("scheduled-transactions/{accountId}")
+    public ResponseEntity<?> getScheduledTransactions(@PathVariable String accountId) {
+        return ResponseEntity.ok().body(transactionService.getScheduledTransactions(UUID.fromString(accountId)));
+    }
 }
