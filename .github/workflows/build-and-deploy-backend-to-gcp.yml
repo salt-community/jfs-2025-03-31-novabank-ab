@@ -47,6 +47,8 @@ jobs:
     env:
       IMAGE_URL: ${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/cloud-run-source-deploy/${{ vars.GC_REPO_BACKEND_NAME }}/${{ vars.GC_SERVICE_BACKEND_NAME }}:${{ github.sha }}
     steps:
+      - uses: actions/checkout@v4
+
       - name: Authenticate GCP
         uses: google-github-actions/auth@v1
         with:
