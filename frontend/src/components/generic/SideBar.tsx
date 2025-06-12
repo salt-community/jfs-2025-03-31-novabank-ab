@@ -22,10 +22,10 @@ export default function SideBar() {
         />
       </a>
 
-      <div className="flex gap-8 flex-col list-none mx-auto">
+      <div className="flex gap-20 flex-col mb-10 list-none mx-auto">
         <a
           onClick={() => navigate({ to: '/dashboard' })}
-          className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
+          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
         >
           <img src={homeicon} />
           {t('dashboard')}
@@ -33,7 +33,7 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/accounts' })}
-          className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
+          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
         >
           <img src={accounticon} />
           {t('accounts')}
@@ -41,7 +41,7 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/transactions' })}
-          className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
+          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
         >
           <img src={transactionicon} />
           {t('transactions')}
@@ -49,22 +49,22 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/transfer' })}
-          className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
+          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
         >
           <img src={transfericon} />
           {t('transfer')}
         </a>
-      </div>
 
       <a
         onClick={() => navigate({ to: '/settings' })}
-        className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 mx-auto"
-      >
+        className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100"
+        >
         <img src={settingsicon} />
         {t('settings')}
       </a>
+        </div>
       <SignOutButton>
-        <button className='hover:cursor-pointer opacity-80 hover:opacity-100 mx-auto'>
+        <button className='hover:cursor-pointer underline opacity-80 hover:opacity-100 hover:text-red-400 mx-auto'>
           Sign out
         </button>
       </SignOutButton>
