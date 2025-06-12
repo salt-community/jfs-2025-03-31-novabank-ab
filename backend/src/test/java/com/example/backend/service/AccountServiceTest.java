@@ -48,6 +48,12 @@ class AccountServiceTest {
 
     @Test
     void getAllUserAccounts_userNotFound_throwsUserNotFoundException() {
+        when(userRepository.findById("unknown-user")).thenReturn(Optional.empty());
 
+        assertThrows(UserNotFoundException.class,
+                () -> service.getAllUserAccounts("unknown-user"));
+
+        verify(userRepository).findById("unknown-user");
+        verifyNoInteractions(accountRepository);
     }
 }
