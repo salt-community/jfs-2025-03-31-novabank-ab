@@ -1,11 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import AccountCard from './AccountCard'
-
-type Account = {
-  accountName: string
-  accountNumber: string
-  balance: number
-}
+import type { Account } from '@/types'
 
 type AccountGalleryProps = {
   bankAccounts: Array<Account>
@@ -24,8 +19,8 @@ export default function AccountGallery({ bankAccounts }: AccountGalleryProps) {
 
         <div className="flex flex-wrap justify-center gap-6">
           {bankAccounts.map((account) => (
-            <div key={account.accountNumber}>
-              <Link to="/accounts/$id" params={{ id: account.accountNumber }}>
+            <div key={account.number}>
+              <Link to="/accounts/$id" params={{ id: account.number }}>
                 <AccountCard account={account} />
               </Link>
             </div>
