@@ -84,4 +84,18 @@ describe('Transaction List', () => {
       expect(transactionItems[i]).toHaveTextContent(testTransactions[i].name)
     }
   })
+  it('rendered transaction items should have the correct categories.', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const transactionList = screen.getByTestId('transaction-list')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(transactionList).toBeInTheDocument()
+    for (let i = 0; i < transactionItems.length; i++) {
+      expect(transactionItems[i]).toHaveTextContent(
+        testTransactions[i].category,
+      )
+    }
+  })
 })
