@@ -23,7 +23,7 @@ describe('Transaction Item', () => {
     const transactionItem = screen.getByTestId('transaction-item')
     expect(transactionItem).toBeInTheDocument()
   })
-  it('should verify the correct item time is displayed', () => {
+  it('should verify the correct transaction item time is displayed', () => {
     render(
       <TransactionItem
         amount={testTransaction.amount}
@@ -36,7 +36,7 @@ describe('Transaction Item', () => {
     expect(transactionItem).toBeInTheDocument()
     expect(transactionItem).toHaveTextContent(testTransaction.time)
   })
-  it('should verify the correct item name is displayed', () => {
+  it('should verify the correct transaction item name is displayed', () => {
     render(
       <TransactionItem
         amount={testTransaction.amount}
@@ -49,7 +49,7 @@ describe('Transaction Item', () => {
     expect(transactionItem).toBeInTheDocument()
     expect(transactionItem).toHaveTextContent(testTransaction.name)
   })
-  it('should verify the correct item category is displayed', () => {
+  it('should verify the correct transaction item category is displayed', () => {
     render(
       <TransactionItem
         amount={testTransaction.amount}
@@ -61,5 +61,20 @@ describe('Transaction Item', () => {
     const transactionItem = screen.getByTestId('transaction-item')
     expect(transactionItem).toBeInTheDocument()
     expect(transactionItem).toHaveTextContent(testTransaction.category)
+  })
+  it('should verify the correct transaction item amount is displayed', () => {
+    render(
+      <TransactionItem
+        amount={testTransaction.amount}
+        category={testTransaction.category}
+        name={testTransaction.name}
+        time={testTransaction.time}
+      />,
+    )
+    const transactionItem = screen.getByTestId('transaction-item')
+    expect(transactionItem).toBeInTheDocument()
+    expect(transactionItem).toHaveTextContent(
+      testTransaction.amount.toFixed(2).toString(),
+    )
   })
 })
