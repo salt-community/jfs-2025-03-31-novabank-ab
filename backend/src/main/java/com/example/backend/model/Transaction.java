@@ -28,9 +28,13 @@ public class Transaction {
     private Account toAccount;
     @Column(nullable = false)
     private LocalDateTime createdAt;
+    @Column(nullable = false)
     private double amount;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private String userNote;
+    @Column(nullable = false)
     private String ocrNumber;
 
 }
