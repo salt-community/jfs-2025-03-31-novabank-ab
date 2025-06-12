@@ -6,6 +6,8 @@ import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -27,7 +29,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(description = "Add new User")
+    @Operation(summary = "Add new User", description = "Creates new User from Clerk userId, returns User location")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
     @PostMapping("/add-user")
     public ResponseEntity<Void> addUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
