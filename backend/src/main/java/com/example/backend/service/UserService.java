@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ public class UserService {
 
     public User getUser(String id) {
         Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        if (user.isEmpty()) throw new UserNotFoundException();
+        return user.get();
     }
 
     public List<User> getAllUsers() {
@@ -31,12 +33,12 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
+        getUser(id); // makes sure to check if user exists
         userRepository.deleteById(id);
     }
 
     public User updateUser(String id, User user) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User existingUser = getUser(id);
 
         existingUser.setFullName(user.getFullName());
         existingUser.setEmail(user.getEmail());

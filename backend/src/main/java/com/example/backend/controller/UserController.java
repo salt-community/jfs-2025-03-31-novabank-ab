@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.RegisterUserDto;
+import com.example.backend.dto.UpdateUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.service.UserService;
@@ -10,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
-
 
 import java.net.URI;
 import java.util.List;
@@ -52,6 +52,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -61,8 +62,8 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id,
-                                           @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
+                                           @RequestBody UpdateUserRequestDto dto) {
+        User updatedUser = userService.updateUser(id, dto.toUser());
 
         return ResponseEntity.ok(updatedUser)  ;
     }

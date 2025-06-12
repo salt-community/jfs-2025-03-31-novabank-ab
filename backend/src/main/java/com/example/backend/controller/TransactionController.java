@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
+import com.example.backend.model.Account;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,28 +33,25 @@ public class TransactionController {
 
     @GetMapping("/account/{accountId}")
     public ResponseEntity<?> getTransactions(@PathVariable UUID accountId){
-        transactionService.getAllTransactions();
-        return null;
+        return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId));
     }
 
     @PostMapping
     public ResponseEntity<?> addTransaction( @RequestBody TransactionRequestDto dto){
         transactionService.addTransaction(dto.convertToTransaction());
-        return null;
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto){
-
-        //Transaction repository can't save the typ of scheduledTransaction
-       // transactionService.addScheduledTransaction(dto.toScheduledTransaction());
-        return null;
+        transactionService.addScheduledTransaction(dto.toScheduledTransaction());
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{transactionId}")
     public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID transactionId){
         transactionService.deleteScheduledTransaction(transactionId);
-        return null;
+        return ResponseEntity.noContent().build();
     }
 
 
