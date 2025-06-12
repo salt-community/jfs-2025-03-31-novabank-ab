@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { ClerkProvider } from '@clerk/clerk-react'
 import "./i18n";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 
 
 // Import the generated route tree
@@ -30,6 +32,8 @@ declare module '@tanstack/react-router' {
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
+const queryClient = new QueryClient()
+
 if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key')
 }
@@ -40,9 +44,11 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
+      <QueryClientProvider client={queryClient}>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/'>
         <RouterProvider router={router} />
       </ClerkProvider>
+      </QueryClientProvider>
     </StrictMode>,
   )
 }
