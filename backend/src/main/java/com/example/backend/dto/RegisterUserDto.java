@@ -7,22 +7,21 @@ import com.example.backend.model.enums.UserStatus;
 import java.time.LocalDateTime;
 
 public record RegisterUserDto(
-    String fullname,
-    String email,
-    String phoneNumber,
-    Role role,
-    UserStatus status
+        String email,
+        String phoneNumber,
+        String firstName,
+        String lastName
 ) {
-
-    public User toUser() {
+    public User toUser(String id, Role role) {
         User user = new User();
-        user.setFullName(fullname);
+        user.setId(id);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
-        user.setRole(role);
-        user.setStatus(status);
+        user.setFullName(String.format("%s %s", firstName, lastName));
         user.setCreatedAt(LocalDateTime.now());
         user.setLastLogin(null);
+        user.setStatus(UserStatus.ACTIVE);
+        user.setRole(role);
         return user;
     }
 }

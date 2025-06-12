@@ -4,9 +4,7 @@ import com.example.backend.model.Transaction;
 import com.example.backend.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -20,7 +18,7 @@ public class TransactionService {
     }
 
     public Transaction getTransaction(UUID id) {
-        return transactionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No such transaction"));
+        return transactionRepository.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
     public void addTransaction(Transaction transaction) {

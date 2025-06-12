@@ -6,6 +6,7 @@ import com.example.backend.dto.DepositRequestDto;
 import com.example.backend.dto.WithdrawalRequestDto;
 import com.example.backend.model.Account;
 import com.example.backend.service.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class AccountController {
     }
 
     @GetMapping("/{userId}/accounts")
-    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable UUID userId) {
+    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         return ResponseEntity.ok(accounts);
     }
@@ -52,24 +53,27 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        Account created = accountService.createAccount(dto.toAccount());
+        Account created = accountService.createAccount(dto);
         URI location = URI.create("api/account/" + created.getId());
         return ResponseEntity.created(location).build();
     }
 
     @PatchMapping("/{accountId}/deposit")
-    public ResponseEntity<Void> deposit(@PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
-        return null;
+    public ResponseEntity<Void> deposit(@Valid @PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
+        accountService.addDeposit(accountId, dto.amount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(@PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
-        return null;
+    public ResponseEntity<Void> withdrawal(@Valid @PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
+        accountService.makeWithdrawal(accountId, dto.amount());
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/suspend/{accountId}")
     public ResponseEntity<Void> suspendAccount(@PathVariable UUID accountId) {
-        return null;
+        accountService.makeAccountSuspend(accountId);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{accountId}")

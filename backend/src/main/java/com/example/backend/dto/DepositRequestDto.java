@@ -1,6 +1,9 @@
 package com.example.backend.dto;
 
-public record DepositRequestDto(
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-) {
-}
+public record DepositRequestDto(
+        @NotNull
+        @Positive
+        double amount) {}

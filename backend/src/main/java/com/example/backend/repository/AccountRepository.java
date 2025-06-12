@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface AccountRepository extends CrudRepository<Account, UUID> {
     List<Account> findAccountsByUser(User user);
+    boolean existsByAccountNumber(String accountNumber);
 }
