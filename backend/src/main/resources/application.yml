@@ -34,3 +34,7 @@ spring:
       mode: always
 
 
+logging:
+  level:
+    org.springdoc: ${SPRING_LOGGING_LEVEL:INFO}
+    org.springframework.web: ${SPRING_LOGGING_LEVEL:INFO}

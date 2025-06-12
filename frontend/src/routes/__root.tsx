@@ -1,15 +1,15 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { SignedIn } from '@clerk/clerk-react'
 
 import SideBar from '@/components/generic/SideBar'
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <SideBar />
-
+      <SignedIn>
+        <SideBar />
+      </SignedIn>
       <Outlet />
-      <TanStackRouterDevtools />
     </>
   ),
 })

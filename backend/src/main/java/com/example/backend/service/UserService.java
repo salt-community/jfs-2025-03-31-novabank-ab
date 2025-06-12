@@ -1,6 +1,9 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.UserAlreadyExistsException;
+import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.User;
+import com.example.backend.model.enums.UserStatus;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,26 +20,40 @@ public class UserService {
     }
 
     public User addUser(User user) {
+        boolean idExists = userRepository.existsById(user.getId());
+        boolean emailExists = userRepository.existsByEmail(user.getEmail());
+
+        if (idExists || emailExists) {
+            throw new UserAlreadyExistsException("User with this ID or email already exists");
+        }
+
         return userRepository.save(user);
     }
 
-
     public User getUser(String id) {
-        Optional<User> user = userRepository.findById(id);
-        return user.orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public List<User> getAllUsers() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
+    }
+
+    public User suspendUser(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
+        user.setStatus(UserStatus.SUSPENDED);
+        return userRepository.save(user);
     }
 
     public void deleteUser(String id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
         userRepository.deleteById(id);
     }
 
     public User updateUser(String id, User user) {
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User existingUser = getUser(id);
 
         existingUser.setFullName(user.getFullName());
         existingUser.setEmail(user.getEmail());

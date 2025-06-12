@@ -1,6 +1,7 @@
 package com.example.backend.exception;
 
 import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.UserAlreadyExistsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.exception.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
@@ -33,5 +34,13 @@ public class GlobalExceptionHandler {
                 e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleUserAlreadyExists(UserAlreadyExistsException e) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                e.getMessage(), HttpStatus.CONFLICT.value(), LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 }
