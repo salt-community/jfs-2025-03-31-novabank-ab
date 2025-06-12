@@ -1,20 +1,41 @@
 [
   {
     "id": "1",
+    "name": "MOCK Domino's Pizza",
+    "category": "Foodservice",
+    "amount": -16.3,
+    "time": "11:54 pm"
+  },
+  {
+    "id": "2",
+    "name": "MOCK YouTube Premium",
+    "category": "Streaming service",
+    "amount": -6.0,
+    "time": "06:30 pm"
+  },
+  {
+    "id": "3",
+    "name": "MOCK Cashbox terminal #17",
+    "category": "Replenishment",
+    "amount": 450.0,
+    "time": "02:02 pm"
+  },
+  {
+    "id": "4",
     "name": "MOCK Mom",
     "category": "Incoming",
     "amount": 300,
     "time": "2025-06-12 14:23"
   },
   {
-    "id": "2",
+    "id": "5",
     "name": "MOCK Dad",
     "category": "Outgoing",
     "amount": -2500,
     "time": "2025-06-10 09:00"
   },
   {
-    "id": "3",
+    "id": "6",
     "name": "MOCK Joe Biden",
     "category": "Outgoing",
     "amount": -4000,
