@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.InsufficientFundsException;
 import com.example.backend.exception.custom.UserNotFoundException;
@@ -14,14 +13,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final Random random = new Random();
 
     public AccountService(AccountRepository accountRepository,
                           UserRepository userRepository) {
@@ -41,33 +39,28 @@ public class AccountService {
     }
 
     public List<Account> getAllAccounts() {
-        Iterable<Account> iterable = accountRepository.findAll();
-        return StreamSupport.stream(iterable.spliterator(), false)
-                .collect(Collectors.toList());
+        return (List<Account>) accountRepository.findAll();
     }
 
     public double getBalance(UUID accountId) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(AccountNotFoundException::new);
+        Account account = getAccount(accountId);
 
         return account.getBalance();
     }
 
-    public Account createAccount(CreateAccountRequestDto account) {
-        int startBalance = 0;
-        userRepository.findById(String.valueOf("lol")).orElseThrow(UserNotFoundException::new);
-        Account createdAccount = new Account();
-        createdAccount.setCreatedAt(LocalDate.now());
-        createdAccount.setStatus(AccountStatus.ACTIVE);
-        createdAccount.setCurrency(account.currency());
-        createdAccount.setType(account.type());
-        createdAccount.setBalance(startBalance);
-        createdAccount.setAccountNumber(generateUniqueAccountNumber());
-        return accountRepository.save(createdAccount);
+    public Account createAccount(Account account) {
+        userRepository.findById(account.getUser().getId())
+                .orElseThrow(UserNotFoundException::new);
+        account.setCreatedAt(LocalDate.now());
+        account.setStatus(AccountStatus.ACTIVE);
+        account.setBalance(0);
+        account.setAccountNumber(generateUniqueAccountNumber());
+        return accountRepository.save(account);
     }
 
 
     private String generateUniqueAccountNumber() {
+        //Todo: make this secure
         String prefix = "1337-";
         String accountNumber;
 
@@ -79,7 +72,6 @@ public class AccountService {
     }
 
     private String generateRandomDigits(int length) {
-        Random random = new Random();
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
@@ -90,9 +82,10 @@ public class AccountService {
     }
 
     public void addDeposit(UUID accountId, double amount) {
-            Account account = getAccount(accountId);
-            account.setBalance(account.getBalance() + amount);
-            accountRepository.save(account);
+        System.out.println("WAS HERE!");
+        Account account = getAccount(accountId);
+        account.setBalance(account.getBalance() + amount);
+        accountRepository.save(account);
     }
 
     public void makeWithdrawal(UUID accountId, double amount) {
@@ -109,5 +102,10 @@ public class AccountService {
         Account account = getAccount(accountId);
         account.setStatus(AccountStatus.SUSPENDED);
         accountRepository.save(account);
+    }
+
+    public void deleteAccount(UUID accountId) {
+        Account account = getAccount(accountId);
+        accountRepository.delete(account);
     }
 }
