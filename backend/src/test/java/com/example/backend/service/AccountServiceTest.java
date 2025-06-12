@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -41,5 +43,11 @@ class AccountServiceTest {
         assertTrue(acct.startsWith("1337-"));
         assertEquals(5 + 9, acct.length());
         verify(accountRepository, times(1)).existsByAccountNumber(acct);
+    }
+
+
+    @Test
+    void getAllUserAccounts_userNotFound_throwsUserNotFoundException() {
+
     }
 }
