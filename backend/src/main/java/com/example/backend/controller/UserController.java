@@ -20,7 +20,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -52,7 +51,7 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Manually creat new User", description = "Creates new User from Admin portal, returns User location in header")
+    @Operation(summary = "Manually create new User", description = "Creates new User from Admin portal, returns User location in header")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
             @ApiResponse(responseCode = "409", description = "User already exists"),
@@ -115,8 +114,16 @@ public class UserController {
         return ResponseEntity.ok(suspended);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable String id) {
+    @Operation(summary = "Delete a user by id", description = "Deletes the user from database, needs ADMIN rights")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted User"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/delete-user/{id}")
+    public ResponseEntity<User> deleteUser(
+            @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
+    ) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
