@@ -1,30 +1,18 @@
 import TransactionItem from "../generic/TransactionItem";
 
-export default function TransactionList() {
-  // MockData
-  const transactions = [
-    {
-      id: 1,
-      name: "Domino's Pizza",
-      category: "Foodservice",
-      amount: -16.30,
-      time: "11:54 pm"
-    },
-    {
-      id: 2,
-      name: "YouTube Premium",
-      category: "Streaming service",
-      amount: -6.00,
-      time: "06:30 pm"
-    },
-    {
-      id: 3,
-      name: "Cashbox terminal #17",
-      category: "Replenishment",
-      amount: 450.00,
-      time: "02:02 pm"
-    },
-  ];
+type Transaction={
+  id: number;
+  name: string;
+  category: string;
+  amount: number;
+  time: string;
+}
+type TransactionListProps={
+  transactions: Array<Transaction>;
+}
+
+
+export default function TransactionList({transactions}: TransactionListProps) {
 
   return (
     <div className="p-10 rounded-lg max-w-xl mx-auto"> 
