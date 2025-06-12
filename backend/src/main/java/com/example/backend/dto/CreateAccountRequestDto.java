@@ -4,14 +4,15 @@ import com.example.backend.model.Account;
 import com.example.backend.model.Currency;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.BankAccountType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 // TODO: Add Currency
 public record CreateAccountRequestDto(
-        @NotNull String userId,
-        BankAccountType type
+        @NotNull @NotBlank String userId,
+        @NotNull BankAccountType type
 ) {
     public Account toAccount(User user) {
         Account account = new Account();

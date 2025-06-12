@@ -6,4 +6,5 @@ import jakarta.validation.constraints.Positive;
 public record DepositRequestDto(
         @NotNull
         @Positive
-        double amount) {}
+        double amount
+) {}

@@ -2,12 +2,12 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.*;
 import com.example.backend.model.Account;
-import com.example.backend.model.Currency;
 import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +29,19 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<AccountResponseDto> getAccount(@PathVariable UUID accountId) {
+    public ResponseEntity<AccountResponseDto> getAccount(
+        @PathVariable @org.hibernate.validator.constraints.UUID
+        UUID accountId
+    ) {
         Account account = accountService.getAccount(accountId);
         return ResponseEntity.ok(AccountResponseDto.fromAccount(account));
     }
 
     @GetMapping("/{userId}/accounts")
-    public ResponseEntity<ListAccountResponseDto> getAllUserAccounts(@PathVariable String userId) {
+    public ResponseEntity<ListAccountResponseDto> getAllUserAccounts(
+        @PathVariable @NotNull @NotBlank
+        String userId
+    ) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         return ResponseEntity.ok(
             ListAccountResponseDto.fromAccounts(accounts)
@@ -51,7 +57,10 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}/balance")
-    public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable UUID accountId) {
+    public ResponseEntity<BalanceResponseDto> getBalance(
+        @PathVariable @org.hibernate.validator.constraints.UUID
+        UUID accountId
+    ) {
         BalanceResponseDto response = new BalanceResponseDto(
                 accountService.getBalance(accountId), LocalDateTime.now()
         );
@@ -59,7 +68,10 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
+    public ResponseEntity<Void> createAccount(
+        @RequestBody @Valid
+        CreateAccountRequestDto dto
+    ) {
         User user = userService.getUser(dto.userId());
         Account created = accountService.createAccount(dto.toAccount(user));
         URI location = URI.create("api/account/" + created.getId());
@@ -67,25 +79,41 @@ public class AccountController {
     }
 
     @PatchMapping("/{accountId}/deposit")
-    public ResponseEntity<Void> deposit(@Valid @PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
+    public ResponseEntity<Void> deposit(
+        @PathVariable @org.hibernate.validator.constraints.UUID
+        UUID accountId,
+        @RequestBody @Valid
+        DepositRequestDto dto
+    ) {
         accountService.addDeposit(accountId, dto.amount());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(@Valid @PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
+    public ResponseEntity<Void> withdrawal(
+        @PathVariable @org.hibernate.validator.constraints.UUID
+        UUID accountId,
+        @RequestBody @Valid
+        WithdrawalRequestDto dto
+    ) {
         accountService.makeWithdrawal(accountId, dto.amount());
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/suspend/{accountId}")
-    public ResponseEntity<Void> suspendAccount(@PathVariable UUID accountId) {
+    public ResponseEntity<Void> suspendAccount(
+        @PathVariable @org.hibernate.validator.constraints.UUID
+        UUID accountId
+    ) {
         accountService.makeAccountSuspend(accountId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable UUID accountId) {
+    public ResponseEntity<Void> deleteAccount(
+        @PathVariable @org.hibernate.validator.constraints.UUID
+        UUID accountId
+    ) {
         accountService.deleteAccount(accountId);
         return ResponseEntity.noContent().build();
     }
