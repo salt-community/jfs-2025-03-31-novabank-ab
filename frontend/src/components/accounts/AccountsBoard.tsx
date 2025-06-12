@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import AccountItem from './AccountItem'
 
 const bankAccounts = [
   {
@@ -18,36 +18,15 @@ const bankAccounts = [
   },
 ]
 export default function AccountsBoard() {
-  const navigate = useNavigate()
   return (
     <div className="max-w mx-auto p-6 space-y-6">
       <h1 className="text-2xl">My bank accounts ({bankAccounts.length})</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
-          <div
+          <AccountItem
             key={account.accountNumber}
-            className="flex items-center justify-between border px-4 py-3 shadow-sm hover:bg-gray-200 rounded-md"
-            onClick={() =>
-              navigate({
-                to: '/accounts/$id',
-                params: { id: account.accountNumber },
-              })
-            }
-          >
-            <div>
-              <div>{account.accountName}</div>
-              <div className="text-sm text-gray-500">
-                {account.accountNumber}
-              </div>
-            </div>
-            <div className="text-right ">
-              $
-              {account.balance.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-              })}
-              <span className="ml-2">{'>'}</span>
-            </div>
-          </div>
+            account={account}
+          />
         ))}
 
         <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow rounded-md">
