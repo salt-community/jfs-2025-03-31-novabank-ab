@@ -1,28 +1,18 @@
-export default function TransactionList() {
-  // MockData
-  const transactions = [
-    {
-      id: 1,
-      name: "Domino's Pizza",
-      category: "Foodservice",
-      amount: -16.30,
-      time: "11:54 pm"
-    },
-    {
-      id: 2,
-      name: "YouTube Premium",
-      category: "Streaming service",
-      amount: -6.00,
-      time: "06:30 pm"
-    },
-    {
-      id: 3,
-      name: "Cashbox terminal #17",
-      category: "Replenishment",
-      amount: 450.00,
-      time: "02:02 pm"
-    },
-  ];
+import TransactionItem from "../generic/TransactionItem";
+
+type Transaction={
+  id: number;
+  name: string;
+  category: string;
+  amount: number;
+  time: string;
+}
+type TransactionListProps={
+  transactions: Array<Transaction>;
+}
+
+
+export default function TransactionList({transactions}: TransactionListProps) {
 
   return (
     <div className="p-10 rounded-lg max-w-xl mx-auto"> 
@@ -32,19 +22,14 @@ export default function TransactionList() {
       </div>
 
       <div className="shadow-md p-1">
-        {transactions.map(transaction => (
-          <div key={transaction.id} className="flex justify-between items-center py-3 border-b last:border-b-0">
-            <div className="flex flex-col">
-              <span className="text-base text-gray-800">{transaction.name}</span>
-              <span className="text-xs text-gray-500">{transaction.category}</span>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className={`text-base font-medium ${transaction.amount < 0 ? 'text-gray-800' : 'text-green-500'}`}>
-                {transaction.amount < 0 ? `-${Math.abs(transaction.amount).toFixed(2)}` : `+${transaction.amount.toFixed(2)}`}
-              </span>
-              <span className="text-xs text-gray-400">{transaction.time}</span>
-            </div>
-          </div>
+        {transactions.map((transaction) => (
+          <TransactionItem 
+          key={transaction.id}
+          name={transaction.name}
+          category={transaction.category}
+          amount={transaction.amount}
+          time={transaction.time}
+          />
         ))}
       </div>
     </div>
