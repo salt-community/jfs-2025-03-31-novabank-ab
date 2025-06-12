@@ -5,7 +5,10 @@ import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.dto.DepositRequestDto;
 import com.example.backend.dto.WithdrawalRequestDto;
 import com.example.backend.model.Account;
+import com.example.backend.model.Currency;
+import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
+import com.example.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +23,11 @@ import java.util.UUID;
 public class AccountController {
 
     private final AccountService accountService;
+    private final UserService userService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, UserService userService) {
         this.accountService = accountService;
+        this.userService = userService;
     }
 
     @GetMapping("/{accountId}")
@@ -53,7 +58,8 @@ public class AccountController {
 
     @PostMapping
     public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        Account created = accountService.createAccount(dto);
+        User user = userService.getUser(dto.userId());
+        Account created = accountService.createAccount(dto.toAccount(user));
         URI location = URI.create("api/account/" + created.getId());
         return ResponseEntity.created(location).build();
     }

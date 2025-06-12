@@ -53,17 +53,13 @@ public class AccountService {
         return account.getBalance();
     }
 
-    public Account createAccount(CreateAccountRequestDto account) {
-        int startBalance = 0;
-        userRepository.findById(String.valueOf(account.userId())).orElseThrow(UserNotFoundException::new);
-        Account createdAccount = new Account();
-        createdAccount.setCreatedAt(LocalDate.now());
-        createdAccount.setStatus(AccountStatus.ACTIVE);
-        createdAccount.setCurrency(account.currency());
-        createdAccount.setType(account.type());
-        createdAccount.setBalance(startBalance);
-        createdAccount.setAccountNumber(generateUniqueAccountNumber());
-        return accountRepository.save(createdAccount);
+    public Account createAccount(Account account) {
+        userRepository.findById(String.valueOf(account.getUser().getId())).orElseThrow(UserNotFoundException::new);
+        account.setCreatedAt(LocalDate.now());
+        account.setStatus(AccountStatus.ACTIVE);
+        account.setBalance(0);
+        account.setAccountNumber(generateUniqueAccountNumber());
+        return accountRepository.save(account);
     }
 
 
