@@ -4,16 +4,27 @@ on:
   push:
     branches:
       - main
+      - frontendWorkflowStepsImprovement
   workflow_dispatch:
 
 jobs:
-  all:
+  docker-img-build-and-push:
     runs-on: ubuntu-latest
     env:
       IMAGE_URL: ${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/cloud-run-source-deploy/${{ vars.GC_REPO_FRONTEND_NAME }}/${{ vars.GC_SERVICE_FRONTEND_NAME }}:${{ github.sha }}
-
     steps:
       - uses: actions/checkout@v3
+
+      - name: Authenticate GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Configure Docker to use gcloud as a credential helper
+        run: gcloud auth configure-docker ${{ vars.GC_REGION }}-docker.pkg.dev
 
       - name: Docker Build
         run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile frontend
@@ -21,33 +32,22 @@ jobs:
       - name: Docker Push
         run: docker push $IMAGE_URL
 
-      - name: Update Cloud Run service
+  deploy-to-gcp:
+    runs-on: ubuntu-latest
+    needs: docker-img-build-and-push
+    env:
+      IMAGE_URL: ${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/cloud-run-source-deploy/${{ vars.GC_REPO_FRONTEND_NAME }}/${{ vars.GC_SERVICE_FRONTEND_NAME }}:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Authenticate GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Deploy to Cloud Run Service
         uses: google-github-actions/deploy-cloudrun@v1
         with:
           region: ${{ vars.GC_REGION }}
           service: ${{ vars.GC_SERVICE_FRONTEND_NAME }}
           image: ${{ env.IMAGE_URL }}
-  auth:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - id: "auth"
-        name: Authenticate GCP
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: "${{ secrets.GCP_SA_KEY }}"
-  setup:
-    runs-on: ubuntu-latest
-    needs: auth
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
-      - name: Use gcloud CLI
-        run: gcloud info
-
-      - name: Configure docker
-        run: gcloud auth configure-docker ${{ vars.GC_REGION }}-docker.pkg.dev
