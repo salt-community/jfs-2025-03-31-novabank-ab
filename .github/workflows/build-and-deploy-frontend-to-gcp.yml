@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - frontendWorkflowStepsImprovement
   workflow_dispatch:
 
 jobs:
