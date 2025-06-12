@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.AddNewUserRequestDto;
 import com.example.backend.dto.RegisterUserDto;
 import com.example.backend.dto.UpdateUserRequestDto;
 import com.example.backend.model.User;
@@ -8,7 +9,6 @@ import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -48,6 +49,22 @@ public class UserController {
         User created = userService.addUser(dto.toUser(userId, role));
         URI location = URI.create("/api/user/" + created.getId());
 
+        return ResponseEntity.created(location).build();
+    }
+
+    @Operation(summary = "Manually creat new User", description = "Creates new User from Admin portal, returns User location in header")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "409", description = "User already exists"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/admin/add-user")
+    public ResponseEntity<Void> addUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+            @RequestBody AddNewUserRequestDto dto) {
+        User created = userService.addUser(dto.toUser());
+        URI location = URI.create("/api/user/" + created.getId());
         return ResponseEntity.created(location).build();
     }
 
