@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
+import com.example.backend.exception.custom.AccountNotAllowedException;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.TransactionNotFoundException;
 import com.example.backend.model.Account;
