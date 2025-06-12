@@ -13,6 +13,8 @@ import java.util.UUID;
 @Table(name = "currencies")
 public class Currency {
 
+    public Currency() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

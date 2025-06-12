@@ -7,5 +7,4 @@ public record WithdrawalRequestDto(
         @NotNull
         @Positive
         double amount
-) {
-}
+) { }

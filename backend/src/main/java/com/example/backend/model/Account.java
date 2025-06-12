@@ -27,9 +27,9 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "currency_id")
-    private Currency currency;
+//    @ManyToOne
+//    @JoinColumn(name = "currency_id")
+//    private Currency currency;
     private LocalDate createdAt;
     private double balance;
 
