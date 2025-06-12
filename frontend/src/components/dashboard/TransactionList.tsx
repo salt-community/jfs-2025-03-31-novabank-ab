@@ -1,3 +1,5 @@
+import TransactionItem from "../generic/TransactionItem";
+
 export default function TransactionList() {
   // MockData
   const transactions = [
@@ -32,19 +34,14 @@ export default function TransactionList() {
       </div>
 
       <div className="shadow-md p-1">
-        {transactions.map(transaction => (
-          <div key={transaction.id} className="flex justify-between items-center py-3 border-b last:border-b-0">
-            <div className="flex flex-col">
-              <span className="text-base text-gray-800">{transaction.name}</span>
-              <span className="text-xs text-gray-500">{transaction.category}</span>
-            </div>
-            <div className="flex flex-col items-end">
-              <span className={`text-base font-medium ${transaction.amount < 0 ? 'text-gray-800' : 'text-green-500'}`}>
-                {transaction.amount < 0 ? `-${Math.abs(transaction.amount).toFixed(2)}` : `+${transaction.amount.toFixed(2)}`}
-              </span>
-              <span className="text-xs text-gray-400">{transaction.time}</span>
-            </div>
-          </div>
+        {transactions.map((transaction) => (
+          <TransactionItem 
+          key={transaction.id}
+          name={transaction.name}
+          category={transaction.category}
+          amount={transaction.amount}
+          time={transaction.time}
+          />
         ))}
       </div>
     </div>
