@@ -6,6 +6,7 @@ import com.example.backend.model.Account;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,17 +56,26 @@ public class TransactionController {
     }
     @Operation(
             summary = "Create a scheduled transaction",
-            description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data."
+            description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+            }
     )
     @PostMapping("/create-scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto, @PathVariable String accountId) {
-        transactionService.addScheduledTransaction(dto.toScheduledTransaction());
+        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
         return ResponseEntity.ok().build();
     }
 
     @Operation(
             summary = "Delete a scheduled transaction",
-            description = "Deletes a scheduled transaction from the system using its unique transaction ID."
+            description = "Deletes a scheduled transaction from the system using its unique transaction ID.",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Scheduled transaction successfully deleted"),
+                    @ApiResponse(responseCode = "404", description = "Scheduled transaction not found"),
+                    @ApiResponse(responseCode = "400", description = "Invalid transaction ID format")
+            }
     )
     @DeleteMapping("/delete-scheduled/{transactionId}")
     public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID transactionId, @PathVariable String accountId) {
