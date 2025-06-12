@@ -36,4 +36,17 @@ describe('Transaction Item', () => {
     expect(transactionItem).toBeInTheDocument()
     expect(transactionItem).toHaveTextContent(testTransaction.time)
   })
+  it('should verify the correct item name is displayed', () => {
+    render(
+      <TransactionItem
+        amount={testTransaction.amount}
+        category={testTransaction.category}
+        name={testTransaction.name}
+        time={testTransaction.time}
+      />,
+    )
+    const transactionItem = screen.getByTestId('transaction-item')
+    expect(transactionItem).toBeInTheDocument()
+    expect(transactionItem).toHaveTextContent(testTransaction.name)
+  })
 })
