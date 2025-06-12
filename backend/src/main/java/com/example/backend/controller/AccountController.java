@@ -1,9 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.BalanceResponseDto;
-import com.example.backend.dto.CreateAccountRequestDto;
-import com.example.backend.dto.DepositRequestDto;
-import com.example.backend.dto.WithdrawalRequestDto;
+import com.example.backend.dto.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.Currency;
 import com.example.backend.model.User;
@@ -31,21 +28,25 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<Account> getAccount(@PathVariable UUID accountId) {
+    public ResponseEntity<AccountResponseDto> getAccount(@PathVariable UUID accountId) {
         Account account = accountService.getAccount(accountId);
-        return ResponseEntity.ok(account);
+        return ResponseEntity.ok(AccountResponseDto.fromAccount(account));
     }
 
     @GetMapping("/{userId}/accounts")
-    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable String userId) {
+    public ResponseEntity<ListAccountResponseDto> getAllUserAccounts(@PathVariable String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
-        return ResponseEntity.ok(accounts);
+        return ResponseEntity.ok(
+            ListAccountResponseDto.fromAccounts(accounts)
+        );
     }
 
     // Do we need this?
     @GetMapping
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        return ResponseEntity.ok(accountService.getAllAccounts());
+    public ResponseEntity<ListAccountResponseDto> getAllAccounts() {
+        return ResponseEntity.ok(
+            ListAccountResponseDto.fromAccounts(accountService.getAllAccounts())
+        );
     }
 
     @GetMapping("/{accountId}/balance")
