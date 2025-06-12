@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -55,5 +57,18 @@ class AccountServiceTest {
 
         verify(userRepository).findById("unknown-user");
         verifyNoInteractions(accountRepository);
+    }
+
+    @Test
+    void getAccount_accountNotFound_throwsAccountNotFoundException() {
+        UUID accountId = UUID.randomUUID();
+        when(accountRepository.findById(accountId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(AccountNotFoundException.class,
+                () -> service.getAccount(accountId));
+
+        verify(accountRepository).findById(accountId);
+        verifyNoMoreInteractions(accountRepository);
     }
 }
