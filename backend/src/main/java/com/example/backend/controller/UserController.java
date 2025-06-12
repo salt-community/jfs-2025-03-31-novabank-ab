@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping({"/api/user", "/api/user"})
 public class UserController {
 
     private final UserService userService;
@@ -59,24 +59,35 @@ public class UserController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/admin/add-user")
-    public ResponseEntity<Void> addUser(
-            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
-            @RequestBody AddNewUserRequestDto dto) {
+    public ResponseEntity<Void> addUser(@RequestBody AddNewUserRequestDto dto) {
         User created = userService.addUser(dto.toUser());
         URI location = URI.create("/api/user/" + created.getId());
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get a user by id", description = "Returns a user as per the id")
+    @Operation(summary = "Get a user by id", description = "Returns a user as per the id, requires ADMIN")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
     ) {
         User user = userService.getUser(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @Operation(summary = "Get a user", description = "Returns a user based on Clerk token userId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
+    })
+    @GetMapping
+    public ResponseEntity<User> getOwnUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        User user = userService.getUser(userId);
         return ResponseEntity.ok(user);
     }
 
