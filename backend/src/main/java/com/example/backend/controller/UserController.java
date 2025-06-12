@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @PostMapping("/register")
-    public ResponseEntity<Void> addUser(
+    public ResponseEntity<Void> registerNewUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestBody RegisterUserDto dto) {
 
@@ -43,7 +44,7 @@ public class UserController {
         Role role = extractRoleFromJWT(jwt);
 
         User created = userService.addUser(dto.toUser(userId, role));
-        URI location = URI.create("api/user/" + created.getId());
+        URI location = URI.create("/api/user/" + created.getId());
 
         return ResponseEntity.created(location).build();
     }
@@ -61,7 +62,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-
+    @Operation(summary = "Get all users", description = "Returns a list of users, needs ADMIN rights")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "500", description = "Unexxpected Error")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();

@@ -1,16 +1,15 @@
 package com.example.backend.dto;
 
-import com.example.backend.model.Account;
-import com.example.backend.model.Transaction;
+
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 
 
-public record TransactionRequestDto(Account from,
-                                    Account to,
-                                    @NotNull
-                                    double amount) {
-    public Transaction convertToTransaction(){
-        return new Transaction();
-
-    }
-}
+public record TransactionRequestDto(
+        @NotNull UUID fromAccountId,
+        @NotNull UUID toAccountId,
+        @NotNull double amount,
+        String description,
+        String ocrNumber,
+        String userNote
+) {}

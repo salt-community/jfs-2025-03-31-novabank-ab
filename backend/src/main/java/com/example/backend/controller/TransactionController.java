@@ -50,7 +50,7 @@ public class TransactionController {
     )
     @PostMapping
     public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto) {
-        transactionService.addTransaction(dto.convertToTransaction());
+        transactionService.addTransaction(dto);
         return ResponseEntity.ok().build();
     }
     @Operation(

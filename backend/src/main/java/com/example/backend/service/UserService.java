@@ -23,13 +23,12 @@ public class UserService {
 
 
     public User getUser(String id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) throw new UserNotFoundException();
-        return user.get();
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public List<User> getAllUsers() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public void deleteUser(String id) {
