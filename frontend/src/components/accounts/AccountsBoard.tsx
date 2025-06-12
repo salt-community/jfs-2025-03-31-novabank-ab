@@ -26,7 +26,7 @@ export default function AccountsBoard() {
         {bankAccounts.map((account) => (
           <div
             key={account.accountNumber}
-            className="flex items-center justify-between border px-4 py-3 shadow-sm hover:bg-gray-200"
+            className="flex items-center justify-between border px-4 py-3 shadow-sm hover:bg-gray-200 rounded-md"
             onClick={() =>
               navigate({
                 to: '/accounts/$id',
@@ -50,7 +50,7 @@ export default function AccountsBoard() {
           </div>
         ))}
 
-        <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow">
+        <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow rounded-md">
           <span className="text-lg">+ Open new account</span>
           <span className="text-xl">{'>'}</span>
         </button>
