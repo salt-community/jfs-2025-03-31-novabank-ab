@@ -27,12 +27,11 @@ public class TransactionController {
 
     @GetMapping("/account/{transactionId}")
     public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId){
-        transactionService.getTransaction(transactionId);
-        return null;
+        return ResponseEntity.ok().body(transactionService.getTransaction(transactionId));
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<?> getTransactions(@PathVariable UUID accountId){
+    public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId){
         return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId));
     }
 

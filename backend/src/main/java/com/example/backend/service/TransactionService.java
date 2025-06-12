@@ -6,8 +6,6 @@ import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,11 +35,7 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactions(UUID id) {
-
-        Iterable<Transaction> transactions = transactionRepository.findAll();
-
-
-        return (List<Transaction>) transactionRepository.findAll();
+        return  transactionRepository.findByFromAccount_IdOrToAccount_Id(id, id);
     }
 
     public void deleteScheduledTransaction(UUID id) {
