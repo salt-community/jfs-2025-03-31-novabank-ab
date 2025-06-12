@@ -37,7 +37,8 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<Void> registerNewUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
-            @RequestBody RegisterUserRequestDto dto) {
+            @RequestBody RegisterUserRequestDto dto
+    ) {
 
         String userId = jwt.getSubject();
         Role role = extractRoleFromJWT(jwt);
@@ -66,8 +67,10 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
     @PutMapping("")
-    public ResponseEntity<User> updateUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
-                                           @RequestBody UpdateUserRequestDto dto) {
+    public ResponseEntity<User> updateUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+            @RequestBody UpdateUserRequestDto dto
+    ) {
         String userId = jwt.getSubject();
         User updatedUser = userService.updateUser(userId, dto);
         return ResponseEntity.ok(updatedUser);
