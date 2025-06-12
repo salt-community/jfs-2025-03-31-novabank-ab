@@ -27,7 +27,7 @@ jobs:
       - name: Installing dependencies
         run: |
           cd frontend
-          npm install
+          npm ci
 
       - name: Running tests
         run: |
@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: |
           cd frontend
-          npm run build
+          VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} npm run build
 
       - name: Upload artifact to gh
         uses: "actions/upload-artifact@v4"
@@ -67,7 +67,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: frontend-dist
-          path: frontend
+          path: frontend/dist
 
       - name: Docker Build
         run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile frontend
