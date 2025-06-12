@@ -5,11 +5,12 @@ import com.example.backend.model.Transaction;
 import jakarta.validation.constraints.NotNull;
 
 
-public record TransactionRequestDto(Account from,
-                                    Account to,
+public record TransactionRequestDto(
+                                    Account otherAccount,
+                                    boolean in,
                                     @NotNull
                                     double amount) {
-    public Transaction convertToTransaction(){
+    public Transaction convertToTransaction(Account ownAccount){
         return new Transaction();
 
     }
