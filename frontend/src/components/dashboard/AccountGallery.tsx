@@ -1,11 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import AccountCard from './AccountCard'
-
-type Account = {
-  accountName: string
-  accountNumber: string
-  balance: number
-}
+import type { Account } from '@/types'
 
 type AccountGalleryProps = {
   bankAccounts: Array<Account>
