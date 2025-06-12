@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - backendDeployWithCache
   workflow_dispatch:
 
 jobs:
