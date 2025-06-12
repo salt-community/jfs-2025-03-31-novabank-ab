@@ -55,7 +55,7 @@ public class AccountService {
 
     public Account createAccount(CreateAccountRequestDto account) {
         int startBalance = 0;
-        userRepository.findById(String.valueOf(account.userId())).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(String.valueOf("lol")).orElseThrow(UserNotFoundException::new);
         Account createdAccount = new Account();
         createdAccount.setCreatedAt(LocalDate.now());
         createdAccount.setStatus(AccountStatus.ACTIVE);

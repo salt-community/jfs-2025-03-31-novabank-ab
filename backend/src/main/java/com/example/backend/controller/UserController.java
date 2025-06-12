@@ -97,7 +97,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
