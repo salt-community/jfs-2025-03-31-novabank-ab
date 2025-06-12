@@ -60,11 +60,16 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable String id,
+    @Operation(summary = "Update user", description = "Returns the updated user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
+    })
+    @PutMapping("")
+    public ResponseEntity<User> updateUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
                                            @RequestBody UpdateUserRequestDto dto) {
-        User updatedUser = userService.updateUser(id, dto.toUser());
-
+        String userId = jwt.getSubject();
+        User updatedUser = userService.updateUser(userId, dto);
         return ResponseEntity.ok(updatedUser);
     }
 

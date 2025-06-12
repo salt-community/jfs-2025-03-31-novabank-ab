@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.UpdateUserRequestDto;
 import com.example.backend.exception.custom.UserAlreadyExistsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.User;
@@ -59,12 +60,26 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(String id, User user) {
-        User existingUser = getUser(id);
+    public User updateUser(String id, UpdateUserRequestDto dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
 
-        existingUser.setFullName(user.getFullName());
-        existingUser.setEmail(user.getEmail());
+        if (dto.fullname() != null) {
+            user.setFullName(dto.fullname());
+        }
+        if (dto.email() != null) {
+            user.setEmail(dto.email());
+        }
+        if (dto.phoneNumber() != null) {
+            user.setPhoneNumber(dto.phoneNumber());
+        }
+        if (dto.role() != null) {
+            user.setRole(dto.role());
+        }
+        if (dto.status() != null) {
+            user.setStatus(dto.status());
+        }
 
-        return userRepository.save(existingUser);
+        return userRepository.save(user);
     }
 }
