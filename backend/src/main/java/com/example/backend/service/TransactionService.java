@@ -7,13 +7,13 @@ import com.example.backend.exception.custom.TransactionNotFoundException;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
+import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -26,10 +26,13 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository, ScheduledTransactionRepository scheduledTransactionRepository, AccountRepository accountRepository) {
+    public TransactionService(TransactionRepository transactionRepository,
+                              ScheduledTransactionRepository scheduledTransactionRepository,
+                              AccountRepository accountRepository) {
         this.transactionRepository = transactionRepository;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.accountRepository = accountRepository;
+
     }
 
     public Transaction getTransaction(UUID id) {
@@ -37,10 +40,9 @@ public class TransactionService {
     }
 
     public void addTransaction(TransactionRequestDto dto) {
-        Account from = accountRepository.findById(dto.fromAccountId())
-                .orElseThrow(AccountNotFoundException::new);
-        Account to = accountRepository.findById(dto.toAccountId())
-                .orElseThrow(AccountNotFoundException::new);
+        Account from = getActiveAccountOrThrow(dto.fromAccountId(),"From account");
+        Account to = getActiveAccountOrThrow(dto.toAccountId(),"To account");
+        updateBalances(from,to,dto.amount());
 
         Transaction transaction = new Transaction(
                 UUID.randomUUID(),
@@ -57,11 +59,9 @@ public class TransactionService {
     }
 
     public void addScheduledTransaction(ScheduledRequestDto dto) {
-        Account from = accountRepository.findById(dto.fromAccountId())
-                .orElseThrow(AccountNotFoundException::new);
-        Account to = accountRepository.findById(dto.toAccountId())
-                .orElseThrow(AccountNotFoundException::new);
-
+        Account from = getActiveAccountOrThrow(dto.fromAccountId(),"From account");
+        Account to = getActiveAccountOrThrow(dto.toAccountId(),"To account");
+        updateBalances(from,to,dto.amount());
         ScheduledTransaction scheduled = new ScheduledTransaction(
                 UUID.randomUUID(),
                 from,
@@ -77,6 +77,23 @@ public class TransactionService {
 
         scheduledTransactionRepository.save(scheduled);
 
+    }
+
+    private Account getActiveAccountOrThrow(UUID accountId, String label) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException(label + " not found"));
+
+        if (account.getStatus() != AccountStatus.ACTIVE) {
+            throw new AccountNotAllowedException(label + " is not active");
+        }
+        return account;
+    }
+
+    private void updateBalances(Account from, Account to, double amount) {
+        from.setBalance(from.getBalance() - amount);
+        to.setBalance(to.getBalance() + amount);
+        accountRepository.save(from);
+        accountRepository.save(to);
     }
 
     public List<Transaction> getAllTransactions(UUID id) {
