@@ -34,7 +34,7 @@ public class TransactionController {
             summary = "Retrieve all transactions for a specific account",
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
-    @GetMapping("/account/{accountId}")
+    @GetMapping("/account/{accountId}/transaction-history")
     public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId) {
         return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId));
     }
