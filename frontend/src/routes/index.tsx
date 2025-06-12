@@ -1,8 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import DashboardPage from '@/pages/dashboardPage/DashboardPage'
+import { SignInButton, SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
-import { useNavigate } from '@tanstack/react-router'
-import { SignedIn, SignedOut, SignInButton, useUser } from '@clerk/clerk-react'
+
 import Header from '@/components/generic/Header'
 
 export const Route = createFileRoute('/')({
