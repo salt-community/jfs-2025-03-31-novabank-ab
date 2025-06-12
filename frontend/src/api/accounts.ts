@@ -7,7 +7,7 @@ const BASE_URL = '/mocks/accounts.json'
 
 export async function getAccounts(token: string): Promise<Array<Account>> {
   const res = await fetch(BASE_URL, {
-    // method: 'GET',
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
