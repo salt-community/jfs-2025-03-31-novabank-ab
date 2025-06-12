@@ -6,9 +6,7 @@ type TransactionListProps = {
   transactions: Array<Transaction>
 }
 
-export default function TransactionList({
-  transactions,
-}: TransactionListProps) {
+export function TransactionList({ transactions }: TransactionListProps) {
   const navigate = useNavigate()
 
   return (

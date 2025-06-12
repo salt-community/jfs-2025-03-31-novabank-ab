@@ -1,6 +1,6 @@
 import { useAccounts, useTransactions } from '@/hooks'
-import TransactionList from '@/components/dashboard/TransactionList'
-import AccountGallery from '@/components/dashboard/AccountGallery'
+import { TransactionList } from '@/components/generic'
+import { AccountGallery } from '@/components/dashboard'
 
 export default function DashboardPage() {
   const {
