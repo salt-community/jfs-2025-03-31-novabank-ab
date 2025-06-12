@@ -10,7 +10,9 @@ on:
 jobs:
   build-artifact-and-push-to-gh:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: backend
     steps:
       - uses: actions/checkout@v4
 
@@ -28,11 +30,10 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Enter the backend
-        run: cd backend
-
       - name: Build with Maven
-        run: mvn clean package
+        run: |
+          cd backend
+          mvn clean package
 
       - name: Upload artifact to gh
         uses: "actions/upload-artifact@v4"
