@@ -72,7 +72,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // TODO: Add correct frontend-domain
+        config.setAllowedOrigins(List.of("https://novabank-ab-frontend-876198057788.europe-north2.run.app/")); // TODO: Add correct frontend-domain
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
