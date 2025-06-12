@@ -4,8 +4,8 @@ import AccountCard from '../src/components/dashboard/AccountCard'
 import '@testing-library/jest-dom'
 
 const testAccount = {
-  accountName: 'Test Account',
-  accountNumber: '**** 1818',
+  name: 'Test Account',
+  number: '**** 1818',
   balance: 1803.98,
 }
 
@@ -19,13 +19,13 @@ describe('AccountCard', () => {
     render(<AccountCard account={testAccount} />)
     const accountName = screen.getByTestId('account-name')
     expect(accountName).toBeInTheDocument()
-    expect(accountName).toHaveTextContent(testAccount.accountName)
+    expect(accountName).toHaveTextContent(testAccount.name)
   })
   it('should verify that the correct accountNumber is displayed', () => {
     render(<AccountCard account={testAccount} />)
     const accountNumber = screen.getByTestId('account-number')
     expect(accountNumber).toBeInTheDocument()
-    expect(accountNumber).toHaveTextContent(testAccount.accountNumber)
+    expect(accountNumber).toHaveTextContent(testAccount.number)
   })
   it('should verify that the correct balance is displayed', () => {
     render(<AccountCard account={testAccount} />)

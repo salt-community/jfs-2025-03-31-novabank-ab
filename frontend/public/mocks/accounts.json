@@ -1,0 +1,17 @@
+[
+  {
+    "name": "MOCK Savings",
+    "number": "****2201",
+    "balance": 4465.0
+  },
+  {
+    "name": "MOCK Personal",
+    "number": "****2202",
+    "balance": 12500.75
+  },
+  {
+    "name": "MOCK Vacation",
+    "number": "****2203",
+    "balance": 3200.0
+  }
+]
