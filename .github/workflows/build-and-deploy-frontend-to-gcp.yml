@@ -71,7 +71,7 @@ jobs:
           path: frontend/dist
 
       - name: Docker Build
-        run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile frontend
+        run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile .
 
       - name: Docker Push
         run: docker push $IMAGE_URL
