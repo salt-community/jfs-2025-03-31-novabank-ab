@@ -20,13 +20,18 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(UserController.class)
+@Import(UserControllerTest.TestSecurityConfig.class)
 class UserControllerTest {
 
     @Autowired
@@ -37,6 +42,17 @@ class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @TestConfiguration
+    static class TestSecurityConfig {
+        @Bean
+        JwtDecoder jwtDecoder() {
+            return token -> Jwt.withTokenValue(token)
+                    .header("alg", "none")
+                    .subject("clerk-user-123")
+                    .build();
+        }
+    }
 
     @Test
     void addUser_success_createsAndReturnsLocation() throws Exception {
