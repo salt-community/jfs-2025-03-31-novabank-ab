@@ -23,7 +23,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    //TODO review deprecated frameOptions() and h2 console below
+    //TODO review deprecated frameOptions() and h2 console below - works for now
     @Bean
     public SecurityFilterChain defaultFilterChain(
             HttpSecurity http,
