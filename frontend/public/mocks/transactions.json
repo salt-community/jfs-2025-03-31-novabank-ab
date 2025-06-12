@@ -1,0 +1,23 @@
+[
+  {
+    "id": "1",
+    "name": "MOCK Mom",
+    "category": "Incoming",
+    "amount": 300,
+    "time": "2025-06-12 14:23"
+  },
+  {
+    "id": "2",
+    "name": "MOCK Dad",
+    "category": "Outgoing",
+    "amount": -2500,
+    "time": "2025-06-10 09:00"
+  },
+  {
+    "id": "3",
+    "name": "MOCK Joe Biden",
+    "category": "Outgoing",
+    "amount": -4000,
+    "time": "2025-06-09 08:15"
+  }
+]
