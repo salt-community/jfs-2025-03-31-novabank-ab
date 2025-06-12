@@ -40,8 +40,8 @@ public class TransactionService {
         return transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
     }
 
-    public void addTransaction(TransactionRequestDto dto) {
-        Account from = getActiveAccountOrThrow(dto.fromAccountId(),"From account");
+    public void addTransaction(UUID fromAccount, TransactionRequestDto dto) {
+        Account from = getActiveAccountOrThrow(fromAccount,"From account");
         Account to = getActiveAccountOrThrow(dto.toAccountId(),"To account");
         updateBalances(from,to,dto.amount());
 
@@ -59,8 +59,8 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public void addScheduledTransaction(ScheduledRequestDto dto) {
-        Account from = getActiveAccountOrThrow(dto.fromAccountId(),"From account");
+    public void addScheduledTransaction(UUID fromAccount,ScheduledRequestDto dto) {
+        Account from = getActiveAccountOrThrow(fromAccount,"From account");
         Account to = getActiveAccountOrThrow(dto.toAccountId(),"To account");
         updateBalances(from,to,dto.amount());
         ScheduledTransaction scheduled = new ScheduledTransaction(
@@ -104,6 +104,14 @@ public class TransactionService {
     public void deleteScheduledTransaction(UUID id) {
         ScheduledTransaction transaction = scheduledTransactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
         scheduledTransactionRepository.delete(transaction);
+    }
+
+    public ScheduledTransaction getScheduledTransaction(UUID id) {
+        return scheduledTransactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+    }
+
+    public List<ScheduledTransaction> getScheduledTransactions(UUID id) {
+       return scheduledTransactionRepository.findByFromAccount_Id(id);
     }
 
 }

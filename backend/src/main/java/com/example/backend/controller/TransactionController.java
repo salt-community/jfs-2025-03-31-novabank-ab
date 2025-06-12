@@ -50,8 +50,7 @@ public class TransactionController {
     )
     @PostMapping
     public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto, @PathVariable UUID accountId) {
-        Account ownAccount = accountService.getAccount(accountId);
-        transactionService.addTransaction(dto.convertToTransaction(ownAccount));
+        transactionService.addTransaction(accountId,dto);
         return ResponseEntity.ok().build();
     }
     @Operation(
@@ -64,7 +63,7 @@ public class TransactionController {
     )
     @PostMapping("/create-scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto, @PathVariable String accountId) {
-        transactionService.addScheduledTransaction(dto.toScheduledTransaction());
+        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
         return ResponseEntity.ok().build();
     }
 
