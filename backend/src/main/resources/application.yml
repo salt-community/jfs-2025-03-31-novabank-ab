@@ -24,3 +24,8 @@ spring:
     show-sql: true
 
 
+logging:
+  level:
+    org:
+      springframework:
+        boot: ${SPRING_LOGGING_LEVEL:INFO}
