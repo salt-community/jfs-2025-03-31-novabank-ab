@@ -1,11 +1,13 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.TransactionNotFoundException;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
+import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
@@ -54,8 +56,26 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public void addScheduledTransaction(ScheduledTransaction transaction) {
-        scheduledTransactionRepository.save(transaction);
+    public void addScheduledTransaction(ScheduledRequestDto dto) {
+        Account from = accountRepository.findById(dto.fromAccountId())
+                .orElseThrow(AccountNotFoundException::new);
+        Account to = accountRepository.findById(dto.toAccountId())
+                .orElseThrow(AccountNotFoundException::new);
+
+        ScheduledTransaction scheduled = new ScheduledTransaction(
+                UUID.randomUUID(),
+                from,
+                to,
+                dto.amount(),
+                dto.scheduledDate(),
+                TransactionStatus.PENDING,
+                LocalDateTime.now(),
+                dto.ocrNumber(),
+                dto.userNote(),
+                dto.description()
+        );
+
+        scheduledTransactionRepository.save(scheduled);
 
     }
 

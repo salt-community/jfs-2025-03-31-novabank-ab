@@ -63,7 +63,7 @@ public class TransactionController {
     )
     @PostMapping("/scheduled")
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto) {
-        transactionService.addScheduledTransaction(dto.toScheduledTransaction());
+        transactionService.addScheduledTransaction(dto);
         return ResponseEntity.ok().build();
     }
 
