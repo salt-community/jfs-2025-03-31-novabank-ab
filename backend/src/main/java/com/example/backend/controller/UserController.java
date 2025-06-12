@@ -8,6 +8,7 @@ import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -66,7 +67,7 @@ public class UserController {
     @Operation(summary = "Get all users", description = "Returns a list of users, needs ADMIN rights")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "500", description = "Unexxpected Error")
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
@@ -80,14 +81,26 @@ public class UserController {
                                            @RequestBody UpdateUserRequestDto dto) {
         User updatedUser = userService.updateUser(id, dto.toUser());
 
-        return ResponseEntity.ok(updatedUser)  ;
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @Operation(summary = "Suspend a user by id", description = "Returns a suspended user, needs ADMIN rights")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully suspended User"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/admin/suspend-user/{id}")
+    public ResponseEntity<User> suspendUser(
+            @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
+    ) {
+        User suspended = userService.suspendUser(id);
+        return ResponseEntity.ok(suspended);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable String id) {
-
         userService.deleteUser(id);
-
         return ResponseEntity.noContent().build();
     }
 
