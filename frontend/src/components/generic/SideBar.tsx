@@ -14,11 +14,11 @@ export default function SideBar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="fixed top-0 left-0 z-50 h-full bg-[#151515] text-white p-10 justify-between flex flex-col">
+    <aside className="w-1/5 fixed top-0 left-0 h-full bg-[#151515] text-white text-2xl p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
-          className="w-20 h-20 mx-auto hover:cursor-pointer"
+          className="w-30 h-30 mx-auto hover:cursor-pointer"
         />
       </a>
 
@@ -52,7 +52,7 @@ export default function SideBar() {
           className="flex flex-row gap-8 hover:cursor-pointer opacity-80 hover:opacity-100 "
         >
           <img src={transfericon} />
-          {t('transfers')}
+          {t('transfer')}
         </a>
       </div>
 
@@ -63,7 +63,11 @@ export default function SideBar() {
         <img src={settingsicon} />
         {t('settings')}
       </a>
-      <SignOutButton />
+      <SignOutButton>
+        <button className='hover:cursor-pointer opacity-80 hover:opacity-100 mx-auto'>
+          Sign out
+        </button>
+      </SignOutButton>
     </aside>
   )
 }
