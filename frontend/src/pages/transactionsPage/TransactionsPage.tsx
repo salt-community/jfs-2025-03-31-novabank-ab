@@ -2,13 +2,14 @@ import { useQuery } from '@tanstack/react-query'
 import TransactionItem from '@/components/generic/TransactionItem'
 
 type Transaction = {
+  id: string;
   name: string
   category: string
   amount: number
   time: string
 }
 
-async function fetchTransactions(): Promise<Transaction[]> {
+async function fetchTransactions(): Promise<Array<Transaction>> {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
@@ -42,9 +43,8 @@ export default function TransactionsPage() {
   const {
     data: transactions = [],
     isLoading,
-    isError,
-    error,
-  } = useQuery<Transaction[]>({
+    isError
+  } = useQuery<Array<Transaction>>({
     queryKey: ['transactions'],
     queryFn: fetchTransactions,
   })
