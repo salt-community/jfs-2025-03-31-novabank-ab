@@ -1,11 +1,5 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/clerk-react'
+import { SignedIn } from '@clerk/clerk-react'
 
 import SideBar from '@/components/generic/SideBar'
 

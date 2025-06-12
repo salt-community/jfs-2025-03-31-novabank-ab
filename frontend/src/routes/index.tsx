@@ -1,6 +1,6 @@
+import { useUser } from '@clerk/clerk-react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
-import { useUser } from '@clerk/clerk-react'
 import Header from '@/components/generic/Header'
 
 export const Route = createFileRoute('/')({
