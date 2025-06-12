@@ -37,7 +37,7 @@ public class TransactionController {
     )
     @GetMapping("/transaction-history")
     public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId) {
-        return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId));
+        return ResponseEntity.ok().body(transactionService.getAllTransactionsForAccount(accountId));
     }
 
     @Operation(
