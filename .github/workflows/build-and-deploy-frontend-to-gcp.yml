@@ -7,8 +7,46 @@ on:
   workflow_dispatch:
 
 jobs:
+  build-artifact-and-push-to-gh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package-lock.json')}}
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installing dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Running tests
+        run: |
+          cd frontend
+          npm t
+
+      - name: Build
+        run: |
+          cd frontend
+          VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} npm run build
+
+      - name: Upload artifact to gh
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
   docker-img-build-and-push:
     runs-on: ubuntu-latest
+    needs: build-artifact-and-push-to-gh
     env:
       IMAGE_URL: ${{ vars.GC_REGION }}-docker.pkg.dev/${{ vars.GC_PROJECT_ID }}/cloud-run-source-deploy/${{ vars.GC_REPO_FRONTEND_NAME }}/${{ vars.GC_SERVICE_FRONTEND_NAME }}:${{ github.sha }}
     steps:
@@ -25,8 +63,14 @@ jobs:
       - name: Configure Docker to use gcloud as a credential helper
         run: gcloud auth configure-docker ${{ vars.GC_REGION }}-docker.pkg.dev
 
+      - name: Download dist artifact from gh
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
       - name: Docker Build
-        run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile frontend
+        run: docker build --no-cache --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} -t ${{ env.IMAGE_URL }} -f frontend/Dockerfile .
 
       - name: Docker Push
         run: docker push $IMAGE_URL
