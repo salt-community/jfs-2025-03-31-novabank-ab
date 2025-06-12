@@ -33,6 +33,7 @@ public class UserController {
     @Operation(summary = "Register new User", description = "Creates new User from Clerk userId, returns User location in header")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "409", description = "User already exists"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @PostMapping("/register")
@@ -71,7 +72,6 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-
         return ResponseEntity.ok(users);
     }
 

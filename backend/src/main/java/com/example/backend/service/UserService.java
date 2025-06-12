@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.exception.custom.UserAlreadyExistsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
@@ -18,9 +19,15 @@ public class UserService {
     }
 
     public User addUser(User user) {
+        boolean idExists = userRepository.existsById(user.getId());
+        boolean emailExists = userRepository.existsByEmail(user.getEmail());
+
+        if (idExists || emailExists) {
+            throw new UserAlreadyExistsException("User with this ID or email already exists");
+        }
+
         return userRepository.save(user);
     }
-
 
     public User getUser(String id) {
         return userRepository.findById(id)
