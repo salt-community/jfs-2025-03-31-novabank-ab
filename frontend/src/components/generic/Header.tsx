@@ -1,7 +1,7 @@
-import novabankicon from '../../assets/NovaBankTransparentLogo.png'
-import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react'
+import { SignInButton, SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import novabankicon from '../../assets/NovaBankTransparentLogo.png'
 
 function RedirectOnSignIn() {
   const { user } = useUser()

@@ -1,24 +1,9 @@
-import { useUser } from '@clerk/clerk-react'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { createFileRoute } from '@tanstack/react-router'
 import Header from '@/components/generic/Header'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
 })
-
-function RedirectOnSignIn() {
-  const { user } = useUser()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (user) {
-      navigate({ to: '/dashboard' })
-    }
-  }, [user, navigate])
-
-  return null
-}
 
 function LandingPage() {
   return (
