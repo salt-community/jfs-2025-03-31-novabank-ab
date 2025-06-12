@@ -40,7 +40,8 @@ public class TransactionService {
     }
 
     public void deleteScheduledTransaction(UUID id) {
-        scheduledTransactionRepository.deleteById(id);
+        ScheduledTransaction transaction = scheduledTransactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+        scheduledTransactionRepository.delete(transaction);
     }
 
 }
