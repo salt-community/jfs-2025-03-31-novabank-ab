@@ -134,4 +134,14 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.accounts[0].id").value(acct1.getId().toString()))
                 .andExpect(jsonPath("$.accounts[1].id").value(acct2.getId().toString()));
     }
+
+    @Test
+    @DisplayName("GET /api/account — 200 OK with empty list")
+    void whenGetAllUserAccounts_noAccounts_returnsEmptyArray() throws Exception {
+        mvc.perform(get("/api/account")
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accounts").isArray())
+                .andExpect(jsonPath("$.accounts").isEmpty());
+    }
 }
