@@ -14,7 +14,7 @@ export default function SideBar() {
   const navigate = useNavigate()
 
   return (
-    <aside className="w-1/5 fixed top-0 left-0 h-full bg-[#151515] text-white text-2xl p-10 justify-between flex flex-col">
+    <aside className="w-1/5 fixed top-0 left-0 h-full bg-[#151515] text-white text-xs lg:text-sm xl:text-md p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
