@@ -59,4 +59,26 @@ describe('AccountItem', () => {
     expect(accountgallery).toBeInTheDocument()
     expect(accountgallery).toHaveTextContent(testAccountItem.accountName)
   })
+  it('should display the correct accountNumber for an AccountItem', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountgallery = screen.getByTestId('account-item')
+    expect(accountgallery).toBeInTheDocument()
+    expect(accountgallery).toHaveTextContent(testAccountItem.accountNumber)
+  })
+  it('should display the correct balance for an AccountItem', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountgallery = screen.getByTestId('account-item')
+    expect(accountgallery).toBeInTheDocument()
+    expect(accountgallery).toHaveTextContent(
+      testAccountItem.balance.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+      }),
+    )
+  })
 })
