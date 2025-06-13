@@ -170,4 +170,15 @@ class AccountControllerTest {
                         .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    @DisplayName("GET /api/account/{id}/balance — 404 Not Found")
+    void whenGetBalance_notFound_returns404() throws Exception {
+        Mockito.when(accountService.getBalance(eq(ACCOUNT_ID), eq(USER_ID)))
+                .thenThrow(new AccountNotFoundException());
+
+        mvc.perform(get("/api/account/{id}/balance", ACCOUNT_ID)
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
+                .andExpect(status().isNotFound());
+    }
 }
