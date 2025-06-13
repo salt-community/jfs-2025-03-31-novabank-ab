@@ -144,4 +144,19 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.accounts").isArray())
                 .andExpect(jsonPath("$.accounts").isEmpty());
     }
+
+    @Test
+    @DisplayName("GET /api/account/{id}/balance — 200 OK")
+    void whenGetBalance_valid_returns200() throws Exception {
+        double bal = 123.45;
+        Mockito.when(accountService.getBalance(eq(ACCOUNT_ID), eq(USER_ID)))
+                .thenReturn(bal);
+
+        mvc.perform(get("/api/account/{id}/balance", ACCOUNT_ID)
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID)))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.balance").value(bal))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
 }
