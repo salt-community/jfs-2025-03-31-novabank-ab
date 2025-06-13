@@ -133,6 +133,33 @@
         @Transactional
         public void processScheduledTransactions() {
 
-        }
+            LocalDateTime now = LocalDateTime.now();
+            List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findByScheduledDateBeforeAndStatus(now, TransactionStatus.PENDING);
 
+            for (ScheduledTransaction scheduledTransaction : scheduledTransactions) {
+                Account from = getActiveAccountOrThrow(scheduledTransaction.getFromAccount().getId(),"From account");
+                Account to = getActiveAccountOrThrow(scheduledTransaction.getToAccount().getId(),"To account");
+
+                if(from.getBalance() < scheduledTransaction.getAmount()) {
+                    scheduledTransaction.setStatus(TransactionStatus.CANCELLED);
+                    continue;
+                }
+
+                updateBalances(from,to,scheduledTransaction.getAmount());
+                Transaction transaction = new Transaction(
+                        null,
+                        from,
+                        to,
+                        now,
+                        scheduledTransaction.getAmount(),
+                        scheduledTransaction.getDescription(),
+                        scheduledTransaction.getUserNote(),
+                        scheduledTransaction.getOcrNumber()
+                );
+                transactionRepository.save(transaction);
+                scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
+            }
+
+            scheduledTransactionRepository.saveAll(scheduledTransactions);
+        }
     }
