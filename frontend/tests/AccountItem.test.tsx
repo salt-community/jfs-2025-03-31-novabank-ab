@@ -1,4 +1,4 @@
-import { describe, expect, it, test } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { act } from 'react'
@@ -12,19 +12,9 @@ import {
 } from '@tanstack/react-router'
 import AccountItem from '../src/components/accounts/AccountItem'
 
-type Account = {
-  accountName: string
-  accountNumber: string
-  balance: number
-}
-
-type AccountItemProps = {
-  account: Account
-}
-
 const testAccountItem = {
-  accountName: 'Test Account Item',
-  accountNumber: '**** 1803',
+  name: 'Test Account Item',
+  number: '**** 1803',
   balance: 1803.1998,
 }
 
@@ -57,7 +47,7 @@ describe('AccountItem', () => {
     })
     const accountgallery = screen.getByTestId('account-item')
     expect(accountgallery).toBeInTheDocument()
-    expect(accountgallery).toHaveTextContent(testAccountItem.accountName)
+    expect(accountgallery).toHaveTextContent(testAccountItem.name)
   })
   it('should display the correct accountNumber for an AccountItem', async () => {
     render(<RouterProvider router={router} />)
@@ -66,7 +56,7 @@ describe('AccountItem', () => {
     })
     const accountgallery = screen.getByTestId('account-item')
     expect(accountgallery).toBeInTheDocument()
-    expect(accountgallery).toHaveTextContent(testAccountItem.accountNumber)
+    expect(accountgallery).toHaveTextContent(testAccountItem.number)
   })
   it('should display the correct balance for an AccountItem', async () => {
     render(<RouterProvider router={router} />)

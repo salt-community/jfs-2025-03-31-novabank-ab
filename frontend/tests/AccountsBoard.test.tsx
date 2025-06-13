@@ -10,22 +10,22 @@ import {
   createMemoryHistory,
   createRouter,
 } from '@tanstack/react-router'
-import AccountsBoard from '../src/components/accounts/AccountsBoard'
+import { AccountsBoard } from '../src/components/accounts/AccountsBoard'
 
 const testAccounts = [
   {
-    accountName: 'Test Account ItemOne',
-    accountNumber: '**** 1803',
+    name: 'Test Account ItemOne',
+    number: '**** 1803',
     balance: 1803.1998,
   },
   {
-    accountName: 'Test Account ItemTwo',
-    accountNumber: '**** 1804',
+    name: 'Test Account ItemTwo',
+    number: '**** 1804',
     balance: 1803.2099,
   },
   {
-    accountName: 'Test Account ItemThree',
-    accountNumber: '**** 1805',
+    name: 'Test Account ItemThree',
+    number: '**** 1805',
     balance: 2222.1998,
   },
 ]
@@ -36,7 +36,7 @@ const rootRoute = new RootRoute({
 const route = new Route({
   getParentRoute: () => rootRoute,
   path: '/',
-  component: () => <AccountsBoard accounts={testAccounts} />,
+  component: () => <AccountsBoard bankAccounts={testAccounts} />,
 })
 const router = createRouter({
   routeTree: rootRoute.addChildren([route]),
@@ -71,7 +71,7 @@ describe('AccountItem', () => {
     const accountItems = screen.getAllByTestId('account-item')
     expect(accountsBoard).toBeInTheDocument()
     for (let i = 0; i < accountItems.length; i++) {
-      expect(accountItems[i]).toHaveTextContent(testAccounts[i].accountName)
+      expect(accountItems[i]).toHaveTextContent(testAccounts[i].name)
     }
   })
   it('should display the correct accountNumber for each AccountItem in an AccountBoard', async () => {
@@ -83,7 +83,7 @@ describe('AccountItem', () => {
     const accountItems = screen.getAllByTestId('account-item')
     expect(accountsBoard).toBeInTheDocument()
     for (let i = 0; i < accountItems.length; i++) {
-      expect(accountItems[i]).toHaveTextContent(testAccounts[i].accountNumber)
+      expect(accountItems[i]).toHaveTextContent(testAccounts[i].number)
     }
   })
   it('should display the correct account balances for each AccountItem in an AccountBoard', async () => {

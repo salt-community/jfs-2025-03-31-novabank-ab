@@ -10,18 +10,18 @@ import {
   createMemoryHistory,
   createRouter,
 } from '@tanstack/react-router'
-import TransactionList from '../src/components/dashboard/TransactionList'
+import { TransactionList } from '../src/components/generic/TransactionList'
 
 const testTransactions = [
   {
-    id: 18031998,
+    id: '18031998',
     name: 'Transaction One',
     category: 'CategoryOne',
     amount: 980318.5,
     time: '18:03:1998',
   },
   {
-    id: 18031999,
+    id: '18031999',
     name: 'Transaction Two',
     category: 'CategoryTwo',
     amount: 980319.5,

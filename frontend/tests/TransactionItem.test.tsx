@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import TransactionItem from '../src/components/generic/TransactionItem'
+
 import '@testing-library/jest-dom'
+import { TransactionItem } from '../src/components/generic/TransactionItem'
 
 const testTransaction = {
   name: 'Spendings Test',

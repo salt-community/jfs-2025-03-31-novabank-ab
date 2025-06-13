@@ -10,7 +10,10 @@ export function TransactionList({ transactions }: TransactionListProps) {
   const navigate = useNavigate()
 
   return (
-    <div className="p-10 rounded-lg max-w mx-auto">
+    <div
+      className="p-10 rounded-lg max-w mx-auto"
+      data-testid="transaction-list"
+    >
       <div className="flex justify-between items-center">
         <h2 className="text-xl text-gray-800 pb-5">Recent transactions</h2>
         <a
