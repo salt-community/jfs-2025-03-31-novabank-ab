@@ -11,9 +11,10 @@
     import com.example.backend.repository.AccountRepository;
     import com.example.backend.repository.ScheduledTransactionRepository;
     import com.example.backend.repository.TransactionRepository;
-    import jakarta.transaction.Transactional;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Service;
+    import org.springframework.transaction.annotation.Transactional;
+
     import java.time.LocalDateTime;
     import java.util.List;
     import java.util.UUID;
@@ -127,6 +128,11 @@
         public List<ScheduledTransaction> getScheduledTransactions(UUID accountId) {
             accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
            return scheduledTransactionRepository.findByFromAccount_Id(accountId);
+        }
+
+        @Transactional
+        public void processScheduledTransactions() {
+
         }
 
     }
