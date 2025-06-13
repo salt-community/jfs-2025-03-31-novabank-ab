@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.userDto.request;
 
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;

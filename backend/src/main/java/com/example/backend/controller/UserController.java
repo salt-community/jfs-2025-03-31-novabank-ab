@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.RegisterUserRequestDto;
-import com.example.backend.dto.UpdateUserRequestDto;
+import com.example.backend.dto.userDto.request.RegisterUserRequestDto;
+import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.service.UserService;

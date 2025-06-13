@@ -1,6 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.UpdateUserRequestDto;
+import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.exception.custom.UserAlreadyExistsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.User;

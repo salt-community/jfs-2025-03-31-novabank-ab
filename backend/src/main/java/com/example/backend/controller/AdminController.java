@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.AddNewUserRequestDto;
-import com.example.backend.dto.ListAccountResponseDto;
+import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
+import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
