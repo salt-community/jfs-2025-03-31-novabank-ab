@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,31 +27,32 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Register new User", description = "Creates new User from Clerk userId, returns User location in header")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created"),
-            @ApiResponse(responseCode = "409", description = "User already exists"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
-    })
-    @PostMapping("/register")
-    public ResponseEntity<Void> registerNewUser(
-            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
-            @RequestBody RegisterUserRequestDto dto
-    ) {
+//    @Operation(summary = "Register new User", description = "Creates new User from Clerk userId, returns User location in header")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "201", description = "Successfully created"),
+//            @ApiResponse(responseCode = "409", description = "User already exists"),
+//            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+//    })
+//    @PostMapping
+//    public ResponseEntity<Void> registerNewUser(
+//            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+//            @RequestBody RegisterUserRequestDto dto
+//    ) {
+//
+//        String userId = jwt.getSubject();
+//        Role role = extractRoleFromJWT(jwt);
+//
+//        User created = userService.addUser(dto.toUser(userId, role));
+//        URI location = URI.create("/api/user/" + created.getId());
+//
+//        return ResponseEntity.created(location).build();
+//    }
 
-        String userId = jwt.getSubject();
-        Role role = extractRoleFromJWT(jwt);
-
-        User created = userService.addUser(dto.toUser(userId, role));
-        URI location = URI.create("/api/user/" + created.getId());
-
-        return ResponseEntity.created(location).build();
-    }
-
-    @Operation(summary = "Get a user", description = "Returns a user based on Clerk token userId")
+    @Operation(summary = "Get a user", description = "Returns a user based on Clerk token userId (Requires JWT in header)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "User Not Found")
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @GetMapping
     public ResponseEntity<User> getUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
@@ -61,12 +61,13 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @Operation(summary = "Update user", description = "Returns the updated user")
+    @Operation(summary = "Update user", description = "Returns the updated user (Requires JWT in header)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "User Not Found")
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
-    @PutMapping("")
+    @PutMapping
     public ResponseEntity<User> updateUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestBody UpdateUserRequestDto dto
