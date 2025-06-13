@@ -62,7 +62,7 @@ public class TransactionController {
         transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
         return ResponseEntity.ok().build();
     }
-
+/*
     @Operation(
             summary = "Delete a scheduled transaction",
             description = "Deletes a scheduled transaction from the system using its unique transaction ID.",
@@ -87,4 +87,5 @@ public class TransactionController {
     public ResponseEntity<?> getScheduledTransactions(@PathVariable String accountId) {
         return ResponseEntity.ok().body(transactionService.getScheduledTransactions(UUID.fromString(accountId)));
     }
+ */
 }

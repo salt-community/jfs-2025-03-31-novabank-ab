@@ -7,17 +7,16 @@ import com.example.backend.model.enums.BankAccountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
-// TODO: Add Currency
 public record CreateAccountRequestDto(
         @NotNull @NotBlank String userId,
-        @NotNull BankAccountType type
-) {
+        @NotNull BankAccountType type,
+        @NotNull Currency currency
+        ) {
     public Account toAccount(User user) {
         Account account = new Account();
         account.setUser(user);
         account.setType(type);
+        account.setCurrency(currency);
         return account;
     }
 }
