@@ -56,14 +56,4 @@ public class UserController {
         User updatedUser = userService.updateUser(userId, dto);
         return ResponseEntity.ok(updatedUser);
     }
-
-    private Role extractRoleFromJWT(Jwt jwt) {
-        String userRole = Optional.ofNullable(jwt.getClaim("metadata"))
-                .filter(Map.class::isInstance)
-                .map(Map.class::cast)
-                .map(m -> (String) m.get("role"))
-                .orElse("user");
-
-        return Role.valueOf(userRole.toUpperCase());
-    }
 }
