@@ -81,4 +81,16 @@ describe('Account Board', () => {
       )
     }
   })
+  it('should verify the correct categories of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    for (let i = 0; i < transactionItems.length; i++) {
+      expect(transactionItems[i]).toHaveTextContent(
+        testAccountDetails.transactions[i].category,
+      )
+    }
+  })
 })
