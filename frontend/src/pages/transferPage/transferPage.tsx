@@ -224,7 +224,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               ${ocr ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
               peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
           >
-            OCR / Message <span className='text-xs'>(optional)</span>
+            OCR <span className='text-xs'>(if applicable)</span>
           </label>
         </div>
 
