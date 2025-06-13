@@ -43,4 +43,10 @@ describe('Account Board', () => {
       testAccountDetails.balance.toFixed(2).toString(),
     )
   })
+  it('should verify the correct account holder is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountHolder)
+  })
 })
