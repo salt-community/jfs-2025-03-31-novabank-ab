@@ -110,7 +110,8 @@
             if (!transaction.getFromAccount().getId().equals(accountId)) {
                 throw new AccessDeniedException("Cannot delete transaction that does not belong to this account");
             }
-            scheduledTransactionRepository.delete(transaction);
+            transaction.setStatus(TransactionStatus.CANCELLED);
+            scheduledTransactionRepository.save(transaction);
         }
 
         public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId) {
@@ -141,7 +142,7 @@
                 Account to = getActiveAccountOrThrow(scheduledTransaction.getToAccount().getId(),"To account");
 
                 if(from.getBalance() < scheduledTransaction.getAmount()) {
-                    scheduledTransaction.setStatus(TransactionStatus.CANCELLED);
+                    scheduledTransaction.setStatus(TransactionStatus.FAILED);
                     continue;
                 }
 
