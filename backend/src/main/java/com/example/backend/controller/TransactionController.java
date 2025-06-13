@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping({"/api/account/{accountId}/transaction", "/api/account/{accountId}/transaction/"})
+@RequestMapping({"/api/account/transaction", "/api/account/transaction/"})
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -27,7 +27,7 @@ public class TransactionController {
             description = "Fetches a single transaction from the database using its unique identifier (UUID)."
     )
     @GetMapping("/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId, @PathVariable String accountId) {
+    public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId) {
         return ResponseEntity.ok().body(transactionService.getTransaction(transactionId));
     }
 
@@ -35,7 +35,7 @@ public class TransactionController {
             summary = "Retrieve all transactions for a specific account",
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
-    @GetMapping("/transaction-history")
+    @GetMapping("/{accountId}/transaction-history")
     public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId) {
         return ResponseEntity.ok().body(transactionService.getAllTransactionsForAccount(accountId));
     }
@@ -45,8 +45,8 @@ public class TransactionController {
             description = "Adds a new immediate transaction to the database based on the provided request data."
     )
     @PostMapping
-    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto, @PathVariable UUID accountId) {
-        transactionService.addTransaction( accountId,dto);
+    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto) {
+//        transactionService.addTransaction(dto);
         return ResponseEntity.ok().build();
     }
     @Operation(
@@ -58,11 +58,12 @@ public class TransactionController {
             }
     )
     @PostMapping("/create-scheduled")
-    public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto, @PathVariable String accountId) {
-        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
+    public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto) {
+//        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
         return ResponseEntity.ok().build();
     }
-/*
+
+    // TODO: Remove accountId and Change to set Status.CANCELED instead of Delete
     @Operation(
             summary = "Delete a scheduled transaction",
             description = "Deletes a scheduled transaction from the system using its unique transaction ID.",
@@ -72,7 +73,7 @@ public class TransactionController {
                     @ApiResponse(responseCode = "400", description = "Invalid transaction ID format")
             }
     )
-    @DeleteMapping("/delete-scheduled/{accountId}/{transactionId}")
+    @DeleteMapping("/cancel-scheduled/{accountId}/{transactionId}")
     public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
         transactionService.deleteScheduledTransaction(accountId, transactionId);
         return ResponseEntity.noContent().build();
@@ -87,5 +88,5 @@ public class TransactionController {
     public ResponseEntity<?> getScheduledTransactions(@PathVariable String accountId) {
         return ResponseEntity.ok().body(transactionService.getScheduledTransactions(UUID.fromString(accountId)));
     }
- */
+
 }
