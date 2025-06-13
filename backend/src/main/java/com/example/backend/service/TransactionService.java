@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,9 +39,27 @@ public class TransactionService {
         this.accountService = accountService;
     }
 
-    public Transaction getTransaction(UUID id, String userId) {
-        Transaction tx = transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
-        return authorizeTransactionAccess(tx, userId);
+    public UnifiedTransactionDto getTransaction(UUID transactionId, String userId) {
+        String type = "COMPLETED";
+
+        Optional<Transaction> transactionOptional = transactionRepository.findById(transactionId);
+        if (transactionOptional.isPresent()) {
+            Transaction transaction = authorizeTransactionAccess(transactionOptional.get(), userId);
+            return new UnifiedTransactionDto(
+                    transaction.getId(),
+                    transaction.getFromAccount().getId(),
+                    transaction.getToAccount().getId(),
+                    transaction.getCreatedAt(),
+                    transaction.getAmount(),
+                    transaction.getDescription(),
+                    transaction.getUserNote(),
+                    transaction.getOcrNumber(),
+                    type,
+                    null
+            );
+        }
+
+        return null;
     }
 
     public void addTransaction(TransactionRequestDto dto, String userId) {
@@ -120,23 +140,6 @@ public class TransactionService {
         scheduledTransactionRepository.save(transaction);
     }
 
-   /* public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
-        Account account = accountService.getAccount(accountId, userId);
-        ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId)
-                .orElseThrow(TransactionNotFoundException::new);
-
-        if (!transaction.getFromAccount().getId().equals(account.getId())) {
-            throw new AccessDeniedException("Transaction does not belong to this account");
-        }
-
-        return transaction;
-    }*/
-
-   /* public List<ScheduledTransaction> getScheduledTransactions(UUID accountId) {
-        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
-       return scheduledTransactionRepository.findByFromAccount_Id(accountId);
-    }*/
-
     @Transactional
     public void processScheduledTransactions() {
 
@@ -181,4 +184,21 @@ public class TransactionService {
         return Objects.equals(tx.getFromAccount().getUser().getId(), userId)
                 || Objects.equals(tx.getToAccount().getUser().getId(), userId);
     }
+
+    /* public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
+        Account account = accountService.getAccount(accountId, userId);
+        ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId)
+                .orElseThrow(TransactionNotFoundException::new);
+
+        if (!transaction.getFromAccount().getId().equals(account.getId())) {
+            throw new AccessDeniedException("Transaction does not belong to this account");
+        }
+
+        return transaction;
+    }*/
+
+   /* public List<ScheduledTransaction> getScheduledTransactions(UUID accountId) {
+        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
+       return scheduledTransactionRepository.findByFromAccount_Id(accountId);
+    }*/
 }

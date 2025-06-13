@@ -63,21 +63,6 @@ public class TransactionController {
         return ResponseEntity.ok().build();
     }
 
-  /*  @Operation(
-            summary = "Create a scheduled transaction",
-            description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
-                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
-                    @ApiResponse(responseCode = "404", description = "Account not found"),
-                    @ApiResponse(responseCode = "403", description = "One of the account is not active")
-            }
-    )
-    @PostMapping("/create-scheduled")
-    public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto) {
-//        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
-        return ResponseEntity.ok().build();
-    }*/
 
     // TODO: Remove accountId and Change to set Status.CANCELED instead of Delete
     @Operation(
@@ -95,7 +80,23 @@ public class TransactionController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(
+     /*  @Operation(
+            summary = "Create a scheduled transaction",
+            description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
+                    @ApiResponse(responseCode = "404", description = "Account not found"),
+                    @ApiResponse(responseCode = "403", description = "One of the account is not active")
+            }
+    )
+    @PostMapping("/create-scheduled")
+    public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto) {
+//        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
+        return ResponseEntity.ok().build();
+    }*/
+
+   /* @Operation(
             summary = "Get a specific scheduled transaction",
             description = "Retrieves details of a specific scheduled transaction for the given account.",
             responses = {
@@ -108,7 +109,7 @@ public class TransactionController {
     @GetMapping("/scheduled-transaction/{accountId}/{transactionId}")
     public ResponseEntity<?> getScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
         return ResponseEntity.ok(transactionService.getScheduledTransaction(accountId, transactionId,"mock"));
-    }
+    }*/
 
   /*  @Operation(
             summary = "Get all scheduled transactions for an account",
