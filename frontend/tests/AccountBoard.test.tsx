@@ -55,4 +55,18 @@ describe('Account Board', () => {
     expect(accountBoard).toBeInTheDocument()
     expect(accountBoard).toHaveTextContent(testAccountDetails.number)
   })
+  it('should verify the correct account number is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+  })
+  it('should verify the correct account of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(transactionItems.length).toBe(2)
+  })
 })
