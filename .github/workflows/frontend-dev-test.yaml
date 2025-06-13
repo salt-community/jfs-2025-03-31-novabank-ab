@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - frontend
-      - addingEsLint
   workflow_dispatch:
 jobs:
   build-and-test:
