@@ -28,3 +28,24 @@ const testAccountDetails: AccountDetails = {
   number: '****2201',
   transactions: testTransactions,
 }
+
+describe('Account Board', () => {
+  it('should render an AccountBoard', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBord = screen.getByTestId('account-board')
+    expect(accountBord).toBeInTheDocument()
+  })
+  //   it('should verify the correct transaction item time is displayed', () => {
+  //     render(
+  //       <TransactionItem
+  //         amount={testTransaction.amount}
+  //         category={testTransaction.category}
+  //         name={testTransaction.name}
+  //         time={testTransaction.time}
+  //       />,
+  //     )
+  //     const transactionItem = screen.getByTestId('transaction-item')
+  //     expect(transactionItem).toBeInTheDocument()
+  //     expect(transactionItem).toHaveTextContent(testTransaction.time)
+  //   })
+})

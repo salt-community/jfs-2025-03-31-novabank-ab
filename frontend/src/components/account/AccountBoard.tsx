@@ -7,7 +7,10 @@ type AccountBoardProps = {
 
 export default function AccountBoard({ account }: AccountBoardProps) {
   return (
-    <div className="max-w mx-auto px-6 py-10 space-y-10">
+    <div
+      className="max-w mx-auto px-6 py-10 space-y-10"
+      data-testid="account-board"
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <h1 className="text-2xl font-semibold">{account.name}</h1>
