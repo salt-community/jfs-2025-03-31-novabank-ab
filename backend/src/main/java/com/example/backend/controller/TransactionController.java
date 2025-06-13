@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.UUID;
 
 @RestController
@@ -42,7 +41,13 @@ public class TransactionController {
 
     @Operation(
             summary = "Create a new transaction",
-            description = "Adds a new immediate transaction to the database based on the provided request data."
+            description = "Adds a new immediate transaction to the database based on the provided request data.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
+                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
+                    @ApiResponse(responseCode = "404", description = "Account not found"),
+                    @ApiResponse(responseCode = "403", description = "One of the account is not active")
+            }
     )
     @PostMapping
     public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto) {
@@ -55,7 +60,9 @@ public class TransactionController {
             description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
-                    @ApiResponse(responseCode = "400", description = "Invalid input data")
+                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
+                    @ApiResponse(responseCode = "404", description = "Account not found"),
+                    @ApiResponse(responseCode = "403", description = "One of the account is not active")
             }
     )
     @PostMapping("/create-scheduled")
