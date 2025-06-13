@@ -74,7 +74,7 @@ class UserControllerTest {
                 .claim("metadata", Map.of("role", "user"))
                 .build();
 
-        mockMvc.perform(post("/api/user/register")
+        mockMvc.perform(post("/api/user")
                         .with(jwt().jwt(jwt))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
