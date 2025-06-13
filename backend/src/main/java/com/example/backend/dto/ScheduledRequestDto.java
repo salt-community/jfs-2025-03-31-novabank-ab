@@ -1,21 +1,20 @@
 package com.example.backend.dto;
 
-import com.example.backend.model.Account;
-import com.example.backend.model.ScheduledTransaction;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.Positive;
 
-//TODO: Make sure it returns correct data
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record ScheduledRequestDto(
-        Account from,
-        Account to,
+        @NotNull UUID fromAccountId,
+        @NotNull UUID toAccountId,
         @NotNull
+        @Positive
         double amount,
-        LocalDateTime date,
-        String description
-) {
-    public ScheduledTransaction toScheduledTransaction() {
-        return new ScheduledTransaction();
-    }
-}
+        @NotNull LocalDateTime scheduledDate,
+        String description,
+        String userNote,
+        String ocrNumber
+) {}
+

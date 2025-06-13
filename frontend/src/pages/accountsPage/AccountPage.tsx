@@ -1,33 +1,29 @@
 import AccountBoard from '@/components/account/AccountBoard'
+import { useAccountDetails } from '@/hooks'
 
-export default function AccountPage() {
-  const transactions = [
-    {
-      name: "Domino's Pizza",
-      category: 'Foodservice',
-      amount: -16.3,
-      time: '11:54 pm',
-    },
-    {
-      name: 'YouTube Premium',
-      category: 'Streaming service',
-      amount: -6.0,
-      time: '06:30 pm',
-    },
-    {
-      name: 'Cashbox terminal #17',
-      category: 'Replenishment',
-      amount: 450.0,
-      time: '02:02 pm',
-    },
-  ]
-  return (
-    <AccountBoard
-      accountName="Savings"
-      balance={1000}
-      accountHolder="First Last"
-      accountNumber="9382 1045 6678 2201"
-      transactions={transactions}
-    />
-  )
+type AccountPageProps = {
+  id: string
+}
+
+export default function AccountPage({ id }: AccountPageProps) {
+  const { data: accountDetails = [], isLoading, isError } = useAccountDetails()
+
+  if (isLoading) return <div className="p-8">Loading account details...</div>
+  if (isError)
+    return (
+      <div className="p-8 text-red-500">Failed loading account details</div>
+    )
+
+  const account = accountDetails.find((acc) => acc.number === id)
+
+  // TODO is this really how we gonna handle this?
+  if (account === undefined) {
+    return (
+      <div className="p-8 text-red-500">
+        Could not find specific account number
+      </div>
+    )
+  }
+
+  return <AccountBoard account={account} />
 }

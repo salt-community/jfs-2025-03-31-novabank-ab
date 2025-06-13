@@ -1,13 +1,20 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.BalanceResponseDto;
-import com.example.backend.dto.CreateAccountRequestDto;
-import com.example.backend.dto.DepositRequestDto;
-import com.example.backend.dto.WithdrawalRequestDto;
+import com.example.backend.dto.*;
 import com.example.backend.model.Account;
+import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
+import com.example.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -16,68 +23,104 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping({"/api/account", "/api/account/"})
+@Validated
 public class AccountController {
 
     private final AccountService accountService;
+    private final UserService userService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, UserService userService) {
         this.accountService = accountService;
+        this.userService = userService;
     }
 
+    @Operation(summary = "Get a account", description = "Returns a account based on Clerk token userId (Requires JWT in header) and accountId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "User Not Authorized to Account"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
     @GetMapping("/{accountId}")
-    public ResponseEntity<Account> getAccount(@PathVariable UUID accountId) {
-        Account account = accountService.getAccount(accountId);
-        return ResponseEntity.ok(account);
+    public ResponseEntity<AccountResponseDto> getAccount(
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        Account account = accountService.getAccount(accountId, userId);
+        return ResponseEntity.ok(AccountResponseDto.fromAccount(account));
     }
 
-    @GetMapping("/{userId}/accounts")
-    public ResponseEntity<List<Account>> getAllUserAccounts(@PathVariable String userId) {
-        List<Account> accounts = accountService.getAllUserAccounts(userId);
-        return ResponseEntity.ok(accounts);
-    }
-
-    // Do we need this?
+    @Operation(summary = "Get all user accounts", description = "Returns a list of accounts based on Clerk token userId (Requires JWT in header)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
     @GetMapping
-    public ResponseEntity<List<Account>> getAllAccounts() {
-        return ResponseEntity.ok(accountService.getAllAccounts());
+    public ResponseEntity<ListAccountResponseDto> getAllUserAccounts(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        return ResponseEntity.ok(
+            ListAccountResponseDto.fromAccounts(accounts)
+        );
     }
 
+    @Operation(summary = "Get balance from account", description = "Returns the balance for a account based on Clerk token userId (Requires JWT in header) and accountId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "401", description = "User Not Authorized to Account"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
     @GetMapping("/{accountId}/balance")
-    public ResponseEntity<BalanceResponseDto> getBalance(@PathVariable UUID accountId) {
+    public ResponseEntity<BalanceResponseDto> getBalance(
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
         BalanceResponseDto response = new BalanceResponseDto(
-                accountService.getBalance(accountId), LocalDateTime.now()
+                accountService.getBalance(accountId, userId), LocalDateTime.now()
         );
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Creates a account", description = "Returns the location to a account connected to Clerk token userId (Requires JWT in header)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
     @PostMapping
-    public ResponseEntity<Void> createAccount(@RequestBody CreateAccountRequestDto dto) {
-        Account created = accountService.createAccount(dto);
+    public ResponseEntity<Void> createAccount(
+        @RequestBody @Valid CreateAccountRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        User user = userService.getUser(userId);
+        Account created = accountService.createAccount(dto.toAccount(user));
         URI location = URI.create("api/account/" + created.getId());
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{accountId}/deposit")
-    public ResponseEntity<Void> deposit(@Valid @PathVariable UUID accountId, @RequestBody DepositRequestDto dto) {
-        accountService.addDeposit(accountId, dto.amount());
+    @Operation(summary = "Get balance from account", description = "Updates the balance for a account based on Clerk token userId (Requires JWT in header) and accountId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "400", description = "Insufficient funds in Account"),
+            @ApiResponse(responseCode = "401", description = "User Not Authorized to Account"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @PatchMapping("/{accountId}/balance")
+    public ResponseEntity<Void> deposit(
+        @PathVariable @NotNull UUID accountId,
+        @RequestBody @Valid BalanceUpdateRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        accountService.updateBalance(accountId, userId, dto.amount(), dto.updateType());
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(@Valid @PathVariable UUID accountId, @RequestBody WithdrawalRequestDto dto) {
-        accountService.makeWithdrawal(accountId, dto.amount());
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping("/suspend/{accountId}")
-    public ResponseEntity<Void> suspendAccount(@PathVariable UUID accountId) {
-        accountService.makeAccountSuspend(accountId);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable UUID accountId) {
-        return null;
-    }
 }

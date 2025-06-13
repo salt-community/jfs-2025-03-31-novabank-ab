@@ -1,32 +1,22 @@
+import { Link } from '@tanstack/react-router'
 import AccountItem from './AccountItem'
+import type { Account } from '@/types'
 
-const bankAccounts = [
-  {
-    accountName: 'Savings',
-    accountNumber: '**** 2201',
-    balance: 4465.23,
-  },
-  {
-    accountName: 'Personal',
-    accountNumber: '**** 7654',
-    balance: 532.78,
-  },
-  {
-    accountName: 'Family',
-    accountNumber: '**** 4720',
-    balance: 66004.65,
-  },
-]
-export default function AccountsBoard() {
+type AccountsBoardProps = {
+  bankAccounts: Array<Account>
+}
+
+export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   return (
-    <div className="max-w mx-auto p-6 space-y-6">
+    <div className="max-w mx-auto p-6 space-y-6" data-testid="accounts-board">
       <h1 className="text-2xl">My bank accounts ({bankAccounts.length})</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
-          <AccountItem
-            key={account.accountNumber}
-            account={account}
-          />
+          <div key={account.number}>
+            <Link to="/accounts/$id" params={{ id: account.number }}>
+              <AccountItem account={account} />
+            </Link>
+          </div>
         ))}
 
         <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow rounded-md">

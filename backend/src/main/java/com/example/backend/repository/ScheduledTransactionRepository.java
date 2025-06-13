@@ -1,8 +1,16 @@
 package com.example.backend.repository;
 
 import com.example.backend.model.ScheduledTransaction;
-import org.springframework.data.repository.CrudRepository;
+import com.example.backend.model.Transaction;
+import com.example.backend.model.enums.TransactionStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-public interface ScheduledTransactionRepository extends CrudRepository<ScheduledTransaction, UUID> {
+public interface ScheduledTransactionRepository extends JpaRepository<ScheduledTransaction, UUID> {
+    List<ScheduledTransaction> findByFromAccount_Id(UUID id);
+
+    List<ScheduledTransaction> findByScheduledDateBeforeAndStatus(LocalDateTime date, TransactionStatus status);
 }
