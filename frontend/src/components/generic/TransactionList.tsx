@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import TransactionItem from '../generic/TransactionItem'
+import { TransactionItem } from '../generic'
 import type { Transaction } from '@/types'
 
 type TransactionListProps = {

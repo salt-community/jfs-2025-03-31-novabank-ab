@@ -1,5 +1,5 @@
 import type { Transaction } from '@/types'
-import TransactionItem from '@/components/generic/TransactionItem'
+import { TransactionItem } from '@/components/generic'
 import { useTransactions } from '@/hooks'
 
 export default function TransactionsPage() {

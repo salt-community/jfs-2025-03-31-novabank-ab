@@ -5,7 +5,7 @@ type TransactionItemProps = {
   time: string
 }
 
-export default function TransactionItem({
+export function TransactionItem({
   name,
   category,
   amount,
