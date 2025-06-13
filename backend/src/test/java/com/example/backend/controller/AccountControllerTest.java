@@ -231,4 +231,18 @@ class AccountControllerTest {
         assertThat(toCreate.getCurrency().getAbbrevation())
                 .isEqualTo(CurrencyAbbrevation.SEK);
     }
+
+    @Test
+    @DisplayName("POST /api/account — 400 Bad Request when missing fields")
+    void whenCreateAccount_missingFields_returns400() throws Exception {
+        // payload missing "currency"
+        Map<String, Object> invalid = Map.of("type", BankAccountType.SAVINGS.name());
+        String json = objectMapper.writeValueAsString(invalid);
+
+        mvc.perform(post("/api/account")
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest());
+    }
 }
