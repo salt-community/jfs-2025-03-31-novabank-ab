@@ -80,7 +80,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "User Not Found"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @PatchMapping("/user/suspend/{userId}")
+    @PatchMapping("/user/{userId}/suspend")
     public ResponseEntity<User> suspendUser(
         @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
     ) {
@@ -94,7 +94,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "User Not Found"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @PatchMapping("/user/activate/{userId}")
+    @PatchMapping("/user/{userId}/activate")
     public ResponseEntity<User> activateUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
     ) {
@@ -108,7 +108,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "User Not Found"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @DeleteMapping("/user/delete/{userId}")
+    @DeleteMapping("/user/{userId}")
     public ResponseEntity<Void> deleteUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
     ) {
@@ -134,7 +134,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "Account Not Found"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @PatchMapping("/account/suspend/{accountId}")
+    @PatchMapping("/account/{accountId}/suspend")
     public ResponseEntity<Account> suspendAccount(
             @PathVariable @NotNull UUID accountId,
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
@@ -150,7 +150,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "Account Not Found"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @PatchMapping("/account/activate/{accountId}")
+    @PatchMapping("/account/{accountId}/activate")
     public ResponseEntity<Account> activateAccount(
             @PathVariable @NotNull UUID accountId,
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
@@ -166,7 +166,7 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "Account Not Found"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @DeleteMapping("/account/delete/{accountId}")
+    @DeleteMapping("/account/{accountId}")
     public ResponseEntity<Void> deleteAccount(
             @PathVariable @NotNull UUID accountId,
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
