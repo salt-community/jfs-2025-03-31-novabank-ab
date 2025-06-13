@@ -43,8 +43,10 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @PostMapping("/user")
-    public ResponseEntity<Void> addUser(@RequestBody AddNewUserRequestDto dto) {
-        User created = userService.addUser(dto.toUser());
+    public ResponseEntity<Void> addUser(@RequestBody AddNewUserRequestDto dto,
+                                        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        User created = userService.addUser(dto.toUser(userId));
         URI location = URI.create("/api/user/" + created.getId());
         return ResponseEntity.created(location).build();
     }
