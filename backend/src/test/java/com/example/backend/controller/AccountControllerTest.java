@@ -105,8 +105,8 @@ class AccountControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/account/{id} — 403 Forbidden")
-    void whenGetAccount_unauthorized_throws403() throws Exception {
+    @DisplayName("GET /api/account/{id} — 401 Unauthorized")
+    void whenGetAccount_unauthorized_throws401() throws Exception {
         Mockito.when(accountService.getAccount(eq(ACCOUNT_ID), eq(USER_ID)))
                 .thenThrow(new UserUnauthorizedException(""));
 
