@@ -1,16 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
-
-type Account = {
-  accountName: string
-  accountNumber: string
-  balance: number
-}
+import TransferAccountItem from './TransferAccountItem'
+import type { Account } from '@/types'
 
 type RecipientsModalProps = {
   bankAccounts: Array<Account>
   fromAccount: Account | null
-  onSubmit: (toAccount: Account | null) => void
+  onSubmit: (recipient: Account | null | string) => void
   onClose: () => void
 }
 
@@ -20,63 +15,66 @@ export default function RecipientsModal({
   onSubmit,
   onClose,
 }: RecipientsModalProps) {
-  // const [validationError, setValidationError] = useState('')
-  const [toAccount, setToAccount] = useState<Account | null>(null)
+  const [, setToAccount] = useState<Account | null>(null)
   const [viewMode, setViewMode] = useState<
     'Saved recipients' | 'New recipient'
   >('Saved recipients')
-  // const [dropdownVisible, setDropdownVisible] = useState(false)
   const [newRecipient, setNewRecipient] = useState('')
-  // const dropdownRef = useRef<HTMLDivElement>(null)
-  // const inputRef = useRef<HTMLInputElement>(null)
-
+  const [accNoType, setAccNoType] = useState('')
   const dialogRef = useRef<HTMLDialogElement | null>(null)
+  const [errors, setErrors] = useState<{
+    accNoTypeError?: string
+    recipientError?: string
+  }>({})
 
   // Show modal on mount
   useEffect(() => {
     dialogRef.current?.showModal()
   }, [])
 
-  // Close modal on successful mutation
-  //   useEffect(() => {
-  //     if (mutation.isSuccess) {
-  //       dialogRef.current?.close()
-  //       onClose()
-  //     }
-  //   }, [mutation.isSuccess])
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    // setValidationError('')
-    onSubmit(toAccount)
-
-    // if (!newRoutineType) {
-    //   const msg = 'Please pick a routine type!'
-    //   setValidationError(msg)
-    //   return
-    // }
-
-    // mutation.mutate(
-    //   {
-    //     id,
-    //     requestBody: {
-    //       dateTime: newDateTime,
-    //       routineType: newRoutineType,
-    //       productsUsed: newProductsUsed,
-    //       notes: newNotes,
-    //     },
-    //   },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success('Log updated successfully!')
-    //       dialogRef.current?.close()
-    //       onClose()
-    //     },
-    //   },
-    // )
+  const handleCancel = () => {
+    dialogRef.current?.close()
+    onClose()
   }
 
-  const handleCancel = () => {
+  function isValidAccountNumber(type: string, value: string): boolean {
+    const cleaned = value.replace(/[\s-]/g, '') // remove spaces and dashes
+
+    switch (type) {
+      case 'Plusgiro':
+        return /^\d{2,8}$/.test(cleaned) || /^\d{2,7}-\d{1}$/.test(value) // original or hyphenated
+      case 'Bankgiro':
+        return /^\d{7,8}$/.test(cleaned) || /^\d{3,4}-\d{4}$/.test(value)
+      case 'Other account':
+        return /^\d{4,30}$/.test(cleaned) // Swedish bank account numbers vary greatly by bank
+      default:
+        return false
+    }
+  }
+
+  const handleRecipientSubmit = (account: Account | string) => {
+    const newErrors: typeof errors = {}
+
+    if (viewMode === 'New recipient') {
+      if (!accNoType)
+        newErrors.accNoTypeError = 'Please select an account number type'
+
+      if (!newRecipient) {
+        newErrors.recipientError = 'Account number is required'
+      } else if (!isValidAccountNumber(accNoType, newRecipient)) {
+        newErrors.recipientError = `Invalid ${accNoType} number`
+      }
+      setErrors(newErrors)
+      if (Object.keys(newErrors).length > 0) return
+      if (typeof account === 'string') {
+        setNewRecipient(newRecipient.trim())
+        onSubmit(newRecipient.trim())
+      }
+    } else if (typeof account === 'object') {
+      setToAccount(account)
+      onSubmit(account)
+    }
+
     dialogRef.current?.close()
     onClose()
   }
@@ -97,88 +95,83 @@ export default function RecipientsModal({
 
         <div className="flex text-sm mt-5 bg-gray-100 w-70 mx-auto rounded-md">
           <button
+            type="button"
             className={`w-35 duration-200 px-3 py-1 rounded-l-md ${
               viewMode === 'Saved recipients'
-                ? 'bg-gray-200 '
+                ? 'bg-gray-200 pointer-events-none'
                 : 'bg-transparent hover:cursor-pointer shadow-sm'
             }`}
-            onClick={() => setViewMode('Saved recipients')}
+            onClick={() => {
+              setToAccount(null)
+              setNewRecipient('')
+              setViewMode('Saved recipients')
+            }}
           >
             Saved recipients
           </button>
 
           <button
+            type="button"
             className={`w-35 duration-200 px-3 py-1 rounded-r-md ${
               viewMode === 'New recipient'
-                ? 'bg-gray-200 '
+                ? 'bg-gray-200 pointer-events-none'
                 : 'bg-transparent hover:cursor-pointer shadow-sm'
             }`}
-            onClick={() => setViewMode('New recipient')}
+            onClick={() => {
+              setToAccount(null)
+              setNewRecipient('')
+              setViewMode('New recipient')
+            }}
           >
             New recipient
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-2 p-10">
-          {/* Errors */}
-          {/* {(validationError || mutation.error) && (
-            <p className="font-bold text-[#832035] text-md">
-              {validationError
-                ? validationError
-                : mutation.error?.message === 'Failed to fetch'
-                  ? 'Failed to update log'
-                  : mutation.error?.message}
-            </p>
-          )} */}
-
+        <div className="space-y-2 p-10">
           {viewMode === 'Saved recipients' ? (
             <div className="h-80">
-              <p className="mb-6 text-xl">My bank accounts</p>
+              <p className="mb-4 text-xl">My bank accounts</p>
               {bankAccounts.map((account) => {
-                const isDisabled =
-                  fromAccount?.accountNumber === account.accountNumber
+                const isDisabled = fromAccount?.number === account.number
 
                 return (
                   <div>
                     <button
-                      key={account.accountNumber}
+                      key={account.number}
                       type="button"
                       onClick={() => {
                         if (isDisabled) return
-                        setToAccount(account)
-                        onSubmit(account)
-                        dialogRef.current?.close()
-                        onClose()
+                        handleRecipientSubmit(account)
                       }}
-                      className={`block w-full text-left p-3 rounded 
+                      className={` w-full py-1 rounded 
                     ${
                       isDisabled
-                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                        : 'hover:bg-gray-100 hover:cursor-pointer'
+                        ? ' text-gray-400 cursor-not-allowed'
+                        : ' hover:cursor-pointer'
                     }`}
                       disabled={isDisabled}
                     >
-                      {account.accountName}
+                      <TransferAccountItem
+                        key={account.number}
+                        account={account}
+                        isDisabled={isDisabled}
+                      />
                     </button>
-                    {isDisabled && (
-                      <span className="text-xs text-red-500">
-                        (Already selected as from account)
-                      </span>
-                    )}
                   </div>
                 )
               })}
             </div>
           ) : (
-            <div className="h-80">
+            <div className="h-80 space-y-5">
               {/* New account */}
               <div className="relative w-full">
                 <input
                   id="newAccount"
                   type="text"
                   onChange={(e) => setNewRecipient(e.target.value)}
-                  className={`peer hover:cursor-pointer border border-gray-500 text-black rounded 
-                        p-4 w-full text-left focus:ring-1 focus:ring-black bg-white
+                  className={`peer hover:cursor-pointer  text-black rounded 
+                        p-4 w-full text-left  bg-white 
+                        ${errors.recipientError ? 'outline outline-red-600 focus:outline-red-600 focus:outline-2 ' : 'border border-gray-500 focus:ring-1 focus:ring-black'}
                         `}
                 />
 
@@ -187,29 +180,85 @@ export default function RecipientsModal({
                   className={`absolute hover:cursor-pointer left-4 px-1  transition-all duration-200 bg-white
                         ${
                           newRecipient
-                            ? '-top-2.5 text-sm text-black'
+                            ? '-top-2.5 text-sm text-black font-semibold'
                             : 'top-4 text-base text-gray-400 bg-transparent'
                         }
-                        peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-black 
+                        ${errors.recipientError ? 'peer-focus:text-red-600 ' : 'peer-focus:text-black'}
+                        peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold
                         peer-focus:bg-white`}
                 >
                   Account number
                 </label>
+                {errors.recipientError && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.recipientError}
+                  </p>
+                )}
               </div>
+
+              {/* Account number type */}
+              <div className="relative w-full">
+                <select
+                  id="accNoType"
+                  name="accNoTypes"
+                  value={accNoType || ''}
+                  onChange={(e) => {
+                    setAccNoType(e.target.value)
+                  }}
+                  className={`peer hover:cursor-pointer rounded p-4 w-full outline outline-gray-500 
+                              focus:outline-2 focus:outline-black text-left bg-white
+                              ${errors.accNoTypeError ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
+                              border-r-15 border-transparent
+                              ${accNoType ? ' text-black' : 'text-gray-400'}`}
+                >
+                  <option value="" className="text-gray-400">
+                    Select an account number type
+                  </option>
+                  <option className="text-black" value="Plusgiro">
+                    Plusgiro
+                  </option>
+                  <option className="text-black" value="Bankgiro">
+                    Bankgiro
+                  </option>
+                  <option className="text-black" value="Other account">
+                    Other account
+                  </option>
+                </select>
+
+                <label
+                  htmlFor="accNoType"
+                  className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+              ${
+                accNoType
+                  ? '-top-2.5 font-semibold text-sm text-black'
+                  : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+              }
+              ${errors.accNoTypeError ? 'peer-focus:text-red-600 ' : 'peer-focus:text-black'}
+              peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
+              peer-focus:bg-white `}
+                >
+                  Account number type
+                </label>
+                {errors.accNoTypeError && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {errors.accNoTypeError}
+                  </p>
+                )}
+              </div>
+
               {/* Done button */}
-              <div className="flex flex-col sm:flex-row justify-end sm:gap-4 gap-2 mt-4">
+              <div className="flex justify-end mt-4">
                 <button
-                  type="submit"
-                  //   disabled={mutation.isPending}
-                  className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded 
-                             hover:cursor-pointer transition-colors w-full"
+                  type="button"
+                  onClick={() => handleRecipientSubmit(newRecipient)}
+                  className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black font-semibold shadow-sm px-5 py-2 rounded transition-colors"
                 >
                   Done
                 </button>
               </div>
             </div>
           )}
-        </form>
+        </div>
       </div>
     </dialog>
   )
