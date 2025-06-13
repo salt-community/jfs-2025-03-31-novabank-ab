@@ -19,6 +19,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "accounts")
 public class Account {
 
     @Id
