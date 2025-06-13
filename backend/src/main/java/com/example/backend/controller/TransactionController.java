@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,8 +31,8 @@ public class TransactionController {
             description = "Fetches a single transaction from the database using its unique identifier (UUID)."
     )
     @GetMapping("/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId,
-                                            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<UnifiedTransactionDto> getTransaction(@PathVariable UUID transactionId,
+                                                                @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getTransaction(transactionId, userId));
     }
@@ -58,7 +59,7 @@ public class TransactionController {
             }
     )
     @PostMapping
-    public ResponseEntity<?> addTransaction(@RequestBody TransactionRequestDto dto) {
+    public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto) {
 //        transactionService.addTransaction(dto);
         return ResponseEntity.ok().build();
     }
@@ -74,7 +75,7 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account or scheduled transaction not found")}
     )
     @DeleteMapping("/cancel-scheduled/{accountId}/{transactionId}")
-    public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
+    public ResponseEntity<Void> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
         String userId ="mock";
         transactionService.deleteScheduledTransaction(accountId, transactionId,userId);
         return ResponseEntity.noContent().build();
