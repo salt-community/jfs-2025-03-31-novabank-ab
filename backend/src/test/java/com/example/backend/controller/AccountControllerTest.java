@@ -159,4 +159,15 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.balance").value(bal))
                 .andExpect(jsonPath("$.timestamp").exists());
     }
+
+    @Test
+    @DisplayName("GET /api/account/{id}/balance — 401 Unauthorized")
+    void whenGetBalance_unauthorized_returns401() throws Exception {
+        Mockito.when(accountService.getBalance(eq(ACCOUNT_ID), eq(USER_ID)))
+                .thenThrow(new UserUnauthorizedException(""));
+
+        mvc.perform(get("/api/account/{id}/balance", ACCOUNT_ID)
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
+                .andExpect(status().isUnauthorized());
+    }
 }
