@@ -21,7 +21,7 @@ public record AddNewUserRequestDto(
                 String.format("%s %s", this.firstName, this.lastName),
                 this.email,
                 this.phoneNumber,
-                Role.USER,
+                Role.USER, // Sätt alltid rollen till USER när man reggar en ny användare
                 UserStatus.ACTIVE,
                 LocalDateTime.now(),
                 null,
