@@ -4,9 +4,12 @@ import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -27,8 +30,10 @@ public class TransactionController {
             description = "Fetches a single transaction from the database using its unique identifier (UUID)."
     )
     @GetMapping("/{transactionId}")
-    public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId) {
-        return ResponseEntity.ok().body(transactionService.getTransaction(transactionId));
+    public ResponseEntity<?> getTransaction(@PathVariable UUID transactionId,
+                                            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        return ResponseEntity.ok().body(transactionService.getTransaction(transactionId, userId));
     }
 
     @Operation(
@@ -36,8 +41,10 @@ public class TransactionController {
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
     @GetMapping("/{accountId}/transaction-history")
-    public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId) {
-        return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId));
+    public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId,
+                                                @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId, userId));
     }
 
     @Operation(

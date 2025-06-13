@@ -1,8 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.exception.custom.AccountNotFoundException;
-import com.example.backend.exception.custom.InsufficientFundsException;
-import com.example.backend.exception.custom.UserNotFoundException;
+import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
@@ -11,6 +9,7 @@ import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -27,9 +26,15 @@ public class AccountService {
         this.userRepository = userRepository;
     }
 
-    public Account getAccount(UUID accountId) {
-        return accountRepository.findById(accountId)
+    public Account getAccount(UUID accountId, String userId) {
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(AccountNotFoundException::new);
+
+        if (!Objects.equals(account.getUser().getId(), userId)) {
+            throw new UserUnauthorizedException("User not connected to account");
+        }
+
+        return account;
     }
 
     public List<Account> getAllUserAccounts(String userId) {
@@ -42,9 +47,8 @@ public class AccountService {
         return (List<Account>) accountRepository.findAll();
     }
 
-    public double getBalance(UUID accountId) {
-        Account account = getAccount(accountId);
-
+    public double getBalance(UUID accountId, String userId) {
+        Account account = getAccount(accountId, userId);
         return account.getBalance();
     }
 
@@ -81,15 +85,15 @@ public class AccountService {
         return sb.toString();
     }
 
-    public void addDeposit(UUID accountId, double amount) {
-        System.out.println("WAS HERE!");
-        Account account = getAccount(accountId);
+    public void addDeposit(UUID accountId, double amount, String userId) {
+        //System.out.println("WAS HERE!");
+        Account account = getAccount(accountId, userId);
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
     }
 
-    public void makeWithdrawal(UUID accountId, double amount) {
-        Account account = getAccount(accountId);
+    public void makeWithdrawal(UUID accountId, double amount, String userId) {
+        Account account = getAccount(accountId, userId);
         if (account.getBalance() < amount) {
             throw new InsufficientFundsException();
         }
@@ -98,14 +102,14 @@ public class AccountService {
 
     }
 
-    public void makeAccountSuspend(UUID accountId) {
-        Account account = getAccount(accountId);
+    public void makeAccountSuspend(UUID accountId, String userId) {
+        Account account = getAccount(accountId, userId);
         account.setStatus(AccountStatus.SUSPENDED);
         accountRepository.save(account);
     }
 
-    public void deleteAccount(UUID accountId) {
-        Account account = getAccount(accountId);
+    public void deleteAccount(UUID accountId, String userId) {
+        Account account = getAccount(accountId, userId);
         accountRepository.delete(account);
     }
 }

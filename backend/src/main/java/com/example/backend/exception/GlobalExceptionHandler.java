@@ -1,9 +1,6 @@
 package com.example.backend.exception;
 
-import com.example.backend.exception.custom.AccountNotFoundException;
-import com.example.backend.exception.custom.UserAlreadyExistsException;
-import com.example.backend.exception.custom.InsufficientFundsException;
-import com.example.backend.exception.custom.UserNotFoundException;
+import com.example.backend.exception.custom.*;
 import com.example.backend.exception.dto.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -80,5 +77,13 @@ public class GlobalExceptionHandler {
                 e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<ErrorResponseDto> handleUnauthorizedUser(UserUnauthorizedException e) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                e.getMessage(), HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 }

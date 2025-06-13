@@ -1,7 +1,9 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.AddNewUserRequestDto;
+import com.example.backend.dto.ListAccountResponseDto;
 import com.example.backend.model.User;
+import com.example.backend.service.AccountService;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,9 +22,11 @@ import java.util.List;
 public class AdminController {
 
     private final UserService userService;
+    private final AccountService accountService;
 
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, AccountService accountService) {
         this.userService = userService;
+        this.accountService = accountService;
     }
 
 
@@ -68,7 +72,6 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Successfully suspended User"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
-    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/suspend-user/{id}")
     public ResponseEntity<User> suspendUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
@@ -82,7 +85,6 @@ public class AdminController {
             @ApiResponse(responseCode = "200", description = "Successfully suspended User"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
-    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/activate-user/{id}")
     public ResponseEntity<User> activateUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
@@ -96,12 +98,18 @@ public class AdminController {
             @ApiResponse(responseCode = "204", description = "Successfully deleted User"),
             @ApiResponse(responseCode = "404", description = "User Not Found")
     })
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<Void> deleteUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("id") String id
     ) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<ListAccountResponseDto> getAllAccounts() {
+        return ResponseEntity.ok(
+                ListAccountResponseDto.fromAccounts(accountService.getAllAccounts())
+        );
     }
 }

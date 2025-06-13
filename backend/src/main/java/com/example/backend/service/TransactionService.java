@@ -2,10 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
-import com.example.backend.exception.custom.AccessDeniedException;
-import com.example.backend.exception.custom.AccountNotAllowedException;
-import com.example.backend.exception.custom.AccountNotFoundException;
-import com.example.backend.exception.custom.TransactionNotFoundException;
+import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
@@ -17,7 +14,9 @@ import com.example.backend.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -26,24 +25,26 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final ScheduledTransactionRepository scheduledTransactionRepository;
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
-    @Autowired
     public TransactionService(TransactionRepository transactionRepository,
                               ScheduledTransactionRepository scheduledTransactionRepository,
-                              AccountRepository accountRepository) {
+                              AccountRepository accountRepository, AccountService accountService) {
         this.transactionRepository = transactionRepository;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.accountRepository = accountRepository;
-
+        this.accountService = accountService;
     }
 
-    public Transaction getTransaction(UUID id) {
-        return transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+    public Transaction getTransaction(UUID id, String userId) {
+        Transaction tx = transactionRepository.findById(id).orElseThrow(TransactionNotFoundException::new);
+        return authorizeTransactionAccess(tx, userId);
     }
 
-    public void addTransaction(UUID fromAccount, TransactionRequestDto dto) {
-        Account from = getActiveAccountOrThrow(fromAccount,"From account");
-        Account to = getActiveAccountOrThrow(dto.toAccountId(),"To account");
+    public void addTransaction(UUID fromAccount, TransactionRequestDto dto, String userId) {
+
+        Account from = getActiveAccountOrThrow(fromAccount, userId,"From");
+        Account to = getActiveAccountOrThrow(dto.toAccountId(), userId,"To");
         updateBalances(from,to,dto.amount());
 
         Transaction transaction = new Transaction(
@@ -60,9 +61,9 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public void addScheduledTransaction(UUID fromAccount,ScheduledRequestDto dto) {
-        Account from = getActiveAccountOrThrow(fromAccount,"From account");
-        Account to = getActiveAccountOrThrow(dto.toAccountId(),"To account");
+    public void addScheduledTransaction(UUID fromAccount,ScheduledRequestDto dto, String userId) {
+        Account from = getActiveAccountOrThrow(fromAccount, userId,"From account");
+        Account to = getActiveAccountOrThrow(dto.toAccountId(), userId, "To account");
         updateBalances(from,to,dto.amount());
         ScheduledTransaction scheduled = new ScheduledTransaction(
                 UUID.randomUUID(),
@@ -81,9 +82,8 @@ public class TransactionService {
 
     }
 
-    private Account getActiveAccountOrThrow(UUID accountId, String label) {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException(label + " not found"));
+    private Account getActiveAccountOrThrow(UUID accountId, String userId, String label) {
+        Account account = accountService.getAccount(accountId, userId);
 
         if (account.getStatus() != AccountStatus.ACTIVE) {
             throw new AccountNotAllowedException(label + " is not active");
@@ -98,7 +98,7 @@ public class TransactionService {
         accountRepository.save(to);
     }
 
-    public List<Transaction> getAllTransactions(UUID id) {
+    public List<Transaction> getAllTransactions(UUID id, String userId) {
         return  transactionRepository.findByFromAccount_IdOrToAccount_Id(id, id);
     }
 
@@ -125,4 +125,14 @@ public class TransactionService {
        return scheduledTransactionRepository.findByFromAccount_Id(accountId);
     }
 
+    private Transaction authorizeTransactionAccess(Transaction tx, String userId) {
+        if (!isYourAccount(tx, userId)) {
+            throw new UserUnauthorizedException("User not authorized to access this transaction");
+        }
+        return tx;
+    }
+
+    private boolean isYourAccount(Transaction tx, String userId) {
+        return (tx.getFromAccount().getUser().getId().equals(userId) || tx.getToAccount().getUser().getId().equals(userId));
+    }
 }

@@ -68,7 +68,7 @@ class TransactionControllerTest {
 
         Transaction tx = new Transaction();
         tx.setId(txId);
-        when(transactionService.getTransaction(txId)).thenReturn(tx);
+        when(transactionService.getTransaction(txId, accountId)).thenReturn(tx);
 
         Jwt ownerJwt = Jwt.withTokenValue(accountId)
                 .header("alg", "none")
