@@ -20,15 +20,15 @@ export default function RecipientsModal({
   onSubmit,
   onClose,
 }: RecipientsModalProps) {
-  const [validationError, setValidationError] = useState('')
+  // const [validationError, setValidationError] = useState('')
   const [toAccount, setToAccount] = useState<Account | null>(null)
   const [viewMode, setViewMode] = useState<
     'Saved recipients' | 'New recipient'
   >('Saved recipients')
-  const [dropdownVisible, setDropdownVisible] = useState(false)
+  // const [dropdownVisible, setDropdownVisible] = useState(false)
   const [newRecipient, setNewRecipient] = useState('')
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
+  // const dropdownRef = useRef<HTMLDivElement>(null)
+  // const inputRef = useRef<HTMLInputElement>(null)
 
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
@@ -47,7 +47,7 @@ export default function RecipientsModal({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    setValidationError('')
+    // setValidationError('')
     onSubmit(toAccount)
 
     // if (!newRoutineType) {
