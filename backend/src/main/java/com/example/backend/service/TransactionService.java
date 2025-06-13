@@ -11,12 +11,11 @@ import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -42,7 +41,6 @@ public class TransactionService {
     }
 
     public void addTransaction(UUID fromAccount, TransactionRequestDto dto, String userId) {
-
         Account from = getActiveAccountOrThrow(fromAccount, userId,"From");
         Account to = getActiveAccountOrThrow(dto.toAccountId(), userId,"To");
         updateBalances(from,to,dto.amount());
@@ -66,7 +64,7 @@ public class TransactionService {
         Account to = getActiveAccountOrThrow(dto.toAccountId(), userId, "To account");
         updateBalances(from,to,dto.amount());
         ScheduledTransaction scheduled = new ScheduledTransaction(
-                UUID.randomUUID(),
+                null,
                 from,
                 to,
                 dto.amount(),
@@ -123,6 +121,39 @@ public class TransactionService {
     public List<ScheduledTransaction> getScheduledTransactions(UUID accountId) {
         accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
        return scheduledTransactionRepository.findByFromAccount_Id(accountId);
+    }
+
+    @Transactional
+    public void processScheduledTransactions() {
+
+        LocalDateTime now = LocalDateTime.now();
+        List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findByScheduledDateBeforeAndStatus(now, TransactionStatus.PENDING);
+
+        for (ScheduledTransaction scheduledTransaction : scheduledTransactions) {
+            Account from = getActiveAccountOrThrow(scheduledTransaction.getFromAccount().getId(), "", "From account");
+            Account to = getActiveAccountOrThrow(scheduledTransaction.getToAccount().getId(), "", "To account");
+
+            if(from.getBalance() < scheduledTransaction.getAmount()) {
+                scheduledTransaction.setStatus(TransactionStatus.FAILED);
+                continue;
+            }
+
+            updateBalances(from,to,scheduledTransaction.getAmount());
+            Transaction transaction = new Transaction(
+                    null,
+                    from,
+                    to,
+                    now,
+                    scheduledTransaction.getAmount(),
+                    scheduledTransaction.getDescription(),
+                    scheduledTransaction.getUserNote(),
+                    scheduledTransaction.getOcrNumber()
+            );
+            transactionRepository.save(transaction);
+            scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
+        }
+
+        scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
     private Transaction authorizeTransactionAccess(Transaction tx, String userId) {
