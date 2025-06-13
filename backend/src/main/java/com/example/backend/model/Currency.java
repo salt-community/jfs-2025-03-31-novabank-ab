@@ -4,6 +4,7 @@ import com.example.backend.model.enums.CurrencyAbbrevation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -13,8 +14,12 @@ import java.util.UUID;
 @Table(name = "currencies")
 public class Currency {
 
+    public Currency() {}
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "VARCHAR(36)")
     private UUID id;
     private String name;
 
