@@ -40,8 +40,8 @@ public class TransactionService {
     }
 
     public UnifiedTransactionDto getTransaction(UUID transactionId, String userId) {
-        String type = "COMPLETED";
-
+        String transactionType = "COMPLETED";
+        String scheduledTransactionType = "SCHEDULED";
         Optional<Transaction> transactionOptional = transactionRepository.findById(transactionId);
         if (transactionOptional.isPresent()) {
             Transaction transaction = authorizeTransactionAccess(transactionOptional.get(), userId);
@@ -54,12 +54,32 @@ public class TransactionService {
                     transaction.getDescription(),
                     transaction.getUserNote(),
                     transaction.getOcrNumber(),
-                    type,
+                    transactionType,
                     null
             );
         }
 
-        return null;
+        Optional<ScheduledTransaction> scheduledTransactionOptional = scheduledTransactionRepository.findById(transactionId);
+        if (scheduledTransactionOptional.isPresent()) {
+            ScheduledTransaction scheduledTransaction = scheduledTransactionOptional.get();
+            if (!Objects.equals(scheduledTransaction.getFromAccount().getUser().getId(), userId)) {
+                throw new UserUnauthorizedException("User not authorized to access this transaction");
+            }
+            return new UnifiedTransactionDto(
+                    scheduledTransaction.getId(),
+                    scheduledTransaction.getFromAccount().getId(),
+                    scheduledTransaction.getToAccount().getId(),
+                    scheduledTransaction.getScheduledDate(),
+                    scheduledTransaction.getAmount(),
+                    scheduledTransaction.getDescription(),
+                    scheduledTransaction.getUserNote(),
+                    scheduledTransaction.getOcrNumber(),
+                    scheduledTransactionType,
+                    scheduledTransaction.getStatus()
+            );
+        }
+
+        throw new TransactionNotFoundException();
     }
 
     public void addTransaction(TransactionRequestDto dto, String userId) {
