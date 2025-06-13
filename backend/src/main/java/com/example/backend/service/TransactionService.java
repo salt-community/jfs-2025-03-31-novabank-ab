@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -41,14 +42,14 @@ public class TransactionService {
     }
 
     public void addTransaction(TransactionRequestDto dto, String userId) {
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
         if(dto.transactionDate().isAfter(today)) {
             addScheduledTransaction(dto,userId);
             return;
         }
 
-        Account from = getActiveAccountOrThrow(dto.fromAccountId(), userId,"From");
-        Account to = getActiveAccountOrThrow(dto.toAccountId(), userId,"To");
+        Account from = getActiveAccountOrThrow(dto.fromAccountId(),"From");
+        Account to = getActiveAccountOrThrow(dto.toAccountId(),"To");
         updateBalances(from,to,dto.amount());
 
         Transaction transaction = new Transaction(
@@ -66,8 +67,8 @@ public class TransactionService {
     }
 
     private void addScheduledTransaction(TransactionRequestDto dto, String userId) {
-        Account from = getActiveAccountOrThrow(dto.fromAccountId(), userId,"From account");
-        Account to = getActiveAccountOrThrow(dto.toAccountId(), userId, "To account");
+        Account from = getActiveAccountOrThrow(dto.fromAccountId(),"From account");
+        Account to = getActiveAccountOrThrow(dto.toAccountId(), "To account");
         ScheduledTransaction scheduled = new ScheduledTransaction(
                 null,
                 from,
@@ -85,9 +86,8 @@ public class TransactionService {
 
     }
 
-    private Account getActiveAccountOrThrow(UUID accountId, String userId, String label) {
-        Account account = accountService.getAccount(accountId, userId);
-
+    private Account getActiveAccountOrThrow(UUID accountId, String label) {
+        Account account = accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
         if (account.getStatus() != AccountStatus.ACTIVE) {
             throw new AccountNotAllowedException(label + " is not active");
         }
@@ -101,22 +101,28 @@ public class TransactionService {
         accountRepository.save(to);
     }
 
-    public List<Transaction> getAllTransactions(UUID id, String userId) {
-        return  transactionRepository.findByFromAccount_IdOrToAccount_Id(id, id);
+    public List<Transaction> getAllTransactions(UUID accountId, String userId) {
+        Account account = accountService.getAccount(accountId, userId);
+        return  transactionRepository.findByFromAccount_IdOrToAccount_Id(account.getId(), account.getId());
     }
 
-    public void deleteScheduledTransaction(UUID accountId, UUID transactionId) {
+    public void deleteScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
         accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
         ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId).orElseThrow(TransactionNotFoundException::new);
-        scheduledTransactionRepository.delete(transaction);
+
+        if (!Objects.equals(transaction.getFromAccount().getUser().getId(), userId)) {
+            throw new UserUnauthorizedException("User not authorized to delete this scheduled transaction");
+        }
+        transaction.setStatus(TransactionStatus.CANCELLED);
+        scheduledTransactionRepository.save(transaction);
     }
 
-    public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId) {
-        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
+    public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
+        Account account = accountService.getAccount(accountId, userId);
         ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId)
                 .orElseThrow(TransactionNotFoundException::new);
 
-        if (!transaction.getFromAccount().getId().equals(accountId)) {
+        if (!transaction.getFromAccount().getId().equals(account.getId())) {
             throw new AccessDeniedException("Transaction does not belong to this account");
         }
 
@@ -135,8 +141,8 @@ public class TransactionService {
         List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findByScheduledDateBeforeAndStatus(now, TransactionStatus.PENDING);
 
         for (ScheduledTransaction scheduledTransaction : scheduledTransactions) {
-            Account from = getActiveAccountOrThrow(scheduledTransaction.getFromAccount().getId(), "", "From account");
-            Account to = getActiveAccountOrThrow(scheduledTransaction.getToAccount().getId(), "", "To account");
+            Account from = getActiveAccountOrThrow(scheduledTransaction.getFromAccount().getId(), "From account");
+            Account to = getActiveAccountOrThrow(scheduledTransaction.getToAccount().getId(), "To account");
 
             if(from.getBalance() < scheduledTransaction.getAmount()) {
                 scheduledTransaction.setStatus(TransactionStatus.FAILED);

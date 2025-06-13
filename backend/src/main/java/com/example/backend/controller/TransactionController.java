@@ -90,7 +90,8 @@ public class TransactionController {
     )
     @DeleteMapping("/cancel-scheduled/{accountId}/{transactionId}")
     public ResponseEntity<?> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
-        transactionService.deleteScheduledTransaction(accountId, transactionId);
+        String userId ="mock";
+        transactionService.deleteScheduledTransaction(accountId, transactionId,userId);
         return ResponseEntity.noContent().build();
     }
 
@@ -106,7 +107,7 @@ public class TransactionController {
     )
     @GetMapping("/scheduled-transaction/{accountId}/{transactionId}")
     public ResponseEntity<?> getScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
-        return ResponseEntity.ok(transactionService.getScheduledTransaction(accountId, transactionId));
+        return ResponseEntity.ok(transactionService.getScheduledTransaction(accountId, transactionId,"mock"));
     }
 
     @Operation(
