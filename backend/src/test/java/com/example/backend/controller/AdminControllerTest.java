@@ -11,8 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Map;
 import java.util.UUID;
 
-import com.example.backend.dto.AddNewUserRequestDto;
-import com.example.backend.dto.RegisterUserRequestDto;
+import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
@@ -89,7 +88,7 @@ class AdminControllerTest {
         verify(userService).addUser(cap.capture());
         User passed = cap.getValue();
 
-//        assert passed.getId().equals("clerk-user-123");
+        assert passed.getId().equals("clerk-user-123");
         assert passed.getEmail().equals("alice@example.com");
         assert passed.getPhoneNumber().equals("555-1234");
         assert passed.getFullName().equals("Alice Smith");

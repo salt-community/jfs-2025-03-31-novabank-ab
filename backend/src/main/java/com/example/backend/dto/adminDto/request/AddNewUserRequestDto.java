@@ -17,7 +17,7 @@ public record AddNewUserRequestDto(
 ) {
     public User toUser(String userId) {
         return new User(
-                UUID.randomUUID().toString(),
+                userId,
                 String.format("%s %s", this.firstName, this.lastName),
                 this.email,
                 this.phoneNumber,
