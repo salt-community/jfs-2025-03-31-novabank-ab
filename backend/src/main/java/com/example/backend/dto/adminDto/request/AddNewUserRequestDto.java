@@ -15,13 +15,13 @@ public record AddNewUserRequestDto(
         String phoneNumber,
         String role
 ) {
-    public User toUser() {
+    public User toUser(String userId) {
         return new User(
-                UUID.randomUUID().toString(),
+                userId,
                 String.format("%s %s", this.firstName, this.lastName),
                 this.email,
                 this.phoneNumber,
-                Role.valueOf(this.role.toUpperCase()),
+                Role.USER,
                 UserStatus.ACTIVE,
                 LocalDateTime.now(),
                 null,
