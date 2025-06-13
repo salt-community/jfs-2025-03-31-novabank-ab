@@ -15,7 +15,7 @@ export default function RecipientsModal({
   onSubmit,
   onClose,
 }: RecipientsModalProps) {
-  const [toAccount, setToAccount] = useState<Account | null>(null)
+  const [, setToAccount] = useState<Account | null>(null)
   const [viewMode, setViewMode] = useState<
     'Saved recipients' | 'New recipient'
   >('Saved recipients')
@@ -128,16 +128,6 @@ export default function RecipientsModal({
         </div>
 
         <div className="space-y-2 p-10">
-          {/* Errors */}
-          {/* {(validationError || mutation.error) && (
-            <p className="font-bold text-[#832035] text-md">
-              {validationError
-                ? validationError
-                : mutation.error?.message === 'Failed to fetch'
-                  ? 'Failed to update log'
-                  : mutation.error?.message}
-            </p>
-          )} */}
 
           {viewMode === 'Saved recipients' ? (
             <div className="h-80">
