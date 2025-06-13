@@ -6,9 +6,7 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function RouteComponent() {
-  return( 
-  <>
-    <DashboardPage />
-  </>
+  return (
+        <DashboardPage />
   )
 }
