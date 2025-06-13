@@ -17,95 +17,66 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private ResponseEntity<ErrorResponseDto> buildResponse(String message, HttpStatus status) {
+        ErrorResponseDto error = new ErrorResponseDto(message, status.value(), LocalDateTime.now());
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDto> handleException(Exception e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                "An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);    }
-
-    @ExceptionHandler({
-        NoResourceFoundException.class,
-        HttpRequestMethodNotSupportedException.class
-    })
-    public ResponseEntity<ErrorResponseDto> handleInvalidEndpoint(Exception e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                "Invalid endpoint", HttpStatus.NOT_FOUND.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return buildResponse("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({
-        MethodArgumentNotValidException.class,
-        MethodArgumentTypeMismatchException.class,
-        HttpMessageNotReadableException.class
+            NoResourceFoundException.class,
+            HttpRequestMethodNotSupportedException.class
+    })
+    public ResponseEntity<ErrorResponseDto> handleInvalidEndpoint(Exception e) {
+        return buildResponse("Invalid endpoint", HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class
     })
     public ResponseEntity<ErrorResponseDto> handleBadRequest(Exception e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                "Bad request", HttpStatus.BAD_REQUEST.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return buildResponse("Bad request", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleAccountNotFound(AccountNotFoundException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleUserNotFound(UserNotFoundException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDto> handleUserAlreadyExists(UserAlreadyExistsException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.CONFLICT.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<ErrorResponseDto> handleInsufficientFunds(InsufficientFundsException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserUnauthorizedException.class)
     public ResponseEntity<ErrorResponseDto> handleUnauthorizedUser(UserUnauthorizedException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+        return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleTransactionNotFound(TransactionNotFoundException e) {
-        ErrorResponseDto error = new ErrorResponseDto(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(AccountNotAllowedException.class)
-    public ResponseEntity<ErrorResponseDto> handleAccountNotAllowed(AccountNotAllowedException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.FORBIDDEN.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponseDto> handleAccessDenied(AccessDeniedException e) {
-        ErrorResponseDto error = new ErrorResponseDto(
-                e.getMessage(), HttpStatus.FORBIDDEN.value(), LocalDateTime.now()
-        );
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    @ExceptionHandler({ AccountNotAllowedException.class, AccessDeniedException.class })
+    public ResponseEntity<ErrorResponseDto> handleForbidden(Exception e) {
+        return buildResponse(e.getMessage(), HttpStatus.FORBIDDEN);
     }
 }
