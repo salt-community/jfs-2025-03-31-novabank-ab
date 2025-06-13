@@ -63,7 +63,7 @@ public class TransactionController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(
+  /*  @Operation(
             summary = "Create a scheduled transaction",
             description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data.",
             responses = {
@@ -77,7 +77,7 @@ public class TransactionController {
     public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto) {
 //        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
         return ResponseEntity.ok().build();
-    }
+    }*/
 
     // TODO: Remove accountId and Change to set Status.CANCELED instead of Delete
     @Operation(

@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
@@ -13,9 +12,10 @@ import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -40,8 +40,14 @@ public class TransactionService {
         return authorizeTransactionAccess(tx, userId);
     }
 
-    public void addTransaction(UUID fromAccount, TransactionRequestDto dto, String userId) {
-        Account from = getActiveAccountOrThrow(fromAccount, userId,"From");
+    public void addTransaction(TransactionRequestDto dto, String userId) {
+        LocalDate today = LocalDate.now();
+        if(dto.transactionDate().isAfter(today)) {
+            addScheduledTransaction(dto,userId);
+            return;
+        }
+
+        Account from = getActiveAccountOrThrow(dto.fromAccountId(), userId,"From");
         Account to = getActiveAccountOrThrow(dto.toAccountId(), userId,"To");
         updateBalances(from,to,dto.amount());
 
@@ -56,19 +62,18 @@ public class TransactionService {
                 dto.ocrNumber()
         );
 
-        transactionRepository.save(transaction);
+        transactionRepository.save(authorizeTransactionAccess(transaction, userId));
     }
 
-    public void addScheduledTransaction(UUID fromAccount,ScheduledRequestDto dto, String userId) {
-        Account from = getActiveAccountOrThrow(fromAccount, userId,"From account");
+    private void addScheduledTransaction(TransactionRequestDto dto, String userId) {
+        Account from = getActiveAccountOrThrow(dto.fromAccountId(), userId,"From account");
         Account to = getActiveAccountOrThrow(dto.toAccountId(), userId, "To account");
-        updateBalances(from,to,dto.amount());
         ScheduledTransaction scheduled = new ScheduledTransaction(
                 null,
                 from,
                 to,
                 dto.amount(),
-                dto.scheduledDate(),
+                dto.transactionDate().atStartOfDay(),
                 TransactionStatus.PENDING,
                 LocalDateTime.now(),
                 dto.ocrNumber(),
@@ -157,13 +162,14 @@ public class TransactionService {
     }
 
     private Transaction authorizeTransactionAccess(Transaction tx, String userId) {
-        if (!isYourAccount(tx, userId)) {
+        if (!isTransactionAccessibleByUser(tx, userId)) {
             throw new UserUnauthorizedException("User not authorized to access this transaction");
         }
         return tx;
     }
 
-    private boolean isYourAccount(Transaction tx, String userId) {
-        return (tx.getFromAccount().getUser().getId().equals(userId) || tx.getToAccount().getUser().getId().equals(userId));
+    private boolean isTransactionAccessibleByUser(Transaction tx, String userId) {
+        return Objects.equals(tx.getFromAccount().getUser().getId(), userId)
+                || Objects.equals(tx.getToAccount().getUser().getId(), userId);
     }
 }
