@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
@@ -89,5 +90,16 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.balance").value(42.5))
                 .andExpect(jsonPath("$.status").value("ACTIVE"))
                 .andExpect(jsonPath("$.createdAt").value("2025-01-01"));
+    }
+
+    @Test
+    @DisplayName("GET /api/account/{id} — 404 Not Found")
+    void whenGetAccount_notFound_throws404() throws Exception {
+        Mockito.when(accountService.getAccount(eq(ACCOUNT_ID), eq(USER_ID)))
+                .thenThrow(new AccountNotFoundException());
+
+        mvc.perform(get("/api/account/{id}", ACCOUNT_ID)
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
+                .andExpect(status().isNotFound());
     }
 }
