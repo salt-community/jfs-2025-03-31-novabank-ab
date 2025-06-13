@@ -24,7 +24,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
         </a>
       </div>
 
-      <div className="shadow-md p-1">
+      <div className=" p-1">
         {transactions.slice(0, 3).map((transaction) => (
           <TransactionItem
             key={transaction.id}

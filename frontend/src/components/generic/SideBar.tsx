@@ -7,6 +7,7 @@ import transactionicon from '../../assets/transactionicon.svg'
 import transfericon from '../../assets/transfericon.svg'
 import settingsicon from '../../assets/settingsicon.svg'
 import novabankicon from '../../assets/NovaBankTransparentLogo.png'
+import signouticon from '../../assets/signouticon.svg'
 
 export default function SideBar() {
   const { t } = useTranslation('sidebar')
@@ -18,11 +19,11 @@ export default function SideBar() {
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
-          className="w-30 h-30 mx-auto hover:cursor-pointer"
+          className="w-10 h-10 xl:h-20 xl:w-20 mx-auto hover:cursor-pointer"
         />
       </a>
 
-      <div className="flex gap-20 flex-col mb-10 list-none mx-auto">
+      <div className="flex gap-5 flex-col mb-10 list-none mx-auto">
         <a
           onClick={() => navigate({ to: '/dashboard' })}
           className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
@@ -55,16 +56,17 @@ export default function SideBar() {
           {t('transfer')}
         </a>
 
-      <a
-        onClick={() => navigate({ to: '/settings' })}
-        className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100"
+        <a
+          onClick={() => navigate({ to: '/settings' })}
+          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100"
         >
-        <img src={settingsicon} />
-        {t('settings')}
-      </a>
-        </div>
+          <img src={settingsicon} />
+          {t('settings')}
+        </a>
+      </div>
       <SignOutButton>
-        <button className='hover:cursor-pointer underline opacity-80 hover:opacity-100 hover:text-red-400 mx-auto'>
+        <button className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 mx-auto ml-5">
+          <img src={signouticon} />
           Sign out
         </button>
       </SignOutButton>
