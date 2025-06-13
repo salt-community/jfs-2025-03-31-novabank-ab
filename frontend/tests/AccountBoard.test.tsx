@@ -1,0 +1,120 @@
+import { describe, expect, it } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import '@testing-library/jest-dom'
+import AccountBoard from '../src/components/account/AccountBoard'
+import type { AccountDetails, Transaction } from '@/types'
+
+const testTransactions: Array<Transaction> = [
+  {
+    amount: 50,
+    category: 'Games',
+    id: 'TestId',
+    name: 'Skyrim',
+    time: '18:03:18:1998',
+  },
+  {
+    amount: 180,
+    category: 'Food',
+    id: 'TestId',
+    name: 'Tomatoes',
+    time: '18:03:18:1995',
+  },
+]
+
+const testAccountDetails: AccountDetails = {
+  accountHolder: 'Aki',
+  balance: 200000000.123123,
+  name: 'Savings',
+  number: '****2201',
+  transactions: testTransactions,
+}
+
+describe('Account Board', () => {
+  it('should render an AccountBoard', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+  })
+  it('should verify the correct total balance is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(
+      testAccountDetails.balance.toFixed(2).toString(),
+    )
+  })
+  it('should verify the correct account holder is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountHolder)
+  })
+  it('should verify the correct account number is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+  })
+  it('should verify the correct account number is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+  })
+  it('should verify the correct amount of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(transactionItems.length).toBe(2)
+  })
+  it('should verify the correct names of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    for (let i = 0; i < transactionItems.length; i++) {
+      expect(transactionItems[i]).toHaveTextContent(
+        testAccountDetails.transactions[i].name,
+      )
+    }
+  })
+  it('should verify the correct categories of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    for (let i = 0; i < transactionItems.length; i++) {
+      expect(transactionItems[i]).toHaveTextContent(
+        testAccountDetails.transactions[i].category,
+      )
+    }
+  })
+  it('should verify the correct amounts of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    for (let i = 0; i < transactionItems.length; i++) {
+      expect(transactionItems[i]).toHaveTextContent(
+        testAccountDetails.transactions[i].amount.toFixed(2).toString(),
+      )
+    }
+  })
+  it('should verify the correct times of transaction items is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    const transactionItems = screen.getAllByTestId('transaction-item')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    for (let i = 0; i < transactionItems.length; i++) {
+      expect(transactionItems[i]).toHaveTextContent(
+        testAccountDetails.transactions[i].time,
+      )
+    }
+  })
+})

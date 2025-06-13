@@ -10,7 +10,7 @@ import {
   createMemoryHistory,
   createRouter,
 } from '@tanstack/react-router'
-import AccountGallery from '../src/components/dashboard/AccountGallery'
+import { AccountGallery } from '../src/components/dashboard/AccountGallery'
 
 const testAccounts = [
   {

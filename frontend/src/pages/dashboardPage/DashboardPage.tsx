@@ -1,40 +1,33 @@
-import { useAccounts } from '@/hooks'
-import TransactionList from '@/components/dashboard/TransactionList'
-import AccountGallery from '@/components/dashboard/AccountGallery'
+import { useAccounts, useTransactions } from '@/hooks'
+import { TransactionList } from '@/components/generic'
+import { AccountGallery } from '@/components/dashboard'
 
 export default function DashboardPage() {
-  const { data, isLoading, isError } = useAccounts()
+  const {
+    data: accounts = [],
+    isLoading: isAccountsLoading,
+    isError: isAccountsError,
+  } = useAccounts()
 
-  if (isLoading) return <p>Loading accounts...</p>
-  if (isError || !data) return <p>Failed to load accounts</p>
+  const {
+    data: transactions = [],
+    isLoading: isTransactionsLoading,
+    isError: isTransactionsError,
+  } = useTransactions()
+
+  if (isAccountsLoading) return <div className="p-8">Loading accounts...</div>
+  if (isTransactionsLoading)
+    return <div className="p-8">Loading transactions...</div>
+
+  if (isAccountsError)
+    return <div className="p-8 text-red-500">Failed to load accounts</div>
+  if (isTransactionsError)
+    return <div className="p-8 text-red-500">Failed to load transactions</div>
+
   return (
     <>
-      <AccountGallery bankAccounts={data} />
-      <TransactionList
-        transactions={[
-          {
-            id: 1,
-            name: "Domino's Pizza",
-            category: 'Foodservice',
-            amount: -16.3,
-            time: '11:54 pm',
-          },
-          {
-            id: 2,
-            name: 'YouTube Premium',
-            category: 'Streaming service',
-            amount: -6.0,
-            time: '06:30 pm',
-          },
-          {
-            id: 3,
-            name: 'Cashbox terminal #17',
-            category: 'Replenishment',
-            amount: 450.0,
-            time: '02:02 pm',
-          },
-        ]}
-      />
+      <AccountGallery bankAccounts={accounts} />
+      <TransactionList transactions={transactions} />
     </>
   )
 }
