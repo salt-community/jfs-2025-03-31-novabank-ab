@@ -74,4 +74,16 @@ describe('AccountItem', () => {
       expect(accountItems[i]).toHaveTextContent(testAccounts[i].accountName)
     }
   })
+  it('should display the correct accountNumber for each AccountItem in an AccountBoard', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountsBoard = screen.getByTestId('accounts-board')
+    const accountItems = screen.getAllByTestId('account-item')
+    expect(accountsBoard).toBeInTheDocument()
+    for (let i = 0; i < accountItems.length; i++) {
+      expect(accountItems[i]).toHaveTextContent(testAccounts[i].accountNumber)
+    }
+  })
 })
