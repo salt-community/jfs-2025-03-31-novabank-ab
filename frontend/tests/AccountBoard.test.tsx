@@ -49,4 +49,10 @@ describe('Account Board', () => {
     expect(accountBoard).toBeInTheDocument()
     expect(accountBoard).toHaveTextContent(testAccountDetails.accountHolder)
   })
+  it('should verify the correct account number is displayed', () => {
+    render(<AccountBoard account={testAccountDetails} />)
+    const accountBoard = screen.getByTestId('account-board')
+    expect(accountBoard).toBeInTheDocument()
+    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+  })
 })
