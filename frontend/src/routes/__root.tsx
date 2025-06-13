@@ -1,22 +1,25 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
+import { SignedIn, SignedOut } from '@clerk/clerk-react'
 
 import SideBar from '@/components/generic/SideBar'
 
 export const Route = createRootRoute({
   component: () => (
-    <>
-      <SideBar />
-      <div className='flex justify-center align-center text-black'><SignedOut>
-        <SignInButton />
-      </SignedOut>
+    <div className="flex h-screen ">
       <SignedIn>
-        <UserButton />
-      </SignedIn></div>
-      
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
+        <aside className="w-1/5 h-screen">
+          <SideBar />
+        </aside>
+        <main className="flex-1 my-20 mx-30 h-full bg-white text-black">
+          <Outlet />
+        </main>
+      </SignedIn>
+
+      <SignedOut>
+        <main>
+          <Outlet />
+        </main>
+      </SignedOut>
+    </div>
   ),
 })
