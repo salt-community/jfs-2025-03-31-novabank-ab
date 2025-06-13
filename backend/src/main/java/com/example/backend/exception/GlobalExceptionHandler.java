@@ -1,9 +1,6 @@
 package com.example.backend.exception;
 
-import com.example.backend.exception.custom.AccountNotFoundException;
-import com.example.backend.exception.custom.UserAlreadyExistsException;
-import com.example.backend.exception.custom.InsufficientFundsException;
-import com.example.backend.exception.custom.UserNotFoundException;
+import com.example.backend.exception.custom.*;
 import com.example.backend.exception.dto.ErrorResponseDto;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -80,5 +77,19 @@ public class GlobalExceptionHandler {
                 e.getMessage(), HttpStatus.BAD_REQUEST.value(), LocalDateTime.now()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleTransactionNotFound(TransactionNotFoundException e) {
+        ErrorResponseDto error = new ErrorResponseDto(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(AccountNotAllowedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccountNotAllowed(AccountNotAllowedException e) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                e.getMessage(), HttpStatus.FORBIDDEN.value(), LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 }
