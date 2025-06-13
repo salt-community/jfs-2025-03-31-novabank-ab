@@ -1,5 +1,5 @@
-import { useNavigate } from '@tanstack/react-router'
-import type { Account } from '@/types'
+import { useNavigate } from '@tanstack/react-router';
+import type { Account } from '@/types';
 
 type AccountItemProps = {
   account: Account

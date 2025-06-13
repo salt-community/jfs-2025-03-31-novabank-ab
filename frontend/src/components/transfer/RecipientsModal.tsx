@@ -35,6 +35,7 @@ export default function RecipientsModal({
   const handleCancel = () => {
     dialogRef.current?.close()
     onClose()
+
   }
 
   function isValidAccountNumber(type: string, value: string): boolean {
@@ -128,6 +129,7 @@ export default function RecipientsModal({
         </div>
 
         <div className="space-y-2 p-10">
+
           {viewMode === 'Saved recipients' ? (
             <div className="h-80">
               <p className="mb-4 text-xl">My bank accounts</p>

@@ -17,6 +17,7 @@ import { Route as SettingsImport } from './routes/settings'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as AccountsIndexImport } from './routes/accounts/index'
+import { Route as AdminDashboardImport } from './routes/admin/dashboard'
 import { Route as AccountsIdImport } from './routes/accounts/$id'
 
 // Create/Update Routes
@@ -54,6 +55,12 @@ const IndexRoute = IndexImport.update({
 const AccountsIndexRoute = AccountsIndexImport.update({
   id: '/accounts/',
   path: '/accounts/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminDashboardRoute = AdminDashboardImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -109,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsIdImport
       parentRoute: typeof rootRoute
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardImport
+      parentRoute: typeof rootRoute
+    }
     '/accounts/': {
       id: '/accounts/'
       path: '/accounts'
@@ -128,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/accounts': typeof AccountsIndexRoute
 }
 
@@ -138,6 +153,7 @@ export interface FileRoutesByTo {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/accounts': typeof AccountsIndexRoute
 }
 
@@ -149,6 +165,7 @@ export interface FileRoutesById {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/accounts/': typeof AccountsIndexRoute
 }
 
@@ -161,6 +178,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/dashboard'
     | '/accounts'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -170,6 +188,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/dashboard'
     | '/accounts'
   id:
     | '__root__'
@@ -179,6 +198,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/dashboard'
     | '/accounts/'
   fileRoutesById: FileRoutesById
 }
@@ -190,6 +210,7 @@ export interface RootRouteChildren {
   TransactionsRoute: typeof TransactionsRoute
   TransferRoute: typeof TransferRoute
   AccountsIdRoute: typeof AccountsIdRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
@@ -200,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   TransactionsRoute: TransactionsRoute,
   TransferRoute: TransferRoute,
   AccountsIdRoute: AccountsIdRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   AccountsIndexRoute: AccountsIndexRoute,
 }
 
@@ -219,6 +241,7 @@ export const routeTree = rootRoute
         "/transactions",
         "/transfer",
         "/accounts/$id",
+        "/admin/dashboard",
         "/accounts/"
       ]
     },
@@ -239,6 +262,9 @@ export const routeTree = rootRoute
     },
     "/accounts/$id": {
       "filePath": "accounts/$id.tsx"
+    },
+    "/admin/dashboard": {
+      "filePath": "admin/dashboard.tsx"
     },
     "/accounts/": {
       "filePath": "accounts/index.tsx"
