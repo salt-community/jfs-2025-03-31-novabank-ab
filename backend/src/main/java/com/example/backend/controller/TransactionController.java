@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.CombinedTransactionResponseDto;
 import com.example.backend.dto.ScheduledRequestDto;
 import com.example.backend.dto.TransactionRequestDto;
 import com.example.backend.service.TransactionService;
@@ -41,8 +42,8 @@ public class TransactionController {
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
     @GetMapping("/{accountId}/transaction-history")
-    public ResponseEntity<?> getAllTransactions(@PathVariable UUID accountId,
-                                                @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<CombinedTransactionResponseDto> getAllTransactions(@PathVariable UUID accountId,
+                                                                             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId, userId));
     }
