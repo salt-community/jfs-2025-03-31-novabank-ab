@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
+import TransferPage from '@/pages/transferPage/transferPage'
 
 export const Route = createFileRoute('/transfer')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/transfer"!</div>
+  return <TransferPage />
 }
