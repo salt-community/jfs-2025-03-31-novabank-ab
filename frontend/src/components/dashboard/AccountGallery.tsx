@@ -6,7 +6,7 @@ type AccountGalleryProps = {
   bankAccounts: Array<Account>
 }
 
-export default function AccountGallery({ bankAccounts }: AccountGalleryProps) {
+export function AccountGallery({ bankAccounts }: AccountGalleryProps) {
   return (
     <div
       className="flex flex-col items-center p-10 gap-10"
