@@ -16,6 +16,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "scheduled_transactions")
 public class ScheduledTransaction {
 
     @Id
