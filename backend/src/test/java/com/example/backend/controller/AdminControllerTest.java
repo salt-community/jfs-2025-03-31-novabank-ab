@@ -66,7 +66,7 @@ class AdminControllerTest {
         stubUser.setId(returnedId.toString());
         when(userService.addUser(any(User.class))).thenReturn(stubUser);
 
-        AddNewUserRequestDto dto2= new AddNewUserRequestDto("Alice", "Smith", "alice@example.com", "555-1234", Role.USER.toString());
+        AddNewUserRequestDto dto2= new AddNewUserRequestDto("Alice", "Smith", "alice@example.com", "555-1234", Role.ADMIN.toString());
 
         Jwt jwt = Jwt.withTokenValue("token")
                 .header("alg", "none")
@@ -79,10 +79,10 @@ class AdminControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto2))
                 )
-                .andExpect(status().isCreated());
-//                .andExpect(header().string(
-//                        "Location", "/api/user/" + returnedId
-//                ));
+                .andExpect(status().isCreated())
+                .andExpect(header().string(
+                        "Location", "/api/user/" + returnedId
+                ));
 
         ArgumentCaptor<User> cap = ArgumentCaptor.forClass(User.class);
         verify(userService).addUser(cap.capture());
