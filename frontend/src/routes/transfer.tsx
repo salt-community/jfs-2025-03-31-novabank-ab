@@ -10,18 +10,18 @@ function RouteComponent() {
     <TransferPage
       bankAccounts={[
         {
-          accountName: 'Savings',
-          accountNumber: '**** 2201',
+          name: 'Savings',
+          number: '**** 2201',
           balance: 4465.23,
         },
         {
-          accountName: 'Personal',
-          accountNumber: '**** 7654',
+          name: 'Personal',
+          number: '**** 7654',
           balance: 532.78,
         },
         {
-          accountName: 'Family',
-          accountNumber: '**** 4720',
+          name: 'Family',
+          number: '**** 4720',
           balance: 66004.65,
         },
       ]}

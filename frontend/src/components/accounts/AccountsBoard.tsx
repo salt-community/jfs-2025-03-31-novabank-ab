@@ -18,7 +18,6 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
             </Link>
           </div>
         ))}
-
         <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow rounded-md">
           <span className="text-lg">+ Open new account</span>
           <span className="text-xl">{'>'}</span>
