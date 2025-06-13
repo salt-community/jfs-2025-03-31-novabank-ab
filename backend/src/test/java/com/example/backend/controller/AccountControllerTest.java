@@ -22,6 +22,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -113,5 +114,24 @@ class AccountControllerTest {
         mvc.perform(get("/api/account/{id}", ACCOUNT_ID)
                         .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("GET /api/account — 200 OK with accounts")
+    void whenGetAllUserAccounts_withAccounts_returns200() throws Exception {
+        Account acct1 = sampleAccount();
+        Account acct2 = sampleAccount();
+        acct2.setId(UUID.randomUUID());
+        Mockito.when(accountService.getAllUserAccounts(eq(USER_ID)))
+                .thenReturn(List.of(acct1, acct2));
+
+        mvc.perform(get("/api/account")
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID)))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accounts").isArray())
+                .andExpect(jsonPath("$.accounts.length()").value(2))
+                .andExpect(jsonPath("$.accounts[0].id").value(acct1.getId().toString()))
+                .andExpect(jsonPath("$.accounts[1].id").value(acct2.getId().toString()));
     }
 }
