@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.ScheduledRequestDto;
-import com.example.backend.dto.TransactionRequestDto;
+import com.example.backend.dto.transactionDto.request.ScheduledRequestDto;
+import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
@@ -59,7 +59,7 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public void addScheduledTransaction(UUID fromAccount,ScheduledRequestDto dto, String userId) {
+    public void addScheduledTransaction(UUID fromAccount, ScheduledRequestDto dto, String userId) {
         Account from = getActiveAccountOrThrow(fromAccount, userId,"From account");
         Account to = getActiveAccountOrThrow(dto.toAccountId(), userId, "To account");
         updateBalances(from,to,dto.amount());

@@ -1,6 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.BalanceUpdateRequestDto;
+import com.example.backend.dto.accountDto.request.BalanceUpdateRequestDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;

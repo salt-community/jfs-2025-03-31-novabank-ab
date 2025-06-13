@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.accountDto.response;
 
 import com.example.backend.model.Account;
 import com.example.backend.model.enums.AccountStatus;
