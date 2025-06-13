@@ -52,13 +52,24 @@ describe('AccountItem', () => {
     const accountsBoard = screen.getByTestId('accounts-board')
     expect(accountsBoard).toBeInTheDocument()
   })
-  //   it('should display the correct accountName for an AccountItem', async () => {
+  it('should display the correct amount of AccountItem in an AccountBoard', async () => {
+    render(<RouterProvider router={router} />)
+    await act(async () => {
+      await router.navigate({ to: '/' })
+    })
+    const accountsBoard = screen.getByTestId('accounts-board')
+    const accountItems = screen.getAllByTestId('account-item')
+    expect(accountsBoard).toBeInTheDocument()
+    expect(accountItems.length).toBe(3)
+  })
+  //   it('should display the correct accountNames for each AccountItem in an AccountBoard', async () => {
   //     render(<RouterProvider router={router} />)
   //     await act(async () => {
   //       await router.navigate({ to: '/' })
   //     })
-  //     const accountgallery = screen.getByTestId('account-item')
-  //     expect(accountgallery).toBeInTheDocument()
-  //     expect(accountgallery).toHaveTextContent(testAccountItem.accountName)
+  //     const accountsBoard = screen.getByTestId('accounts-board')
+  //     const accountItems = screen.getAllByTestId('account-item')
+  //     expect(accountsBoard).toBeInTheDocument()
+  //     expect(accountsBoard).toHaveTextContent(testAccounts.accountName)
   //   })
 })
