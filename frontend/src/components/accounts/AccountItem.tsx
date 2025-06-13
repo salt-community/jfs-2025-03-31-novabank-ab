@@ -1,10 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-
-type Account = {
-  accountName: string
-  accountNumber: string
-  balance: number
-}
+import type { Account } from '@/types';
 
 type AccountItemProps = {
   account: Account
@@ -21,13 +16,13 @@ export default function AccountItem({
       onClick={() =>
         navigate({
           to: '/accounts/$id',
-          params: { id: account.accountNumber },
+          params: { id: account.number },
         })
       }
     >
       <div>
-        <div>{account.accountName}</div>
-        <div className="text-sm text-gray-500">{account.accountNumber}</div>
+        <div>{account.name}</div>
+        <div className="text-sm text-gray-500">{account.number}</div>
       </div>
       <div className="text-right">
         ${account.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
