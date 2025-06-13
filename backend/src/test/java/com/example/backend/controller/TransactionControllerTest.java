@@ -13,7 +13,7 @@
 //import java.util.Map;
 //import java.util.UUID;
 //
-//import com.example.backend.dto.RegisterUserRequestDto;
+//import com.example.backend.dto.userDto.request.RegisterUserRequestDto;
 //import com.example.backend.dto.TransactionRequestDto;
 //import com.example.backend.exception.custom.TransactionNotFoundException;
 //import com.example.backend.model.Transaction;

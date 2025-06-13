@@ -1,7 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.CombinedTransactionResponseDto;
-import com.example.backend.dto.TransactionRequestDto;
+import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;

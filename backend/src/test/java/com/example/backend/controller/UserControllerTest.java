@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Map;
 import java.util.UUID;
 
-import com.example.backend.dto.RegisterUserRequestDto;
+import com.example.backend.dto.userDto.request.RegisterUserRequestDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
