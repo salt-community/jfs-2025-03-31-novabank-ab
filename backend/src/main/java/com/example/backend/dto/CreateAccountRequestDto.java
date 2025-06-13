@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateAccountRequestDto(
-        @NotNull @NotBlank String userId,
         @NotNull BankAccountType type,
         @NotNull Currency currency
         ) {

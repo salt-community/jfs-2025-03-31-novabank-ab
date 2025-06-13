@@ -5,10 +5,13 @@ import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.UserService;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/account")
+@RequestMapping({"/api/account", "/api/account/"})
 @Validated
 public class AccountController {
 
@@ -32,49 +35,44 @@ public class AccountController {
 
     @GetMapping("/{accountId}")
     public ResponseEntity<AccountResponseDto> getAccount(
-        @PathVariable @NotNull
-        UUID accountId
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
-        Account account = accountService.getAccount(accountId);
+        String userId = jwt.getSubject();
+        Account account = accountService.getAccount(accountId, userId);
         return ResponseEntity.ok(AccountResponseDto.fromAccount(account));
     }
 
-    @GetMapping("/{userId}/accounts")
+    @GetMapping("/accounts")
     public ResponseEntity<ListAccountResponseDto> getAllUserAccounts(
-        @PathVariable @NotNull @NotBlank
-        String userId
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
+        String userId = jwt.getSubject();
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         return ResponseEntity.ok(
             ListAccountResponseDto.fromAccounts(accounts)
         );
     }
 
-    // Do we need this?
-    @GetMapping
-    public ResponseEntity<ListAccountResponseDto> getAllAccounts() {
-        return ResponseEntity.ok(
-            ListAccountResponseDto.fromAccounts(accountService.getAllAccounts())
-        );
-    }
-
     @GetMapping("/{accountId}/balance")
     public ResponseEntity<BalanceResponseDto> getBalance(
-        @PathVariable @NotNull
-        UUID accountId
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
+        String userId = jwt.getSubject();
         BalanceResponseDto response = new BalanceResponseDto(
-                accountService.getBalance(accountId), LocalDateTime.now()
+                accountService.getBalance(accountId, userId), LocalDateTime.now()
         );
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
     public ResponseEntity<Void> createAccount(
-        @RequestBody @Valid
-        CreateAccountRequestDto dto
+        @RequestBody @Valid CreateAccountRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
-        User user = userService.getUser(dto.userId());
+        String userId = jwt.getSubject();
+        User user = userService.getUser(userId);
         Account created = accountService.createAccount(dto.toAccount(user));
         URI location = URI.create("api/account/" + created.getId());
         return ResponseEntity.created(location).build();
@@ -85,9 +83,11 @@ public class AccountController {
         @PathVariable @NotNull
         UUID accountId,
         @RequestBody @Valid
-        DepositRequestDto dto
+        DepositRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
-        accountService.addDeposit(accountId, dto.amount());
+        String userId = jwt.getSubject();
+        accountService.addDeposit(accountId, dto.amount(), userId);
         return ResponseEntity.ok().build();
     }
 
@@ -96,27 +96,33 @@ public class AccountController {
         @PathVariable @NotNull
         UUID accountId,
         @RequestBody @Valid
-        WithdrawalRequestDto dto
+        WithdrawalRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
-        accountService.makeWithdrawal(accountId, dto.amount());
+        String userId = jwt.getSubject();
+        accountService.makeWithdrawal(accountId, dto.amount(), userId);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/suspend/{accountId}")
     public ResponseEntity<Void> suspendAccount(
         @PathVariable @NotNull
-        UUID accountId
+        UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
-        accountService.makeAccountSuspend(accountId);
+        String userId = jwt.getSubject();
+        accountService.makeAccountSuspend(accountId, userId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{accountId}")
     public ResponseEntity<Void> deleteAccount(
         @PathVariable @NotNull
-        UUID accountId
+        UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
-        accountService.deleteAccount(accountId);
+        String userId = jwt.getSubject();
+        accountService.deleteAccount(accountId, userId);
         return ResponseEntity.noContent().build();
     }
 }

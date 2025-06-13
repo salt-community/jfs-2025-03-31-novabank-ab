@@ -79,6 +79,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<ErrorResponseDto> handleUnauthorizedUser(UserUnauthorizedException e) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                e.getMessage(), HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleTransactionNotFound(TransactionNotFoundException e) {
         ErrorResponseDto error = new ErrorResponseDto(e.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now());
@@ -87,6 +95,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccountNotAllowedException.class)
     public ResponseEntity<ErrorResponseDto> handleAccountNotAllowed(AccountNotAllowedException e) {
+        ErrorResponseDto error = new ErrorResponseDto(
+                e.getMessage(), HttpStatus.FORBIDDEN.value(), LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDto> handleAccessDenied(AccessDeniedException e) {
         ErrorResponseDto error = new ErrorResponseDto(
                 e.getMessage(), HttpStatus.FORBIDDEN.value(), LocalDateTime.now()
         );
