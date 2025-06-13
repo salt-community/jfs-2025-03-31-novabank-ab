@@ -12,7 +12,7 @@ type AccountsBoardProps = {
 
 export default function AccountsBoard({ accounts }: AccountsBoardProps) {
   return (
-    <div className="max-w mx-auto p-6 space-y-6">
+    <div className="max-w mx-auto p-6 space-y-6" data-testid="accounts-board">
       <h1 className="text-2xl">My bank accounts ({accounts.length})</h1>
       <div className="space-y-3">
         {accounts.map((account) => (
