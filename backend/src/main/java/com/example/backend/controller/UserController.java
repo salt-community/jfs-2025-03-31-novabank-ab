@@ -14,7 +14,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 
@@ -49,7 +48,7 @@ public class UserController {
 //        return ResponseEntity.created(location).build();
 //    }
 
-    @Operation(summary = "Get a user", description = "Returns a user based on Clerk token userId")
+    @Operation(summary = "Get a user", description = "Returns a user based on Clerk token userId (Requires JWT in header)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "404", description = "User Not Found"),
@@ -62,7 +61,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @Operation(summary = "Update user", description = "Returns the updated user")
+    @Operation(summary = "Update user", description = "Returns the updated user (Requires JWT in header)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "404", description = "User Not Found"),

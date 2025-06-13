@@ -79,10 +79,10 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public void changeAccountStatus(UUID accountId, String userId, AccountStatus newStatus) {
+    public Account changeAccountStatus(UUID accountId, String userId, AccountStatus newStatus) {
         Account account = getAccount(accountId, userId);
         account.setStatus(newStatus);
-        accountRepository.save(account);
+        return accountRepository.save(account);
     }
 
     public void deleteAccount(UUID accountId, String userId) {

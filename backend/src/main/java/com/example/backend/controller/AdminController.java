@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.AddNewUserRequestDto;
 import com.example.backend.dto.ListAccountResponseDto;
+import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.service.AccountService;
@@ -35,7 +36,7 @@ public class AdminController {
     }
 
 
-    @Operation(summary = "Create new User", description = "Creates new User from Admin portal, returns User location in header")
+    @Operation(summary = "Create new User", description = "Returns User location in header")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created"),
             @ApiResponse(responseCode = "409", description = "User already exists"),
@@ -48,10 +49,11 @@ public class AdminController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get a user by id", description = "Returns a user as per the id, requires ADMIN")
+    @Operation(summary = "Get a user by id", description = "Returns a user as per the id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "User Not Found")
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @GetMapping("/user/{userId}")
     public ResponseEntity<User> getUser(
@@ -61,7 +63,7 @@ public class AdminController {
         return ResponseEntity.ok(user);
     }
 
-    @Operation(summary = "Get all users", description = "Returns a list of users, needs ADMIN rights")
+    @Operation(summary = "Get all users", description = "Returns a list of all users")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
@@ -72,10 +74,11 @@ public class AdminController {
         return ResponseEntity.ok(users);
     }
 
-    @Operation(summary = "Suspend a user by id", description = "Returns the suspended user, needs ADMIN rights")
+    @Operation(summary = "Suspend a user by id", description = "Returns the suspended user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully suspended User"),
-            @ApiResponse(responseCode = "404", description = "User Not Found")
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PatchMapping("/user/suspend/{userId}")
     public ResponseEntity<User> suspendUser(
@@ -85,10 +88,11 @@ public class AdminController {
         return ResponseEntity.ok(suspended);
     }
 
-    @Operation(summary = "Activate a user by id", description = "Returns the re-activated user, needs ADMIN rights")
+    @Operation(summary = "Activate a user by id", description = "Returns the re-activated user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully suspended User"),
-            @ApiResponse(responseCode = "404", description = "User Not Found")
+            @ApiResponse(responseCode = "200", description = "Successfully re-activate User"),
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PatchMapping("/user/activate/{userId}")
     public ResponseEntity<User> activateUser(
@@ -98,10 +102,11 @@ public class AdminController {
         return ResponseEntity.ok(activated);
     }
 
-    @Operation(summary = "Delete a user by id", description = "Deletes the user from database, needs ADMIN rights")
+    @Operation(summary = "Delete a user by id", description = "Deletes the user from database")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successfully deleted User"),
-            @ApiResponse(responseCode = "404", description = "User Not Found")
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @DeleteMapping("/user/delete/{userId}")
     public ResponseEntity<Void> deleteUser(
@@ -111,6 +116,11 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get a all accounts", description = "Returns a list of all accounts")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
     @GetMapping("/account")
     public ResponseEntity<ListAccountResponseDto> getAllAccounts() {
         return ResponseEntity.ok(
@@ -118,27 +128,44 @@ public class AdminController {
         );
     }
 
+    @Operation(summary = "Suspend a account by id", description = "Returns the suspended account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully suspended User"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
     @PatchMapping("/account/suspend/{accountId}")
-    public ResponseEntity<Void> suspendAccount(
+    public ResponseEntity<Account> suspendAccount(
             @PathVariable @NotNull UUID accountId,
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
         String userId = jwt.getSubject();
-        accountService.changeAccountStatus(accountId, userId, AccountStatus.SUSPENDED);
-        return ResponseEntity.ok().build();
+        Account account = accountService.changeAccountStatus(accountId, userId, AccountStatus.SUSPENDED);
+        return ResponseEntity.ok(account);
     }
 
+    @Operation(summary = "Activate a account by id", description = "Returns the re-activated account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully re-activate Account"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
     @PatchMapping("/account/activate/{accountId}")
-    public ResponseEntity<Void> activateAccount(
+    public ResponseEntity<Account> activateAccount(
             @PathVariable @NotNull UUID accountId,
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
         String userId = jwt.getSubject();
-        accountService.changeAccountStatus(accountId, userId, AccountStatus.ACTIVE);
-        return ResponseEntity.ok().build();
+        Account account = accountService.changeAccountStatus(accountId, userId, AccountStatus.ACTIVE);
+        return ResponseEntity.ok(account);
     }
 
-
+    @Operation(summary = "Delete a account by id", description = "Deletes the account from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted Account"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
     @DeleteMapping("/account/delete/{accountId}")
     public ResponseEntity<Void> deleteAccount(
             @PathVariable @NotNull UUID accountId,
