@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import type { Account } from '@/types'
 import AccountItem from './AccountItem'
+import type { Account } from '@/types'
 
 type AccountsBoardProps = {
   bankAccounts: Array<Account>
