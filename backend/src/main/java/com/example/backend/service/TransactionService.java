@@ -1,6 +1,6 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.CombinedTransactionResponseDto;
+import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
@@ -120,7 +120,7 @@ public class TransactionService {
         scheduledTransactionRepository.save(transaction);
     }
 
-    public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
+   /* public ScheduledTransaction getScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
         Account account = accountService.getAccount(accountId, userId);
         ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId)
                 .orElseThrow(TransactionNotFoundException::new);
@@ -130,7 +130,7 @@ public class TransactionService {
         }
 
         return transaction;
-    }
+    }*/
 
    /* public List<ScheduledTransaction> getScheduledTransactions(UUID accountId) {
         accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);

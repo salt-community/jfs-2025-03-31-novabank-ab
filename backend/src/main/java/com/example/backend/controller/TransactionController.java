@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CombinedTransactionResponseDto;
+import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
