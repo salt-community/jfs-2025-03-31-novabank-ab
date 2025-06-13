@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
-import { AccountItem } from './'
 import type { Account } from '@/types'
+import AccountItem from './AccountItem'
 
 type AccountsBoardProps = {
   bankAccounts: Array<Account>
@@ -8,9 +8,8 @@ type AccountsBoardProps = {
 
 export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   return (
-    <div className="max-w mx-auto p-6 space-y-6">
+    <div className="max-w mx-auto p-6 space-y-6" data-testid="accounts-board">
       <h1 className="text-2xl">My bank accounts ({bankAccounts.length})</h1>
-
       <div className="space-y-3">
         {bankAccounts.map((account) => (
           <div key={account.number}>

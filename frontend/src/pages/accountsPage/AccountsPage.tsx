@@ -1,5 +1,5 @@
-import { useAccounts } from '@/hooks'
 import { AccountsBoard } from '@/components/accounts'
+import { useAccounts } from '@/hooks'
 
 export default function AccountsPage() {
   const { data: accounts = [], isLoading, isError } = useAccounts()
