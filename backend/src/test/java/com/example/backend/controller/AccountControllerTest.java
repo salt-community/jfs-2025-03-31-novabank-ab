@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.UserUnauthorizedException;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
@@ -101,5 +102,16 @@ class AccountControllerTest {
         mvc.perform(get("/api/account/{id}", ACCOUNT_ID)
                         .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET /api/account/{id} — 403 Forbidden")
+    void whenGetAccount_unauthorized_throws403() throws Exception {
+        Mockito.when(accountService.getAccount(eq(ACCOUNT_ID), eq(USER_ID)))
+                .thenThrow(new UserUnauthorizedException(""));
+
+        mvc.perform(get("/api/account/{id}", ACCOUNT_ID)
+                        .with(jwt().jwt(jwt -> jwt.subject(USER_ID))))
+                .andExpect(status().isUnauthorized());
     }
 }
