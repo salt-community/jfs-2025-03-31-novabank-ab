@@ -7,7 +7,6 @@ import com.example.backend.service.AccountService;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -43,7 +42,7 @@ public class AccountController {
         return ResponseEntity.ok(AccountResponseDto.fromAccount(account));
     }
 
-    @GetMapping("/accounts")
+    @GetMapping
     public ResponseEntity<ListAccountResponseDto> getAllUserAccounts(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
@@ -78,51 +77,15 @@ public class AccountController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{accountId}/deposit")
+    @PatchMapping("/{accountId}/balance")
     public ResponseEntity<Void> deposit(
-        @PathVariable @NotNull
-        UUID accountId,
-        @RequestBody @Valid
-        DepositRequestDto dto,
+        @PathVariable @NotNull UUID accountId,
+        @RequestBody @Valid BalanceUpdateRequestDto dto,
         @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
         String userId = jwt.getSubject();
-        accountService.addDeposit(accountId, dto.amount(), userId);
+        accountService.updateBalance(accountId, userId, dto.amount(), dto.updateType());
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{accountId}/withdrawal")
-    public ResponseEntity<Void> withdrawal(
-        @PathVariable @NotNull
-        UUID accountId,
-        @RequestBody @Valid
-        WithdrawalRequestDto dto,
-        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
-    ) {
-        String userId = jwt.getSubject();
-        accountService.makeWithdrawal(accountId, dto.amount(), userId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PatchMapping("/suspend/{accountId}")
-    public ResponseEntity<Void> suspendAccount(
-        @PathVariable @NotNull
-        UUID accountId,
-        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
-    ) {
-        String userId = jwt.getSubject();
-        accountService.makeAccountSuspend(accountId, userId);
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{accountId}")
-    public ResponseEntity<Void> deleteAccount(
-        @PathVariable @NotNull
-        UUID accountId,
-        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
-    ) {
-        String userId = jwt.getSubject();
-        accountService.deleteAccount(accountId, userId);
-        return ResponseEntity.noContent().build();
-    }
 }
