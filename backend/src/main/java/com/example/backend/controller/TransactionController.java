@@ -110,7 +110,7 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getScheduledTransaction(accountId, transactionId,"mock"));
     }
 
-    @Operation(
+  /*  @Operation(
             summary = "Get all scheduled transactions for an account",
             description = "Fetches a list of all scheduled transactions belonging to the given account.",
             responses = {
@@ -121,6 +121,6 @@ public class TransactionController {
     @GetMapping("scheduled-transactions/{accountId}")
     public ResponseEntity<?> getScheduledTransactions(@PathVariable String accountId) {
         return ResponseEntity.ok().body(transactionService.getScheduledTransactions(UUID.fromString(accountId)));
-    }
+    }*/
 
 }
