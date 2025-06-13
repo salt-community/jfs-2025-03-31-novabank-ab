@@ -35,6 +35,7 @@ export default function RecipientsModal({
   const handleCancel = () => {
     dialogRef.current?.close()
     onClose()
+
   }
 
   function isValidAccountNumber(type: string, value: string): boolean {
