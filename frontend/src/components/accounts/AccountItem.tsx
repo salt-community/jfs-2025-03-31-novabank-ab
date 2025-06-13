@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router'
 
 type Account = {
   accountName: string
@@ -8,15 +8,14 @@ type Account = {
 
 type AccountItemProps = {
   account: Account
-};
+}
 
-export default function AccountItem({
-  account
-}: AccountItemProps) {
-  const navigate = useNavigate();
+export default function AccountItem({ account }: AccountItemProps) {
+  const navigate = useNavigate()
 
   return (
     <div
+      data-testid="account-item"
       className="flex items-center justify-between border px-4 py-3 shadow-sm hover:bg-gray-200 rounded-md cursor-pointer"
       onClick={() =>
         navigate({
@@ -30,9 +29,12 @@ export default function AccountItem({
         <div className="text-sm text-gray-500">{account.accountNumber}</div>
       </div>
       <div className="text-right">
-        ${account.balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        $
+        {account.balance.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+        })}
         <span className="ml-2">{'>'}</span>
       </div>
     </div>
-  );
+  )
 }
