@@ -4,8 +4,6 @@ type AccountCardProps = {
   account: Account
 }
 
-const test = 'hello'
-
 export default function AccountCard({ account }: AccountCardProps) {
   return (
     <>
