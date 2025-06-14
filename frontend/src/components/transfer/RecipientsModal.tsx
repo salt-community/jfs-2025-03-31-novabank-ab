@@ -171,8 +171,8 @@ export default function RecipientsModal({
                   type="text"
                   onChange={(e) => setNewRecipient(e.target.value)}
                   className={`peer hover:cursor-pointer  text-black rounded 
-                        p-4 w-full text-left  bg-white 
-                        ${errors.recipientError ? 'outline outline-red-600 focus:outline-red-600 focus:outline-2 ' : 'border border-gray-500 focus:ring-1 focus:ring-black'}
+                        p-4 w-full text-left  bg-white outline focus:outline-2
+                        ${errors.recipientError ? ' outline-red-600 focus:outline-red-600  ' : ' outline-gray-500 focus:outline-black'}
                         `}
                 />
 

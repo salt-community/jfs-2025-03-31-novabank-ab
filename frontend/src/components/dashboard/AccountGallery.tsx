@@ -8,16 +8,11 @@ type AccountGalleryProps = {
 
 export function AccountGallery({ bankAccounts }: AccountGalleryProps) {
   return (
-    <div
-      className="flex flex-col items-center p-10 gap-10"
-      data-testid="account-gallery"
-    >
+    <div data-testid="account-gallery">
       <div>
-        <h1 className="text-center font-semibold text-xl mb-4">
-          My Accounts ({bankAccounts.length})
-        </h1>
+        <h1 className="text-2xl mb-5">My bank accounts</h1>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex gap-6">
           {bankAccounts.map((account) => (
             <div key={account.number}>
               <Link to="/accounts/$id" params={{ id: account.number }}>

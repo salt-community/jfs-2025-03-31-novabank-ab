@@ -63,8 +63,8 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
 
   return (
     <>
-      <h1 className="text-3xl">New transfer</h1>
-      <form onSubmit={handleSubmit} className="space-y-5 mt-20 max-w-3xl">
+      <h1 className="text-3xl mb-20">New transfer</h1>
+      <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl">
         {/* From account */}
         <div className="relative w-full">
           <select
@@ -77,7 +77,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               )
               setFromAccount(selectedAccount || null)
             }}
-            className={`peer hover:cursor-pointer rounded p-4 w-full outline outline-gray-500 focus:outline-2 focus:outline-black text-left bg-white
+            className={` peer hover:cursor-pointer rounded p-4 w-full outline outline-gray-500 focus:outline-2 focus:outline-black text-left bg-white
              ${errors.fromAccount ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
               border-r-15 border-transparent 
               ${fromAccount ? ' text-black' : 'text-gray-400'}`}
@@ -129,9 +129,9 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
             id="toAccount"
             type="button"
             onClick={() => setShowRecipientsModal(true)}
-            className={`peer hover:cursor-pointer rounded p-4 w-full text-left focus:ring-1 border border-gray-500 focus:ring-black bg-white
+            className={`peer hover:cursor-pointer rounded p-4 w-full text-left outline outline-gray-500 focus:outline-2 focus:outline-black   bg-white
               ${toAccount || newRecipient ? 'text-black' : 'text-gray-400'}
-              ${errors.recipientError ? 'border-red-600 focus:ring-red-600 ' : ''}`}
+              ${errors.recipientError ? 'outline-none border border-red-600 focus:ring-red-600 focus:border-2 ' : ''}`}
           >
             {toAccount
               ? toAccount.name
@@ -179,14 +179,14 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             className={`peer rounded p-4 w-full border bg-white text-black
-              ${errors.amount ? 'border-red-600 focus:ring-red-900 focus:outline-none focus:border-2 ' : 'border-gray-500 '}`}
+              ${errors.amount ? 'border-red-600 focus:ring-red-900 outline-none focus:border-2 ' : ' outline outline-gray-500 focus:outline-2 focus:outline-black'}`}
             
           />
           <label
             htmlFor="amount"
             className={`absolute left-4 px-1 bg-white transition-all duration-200
               ${amount ? '-top-2.5 font-semibold text-sm text-black' : 'top-4 text-base text-gray-400 bg-transparent'}
-              ${errors.amount ? ' peer-focus:text-red-600 ' : 'peer-focus:text-black'}
+              ${errors.amount ? ' peer-focus:text-red-600 ' : 'peer-focus:text-black '}
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm peer-focus:bg-white`}
           >
             Amount
@@ -215,7 +215,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
             id="ocr"
             value={ocr}
             onChange={(e) => setOcr(e.target.value)}
-            className="peer border border-gray-500 text-black rounded px-5 py-4 focus:ring-1 focus:ring-black w-full placeholder-transparent bg-white"
+            className="peer text-black rounded px-5 py-4 outline outline-gray-500 focus:outline-2 focus:outline-black w-full placeholder-transparent bg-white"
             placeholder="OCR / Message"
           />
           <label
@@ -234,7 +234,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
             id="notes"
             value={notes}
             rows={4}
-            className="peer border border-gray-500 text-black rounded px-5 pt-6 pb-2 bg-white focus:outline-none focus:ring-1 focus:ring-black w-full placeholder-transparent resize-none"
+            className="peer text-black rounded px-5 pt-6 pb-2 bg-white outline outline-gray-500 focus:outline-2 focus:outline-black w-full placeholder-transparent resize-none"
             onChange={(e) => setNotes(e.target.value)}
           />
           <label
@@ -251,7 +251,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
         <div className="relative w-full">
           <button
             type="submit"
-            className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-full"
+            className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-4 rounded hover:cursor-pointer transition-colors w-full"
           >
             Submit
           </button>

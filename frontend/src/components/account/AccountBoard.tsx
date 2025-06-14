@@ -7,13 +7,10 @@ type AccountBoardProps = {
 
 export default function AccountBoard({ account }: AccountBoardProps) {
   return (
-    <div
-      className="max-w mx-auto px-6 py-10 space-y-10"
-      data-testid="account-board"
-    >
+    <div data-testid="account-board">
+      <h1 className="text-3xl mb-20">{account.name}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <h1 className="text-2xl font-semibold">{account.name}</h1>
           <p className="mt-4 text-gray-600">Total balance</p>
           <p className="text-4xl font-bold">{account.balance.toFixed(2)}</p>
           <button className="mt-4 px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-sm shadow">

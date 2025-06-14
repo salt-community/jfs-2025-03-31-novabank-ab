@@ -9,7 +9,7 @@ export const Route = createRootRoute({
     const isIndex = location.pathname === '/'
 
     return (
-      <div className="flex min-h-screen ">
+      <div className="flex min-h-screen font-quicksand">
         <SignedIn>
           <aside className="w-1/5 h-screen">
             <SideBar />
