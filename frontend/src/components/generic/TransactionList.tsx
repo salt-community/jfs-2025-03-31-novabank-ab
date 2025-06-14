@@ -11,14 +11,14 @@ export function TransactionList({ transactions }: TransactionListProps) {
 
   return (
     <div
-      className="p-10 rounded-lg max-w mx-auto"
+     
       data-testid="transaction-list"
     >
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl text-gray-800 pb-5">Recent transactions</h2>
+      <div className="flex flex-row justify-between items-baseline">
+         <h1 className="text-2xl mt-20 mb-5">Recent transactions</h1>
         <a
           onClick={() => navigate({ to: '/transactions' })}
-          className="text-sm text-gray-600 hover:text-gray-900 hover:cursor-pointer"
+          className="text-md text-gray-500 hover:text-gray-900 hover:cursor-pointer"
         >
           See all
         </a>

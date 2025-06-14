@@ -10,14 +10,15 @@ export default function TransferAccountItem({
   isDisabled,
 }: TransferAccountItemProps) {
   return (
-    <div className={`flex items-center justify-between border px-4 py-2 shadow-sm 
-                      ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-100  cursor-pointer'}
-                      rounded-md`}>
+    <div
+      className={` flex items-center justify-between px-4 py-3 shadow-md  duration-200
+                      ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-[#FAFAFA]  cursor-pointer'}
+                      rounded-md`}
+    >
       <div>
         <div>{account.name}</div>
-        <div className="text-sm text-gray-500">{account.number}</div>
+        <div className="text-left text-sm text-gray-500">{account.number}</div>
       </div>
-
       {isDisabled && (
         <span className="text-xs text-red-500">
           (Already selected as sender)
@@ -30,7 +31,6 @@ export default function TransferAccountItem({
           minimumFractionDigits: 2,
         })}
       </div>
-
     </div>
   )
 }

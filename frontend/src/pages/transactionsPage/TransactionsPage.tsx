@@ -10,8 +10,8 @@ export default function TransactionsPage() {
     return <div className="p-8 text-red-500">Failed loading transactions</div>
 
   return (
-    <div className=" mx-auto">
-      <h1 className="text-3xl mb-10">All Transactions</h1>
+    <div >
+      <h1 className="text-3xl mb-20">All transactions</h1>
       <div>
         {transactions.length === 0 ? (
           <div className="p-4 text-gray-500">No transactions found</div>
