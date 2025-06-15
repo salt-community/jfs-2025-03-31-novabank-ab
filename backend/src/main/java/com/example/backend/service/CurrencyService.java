@@ -1,19 +1,18 @@
 package com.example.backend.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.backend.dto.currencyDto.response.ExchangeRateResponseDto;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpHeaders;
 
 @Service
 public class CurrencyService {
 
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+
 
     /* TODO sync with env
     TODO secondly work with scalability for other currencies
@@ -24,26 +23,24 @@ public class CurrencyService {
 
     public CurrencyService() {
         this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
+
     }
 
     //TODO consider adding caching in future
-    public double fetchSekEurPmiRate() {
+    public ExchangeRateResponseDto fetchRateDto() {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Ocp-Apim-Subscription-Key", API_KEY);
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(
+            ResponseEntity<ExchangeRateResponseDto> response = restTemplate.exchange(
                     API_URL,
                     HttpMethod.GET,
                     entity,
-                    String.class
+                    ExchangeRateResponseDto.class
             );
 
-            JsonNode root = objectMapper.readTree(response.getBody());
-
-            return root.get("value").asDouble(); // justera efter riktig responsstruktur
+            return response.getBody();
 
         } catch (Exception e) {
             throw new RuntimeException("Error fetching exchange rate.", e);
@@ -51,12 +48,12 @@ public class CurrencyService {
     }
 
     public double convertSekToEur(double sek) {
-        double rate = fetchSekEurPmiRate();
+        double rate = fetchRateDto().getValue();
         return sek/rate;
     }
 
     public double convertEurToSek(double eur) {
-        double rate = fetchSekEurPmiRate();
+        double rate = fetchRateDto().getValue();
         return eur * rate;
     }
 }
