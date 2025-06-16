@@ -20,7 +20,7 @@ public class CurrencyController {
 
     @PostMapping("/convert")
     public CurrencyConversionResultDto convert(@RequestBody CurrencyConversionRequestDto request) {
-        return currencyService.convertAndWrapToDto(request);
+        return currencyService.convertCurrency(request);
     }
 
 }
