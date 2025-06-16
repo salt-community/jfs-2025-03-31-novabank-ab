@@ -131,4 +131,20 @@ class AccountServiceTest {
 
         verify(accountRepository).delete(account);
     }
+
+    @Test
+    @DisplayName("updateBalance throws when account is not ACTIVE")
+    void updateBalance_inactiveAccount_throws() {
+        Account account = sampleAccount();
+        account.setStatus(AccountStatus.CLOSED);
+
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        Exception ex = assertThrows(IllegalStateException.class, () ->
+                accountService.updateBalance(ACCOUNT_ID, USER_ID, 50.0, BalanceUpdateRequestDto.UpdateType.DEPOSIT)
+        );
+
+        assertEquals("Cannot update balance of inactive account", ex.getMessage());
+    }
+
 }
