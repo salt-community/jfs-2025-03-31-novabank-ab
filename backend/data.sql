@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS currencies;
 CREATE TABLE currencies (
                             id           VARCHAR(36)   PRIMARY KEY,
                             name         VARCHAR(255),
-                            abbrevation  VARCHAR(255)  CHECK (abbrevation IN ('USD','EUR','SEK'))
+                            abbrevation  VARCHAR(255)  CHECK (abbrevation IN ('EUR','SEK'))
 );
 
 -- 2) users
@@ -34,7 +34,7 @@ CREATE TABLE accounts (
                           currency_id    VARCHAR(36),
                           created_at     DATE,
                           balance        DOUBLE,
-                          type           VARCHAR(255)  NOT NULL CHECK (type   IN ('CHECKING','SAVINGS')),
+                          type           VARCHAR(255)  NOT NULL CHECK (type   IN ('PERSONAL','SAVINGS')),
                           status         VARCHAR(255)  NOT NULL CHECK (status IN ('ACTIVE','SUSPENDED','INACTIVE','CLOSED')),
                           account_number VARCHAR(255),
                           FOREIGN KEY(user_id)     REFERENCES users(id),
@@ -74,7 +74,7 @@ CREATE TABLE scheduled_transactions (
 -- DATA INSERTS
 
 INSERT INTO currencies (id, name, abbrevation) VALUES
-                                                   ('a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','US Dollar','USD'),
+                                                   ('a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','US Dollar','SEK'),
                                                    ('b2c3d4e5-f6a7-8b9c-0d1e-f2a3b4c5d6e7','Euro','EUR'),
                                                    ('c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','Swedish Krona','SEK');
 
@@ -92,10 +92,10 @@ INSERT INTO accounts (
     id, user_id, currency_id, created_at, balance,
     type, status, account_number
 ) VALUES
-      ('11111111-1111-1111-1111-111111111111','3fa85f64-5717-4562-b3fc-2c963f66afa6','a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','2025-05-10',1250.00,'CHECKING','ACTIVE','SE4550000000055555555551'),
+      ('11111111-1111-1111-1111-111111111111','3fa85f64-5717-4562-b3fc-2c963f66afa6','a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','2025-05-10',1250.00,'PERSONAL','ACTIVE','SE4550000000055555555551'),
       ('22222222-2222-2222-2222-222222222222','7b9e1c2d-9f4a-4f3e-a2bd-5c8f9d1e2345','b2c3d4e5-f6a7-8b9c-0d1e-f2a3b4c5d6e7','2025-04-01', 800.50,'SAVINGS','ACTIVE','DE89370400440532013000'),
-      ('33333333-3333-3333-3333-333333333333','1e2d3c4b-5a6f-7e8d-9c0b-1a2f3e4d5c6b','c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','2025-03-20',  50.75,'CHECKING','SUSPENDED','SE4550000000055555555552'),
-      ('44444444-4444-4444-4444-444444444444','9f8e7d6c-5b4a-3c2d-1e0f-9a8b7c6d5e4f','a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','2025-01-15',   0.00,'CHECKING','INACTIVE','SE4550000000055555555553'),
+      ('33333333-3333-3333-3333-333333333333','1e2d3c4b-5a6f-7e8d-9c0b-1a2f3e4d5c6b','c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','2025-03-20',  50.75,'PERSONAL','SUSPENDED','SE4550000000055555555552'),
+      ('44444444-4444-4444-4444-444444444444','9f8e7d6c-5b4a-3c2d-1e0f-9a8b7c6d5e4f','a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','2025-01-15',   0.00,'PERSONAL','INACTIVE','SE4550000000055555555553'),
       ('55555555-5555-5555-5555-555555555555','0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d','c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','2025-06-16', 300.00,'SAVINGS','ACTIVE','SE4550000000055555555554');
 
 INSERT INTO transactions (
