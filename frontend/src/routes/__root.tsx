@@ -9,7 +9,7 @@ export const Route = createRootRoute({
     const isIndex = location.pathname === '/'
 
     return (
-      <div className="flex h-screen ">
+      <div className="flex min-h-screen font-quicksand">
         <SignedIn>
           <aside className="w-1/5 h-screen">
             <SideBar />
@@ -29,8 +29,8 @@ export const Route = createRootRoute({
             ) : (
               <>
                 <Header />
-                <div className="flex justify-center bg-white mt-40 text-4xl">
-                  <h1 style={{ fontFamily: "'Lato', sans-serif" }}>
+                <div className="flex justify-center mx-auto w-full text-center bg-white mt-40 text-4xl">
+                  <h1 className="" style={{ fontFamily: "'Lato', sans-serif" }}>
                     Please sign in to access this page
                   </h1>
                 </div>

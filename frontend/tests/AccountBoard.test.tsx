@@ -22,10 +22,13 @@ const testTransactions: Array<Transaction> = [
 ]
 
 const testAccountDetails: AccountDetails = {
+  id: 'testId-123456789',
+  balance: 1803.98,
+  type: 'Test Account',
+  createdAt: '20250616',
+  status: 'Active',
+  accountNumber: '**** 1818',
   accountHolder: 'Aki',
-  balance: 200000000.123123,
-  name: 'Savings',
-  number: '****2201',
   transactions: testTransactions,
 }
 
@@ -47,26 +50,26 @@ describe('Account Board', () => {
     render(<AccountBoard account={testAccountDetails} />)
     const accountBoard = screen.getByTestId('account-board')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.accountHolder)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
   })
   it('should verify the correct account number is displayed', () => {
     render(<AccountBoard account={testAccountDetails} />)
     const accountBoard = screen.getByTestId('account-board')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
   })
   it('should verify the correct account number is displayed', () => {
     render(<AccountBoard account={testAccountDetails} />)
     const accountBoard = screen.getByTestId('account-board')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
   })
   it('should verify the correct amount of transaction items is displayed', () => {
     render(<AccountBoard account={testAccountDetails} />)
     const accountBoard = screen.getByTestId('account-board')
     const transactionItems = screen.getAllByTestId('transaction-item')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
     expect(transactionItems.length).toBe(2)
   })
   it('should verify the correct names of transaction items is displayed', () => {
@@ -74,7 +77,7 @@ describe('Account Board', () => {
     const accountBoard = screen.getByTestId('account-board')
     const transactionItems = screen.getAllByTestId('transaction-item')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
     for (let i = 0; i < transactionItems.length; i++) {
       expect(transactionItems[i]).toHaveTextContent(
         testAccountDetails.transactions[i].name,
@@ -86,7 +89,7 @@ describe('Account Board', () => {
     const accountBoard = screen.getByTestId('account-board')
     const transactionItems = screen.getAllByTestId('transaction-item')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
     for (let i = 0; i < transactionItems.length; i++) {
       expect(transactionItems[i]).toHaveTextContent(
         testAccountDetails.transactions[i].category,
@@ -98,7 +101,7 @@ describe('Account Board', () => {
     const accountBoard = screen.getByTestId('account-board')
     const transactionItems = screen.getAllByTestId('transaction-item')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
     for (let i = 0; i < transactionItems.length; i++) {
       expect(transactionItems[i]).toHaveTextContent(
         testAccountDetails.transactions[i].amount.toFixed(2).toString(),
@@ -110,7 +113,7 @@ describe('Account Board', () => {
     const accountBoard = screen.getByTestId('account-board')
     const transactionItems = screen.getAllByTestId('transaction-item')
     expect(accountBoard).toBeInTheDocument()
-    expect(accountBoard).toHaveTextContent(testAccountDetails.number)
+    expect(accountBoard).toHaveTextContent(testAccountDetails.accountNumber)
     for (let i = 0; i < transactionItems.length; i++) {
       expect(transactionItems[i]).toHaveTextContent(
         testAccountDetails.transactions[i].time,

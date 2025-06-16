@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import blackrightarrowicon from '../../assets/blackrightarrowicon.svg'
 import AccountItem from './AccountItem'
 import type { Account } from '@/types'
 
@@ -8,20 +9,19 @@ type AccountsBoardProps = {
 
 export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   return (
-    <div className="max-w mx-auto p-6 space-y-6" data-testid="accounts-board">
-      <h1 className="text-2xl">My bank accounts ({bankAccounts.length})</h1>
+    <div data-testid="accounts-board">
+      <h1 className="text-3xl mb-10">My bank accounts</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
-          <div key={account.number}>
-            <Link to="/accounts/$id" params={{ id: account.number }}>
+          <div key={account.accountNumber}>
+            <Link to="/accounts/$id" params={{ id: account.accountNumber }}>
               <AccountItem account={account} />
             </Link>
           </div>
         ))}
-
-        <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow rounded-md">
-          <span className="text-lg">+ Open new account</span>
-          <span className="text-xl">{'>'}</span>
+        <button className=" flex justify-between border-1 border-gray-200 bg-[#FFB20F] mt-10 hover:bg-[#F5A700] text-black shadow-sm px-5 py-4 hover:cursor-pointer transition-colors w-full">
+          <span>Open new account</span>
+          <img src={blackrightarrowicon} />
         </button>
       </div>
     </div>
