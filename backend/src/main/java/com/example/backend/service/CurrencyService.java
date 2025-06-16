@@ -37,14 +37,6 @@ public class CurrencyService {
         double rate = exchangeRateDto.getValue();
         double convertedAmount = originalAmount * rate;
 
-/*
-    private String fromCurrency;
-    private String toCurrency;
-    private double originalAmount;
-    private double convertedAmount;
-    private double rateUsed;
-    private String rateDate;*/
-
         return new CurrencyConversionResultDto(
                 fromCurrency,
                 toCurrency,
