@@ -120,4 +120,15 @@ class AccountServiceTest {
                 accountService.updateBalance(ACCOUNT_ID, USER_ID, 200.0, BalanceUpdateRequestDto.UpdateType.WITHDRAW)
         );
     }
+
+    @Test
+    @DisplayName("deleteAccount deletes the account")
+    void deleteAccount_valid_deletesAccount() {
+        Account account = sampleAccount();
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        accountService.deleteAccount(ACCOUNT_ID, USER_ID);
+
+        verify(accountRepository).delete(account);
+    }
 }
