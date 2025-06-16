@@ -67,4 +67,16 @@ class AccountServiceTest {
                 accountService.getAccount(ACCOUNT_ID, USER_ID)
         );
     }
+
+    @Test
+    @DisplayName("getAccount throws when user not authorized")
+    void getAccount_unauthorized_throws() {
+        Account account = sampleAccount();
+        account.getUser().setId("other-user");
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        assertThrows(UserUnauthorizedException.class, () ->
+                accountService.getAccount(ACCOUNT_ID, USER_ID)
+        );
+    }
 }
