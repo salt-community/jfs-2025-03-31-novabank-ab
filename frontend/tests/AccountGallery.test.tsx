@@ -14,19 +14,28 @@ import { AccountGallery } from '../src/components/dashboard/AccountGallery'
 
 const testAccounts = [
   {
-    name: 'Savings',
-    number: '**** 2201',
-    balance: 4465.23,
+    id: 'testId-123456789',
+    balance: 1803.98,
+    type: 'Test Account',
+    createdAt: '20250616',
+    status: 'Active',
+    accountNumber: '**** 1818',
   },
   {
-    name: 'Personal',
-    number: '**** 7654',
-    balance: 532.78,
+    id: 'testId-987654321',
+    balance: 2000,
+    type: 'Test Account',
+    createdAt: '20250616',
+    status: 'Active',
+    accountNumber: '**** 4444',
   },
   {
-    name: 'Family',
-    number: '**** 4720',
-    balance: 66004.65,
+    id: 'testId-5748392038',
+    balance: 456000.98,
+    type: 'Test Account',
+    createdAt: '20250617',
+    status: 'Active',
+    accountNumber: '**** 1202',
   },
 ]
 
@@ -67,7 +76,7 @@ describe('AccountGallery', () => {
     })
     const accountCards = screen.getAllByTestId('account-card')
     for (let i = 0; i < accountCards.length; i++) {
-      expect(accountCards[i]).toHaveTextContent(testAccounts[i].name)
+      expect(accountCards[i]).toHaveTextContent(testAccounts[i].type)
     }
   })
   it('should render correct account numbers for the accounts', async () => {
@@ -77,7 +86,7 @@ describe('AccountGallery', () => {
     })
     const accountNumbers = screen.getAllByTestId('account-number')
     for (let i = 0; i < accountNumbers.length; i++) {
-      expect(accountNumbers[i]).toHaveTextContent(testAccounts[i].number)
+      expect(accountNumbers[i]).toHaveTextContent(testAccounts[i].accountNumber)
     }
   })
   it('should render correct balance for the accounts', async () => {
