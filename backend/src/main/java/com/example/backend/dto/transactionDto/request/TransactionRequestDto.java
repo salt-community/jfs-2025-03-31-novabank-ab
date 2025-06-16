@@ -1,6 +1,7 @@
 package com.example.backend.dto.transactionDto.request;
 
 
+import com.example.backend.model.enums.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -14,7 +15,7 @@ public record TransactionRequestDto(
         UUID toAccountId,
         String recipientNumber,
         @NotNull
-        String type,
+        PaymentType type,
         @NotNull
         LocalDate transactionDate,
         @NotNull

@@ -8,12 +8,15 @@ import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
 import com.example.backend.model.enums.AccountStatus;
+import com.example.backend.model.enums.PaymentType;
 import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
+import jakarta.transaction.InvalidTransactionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -84,26 +87,42 @@ public class TransactionService {
 
     public void addTransaction(TransactionRequestDto dto, String userId) {
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
-        if(dto.transactionDate().isAfter(today)) {
-            addScheduledTransaction(dto,userId);
+        if (dto.transactionDate().isAfter(today)) {
+            addScheduledTransaction(dto, userId);
             return;
         }
 
         Account from = accountService.getAccount(dto.fromAccountId(), userId);
 
         if (accountIsActive(from)) {
-            throw new AccountNotAllowedException("One of the account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
+            throw new AccountNotAllowedException("From account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
         }
         Account to = null;
         String recipientNumber = null;
 
-
-        updateBalances(from,to,dto.amount());
+        if (dto.type() == PaymentType.INTERNAL_TRANSFER) {
+            if (dto.toAccountId() == null) {
+                throw new AccountNotFoundException("To account not found");
+            }
+            to = accountService.getAccount(dto.toAccountId(), userId);
+            if (accountIsActive(to)) {
+                throw new AccountNotAllowedException("To account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
+            }
+        } else {
+            if (dto.recipientNumber() == null || dto.recipientNumber().isBlank()) {
+                throw new IllegalArgumentException("recipientNumber is required for external payment");
+            }
+            recipientNumber = dto.recipientNumber();
+        }
+        if (to != null && from.getBalance() > dto.amount()) {
+            updateBalances(from, to, dto.amount());
+        }
 
         Transaction transaction = new Transaction(
                 null,
                 from,
                 to,
+                recipientNumber,
                 dto.type(),
                 LocalDateTime.now(),
                 dto.amount(),
@@ -123,7 +142,7 @@ public class TransactionService {
                 null,
                 from,
                 to,
-                dto.type(),
+
                 dto.amount(),
                 dto.transactionDate().atStartOfDay(),
                 TransactionStatus.PENDING,
@@ -181,12 +200,12 @@ public class TransactionService {
                 throw new AccountNotAllowedException("One of the account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
             }
 
-            if(from.getBalance() < scheduledTransaction.getAmount()) {
+            if (from.getBalance() < scheduledTransaction.getAmount()) {
                 scheduledTransaction.setStatus(TransactionStatus.FAILED);
                 continue;
             }
 
-            updateBalances(from,to,scheduledTransaction.getAmount());
+            updateBalances(from, to, scheduledTransaction.getAmount());
             Transaction transaction = new Transaction(
                     null,
                     from,
