@@ -5,20 +5,20 @@ INSERT INTO currencies (id, name, abbrevation) VALUES
 
 -- Users
 INSERT INTO users (id, full_name, email, phone_number, role, status, created_at, last_login) VALUES
-    ('77d9d2ef-c01b-4e76-a7fc-7b84e13c8b23', 'User 1', 'user1@example.com', '0700000000', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
-    ('934da29c-4a3c-4dd1-bbe7-3a3219bb12e7', 'User 2', 'user2@example.com', '0700000001', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
+    ('user_2yMYqxXhoEDq64tfBlelGADfdlp', 'Amanda', 'amanda.strom@appliedtechnology.se', '0700000000', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
+    ('user_2ya9D2bPCC3XYyGsklZRQPPBeb9', 'Elias', 'elias.egelrud@appliedtechnology.se', '0700000001', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
     ('b29f9397-ec6b-4d5e-9f1c-2939d2c1995b', 'User 3', 'user3@example.com', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
 
-    -- Accounts
+-- Accounts
 INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
-    ('c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '77d9d2ef-c01b-4e76-a7fc-7b84e13c8b23', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9370, 'PERSONAL', 'ACTIVE', 'ACC1000'),
-    ('3587b71d-5845-4ba3-b667-e556bdf845be', '934da29c-4a3c-4dd1-bbe7-3a3219bb12e7', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 1763, 'PERSONAL', 'ACTIVE', 'ACC1001'),
+    ('c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9370, 'PERSONAL', 'ACTIVE', 'ACC1000'),
+    ('3587b71d-5845-4ba3-b667-e556bdf845be', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 1763, 'PERSONAL', 'ACTIVE', 'ACC1001'),
     ('7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'b29f9397-ec6b-4d5e-9f1c-2939d2c1995b', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 7459, 'PERSONAL', 'ACTIVE', 'ACC1002'),
-    ('67d254c1-1532-4cf4-8d4f-55ef8fe12717', '77d9d2ef-c01b-4e76-a7fc-7b84e13c8b23', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 2583, 'PERSONAL', 'ACTIVE', 'ACC1003'),
-    ('57a34877-b5f7-4967-a40b-c5cfba12cc67', '934da29c-4a3c-4dd1-bbe7-3a3219bb12e7', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9515, 'PERSONAL', 'ACTIVE', 'ACC1004'),
+    ('67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 2583, 'PERSONAL', 'ACTIVE', 'ACC1003'),
+    ('57a34877-b5f7-4967-a40b-c5cfba12cc67', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9515, 'PERSONAL', 'ACTIVE', 'ACC1004'),
     ('4cab58e6-5ebd-4cc3-b42c-1eca8da00a4a', 'b29f9397-ec6b-4d5e-9f1c-2939d2c1995b', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 4064, 'PERSONAL', 'ACTIVE', 'ACC1005'),
-    ('ec70e8d7-6fb5-4364-81da-9b1a52cc1650', '77d9d2ef-c01b-4e76-a7fc-7b84e13c8b23', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 2333, 'PERSONAL', 'ACTIVE', 'ACC1006'),
-    ('400086d4-7b9c-4052-abf3-651376b6817d', '934da29c-4a3c-4dd1-bbe7-3a3219bb12e7', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 9588, 'PERSONAL', 'ACTIVE', 'ACC1007');
+    ('ec70e8d7-6fb5-4364-81da-9b1a52cc1650', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 2333, 'PERSONAL', 'ACTIVE', 'ACC1006'),
+    ('400086d4-7b9c-4052-abf3-651376b6817d', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 9588, 'PERSONAL', 'ACTIVE', 'ACC1007');
 
 -- Transactions
 INSERT INTO transactions (id, from_account_id, to_account_id, created_at, amount, description, user_note, ocr_number) VALUES

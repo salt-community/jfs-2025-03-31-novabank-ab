@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.currencyDto.response.ExchangeRateResponseDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -12,18 +13,22 @@ import org.springframework.web.client.RestTemplate;
 public class CurrencyService {
 
     private final RestTemplate restTemplate;
+    private final String API_URL;
+    private final String API_KEY;
 
-
-    /* TODO sync with env
-    TODO secondly work with scalability for other currencies
-    TODO check whether to add each currency or fix fancy formula
+    /*
+    TODO work with scalability for other currencies than sek/eur
+    TODO check whether to add each currency or fix fancier formula
      */
-    private final String API_URL = "";
-    private final String API_KEY = "";
 
-    public CurrencyService() {
+
+    public CurrencyService(
+            @Value("${RIKSBANK_API_URL}") String apiUrl,
+            @Value("${RIKSBANK_API_KEY}") String apiKey
+    ) {
         this.restTemplate = new RestTemplate();
-
+        this.API_URL = apiUrl;
+        this.API_KEY = apiKey;
     }
 
     //TODO consider adding caching in future
