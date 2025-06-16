@@ -26,7 +26,7 @@ public class CurrencyService {
     }
 
     public double convert(String from, String to, double amount) {
-        double rate = getRate(from, to);
+        double rate = getEffectiveRate(from, to);
         return amount * rate;
     }
     
@@ -49,11 +49,11 @@ public class CurrencyService {
             return response.getBody();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching exchange rate.", e);
+            throw new RuntimeException("Error fetching exchange rate from API.", e);
         }
     }
 
-    public double getRate(String from, String to) {
+    public ExchangeRateResponseDto getEffectiveRate(String from, String to) {
         String directCode = getCurrencyPairCode(from, to);
         String inverseCode = getCurrencyPairCode(to, from);
 
@@ -72,7 +72,7 @@ public class CurrencyService {
         }
 
         double rate = dto.getValue();
-        return inverted ? (1 / rate) : rate;
+        return new ExchangeRateResponseDto(dto.getDate(), inverted ? (1 / rate) : rate);
     }
 
     public String getCurrencyPairCode(String fromCurrency, String toCurrency) {
