@@ -52,6 +52,15 @@ public class CurrencyService {
         }
     }
 
+    public String getCurrencyPairCode(String fromCurrency, String toCurrency) {
+        return (fromCurrency + toCurrency + "pmi").toLowerCase();
+    }
+
+    public double convert(String from, String to, double amount) {
+        double rate = getRate(from, to);
+        return amount * rate;
+    }
+
     public double convertSekToEur(double sek) {
         double rate = fetchRateDto().getValue();
         return sek/rate;
