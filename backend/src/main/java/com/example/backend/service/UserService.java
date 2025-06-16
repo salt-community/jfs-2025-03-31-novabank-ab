@@ -37,20 +37,28 @@ public class UserService {
         this.clerkService = clerkService;
     }
 
-    public User addUser(AddNewUserRequestDto dto) {
-        if (userRepository.existsByEmail(dto.email())) {
+    public User addUser(UUID applicationId) {
+        Application application = applicationRepository
+                .findById(applicationId).orElseThrow(ApplicationNotFoundException::new);
+
+        if (userRepository.existsByEmail(application.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
 
-        String userId = clerkService.createClerkUser(dto.email(), dto.password(), dto.firstName(), dto.lastName(), dto.phoneNumber());
+        String userId = clerkService.createClerkUser(
+                application.getEmail(),
+                application.getFirstName(),
+                application.getLastName(),
+                application.getPhoneNumber()
+        );
 
         User user = new User(
                 userId,
 //                passwordEncoder.encode(dto.password()),
-                dto.firstName(),
-                dto.lastName(),
-                dto.email(),
-                dto.phoneNumber(),
+                application.getFirstName(),
+                application.getLastName(),
+                application.getEmail(),
+                application.getPhoneNumber(),
                 Role.USER,
                 UserStatus.ACTIVE,
                 LocalDateTime.now(),

@@ -39,7 +39,7 @@ public class ClerkService {
         restTemplate.exchange(url, HttpMethod.PATCH, req, Void.class);
     }
 
-    public String createClerkUser(String email, String password, String firstName, String lastName, String phoneNumber) {
+    public String createClerkUser(String email, String firstName, String lastName, String phoneNumber) {
         String url = "https://api.clerk.com/v1/users";
 
         HttpHeaders headers = new HttpHeaders();
@@ -48,7 +48,6 @@ public class ClerkService {
 
         Map<String, Object> body = Map.of(
                 "email_address", List.of(email),
-                "password", password,
                 "first_name", firstName,
                 "last_name", lastName,
                 "phone_number", List.of(phoneNumber),

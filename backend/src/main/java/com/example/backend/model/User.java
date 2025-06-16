@@ -23,14 +23,15 @@ public class User {
     @Id
     private String id;
 
+//    @Column(nullable = false)
+//    private String password;
     @Column(nullable = false)
-    private String password;
-
+    private String firstName;
     @Column(nullable = false)
-    private String fullName;
-
+    private String lastName;
+    @Column(nullable = false)
     private String email;
-
+    @Column(nullable = false)
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
@@ -40,8 +41,8 @@ public class User {
     private UserStatus status;
 
     private LocalDateTime createdAt;
-
     private LocalDateTime lastLogin;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Account> accounts = new ArrayList<>();
 

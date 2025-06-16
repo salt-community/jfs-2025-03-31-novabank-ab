@@ -4,7 +4,6 @@ import com.example.backend.dto.userDto.request.ApplicationRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
-import com.example.backend.model.enums.Role;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
