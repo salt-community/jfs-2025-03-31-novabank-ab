@@ -98,4 +98,15 @@ class AccountServiceTest {
         assertNotNull(result.getCreatedAt());
         assertTrue(result.getAccountNumber().startsWith("1337-"));
     }
+
+    @Test
+    @DisplayName("updateBalance handles deposit correctly")
+    void updateBalance_deposit_success() {
+        Account account = sampleAccount();
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        accountService.updateBalance(ACCOUNT_ID, USER_ID, 50.0, BalanceUpdateRequestDto.UpdateType.DEPOSIT);
+
+        assertEquals(150.0, account.getBalance());
+    }
 }
