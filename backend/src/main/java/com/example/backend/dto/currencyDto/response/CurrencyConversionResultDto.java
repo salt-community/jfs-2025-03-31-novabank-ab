@@ -11,4 +11,5 @@ public class CurrencyConversionResultDto {
     private double originalAmount;
     private double convertedAmount;
     private double rateUsed;
+    private String rateDate;
 }
