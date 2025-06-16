@@ -79,4 +79,23 @@ class AccountServiceTest {
                 accountService.getAccount(ACCOUNT_ID, USER_ID)
         );
     }
+
+    @Test
+    @DisplayName("createAccount sets fields and saves")
+    void createAccount_valid_setsFieldsAndSaves() {
+        User user = sampleUser();
+        Account input = new Account();
+        input.setUser(user);
+
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
+        when(accountRepository.existsByAccountNumber(anyString())).thenReturn(false);
+        when(accountRepository.save(any(Account.class))).thenAnswer(i -> i.getArgument(0));
+
+        Account result = accountService.createAccount(input);
+
+        assertEquals(0, result.getBalance());
+        assertEquals(AccountStatus.ACTIVE, result.getStatus());
+        assertNotNull(result.getCreatedAt());
+        assertTrue(result.getAccountNumber().startsWith("1337-"));
+    }
 }
