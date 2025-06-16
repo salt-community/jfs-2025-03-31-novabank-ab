@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import type { CashFlowChartData } from '@/types/admin/cashFlowChartData'
+import type { CashFlowChartData } from '@/types/admin/inOutChartData'
 import type { ChartConfig } from '@/components/ui/chart'
 import {
   Card,
