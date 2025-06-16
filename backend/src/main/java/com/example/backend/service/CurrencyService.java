@@ -16,12 +16,6 @@ public class CurrencyService {
     private final String API_URL;
     private final String API_KEY;
 
-    /*
-    TODO work with scalability for other currencies than sek/eur
-    TODO check whether to add each currency or fix fancier formula
-     */
-
-
     public CurrencyService(
             @Value("${RIKSBANK_API_URL}") String apiUrl,
             @Value("${RIKSBANK_API_KEY}") String apiKey
@@ -31,6 +25,11 @@ public class CurrencyService {
         this.API_KEY = apiKey;
     }
 
+    public double convert(String from, String to, double amount) {
+        double rate = getRate(from, to);
+        return amount * rate;
+    }
+    
     //TODO consider adding caching in future
     public ExchangeRateResponseDto fetchRate(String seriesCode) {
 
@@ -41,7 +40,7 @@ public class CurrencyService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<ExchangeRateResponseDto> response = restTemplate.exchange(
-                    API_URL,
+                    url,
                     HttpMethod.GET,
                     entity,
                     ExchangeRateResponseDto.class
@@ -54,12 +53,31 @@ public class CurrencyService {
         }
     }
 
+    public double getRate(String from, String to) {
+        String directCode = getCurrencyPairCode(from, to);
+        String inverseCode = getCurrencyPairCode(to, from);
+
+        ExchangeRateResponseDto dto;
+        boolean inverted = false;
+
+        try {
+            dto = fetchRate(directCode);
+        } catch (Exception e) {
+            try {
+                dto = fetchRate(inverseCode);
+                inverted = true;
+            } catch (Exception ex) {
+                throw new RuntimeException("Could not fetch exchange rate: " + from + " to " + to);
+            }
+        }
+
+        double rate = dto.getValue();
+        return inverted ? (1 / rate) : rate;
+    }
+
     public String getCurrencyPairCode(String fromCurrency, String toCurrency) {
         return (fromCurrency + toCurrency + "pmi").toLowerCase();
     }
 
-    public double convert(String from, String to, double amount) {
-        double rate = getRate(from, to);
-        return amount * rate;
-    }
+
 }
