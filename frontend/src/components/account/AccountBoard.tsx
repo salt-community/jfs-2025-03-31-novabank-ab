@@ -2,6 +2,7 @@ import { TransactionItem } from '../generic/'
 import type { AccountDetails } from '@/types'
 import { ScheduledTransactionItem } from '../generic'
 import type { ScheduledTransactionItemProps } from '../generic/'
+import { NoTransactionItem } from '../generic/'
 
 type AccountBoardProps = {
   account: AccountDetails
@@ -49,11 +50,11 @@ export default function AccountBoard({ account }: AccountBoardProps) {
         </div>
       </div>
 
-      {scheduledTransactionsMock.length > 0 && (
-        <div className="mb-8">
-          <h2 className="text-2xl mb-4">Scheduled Transactions</h2>
-          <div className="space-y-2">
-            {scheduledTransactionsMock.map((st, index) => (
+      <div className="mb-8">
+        <h2 className="text-2xl mb-4">Scheduled Transactions</h2>
+        <div className="space-y-2">
+          {scheduledTransactionsMock.length > 0 ? (
+            scheduledTransactionsMock.map((st, index) => (
               <ScheduledTransactionItem
                 key={index}
                 amount={st.amount}
@@ -64,10 +65,13 @@ export default function AccountBoard({ account }: AccountBoardProps) {
                 toAccountId={st.toAccountId}
                 userNote={st.userNote}
               />
-            ))}
-          </div>
+            ))
+          ) : (
+            <NoTransactionItem></NoTransactionItem>
+          )}
         </div>
-      )}
+      </div>
+
       <div>
         <h2 className="text-2xl mb-4">Transactions</h2>
         <div className="space-y-2">

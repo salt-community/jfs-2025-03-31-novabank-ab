@@ -37,10 +37,7 @@ export function ScheduledTransactionItem({
   }, [openMenu])
 
   return (
-    <div
-      className="flex justify-between items-center py-3 border-b last:border-b-0"
-      data-testid="transaction-item"
-    >
+    <div className="flex justify-between items-center py-3 border-b last:border-b-0">
       <div className="flex flex-col">
         <span className="text-base text-gray-800">{description}</span>
         <span className="text-xs text-gray-500">Note: {userNote}</span>
