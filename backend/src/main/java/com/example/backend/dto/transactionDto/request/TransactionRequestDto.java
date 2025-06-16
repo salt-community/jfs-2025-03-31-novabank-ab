@@ -11,8 +11,9 @@ import java.util.UUID;
 
 public record TransactionRequestDto(
         @NotNull
-        UUID fromAccountId,
-        UUID toAccountId,
+        String fromAccountNo,
+        @NotNull
+        String toAccountNo,
         String recipientNumber,
         @NotNull
         PaymentType type,
