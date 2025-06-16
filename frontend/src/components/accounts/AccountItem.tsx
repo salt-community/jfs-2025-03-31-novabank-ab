@@ -6,13 +6,13 @@ type AccountItemProps = {
   account: Account
 }
 
-export default function AccountItem({ account }: AccountItemProps) {
+export default function   AccountItem({ account }: AccountItemProps) {
   const navigate = useNavigate()
 
   return (
     <div
       data-testid="account-item"
-      className="group flex items-center justify-between px-4 py-3 shadow-md bg-white hover:bg-[#FAFAFA] duration-200 rounded cursor-pointer"
+      className="group flex items-center border-1 justify-between px-4 py-3 shadow-md bg-white hover:bg-[#FAFAFA] duration-200 rounded-lg cursor-pointer"
       onClick={() =>
         navigate({
           to: '/accounts/$id',

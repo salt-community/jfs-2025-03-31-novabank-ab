@@ -8,7 +8,7 @@ export default function AccountCard({ account }: AccountCardProps) {
   return (
     <>
       <div
-        className="flex flex-col justify-evenly w-50 h-50 p-4 rounded-4xl text-center shadow-lg bg-[#FFFFFF]  hover:bg-[#FAFAFA] duration-200 "
+        className="flex flex-col justify-evenly w-50 h-50 border-1 border-gray-200 p-4 rounded-4xl text-center shadow-sm bg-[#FFFFFF]  hover:bg-[#FAFAFA] duration-200 "
         data-testid="account-card"
       >
         <div>
@@ -17,7 +17,7 @@ export default function AccountCard({ account }: AccountCardProps) {
         </div>
         <div>
           <h4 className="text-xl font-semibold" data-testid="account-balance">{account.balance} SEK</h4>
-          <p className="text-xs text-gray-500" >total balance</p>
+          <p className="text-xs text-gray-500" >Total Balance</p>
         </div>
       </div>
     </>

@@ -1,6 +1,7 @@
 import { SignInButton, SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import signinicon from '../../assets/signinicon.svg'
 import novabankicon from '../../assets/NovaBankTransparentLogo.png'
 
 function RedirectOnSignIn() {
@@ -20,24 +21,25 @@ export default function Header() {
   const navigate = useNavigate()
   return (
     <header className="bg-black w-full">
-      <div className="flex items-center justify-between px-8">
-      <img
-        src={novabankicon}
-        onClick={() => navigate({ to: '/' })}
-        alt="Nova Bank Logo"
-        className="h-30 bg-black rounded-4xl hover:cursor-pointer w-30 my-1"
-      />
-      <SignedOut>
-        <SignInButton>
-          <button className="text-center ml-2 mr-2 text-white hover:text-yellow-500 hover:border-yellow-500 hover:cursor-pointer px-4 py-1 border-2 border-white rounded-4xl">
-                    Sign In
-          </button>
-        </SignInButton>
-      </SignedOut>
-      <SignedIn>
-        <RedirectOnSignIn />
-      </SignedIn>
+      <div className="flex items-center justify-between px-12">
+        <img
+          src={novabankicon}
+          onClick={() => navigate({ to: '/' })}
+          alt="Nova Bank Logo"
+          className="h-20 bg-black rounded-4xl hover:cursor-pointer w-20"
+        />
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#FFB20F] text-white hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:bg-[#F5A700] hover:opacity-100">
+              Sign In
+              <img src={signinicon} />
+            </button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <RedirectOnSignIn />
+        </SignedIn>
       </div>
     </header>
-  );
+  )
 }

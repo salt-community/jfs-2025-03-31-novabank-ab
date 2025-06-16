@@ -29,8 +29,8 @@ export const Route = createRootRoute({
             ) : (
               <>
                 <Header />
-                <div className="flex justify-center bg-white mt-40 text-4xl">
-                  <h1 style={{ fontFamily: "'Lato', sans-serif" }}>
+                <div className="flex justify-center mx-auto w-full text-center bg-white mt-40 text-4xl">
+                  <h1 className="" style={{ fontFamily: "'Lato', sans-serif" }}>
                     Please sign in to access this page
                   </h1>
                 </div>
