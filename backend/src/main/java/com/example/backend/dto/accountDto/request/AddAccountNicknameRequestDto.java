@@ -1,3 +1,6 @@
 package com.example.backend.dto.accountDto.request;
 
-public record AddAccountNicknameRequestDto(String nickname) {}
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record AddAccountNicknameRequestDto(@NotNull @NotBlank String nickname) {}

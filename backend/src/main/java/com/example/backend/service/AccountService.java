@@ -97,7 +97,7 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
-    public void addAccountNickname(String userId, UUID accountId, String name) {
+    public void updateAccountNickname(String userId, UUID accountId, String name) {
         Account account = getAccount(accountId, userId);
         Optional<AccountNickname> pastNickname = accountNicknameRepository.findAccountNicknameByAccount_Id(accountId);
         if (pastNickname.isPresent()) {
