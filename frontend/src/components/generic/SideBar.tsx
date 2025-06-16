@@ -8,6 +8,11 @@ import transfericon from '../../assets/transfericon.svg'
 import settingsicon from '../../assets/settingsicon.svg'
 import novabankicon from '../../assets/NovaBankTransparentLogo.png'
 import signouticon from '../../assets/signouticon.svg'
+import yellowhomeicon from '../../assets/yellowhomeicon.svg'
+import yellowtransfericon from '../../assets/yellowtransfericon.svg'
+import yellowaccounticon from '../../assets/yellowaccounticon.svg'
+import yellowtransactionicon from '../../assets/yellowtransactionicon.svg'
+import yellowsettingsicon from '../../assets/yellowsettingsicon.svg'
 
 export default function SideBar() {
   const { t } = useTranslation('sidebar')
@@ -29,11 +34,14 @@ export default function SideBar() {
           onClick={() => navigate({ to: '/dashboard' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
             isActive('/dashboard')
-              ? 'text-[#FFB20F] hover:opacity-100'
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
               : ''
           }`}
         >
-          <img src={homeicon} />
+          <img
+            src={isActive('/dashboard') ? yellowhomeicon : homeicon}
+            alt="Home"
+          />
           {t('dashboard')}
         </a>
 
@@ -41,11 +49,11 @@ export default function SideBar() {
           onClick={() => navigate({ to: '/accounts' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
             isActive('/accounts')
-              ? 'text-[#FFB20F] hover:opacity-100'
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
               : ''
           }`}
         >
-          <img src={accounticon} />
+          <img src={isActive('/accounts') ? yellowaccounticon : accounticon} />
           {t('accounts')}
         </a>
 
@@ -53,11 +61,17 @@ export default function SideBar() {
           onClick={() => navigate({ to: '/transactions' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
             isActive('/transactions')
-              ? 'text-[#FFB20F] hover:opacity-100'
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
               : ''
           }`}
         >
-          <img src={transactionicon} />
+          <img
+            src={
+              isActive('/transactions')
+                ? yellowtransactionicon
+                : transactionicon
+            }
+          />
           {t('transactions')}
         </a>
 
@@ -65,11 +79,13 @@ export default function SideBar() {
           onClick={() => navigate({ to: '/transfer' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
             isActive('/transfer')
-              ? 'text-[#FFB20F] hover:opacity-100'
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
               : ''
           }`}
         >
-          <img src={transfericon} />
+          <img
+            src={isActive('/transfer') ? yellowtransfericon : transfericon}
+          />
           {t('transfer')}
         </a>
 
@@ -77,11 +93,13 @@ export default function SideBar() {
           onClick={() => navigate({ to: '/settings' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
             isActive('/settings')
-              ? 'text-[#FFB20F] hover:opacity-100'
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
               : ''
           }`}
         >
-          <img src={settingsicon} />
+          <img
+            src={isActive('/settings') ? yellowsettingsicon : settingsicon}
+          />
           {t('settings')}
         </a>
         <div className="mt-30">
