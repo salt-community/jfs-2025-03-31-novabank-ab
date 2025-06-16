@@ -15,7 +15,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
         <h1 className="text-2xl mb-5">Recent transactions</h1>
         <a
           onClick={() => navigate({ to: '/transactions' })}
-          className="text-md text-black px-5 hover:cursor-pointer hover:underline underline-offset-5 hover:cursor-pointer"
+          className="text-md text-black px-5 hover:underline underline-offset-5 hover:cursor-pointer"
         >
           See all
         </a>
