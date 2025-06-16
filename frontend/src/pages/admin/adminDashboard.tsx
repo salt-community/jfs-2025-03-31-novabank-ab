@@ -1,5 +1,6 @@
 import { ChartAreaInteractive } from '@/components/admin/chart-area-interactive'
 import SectionCard from '@/components/admin/SectionCard'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function AdminDashboard() {
   const cashFlowData = [
@@ -97,7 +98,19 @@ export default function AdminDashboard() {
   ]
   return (
     <div className="space-y-20 ">
-      <ChartAreaInteractive chartData={cashFlowData} />
+      <Tabs defaultValue="activeUsers" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger value="cashFlow">Cash Flow</TabsTrigger>
+          <TabsTrigger value="activeUsers">Active Users</TabsTrigger>
+        </TabsList>
+        <TabsContent value="activeUsers">
+          Make changes to your account here.
+        </TabsContent>
+        <TabsContent value="cashFlow">
+          <ChartAreaInteractive chartData={cashFlowData} />
+        </TabsContent>
+      </Tabs>
+
       <div className="grid grid-cols-3 gap-4">
         <SectionCard
           label="New Customers"
