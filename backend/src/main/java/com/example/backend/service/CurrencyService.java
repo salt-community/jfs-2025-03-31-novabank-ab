@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.currencyDto.request.CurrencyConversionRequestDto;
+import com.example.backend.dto.currencyDto.response.CurrencyConversionResultDto;
 import com.example.backend.dto.currencyDto.response.ExchangeRateResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -25,7 +27,7 @@ public class CurrencyService {
         this.API_KEY = apiKey;
     }
 
-    public double convert(String from, String to, double amount) {
+    public CurrencyConversionResultDto convertCurrency(CurrencyConversionRequestDto requestDto) {
         double rate = getEffectiveRate(from, to);
         return amount * rate;
     }
