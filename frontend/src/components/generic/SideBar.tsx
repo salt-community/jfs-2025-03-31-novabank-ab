@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { SignOutButton } from '@clerk/clerk-react'
 import homeicon from '../../assets/homeicon.svg'
@@ -11,8 +11,9 @@ import signouticon from '../../assets/signouticon.svg'
 
 export default function SideBar() {
   const { t } = useTranslation('sidebar')
-
   const navigate = useNavigate()
+  const { location } = useRouterState()
+  const isActive = (path: string) => location.pathname.startsWith(path)
 
   return (
     <aside className="w-1/5 fixed top-0 left-0 h-full bg-[#151515] text-white text-xs lg:text-sm xl:text-md p-10 justify-between flex flex-col">
@@ -26,7 +27,9 @@ export default function SideBar() {
       <div className="flex gap-5 flex-col mb-10 list-none mx-auto">
         <a
           onClick={() => navigate({ to: '/dashboard' })}
-          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
+          className={`flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 ${
+            isActive('/dashboard') ? 'text-[#FFB20F] underline opacity-100' : ''
+          }`}
         >
           <img src={homeicon} />
           {t('dashboard')}
@@ -34,7 +37,9 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/accounts' })}
-          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
+          className={`flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 ${
+            isActive('/accounts') ? 'text-[#FFB20F] underline opacity-100' : ''
+          }`}
         >
           <img src={accounticon} />
           {t('accounts')}
@@ -42,7 +47,11 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/transactions' })}
-          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
+          className={`flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 ${
+            isActive('/transactions')
+              ? 'text-[#FFB20F] underline opacity-100'
+              : ''
+          }`}
         >
           <img src={transactionicon} />
           {t('transactions')}
@@ -50,7 +59,9 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/transfer' })}
-          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 "
+          className={`flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 ${
+            isActive('/transfer') ? 'text-[#FFB20F] underline opacity-100' : ''
+          }`}
         >
           <img src={transfericon} />
           {t('transfer')}
@@ -58,7 +69,9 @@ export default function SideBar() {
 
         <a
           onClick={() => navigate({ to: '/settings' })}
-          className="flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100"
+          className={`flex flex-row gap-8 hover:cursor-pointer hover:underline underline-offset-5 opacity-80 hover:opacity-100 ${
+            isActive('/settings') ? 'text-[#FFB20F] underline opacity-100' : ''
+          }`}
         >
           <img src={settingsicon} />
           {t('settings')}
