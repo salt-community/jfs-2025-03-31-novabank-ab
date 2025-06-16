@@ -9,7 +9,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
   return (
     <div data-testid="account-board">
       <h1 className="text-3xl mb-20">{account.name}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>
           <p className="mt-4 text-gray-600">Total balance</p>
           <p className="text-4xl font-bold">{account.balance.toFixed(2)}</p>
@@ -27,7 +27,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       </div>
 
       <div>
-        <h2 className="text-lg mb-4">Transactions</h2>
+        <h2 className="text-lg mb-6">Transactions</h2>
 
         <div className="space-y-2">
           {account.transactions.map((t, index) => (
