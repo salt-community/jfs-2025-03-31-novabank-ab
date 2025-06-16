@@ -1,10 +1,12 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.accountDto.request.AddAccountNicknameRequestDto;
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.accountDto.request.BalanceUpdateRequestDto;
 import com.example.backend.dto.accountDto.request.CreateAccountRequestDto;
 import com.example.backend.dto.accountDto.response.AccountResponseDto;
 import com.example.backend.dto.accountDto.response.BalanceResponseDto;
+import com.example.backend.dto.accountDto.response.NicknameResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
@@ -127,4 +129,56 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Update name of account", description = "Updates the nickname for an account based on Clerk token userId (Requires JWT in header) and accountId")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully updated"),
+        @ApiResponse(responseCode = "401", description = "User Not Authorized to Account"),
+        @ApiResponse(responseCode = "404", description = "Account Not Found"),
+        @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @PutMapping("/{accountId}/nickname")
+    public ResponseEntity<Void> updateAccountNickname(
+        @PathVariable @NotNull UUID accountId,
+        @RequestBody @Valid AddAccountNicknameRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        accountService.updateAccountNickname(userId, accountId, dto.nickname());
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Get name of account", description = "Gets the name of an account based on Clerk token userId (Requires JWT in header) and accountId")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "401", description = "User Not Authorized to Account"),
+        @ApiResponse(responseCode = "404", description = "Account Not Found"),
+        @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @GetMapping("/{accountId}/nickname")
+    public ResponseEntity<NicknameResponseDto> getAccountNickname(
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        String name = accountService.getAccountNickname(userId, accountId);
+        return ResponseEntity.ok(new NicknameResponseDto(name));
+    }
+
+    @Operation(summary = "Delete nickname of account", description = "Deletes the nickname of an account based on Clerk token userId (Requires JWT in header) and accountId")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Successfully retrieved"),
+        @ApiResponse(responseCode = "401", description = "User Not Authorized to Account"),
+        @ApiResponse(responseCode = "404", description = "Account Not Found"),
+        @ApiResponse(responseCode = "404", description = "Nickname Not Found"),
+        @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @DeleteMapping("/{accountId}/nickname")
+    public ResponseEntity<Void> deleteAccountNickname(
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        accountService.deleteAccountNickname(userId, accountId);
+        return ResponseEntity.noContent().build();
+    }
 }
