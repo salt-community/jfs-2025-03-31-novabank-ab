@@ -29,6 +29,9 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
+    @Column
+    private String senderNumber;
+    private String recipientNumber;
     @Column(nullable = false)
     private String type;
     @Column(nullable = false)

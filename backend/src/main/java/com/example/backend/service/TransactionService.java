@@ -90,11 +90,14 @@ public class TransactionService {
         }
 
         Account from = accountService.getAccount(dto.fromAccountId(), userId);
-        Account to = accountRepository.findById(dto.toAccountId()).orElseThrow(AccountNotFoundException::new);
 
-        if (accountIsActive(from) || accountIsActive(to)) {
+        if (accountIsActive(from)) {
             throw new AccountNotAllowedException("One of the account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
         }
+        Account to = null;
+        String recipientNumber = null;
+
+
         updateBalances(from,to,dto.amount());
 
         Transaction transaction = new Transaction(
