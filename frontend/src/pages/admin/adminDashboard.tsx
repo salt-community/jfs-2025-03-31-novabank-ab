@@ -1,4 +1,5 @@
 import { ChartAreaInteractive } from '@/components/admin/chart-area-interactive'
+import SectionCard from '@/components/admin/SectionCard'
 
 export default function AdminDashboard() {
   const cashFlowData = [
@@ -95,9 +96,28 @@ export default function AdminDashboard() {
     { date: '2024-06-30', cash_in: 446, cash_out: 400 },
   ]
   return (
-    <div>
+    <div className="space-y-20 ">
       <ChartAreaInteractive chartData={cashFlowData} />
-      <div className="grid grid-cols-3"></div>
+      <div className="grid grid-cols-3 gap-4">
+        <SectionCard
+          label="New Customers"
+          value="4440"
+          trajectory="-13%"
+          fineText="Acqusition needs attention"
+        />
+        <SectionCard
+          label="New Customers"
+          value="4440"
+          trajectory="-13%"
+          fineText="Acqusition needs attention"
+        />
+        <SectionCard
+          label="New Customers"
+          value="4440"
+          trajectory="-13%"
+          fineText="Acqusition needs attention"
+        />
+      </div>
     </div>
   )
 }
