@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class ClerkService {
@@ -51,6 +52,7 @@ public class ClerkService {
                 "first_name", firstName,
                 "last_name", lastName,
                 "phone_number", List.of(phoneNumber),
+                "password", UUID.randomUUID().toString(),
                 "public_metadata", Map.of("role", "user")
         );
 
