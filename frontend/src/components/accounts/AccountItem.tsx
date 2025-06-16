@@ -16,13 +16,13 @@ export default function   AccountItem({ account }: AccountItemProps) {
       onClick={() =>
         navigate({
           to: '/accounts/$id',
-          params: { id: account.number },
+          params: { id: account.accountNumber },
         })
       }
     >
       <div>
-        <div>{account.name}</div>
-        <div className="text-sm text-gray-500">{account.number}</div>
+        <div>{account.type}</div>
+        <div className="text-sm text-gray-500">{account.accountNumber}</div>
       </div>
 
       <div className="flex items-center space-x-2">

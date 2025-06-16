@@ -35,7 +35,6 @@ export default function RecipientsModal({
   const handleCancel = () => {
     dialogRef.current?.close()
     onClose()
-
   }
 
   function isValidAccountNumber(type: string, value: string): boolean {
@@ -129,17 +128,17 @@ export default function RecipientsModal({
         </div>
 
         <div className="space-y-2 p-10">
-
           {viewMode === 'Saved recipients' ? (
             <div className="h-80">
               <p className="mb-4 text-xl">My bank accounts</p>
               {bankAccounts.map((account) => {
-                const isDisabled = fromAccount?.number === account.number
+                const isDisabled =
+                  fromAccount?.accountNumber === account.accountNumber
 
                 return (
                   <div>
                     <button
-                      key={account.number}
+                      key={account.accountNumber}
                       type="button"
                       onClick={() => {
                         if (isDisabled) return
@@ -154,7 +153,7 @@ export default function RecipientsModal({
                       disabled={isDisabled}
                     >
                       <TransferAccountItem
-                        key={account.number}
+                        key={account.accountNumber}
                         account={account}
                         isDisabled={isDisabled}
                       />

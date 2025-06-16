@@ -14,7 +14,8 @@ export default function AccountPage({ id }: AccountPageProps) {
       <div className="p-8 text-red-500">Failed loading account details</div>
     )
 
-  const account = accountDetails.find((acc) => acc.number === id)
+  // TODO later on this will change to specifik hook, getAccountById
+  const account = accountDetails.find((acc) => acc.accountNumber === id)
 
   // TODO is this really how we gonna handle this?
   if (account === undefined) {

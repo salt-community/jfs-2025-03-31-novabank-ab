@@ -12,12 +12,18 @@ export default function AccountCard({ account }: AccountCardProps) {
         data-testid="account-card"
       >
         <div>
-          <h1 className="text-lg" data-testid="account-name">{account.name}</h1>
-          <p className="text-xs text-gray-500" data-testid="account-number">{account.number}</p>
+          <h1 className="text-lg" data-testid="account-name">
+            {account.type}
+          </h1>
+          <p className="text-xs text-gray-500" data-testid="account-number">
+            {account.accountNumber}
+          </p>
         </div>
         <div>
-          <h4 className="text-xl font-semibold" data-testid="account-balance">{account.balance} SEK</h4>
-          <p className="text-xs text-gray-500" >Total Balance</p>
+          <h4 className="text-xl font-semibold" data-testid="account-balance">
+            {account.balance} SEK
+          </h4>
+          <p className="text-xs text-gray-500">Total Balance</p>
         </div>
       </div>
     </>

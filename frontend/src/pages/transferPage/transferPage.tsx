@@ -70,10 +70,10 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
           <select
             id="fromAccount"
             name="bankaccounts"
-            value={fromAccount?.name || ''}
+            value={fromAccount?.type || ''}
             onChange={(e) => {
               const selectedAccount = bankAccounts.find(
-                (acc) => acc.name === e.target.value,
+                (acc) => acc.type === e.target.value,
               )
               setFromAccount(selectedAccount || null)
             }}
@@ -86,18 +86,19 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               Select an account
             </option>
             {bankAccounts.map((account) => {
-              const isDisabled = toAccount?.number === account.number
+              const isDisabled =
+                toAccount?.accountNumber === account.accountNumber
 
               return (
                 <option
-                  key={account.number}
-                  value={account.name}
+                  key={account.accountNumber}
+                  value={account.type}
                   disabled={isDisabled}
                   className={`text-black ${
                     isDisabled ? 'bg-gray-200 text-gray-400' : ''
                   }`}
                 >
-                  {account.name}
+                  {account.type}
                   {isDisabled ? ' (Already selected as recipient)' : ''}
                 </option>
               )
@@ -116,7 +117,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
               peer-focus:bg-white `}
           >
-           Sender
+            Sender
           </label>
           {errors.fromAccount && (
             <p className="text-red-600 text-sm mt-1">{errors.fromAccount}</p>
@@ -134,7 +135,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               ${errors.recipientError ? 'outline-none border border-red-600 focus:ring-red-600 focus:border-2 ' : ''}`}
           >
             {toAccount
-              ? toAccount.name
+              ? toAccount.type
               : newRecipient
                 ? newRecipient
                 : 'Select an account'}
@@ -180,7 +181,6 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
             onChange={(e) => setAmount(e.target.value)}
             className={`peer rounded p-4 w-full border bg-white text-black
               ${errors.amount ? 'border-red-600 focus:ring-red-900 outline-none focus:border-2 ' : ' outline outline-gray-500 focus:outline-2 focus:outline-black'}`}
-            
           />
           <label
             htmlFor="amount"
@@ -201,7 +201,11 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
           <div
             className={`${errors.transferDate ? 'border border-red-500 rounded' : ''}`}
           >
-            <DatePicker value={transferDate} onDateChange={setTransferDate} error={errors.transferDate}/>
+            <DatePicker
+              value={transferDate}
+              onDateChange={setTransferDate}
+              error={errors.transferDate}
+            />
           </div>
           {errors.transferDate && (
             <p className="text-red-600 text-sm mt-1">{errors.transferDate}</p>
@@ -224,7 +228,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               ${ocr ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
               peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
           >
-            OCR <span className='text-xs'>(if applicable)</span>
+            OCR <span className="text-xs">(if applicable)</span>
           </label>
         </div>
 
@@ -243,7 +247,7 @@ export default function TransferPage({ bankAccounts }: TransferPageProps) {
               ${notes ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
               peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
           >
-            Notes <span className='text-xs'>(optional)</span>
+            Notes <span className="text-xs">(optional)</span>
           </label>
         </div>
 
