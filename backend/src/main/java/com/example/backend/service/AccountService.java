@@ -65,6 +65,9 @@ public class AccountService {
 
     public void updateBalance(UUID accountId, String userId, double amount, BalanceUpdateRequestDto.UpdateType type) {
         Account account = getAccount(accountId, userId);
+        if (account.getStatus() == AccountStatus.CLOSED || account.getStatus() == AccountStatus.SUSPENDED) {
+            throw new AccountClosedException("Cannot update balance of inactive account");
+        }
 
         double newBalance = switch (type) {
             case DEPOSIT -> account.getBalance() + amount;

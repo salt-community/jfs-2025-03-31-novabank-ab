@@ -84,4 +84,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleForbidden(Exception e) {
         return buildResponse(e.getMessage(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler({ AccountClosedException.class })
+    public ResponseEntity<ErrorResponseDto> handleClosedAccount(Exception e) {
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
+    }
 }
