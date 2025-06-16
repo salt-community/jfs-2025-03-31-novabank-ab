@@ -17,6 +17,7 @@ public class Currency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(nullable = false, updatable = false)
     private UUID id;
     private String name;
 
