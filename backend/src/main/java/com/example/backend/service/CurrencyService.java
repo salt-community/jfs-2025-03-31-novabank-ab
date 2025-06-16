@@ -32,7 +32,9 @@ public class CurrencyService {
     }
 
     //TODO consider adding caching in future
-    public ExchangeRateResponseDto fetchRateDto() {
+    public ExchangeRateResponseDto fetchRate(String seriesCode) {
+
+        String url = API_URL + "/swea/v1/Observations/Latest/" + seriesCode;
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Ocp-Apim-Subscription-Key", API_KEY);
@@ -59,15 +61,5 @@ public class CurrencyService {
     public double convert(String from, String to, double amount) {
         double rate = getRate(from, to);
         return amount * rate;
-    }
-
-    public double convertSekToEur(double sek) {
-        double rate = fetchRateDto().getValue();
-        return sek/rate;
-    }
-
-    public double convertEurToSek(double eur) {
-        double rate = fetchRateDto().getValue();
-        return eur * rate;
     }
 }
