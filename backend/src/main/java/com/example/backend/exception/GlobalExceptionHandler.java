@@ -70,6 +70,11 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidUserCredentials(InvalidCredentialsException e) {
+        return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleTransactionNotFound(TransactionNotFoundException e) {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
