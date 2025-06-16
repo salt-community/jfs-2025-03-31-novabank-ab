@@ -30,6 +30,8 @@ public class Transaction {
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
     @Column(nullable = false)
+    private String type;
+    @Column(nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private double amount;
@@ -39,5 +41,6 @@ public class Transaction {
     private String userNote;
     @Column(nullable = false)
     private String ocrNumber;
+
 
 }

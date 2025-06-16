@@ -50,7 +50,7 @@ public class TransactionController {
 
     @Operation(
             summary = "Create a new transaction",
-            description = "Adds a new immediate transaction to the database based on the provided request data.",
+            description = "Adds a transaction to the database based on the provided request data.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
                     @ApiResponse(responseCode = "400", description = "Invalid input data"),
@@ -59,8 +59,9 @@ public class TransactionController {
             }
     )
     @PostMapping
-    public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto) {
-//        transactionService.addTransaction(dto);
+    public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        transactionService.addTransaction(dto,userId);
         return ResponseEntity.ok().build();
     }
 
@@ -75,8 +76,8 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account or scheduled transaction not found")}
     )
     @DeleteMapping("/cancel-scheduled/{accountId}/{transactionId}")
-    public ResponseEntity<Void> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
-        String userId ="mock";
+    public ResponseEntity<Void> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId,@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
         transactionService.deleteScheduledTransaction(accountId, transactionId,userId);
         return ResponseEntity.noContent().build();
     }

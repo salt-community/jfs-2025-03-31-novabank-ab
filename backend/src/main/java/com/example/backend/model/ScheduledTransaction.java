@@ -32,6 +32,8 @@ public class ScheduledTransaction {
     @JoinColumn(name = "to_account_id", nullable = false)
     private Account toAccount;
     @Column(nullable = false)
+    private String type;
+    @Column(nullable = false)
     private double amount;
     @Column(nullable = false)
     private LocalDateTime scheduledDate;

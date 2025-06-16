@@ -14,14 +14,16 @@ public record TransactionRequestDto(
         @NotNull
         UUID toAccountId,
         @NotNull
+        String type,
+        @NotNull
         LocalDate transactionDate,
         @NotNull
         @Positive
         double amount,
         @NotNull
         String description,
-        @NotNull
         String userNote,
         @NotNull
         String ocrNumber
+
 ) {}
