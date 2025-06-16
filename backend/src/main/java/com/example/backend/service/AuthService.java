@@ -13,18 +13,18 @@ import java.time.LocalDateTime;
 @Service
 public class AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public User loginUser(String email, String password) {
-        User user = userRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidCredentialsException();
-        }
-
-        user.setLastLogin(LocalDateTime.now());
-
-        return user;
-    }
+//    private final UserRepository userRepository;
+//    private final PasswordEncoder passwordEncoder;
+//
+//    public User loginUser(String email, String password) {
+//        User user = userRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
+//
+//        if (!passwordEncoder.matches(password, user.getPassword())) {
+//            throw new InvalidCredentialsException();
+//        }
+//
+//        user.setLastLogin(LocalDateTime.now());
+//
+//        return user;
+//    }
 }

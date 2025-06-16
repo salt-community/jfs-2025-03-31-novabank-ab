@@ -17,11 +17,11 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginUserRequestDto request) {
-        log.info("Login request received for {}", request.email());
-        User user = authService.loginUser(request.email(), request.password());
-        log.info("User logging in: {}", user.getId());
-        return ResponseEntity.ok(user);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<User> login(@RequestBody LoginUserRequestDto request) {
+//        log.info("Login request received for {}", request.email());
+//        User user = authService.loginUser(request.email(), request.password());
+//        log.info("User logging in: {}", user.getId());
+//        return ResponseEntity.ok(user);
+//    }
 }
