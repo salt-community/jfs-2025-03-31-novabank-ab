@@ -31,27 +31,27 @@ const scheduledTransactionsMock: Array<ScheduledTransactionItemProps> = [
 export default function AccountBoard({ account }: AccountBoardProps) {
   return (
     <div data-testid="account-board">
-      <h1 className="text-3xl mb-20">{account.name}</h1>
+      <h1 className="text-4xl mb-20">{account.name}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>
-          <p className="mt-4 text-gray-600">Total balance</p>
+          <p className="mt-4 text-gray-600 text2xl">Total balance</p>
           <p className="text-4xl font-bold">{account.balance.toFixed(2)}</p>
-          <button className="mt-4 px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-sm shadow">
+          <button className="mt-4 px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-md shadow">
             + New transfer
           </button>
         </div>
 
         <div className="border-l pl-8">
-          <p className="text-sm text-gray-500">Account holder</p>
-          <p className="text-lg ">{account.accountHolder}</p>
-          <p className="mt-4 text-sm text-gray-500">Account number</p>
-          <p className="text-lg ">{account.number}</p>
+          <p className="text-md text-gray-500">Account holder</p>
+          <p className="text-2xl ">{account.accountHolder}</p>
+          <p className="mt-4 text-md text-gray-500">Account number</p>
+          <p className="text-2xl ">{account.number}</p>
         </div>
       </div>
 
       {scheduledTransactionsMock.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg mb-4">Scheduled Transactions</h2>
+          <h2 className="text-2xl mb-4">Scheduled Transactions</h2>
           <div className="space-y-2">
             {scheduledTransactionsMock.map((st, index) => (
               <ScheduledTransactionItem
@@ -69,7 +69,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
         </div>
       )}
       <div>
-        <h2 className="text-lg mb-4">Transactions</h2>
+        <h2 className="text-2xl mb-4">Transactions</h2>
         <div className="space-y-2">
           {account.transactions.map((t, index) => (
             <TransactionItem
