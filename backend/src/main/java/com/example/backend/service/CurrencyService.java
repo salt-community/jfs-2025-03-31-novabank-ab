@@ -31,7 +31,7 @@ public class CurrencyService {
     }
     
     //TODO consider adding caching in future
-    public ExchangeRateResponseDto fetchRate(String seriesCode) {
+    public ExchangeRateResponseDto getRateFromApi(String seriesCode) {
 
         String url = API_URL + "/swea/v1/Observations/Latest/" + seriesCode;
         try {
@@ -61,10 +61,10 @@ public class CurrencyService {
         boolean inverted = false;
 
         try {
-            dto = fetchRate(directCode);
+            dto = getRateFromApi(directCode);
         } catch (Exception e) {
             try {
-                dto = fetchRate(inverseCode);
+                dto = getRateFromApi(inverseCode);
                 inverted = true;
             } catch (Exception ex) {
                 throw new RuntimeException("Could not fetch exchange rate: " + from + " to " + to);
