@@ -8,7 +8,7 @@ type AccountBoardProps = {
 export default function AccountBoard({ account }: AccountBoardProps) {
   return (
     <div data-testid="account-board">
-      <h1 className="text-3xl mb-20">{account.name}</h1>
+      <h1 className="text-3xl mb-20">{account.type}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <p className="mt-4 text-gray-600">Total balance</p>
@@ -22,7 +22,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           <p className="text-sm text-gray-500">Account holder</p>
           <p className="text-lg ">{account.accountHolder}</p>
           <p className="mt-4 text-sm text-gray-500">Account number</p>
-          <p className="text-lg ">{account.number}</p>
+          <p className="text-lg ">{account.accountNumber}</p>
         </div>
       </div>
 

@@ -14,8 +14,8 @@ export function AccountGallery({ bankAccounts }: AccountGalleryProps) {
 
         <div className="flex gap-6">
           {bankAccounts.map((account) => (
-            <div key={account.number}>
-              <Link to="/accounts/$id" params={{ id: account.number }}>
+            <div key={account.accountNumber}>
+              <Link to="/accounts/$id" params={{ id: account.accountNumber }}>
                 <AccountCard account={account} />
               </Link>
             </div>
