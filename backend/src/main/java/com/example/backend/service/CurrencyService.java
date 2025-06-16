@@ -28,8 +28,31 @@ public class CurrencyService {
     }
 
     public CurrencyConversionResultDto convertCurrency(CurrencyConversionRequestDto requestDto) {
-        double rate = getEffectiveRate(from, to);
-        return amount * rate;
+
+        String fromCurrency = requestDto.getFromCurrency();
+        String toCurrency = requestDto.getToCurrency();
+        double originalAmount = requestDto.getAmount();
+
+        ExchangeRateResponseDto exchangeRateDto = getEffectiveRate(fromCurrency, toCurrency);
+        double rate = exchangeRateDto.getValue();
+        double convertedAmount = originalAmount * rate;
+
+/*
+    private String fromCurrency;
+    private String toCurrency;
+    private double originalAmount;
+    private double convertedAmount;
+    private double rateUsed;
+    private String rateDate;*/
+
+        return new CurrencyConversionResultDto(
+                fromCurrency,
+                toCurrency,
+                originalAmount,
+                convertedAmount,
+                rate,
+                exchangeRateDto.getDate()
+        );
     }
     
     //TODO consider adding caching in future
