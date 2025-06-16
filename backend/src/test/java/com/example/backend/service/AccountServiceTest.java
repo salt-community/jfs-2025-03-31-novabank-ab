@@ -109,4 +109,15 @@ class AccountServiceTest {
 
         assertEquals(150.0, account.getBalance());
     }
+
+    @Test
+    @DisplayName("updateBalance throws if insufficient funds")
+    void updateBalance_withdraw_insufficient_throws() {
+        Account account = sampleAccount();
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        assertThrows(InsufficientFundsException.class, () ->
+                accountService.updateBalance(ACCOUNT_ID, USER_ID, 200.0, BalanceUpdateRequestDto.UpdateType.WITHDRAW)
+        );
+    }
 }
