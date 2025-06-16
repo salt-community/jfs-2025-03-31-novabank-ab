@@ -84,4 +84,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleClosedAccount(Exception e) {
         return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(NicknameNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleNicknameNotFound(NicknameNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

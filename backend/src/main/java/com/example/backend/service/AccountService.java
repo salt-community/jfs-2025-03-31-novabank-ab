@@ -118,6 +118,15 @@ public class AccountService {
         return nickname.get().getNickname();
     }
 
+    public void deleteAccountNickname(String userId, UUID accountId) {
+        Account account = getAccount(accountId, userId);
+        Optional<AccountNickname> nickname = accountNicknameRepository.findAccountNicknameByAccount_Id(accountId);
+        if (nickname.isEmpty()) {
+            throw new NicknameNotFoundException();
+        }
+        accountNicknameRepository.delete(nickname.get());
+    }
+
     /* UTIL */
 
     private String generateUniqueAccountNumber() {

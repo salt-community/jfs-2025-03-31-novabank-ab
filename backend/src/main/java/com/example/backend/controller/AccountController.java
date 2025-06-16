@@ -149,4 +149,14 @@ public class AccountController {
         String name = accountService.getAccountNickname(userId, accountId);
         return ResponseEntity.ok(new NicknameResponseDto(name));
     }
+
+    @DeleteMapping("/{accountId}/nickname")
+    public ResponseEntity<Void> deleteAccountNickname(
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        accountService.deleteAccountNickname(userId, accountId);
+        return ResponseEntity.noContent().build();
+    }
 }
