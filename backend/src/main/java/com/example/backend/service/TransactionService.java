@@ -104,7 +104,7 @@ public class TransactionService {
             if (dto.toAccountId() == null) {
                 throw new AccountNotFoundException("To account not found");
             }
-            to = accountService.getAccount(dto.toAccountId(), userId);
+            to = accountRepository.findById(dto.toAccountId()).orElseThrow(AccountNotFoundException::new);
             if (accountIsActive(to)) {
                 throw new AccountNotAllowedException("To account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
             }
@@ -136,13 +136,34 @@ public class TransactionService {
 
     private void addScheduledTransaction(TransactionRequestDto dto, String userId) {
         Account from = accountService.getAccount(dto.fromAccountId(), userId);
-        Account to = accountRepository.findById(dto.toAccountId()).orElseThrow(AccountNotFoundException::new);
+
+        if(accountIsActive(from)) {
+            throw new AccountNotAllowedException("From account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
+        }
+
+        Account to = null;
+        String recipientNumber = null;
+        if (dto.type() == PaymentType.INTERNAL_TRANSFER) {
+            if (dto.toAccountId() == null) {
+                throw new AccountNotFoundException("To account not found");
+            }
+            to = accountRepository.findById(dto.toAccountId()).orElseThrow(AccountNotFoundException::new);
+            if (accountIsActive(to)) {
+                throw new AccountNotAllowedException("To account is not active. Please check your account status and try again. If the problem persists, please contact support. ");
+            }
+        }else{
+            if (dto.recipientNumber() == null || dto.recipientNumber().isBlank()) {
+                throw new IllegalArgumentException("recipientNumber is required for external payment");
+            }
+            recipientNumber = dto.recipientNumber();
+        }
 
         ScheduledTransaction scheduled = new ScheduledTransaction(
                 null,
                 from,
                 to,
-
+                recipientNumber,
+                dto.type(),
                 dto.amount(),
                 dto.transactionDate().atStartOfDay(),
                 TransactionStatus.PENDING,
@@ -151,7 +172,6 @@ public class TransactionService {
                 dto.userNote(),
                 dto.description()
         );
-
         scheduledTransactionRepository.save(scheduled);
 
     }
@@ -210,6 +230,7 @@ public class TransactionService {
                     null,
                     from,
                     to,
+                    scheduledTransaction.getRecipientNumber(),
                     scheduledTransaction.getType(),
                     now,
                     scheduledTransaction.getAmount(),
