@@ -1,40 +1,116 @@
--- Currencies
+-- Full H2 SQL dump: schema + data
+
+-- DROP existing tables
+DROP TABLE IF EXISTS scheduled_transactions;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS currencies;
+
+-- 1) currencies
+CREATE TABLE currencies (
+                            id           VARCHAR(36)   PRIMARY KEY,
+                            name         VARCHAR(255),
+                            abbrevation  VARCHAR(255)  CHECK (abbrevation IN ('USD','EUR','SEK'))
+);
+
+-- 2) users
+CREATE TABLE users (
+                       id           VARCHAR(36)   PRIMARY KEY,
+                       first_name   VARCHAR(255)  NOT NULL,
+                       last_name    VARCHAR(255)  NOT NULL,
+                       email        VARCHAR(255)  NOT NULL,
+                       phone_number VARCHAR(255)  NOT NULL,
+                       role         VARCHAR(255)  NOT NULL CHECK (role IN ('ADMIN','USER')),
+                       status       VARCHAR(255)  NOT NULL CHECK (status IN ('ACTIVE','SUSPENDED','CLOSED')),
+                       created_at   TIMESTAMP,
+                       last_login   TIMESTAMP
+);
+
+-- 3) accounts
+CREATE TABLE accounts (
+                          id             VARCHAR(36)   PRIMARY KEY,
+                          user_id        VARCHAR(36),
+                          currency_id    VARCHAR(36),
+                          created_at     DATE,
+                          balance        DOUBLE,
+                          type           VARCHAR(255)  NOT NULL CHECK (type   IN ('CHECKING','SAVINGS')),
+                          status         VARCHAR(255)  NOT NULL CHECK (status IN ('ACTIVE','SUSPENDED','INACTIVE','CLOSED')),
+                          account_number VARCHAR(255),
+                          FOREIGN KEY(user_id)     REFERENCES users(id),
+                          FOREIGN KEY(currency_id) REFERENCES currencies(id)
+);
+
+-- 4) transactions
+CREATE TABLE transactions (
+                              id               VARCHAR(36)   PRIMARY KEY,
+                              from_account_id  VARCHAR(36),
+                              to_account_id    VARCHAR(36),
+                              created_at       TIMESTAMP     NOT NULL,
+                              amount           DOUBLE        NOT NULL,
+                              description      VARCHAR(255)  NOT NULL,
+                              user_note        VARCHAR(255)  NOT NULL,
+                              ocr_number       VARCHAR(255)  NOT NULL,
+                              FOREIGN KEY(from_account_id) REFERENCES accounts(id),
+                              FOREIGN KEY(to_account_id)   REFERENCES accounts(id)
+);
+
+-- 5) scheduled_transactions
+CREATE TABLE scheduled_transactions (
+                                        id               VARCHAR(36)   PRIMARY KEY,
+                                        from_account_id  VARCHAR(36)   NOT NULL,
+                                        to_account_id    VARCHAR(36)   NOT NULL,
+                                        amount           DOUBLE        NOT NULL,
+                                        scheduled_date   TIMESTAMP     NOT NULL,
+                                        status           VARCHAR(255)  NOT NULL CHECK (status IN ('PENDING','COMPLETED')),
+                                        created_at       TIMESTAMP     NOT NULL,
+                                        ocr_number       VARCHAR(255)  NOT NULL,
+                                        user_note        VARCHAR(255)  NOT NULL,
+                                        description      VARCHAR(255)  NOT NULL,
+                                        FOREIGN KEY(from_account_id) REFERENCES accounts(id),
+                                        FOREIGN KEY(to_account_id)   REFERENCES accounts(id)
+);
+
+-- DATA INSERTS
+
 INSERT INTO currencies (id, name, abbrevation) VALUES
-    ('9bdc18e7-8173-4191-8f61-f3451c5e6759', 'Swedish Krona', 'SEK'),
-    ('9fa9391c-b25a-4933-8c58-e9c7c77f3620', 'Euro', 'EUR');
+                                                   ('a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','US Dollar','USD'),
+                                                   ('b2c3d4e5-f6a7-8b9c-0d1e-f2a3b4c5d6e7','Euro','EUR'),
+                                                   ('c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','Swedish Krona','SEK');
 
--- Users
-INSERT INTO users (id, full_name, email, phone_number, role, status, created_at, last_login) VALUES
-    ('user_2yMYqxXhoEDq64tfBlelGADfdlp', 'Amanda', 'amanda.strom@appliedtechnology.se', '0700000000', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
-    ('user_2ya9D2bPCC3XYyGsklZRQPPBeb9', 'Elias', 'elias.egelrud@appliedtechnology.se', '0700000001', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
-    ('b29f9397-ec6b-4d5e-9f1c-2939d2c1995b', 'User 3', 'user3@example.com', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
+INSERT INTO users (
+    id, first_name, last_name, email, phone_number,
+    role, status, created_at, last_login
+) VALUES
+      ('3fa85f64-5717-4562-b3fc-2c963f66afa6','Alice','Andersson','alice.andersson@example.com','0701234567','USER','ACTIVE','2025-05-10 08:15:00','2025-06-14 17:45:00'),
+      ('7b9e1c2d-9f4a-4f3e-a2bd-5c8f9d1e2345','Björn','Bergström','bjorn.bergstrom@example.com','0702345678','ADMIN','ACTIVE','2025-04-01 09:00:00','2025-06-15 12:00:00'),
+      ('1e2d3c4b-5a6f-7e8d-9c0b-1a2f3e4d5c6b','Carla','Carlsson','carla.carlsson@example.com','0703456789','USER','SUSPENDED','2025-03-20 14:30:00','2025-05-30 08:00:00'),
+      ('9f8e7d6c-5b4a-3c2d-1e0f-9a8b7c6d5e4f','David','Dahl','david.dahl@example.com','0704567890','USER','CLOSED','2025-01-15 11:45:00','2025-02-01 10:15:00'),
+      ('0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d','Elin','Ekström','elin.ekstrom@example.com','0705678901','USER','SUSPENDED','2025-06-16 09:00:00',NULL);
 
--- Accounts
-INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
-    ('c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9370, 'PERSONAL', 'ACTIVE', 'ACC1000'),
-    ('3587b71d-5845-4ba3-b667-e556bdf845be', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 1763, 'PERSONAL', 'ACTIVE', 'ACC1001'),
-    ('7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'b29f9397-ec6b-4d5e-9f1c-2939d2c1995b', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 7459, 'PERSONAL', 'ACTIVE', 'ACC1002'),
-    ('67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 2583, 'PERSONAL', 'ACTIVE', 'ACC1003'),
-    ('57a34877-b5f7-4967-a40b-c5cfba12cc67', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9515, 'PERSONAL', 'ACTIVE', 'ACC1004'),
-    ('4cab58e6-5ebd-4cc3-b42c-1eca8da00a4a', 'b29f9397-ec6b-4d5e-9f1c-2939d2c1995b', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 4064, 'PERSONAL', 'ACTIVE', 'ACC1005'),
-    ('ec70e8d7-6fb5-4364-81da-9b1a52cc1650', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 2333, 'PERSONAL', 'ACTIVE', 'ACC1006'),
-    ('400086d4-7b9c-4052-abf3-651376b6817d', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 9588, 'PERSONAL', 'ACTIVE', 'ACC1007');
+INSERT INTO accounts (
+    id, user_id, currency_id, created_at, balance,
+    type, status, account_number
+) VALUES
+      ('11111111-1111-1111-1111-111111111111','3fa85f64-5717-4562-b3fc-2c963f66afa6','a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','2025-05-10',1250.00,'CHECKING','ACTIVE','SE4550000000055555555551'),
+      ('22222222-2222-2222-2222-222222222222','7b9e1c2d-9f4a-4f3e-a2bd-5c8f9d1e2345','b2c3d4e5-f6a7-8b9c-0d1e-f2a3b4c5d6e7','2025-04-01', 800.50,'SAVINGS','ACTIVE','DE89370400440532013000'),
+      ('33333333-3333-3333-3333-333333333333','1e2d3c4b-5a6f-7e8d-9c0b-1a2f3e4d5c6b','c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','2025-03-20',  50.75,'CHECKING','SUSPENDED','SE4550000000055555555552'),
+      ('44444444-4444-4444-4444-444444444444','9f8e7d6c-5b4a-3c2d-1e0f-9a8b7c6d5e4f','a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6','2025-01-15',   0.00,'CHECKING','INACTIVE','SE4550000000055555555553'),
+      ('55555555-5555-5555-5555-555555555555','0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d','c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f','2025-06-16', 300.00,'SAVINGS','ACTIVE','SE4550000000055555555554');
 
--- Transactions
-INSERT INTO transactions (id, from_account_id, to_account_id, created_at, amount, description, user_note, ocr_number) VALUES
-    ('2fcbbb39-06f2-4d67-a054-2da86129ee28', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', '2025-06-12 08:42:57', 188, 'Description 0', 'Note 0', 'OCR00000'),
-    ('fa70865e-e018-410a-99a1-018ea90a3ce6', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '2025-06-12 08:42:57', 632, 'Description 1', 'Note 1', 'OCR00001'),
-    ('62e1632f-e075-4add-984f-a3a7787efb83', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', '2025-06-12 08:42:57', 670, 'Description 2', 'Note 2', 'OCR00002'),
-    ('a66ea65f-1a05-4153-bdb7-085ff312d6e6', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', '57a34877-b5f7-4967-a40b-c5cfba12cc67', '2025-06-12 08:42:57', 354, 'Description 3', 'Note 3', 'OCR00003'),
-    ('a923eb88-eb4c-43f8-aed4-d3504ecce1e7', '57a34877-b5f7-4967-a40b-c5cfba12cc67', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '2025-06-12 08:42:57', 834, 'Description 4', 'Note 4', 'OCR00004'),
-    ('8d83bef8-c4de-4c3c-aaee-43df053b541b', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', '2025-06-12 08:42:57', 741, 'Description 5', 'Note 5', 'OCR00005'),
-    ('4b49b008-71ff-4770-8417-f411e78f9283', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '2025-06-12 08:42:57', 113, 'Description 6', 'Note 6', 'OCR00006'),
-    ('122f8446-0195-49db-9c83-18bb930bf18f', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', '2025-06-12 08:42:57', 108, 'Description 7', 'Note 7', 'OCR00007'),
-    ('809cc380-badd-4876-b0ae-a8ff19f5c500', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', '57a34877-b5f7-4967-a40b-c5cfba12cc67', '2025-06-12 08:42:57', 401, 'Description 8', 'Note 8', 'OCR00008'),
-    ('47271bd9-b2f5-458e-85b3-7d0ea5a7be7b', '57a34877-b5f7-4967-a40b-c5cfba12cc67', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '2025-06-12 08:42:57', 986, 'Description 9', 'Note 9', 'OCR00009');
+INSERT INTO transactions (
+    id, from_account_id, to_account_id, created_at,
+    amount, description, user_note, ocr_number
+) VALUES
+      ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa','11111111-1111-1111-1111-111111111111','22222222-2222-2222-2222-222222222222','2025-06-10 14:20:00',200.00,'Rent payment','June rent','OCR20250610A'),
+      ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb','33333333-3333-3333-3333-333333333333','11111111-1111-1111-1111-111111111111','2025-06-12 09:05:00', 50.00,'Refund from Carla','Refund','OCR20250612B'),
+      ('cccccccc-cccc-cccc-cccc-cccccccccccc','22222222-2222-2222-2222-222222222222','55555555-5555-5555-5555-555555555555','2025-06-14 16:45:00',100.50,'Gift to Elin','Happy birthday','OCR20250614C'),
+      ('dddddddd-dddd-dddd-dddd-dddddddddddd','55555555-5555-5555-5555-555555555555','44444444-4444-4444-4444-444444444444','2025-06-15 11:30:00', 75.25,'Transfer to savings','Monthly save','OCR20250615D');
 
--- Scheduled Transactions
-INSERT INTO scheduled_transactions (id, from_account_id, to_account_id, amount, scheduled_date, status, created_at, ocr_number, user_note, description) VALUES
-    ('69ca9a09-804d-4c67-9227-ea23569d4a31', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 1331, '2025-06-19 08:42:57', 'PENDING', '2025-06-12 08:42:57', 'OCRS00000', 'Scheduled Note 0', 'Scheduled Description 0'),
-    ('0e683c21-5ed5-4498-b7d4-a9d4e432be02', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 1204, '2025-06-19 08:42:57', 'PENDING', '2025-06-12 08:42:57', 'OCRS00001', 'Scheduled Note 1', 'Scheduled Description 1'),
-    ('4df15be9-12a2-4ee3-8f5c-c11dee6bae57', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', 979, '2025-06-19 08:42:57', 'PENDING', '2025-06-12 08:42:57', 'OCRS00002', 'Scheduled Note 2', 'Scheduled Description 2');
+INSERT INTO scheduled_transactions (
+    id, from_account_id, to_account_id, amount, scheduled_date,
+    status, created_at, ocr_number, user_note, description
+) VALUES
+      ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee','11111111-1111-1111-1111-111111111111','33333333-3333-3333-3333-333333333333',250.00,'2025-07-01 09:00:00','PENDING','2025-06-16 10:00:00','OCR20250701E','Monthly invoice','July invoice'),
+      ('ffffffff-ffff-ffff-ffff-ffffffffffff','22222222-2222-2222-2222-222222222222','44444444-4444-4444-4444-444444444444',150.00,'2025-07-05 15:30:00','PENDING','2025-06-16 10:05:00','OCR20250705F','Subscription fee','Monthly subscription'),
+      ('11111111-aaaa-bbbb-cccc-222222222222','55555555-5555-5555-5555-555555555555','11111111-1111-1111-1111-111111111111', 80.00,'2025-06-20 08:00:00','COMPLETED','2025-06-01 12:00:00','OCR20250620G','Gym membership','June membership');
