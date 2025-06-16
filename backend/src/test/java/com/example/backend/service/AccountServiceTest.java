@@ -140,14 +140,9 @@ class AccountServiceTest {
 
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
-        Exception ex = assertThrows(IllegalStateException.class, () ->
-                accountService.updateBalance(ACCOUNT_ID, USER_ID, 50.0, BalanceUpdateRequestDto.UpdateType.DEPOSIT)
+        assertThrows(AccountClosedException.class, () ->
+                accountService.updateBalance(ACCOUNT_ID, USER_ID, 100.0, BalanceUpdateRequestDto.UpdateType.DEPOSIT)
         );
-
-        assertEquals("Cannot update balance of inactive account", ex.getMessage()); // TODO kanske ändra detta till något i denna stil?
-//        assertThrows(UserUnauthorizedException.class, () ->
-//                accountService.updateBalance(ACCOUNT_ID, USER_ID, 100.0, BalanceUpdateRequestDto.UpdateType.DEPOSIT)
-//        );
     }
 
     @Test
