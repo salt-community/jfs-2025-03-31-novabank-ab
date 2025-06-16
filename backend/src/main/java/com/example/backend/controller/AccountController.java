@@ -1,10 +1,12 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.accountDto.request.AddAccountNicknameRequestDto;
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.accountDto.request.BalanceUpdateRequestDto;
 import com.example.backend.dto.accountDto.request.CreateAccountRequestDto;
 import com.example.backend.dto.accountDto.response.AccountResponseDto;
 import com.example.backend.dto.accountDto.response.BalanceResponseDto;
+import com.example.backend.dto.accountDto.response.NicknameResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.service.AccountService;
@@ -127,4 +129,24 @@ public class AccountController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{accountId}/nickname")
+    public ResponseEntity<Void> addAccountNickname(
+        @PathVariable @NotNull UUID accountId,
+        @RequestBody @Valid AddAccountNicknameRequestDto dto,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        accountService.addAccountNickname(userId, accountId, dto.nickname());
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{accountId}/nickname")
+    public ResponseEntity<NicknameResponseDto> getAccountNickname(
+        @PathVariable @NotNull UUID accountId,
+        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        String name = accountService.getAccountNickname(userId, accountId);
+        return ResponseEntity.ok(new NicknameResponseDto(name));
+    }
 }
