@@ -57,4 +57,14 @@ class AccountServiceTest {
 
         assertEquals(account, result);
     }
+
+    @Test
+    @DisplayName("getAccount throws when not found")
+    void getAccount_notFound_throws() {
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.empty());
+
+        assertThrows(AccountNotFoundException.class, () ->
+                accountService.getAccount(ACCOUNT_ID, USER_ID)
+        );
+    }
 }
