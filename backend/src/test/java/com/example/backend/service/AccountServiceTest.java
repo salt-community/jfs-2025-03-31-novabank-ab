@@ -46,4 +46,15 @@ class AccountServiceTest {
         userRepository = mock(UserRepository.class);
         accountService = new AccountService(accountRepository, userRepository);
     }
+
+    @Test
+    @DisplayName("getAccount returns account when user is authorized")
+    void getAccount_authorized_returnsAccount() {
+        Account account = sampleAccount();
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        Account result = accountService.getAccount(ACCOUNT_ID, USER_ID);
+
+        assertEquals(account, result);
+    }
 }
