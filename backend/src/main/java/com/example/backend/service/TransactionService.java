@@ -10,10 +10,7 @@ import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.TransactionStatus;
-import com.example.backend.repository.AccountRepository;
-import com.example.backend.repository.ClientRepository;
-import com.example.backend.repository.ScheduledTransactionRepository;
-import com.example.backend.repository.TransactionRepository;
+import com.example.backend.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -32,18 +29,24 @@ public class TransactionService {
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final ClientRepository clientRepository;
+    private final ClientTransactionRepository clientTransactionRepository;
+    private final ClientScheduledTransactionRepository clientScheduledTransactionRepository;
 
     public TransactionService(TransactionRepository transactionRepository,
                               ScheduledTransactionRepository scheduledTransactionRepository,
                               AccountRepository accountRepository,
                               AccountService accountService,
-                              ClientRepository clientRepository
+                              ClientRepository clientRepository,
+                              ClientTransactionRepository clientTransactionRepository,
+                              ClientScheduledTransactionRepository clientScheduledTransactionRepository
     ) {
         this.transactionRepository = transactionRepository;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
         this.clientRepository = clientRepository;
+        this.clientTransactionRepository = clientTransactionRepository;
+        this.clientScheduledTransactionRepository = clientScheduledTransactionRepository;
     }
 
     public UnifiedTransactionDto getTransaction(UUID transactionId, String userId) {
