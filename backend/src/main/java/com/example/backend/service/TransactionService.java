@@ -5,11 +5,13 @@ import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
+import com.example.backend.model.Client;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
+import com.example.backend.repository.ClientRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
@@ -29,14 +31,19 @@ public class TransactionService {
     private final ScheduledTransactionRepository scheduledTransactionRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final ClientRepository clientRepository;
 
     public TransactionService(TransactionRepository transactionRepository,
                               ScheduledTransactionRepository scheduledTransactionRepository,
-                              AccountRepository accountRepository, AccountService accountService) {
+                              AccountRepository accountRepository,
+                              AccountService accountService,
+                              ClientRepository clientRepository
+    ) {
         this.transactionRepository = transactionRepository;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
+        this.clientRepository = clientRepository;
     }
 
     public UnifiedTransactionDto getTransaction(UUID transactionId, String userId) {
