@@ -147,4 +147,17 @@ class AccountServiceTest {
         assertEquals("Cannot update balance of inactive account", ex.getMessage());
     }
 
+    @Test
+    @DisplayName("updateBalance throws when user is not the account owner")
+    void updateBalance_wrongUser_throwsUnauthorized() {
+        Account account = sampleAccount();
+        account.getUser().setId("other-user");
+
+        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
+
+        assertThrows(UserUnauthorizedException.class, () ->
+                accountService.updateBalance(ACCOUNT_ID, USER_ID, 100.0, BalanceUpdateRequestDto.UpdateType.DEPOSIT)
+        );
+    }
+
 }
