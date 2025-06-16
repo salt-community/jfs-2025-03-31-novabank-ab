@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
 import com.example.backend.dto.userDto.request.ApplicationRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.model.Application;
@@ -19,7 +20,7 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping({"/api/user", "/api/user"})
+@RequestMapping({"/api/user", "/api/user/"})
 public class UserController {
 
     private final UserService userService;
@@ -37,6 +38,36 @@ public class UserController {
     @GetMapping
     public ResponseEntity<User> getUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
+        User user = userService.getUser(userId);
+        return ResponseEntity.ok(user);
+    }
+
+    @Operation(summary = "Create new User", description = "Returns User location in header")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "409", description = "User already exists"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> addUserFromApplication(@RequestBody AddNewUserRequestDto dto,
+                                                       @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        User created = userService.addUser(dto.applicationId());
+        URI location = URI.create("/api/user/" + created.getId());
+        return ResponseEntity.created(location).build();
+    }
+
+    @Operation(summary = "Get a user by id", description = "Returns a user as per the id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> getUser(
+            @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
+    ) {
         User user = userService.getUser(userId);
         return ResponseEntity.ok(user);
     }
@@ -81,4 +112,5 @@ public class UserController {
         Application application = userService.getApplicationById(applicationId);
         return ResponseEntity.ok(application);
     }
+
 }
