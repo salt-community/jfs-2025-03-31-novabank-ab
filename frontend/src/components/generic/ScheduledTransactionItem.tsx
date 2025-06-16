@@ -1,4 +1,4 @@
-type ScheduledTransactionItemProps = {
+export type ScheduledTransactionItemProps = {
   fromAccountId: string
   toAccountId: string
   amount: number
@@ -7,13 +7,10 @@ type ScheduledTransactionItemProps = {
   userNote: string
   ocrNumber: string
 }
-export function TransactionItem({
+export function ScheduledTransactionItem({
   amount,
   description,
-  fromAccountId,
-  ocrNumber,
   scheduledDate,
-  toAccountId,
   userNote,
 }: ScheduledTransactionItemProps) {
   return (
@@ -22,18 +19,16 @@ export function TransactionItem({
       data-testid="transaction-item"
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-800">{name}</span>
-        <span className="text-xs text-gray-500">{category}</span>
+        <span className="text-base text-gray-800">{description}</span>
+        <span className="text-xs text-gray-500">Note: {userNote}</span>
       </div>
       <div className="flex flex-col items-end">
-        <span
-          className={`text-base font-medium ${amount < 0 ? 'text-gray-800' : 'text-green-500'}`}
-        >
-          {amount < 0
-            ? `-${Math.abs(amount).toFixed(2)}`
-            : `+${amount.toFixed(2)}`}
+        <span className={`text-base font-medium text-gray-800'`}>
+          {`-${Math.abs(amount).toFixed(2)}`}
         </span>
-        <span className="text-xs text-gray-400">{time}</span>
+        <span className="text-xs text-gray-400">
+          {scheduledDate.split('T')[0]}
+        </span>
       </div>
     </div>
   )
