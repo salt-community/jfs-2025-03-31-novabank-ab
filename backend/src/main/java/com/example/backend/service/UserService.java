@@ -45,16 +45,18 @@ public class UserService {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
 
+        String generatedPassword = UUID.randomUUID().toString();
         String userId = clerkService.createClerkUser(
                 application.getEmail(),
                 application.getFirstName(),
                 application.getLastName(),
-                application.getPhoneNumber()
+                application.getPhoneNumber(),
+                generatedPassword
         );
 
         User user = new User(
                 userId,
-//                passwordEncoder.encode(dto.password()),
+                passwordEncoder.encode(generatedPassword),
                 application.getFirstName(),
                 application.getLastName(),
                 application.getEmail(),

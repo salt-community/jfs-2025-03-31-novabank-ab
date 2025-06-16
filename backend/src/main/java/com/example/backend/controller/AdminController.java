@@ -35,35 +35,6 @@ public class AdminController {
         this.accountService = accountService;
     }
 
-
-    @Operation(summary = "Create new User", description = "Returns User location in header")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created"),
-            @ApiResponse(responseCode = "409", description = "User already exists"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
-    })
-    @PostMapping("/user")
-    public ResponseEntity<Void> addUserFromApplication(@RequestBody AddNewUserRequestDto dto,
-                                        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
-        User created = userService.addUser(dto.applicationId());
-        URI location = URI.create("/api/user/" + created.getId());
-        return ResponseEntity.created(location).build();
-    }
-
-    @Operation(summary = "Get a user by id", description = "Returns a user as per the id")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "User Not Found"),
-            @ApiResponse(responseCode = "500", description = "Unexpected Error")
-    })
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<User> getUser(
-            @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
-    ) {
-        User user = userService.getUser(userId);
-        return ResponseEntity.ok(user);
-    }
-
     @Operation(summary = "Get all users", description = "Returns a list of all users")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),

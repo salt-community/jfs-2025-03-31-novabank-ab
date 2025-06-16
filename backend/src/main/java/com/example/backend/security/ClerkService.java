@@ -40,7 +40,7 @@ public class ClerkService {
         restTemplate.exchange(url, HttpMethod.PATCH, req, Void.class);
     }
 
-    public String createClerkUser(String email, String firstName, String lastName, String phoneNumber) {
+    public String createClerkUser(String email, String firstName, String lastName, String phoneNumber, String password) {
         String url = "https://api.clerk.com/v1/users";
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,7 +52,7 @@ public class ClerkService {
                 "first_name", firstName,
                 "last_name", lastName,
                 "phone_number", List.of(phoneNumber),
-                "password", UUID.randomUUID().toString(),
+                "password", password,
                 "public_metadata", Map.of("role", "user")
         );
 
