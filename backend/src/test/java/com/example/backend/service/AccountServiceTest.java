@@ -5,6 +5,7 @@ import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
+import com.example.backend.repository.AccountNicknameRepository;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ class AccountServiceTest {
     private AccountRepository accountRepository;
     private UserRepository userRepository;
     private AccountService accountService;
+    private AccountNicknameRepository accountNicknameRepository;
 
     private final String USER_ID = "user-123";
     private final UUID ACCOUNT_ID = UUID.randomUUID();
@@ -44,7 +46,8 @@ class AccountServiceTest {
     void setUp() {
         accountRepository = mock(AccountRepository.class);
         userRepository = mock(UserRepository.class);
-        accountService = new AccountService(accountRepository, userRepository);
+        accountNicknameRepository = mock(AccountNicknameRepository.class);
+        accountService = new AccountService(accountRepository, userRepository, accountNicknameRepository);
     }
 
     @Test
