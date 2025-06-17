@@ -7,7 +7,6 @@ import com.example.backend.model.Account;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
-import com.example.backend.model.enums.ApplicationStatus;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import com.example.backend.service.UserService;
@@ -145,6 +144,13 @@ public class AdminController {
         return ResponseEntity.ok(transactionService.getAllTransactionHistory());
     }
 
+    @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated application status"),
+            @ApiResponse(responseCode = "400", description = "Invalid action"),
+            @ApiResponse(responseCode = "404", description = "Application Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
     @PatchMapping("/application/{applicationId}")
     public ResponseEntity<Void> updateApplication(@PathVariable UUID applicationId, @RequestParam(name = "status") String status){
         Application application = userService.getApplicationById(applicationId);
