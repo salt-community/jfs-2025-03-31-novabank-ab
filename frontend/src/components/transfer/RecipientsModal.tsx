@@ -4,23 +4,31 @@ import type { Account } from '@/types'
 
 type RecipientsModalProps = {
   bankAccounts: Array<Account>
-  fromAccount: Account | null
-  onSubmit: (recipient: Account | null | string) => void
+  sender: Account | null
+  onSubmit: (recipient: Account | null | string, accNoType: string) => void
   onClose: () => void
+  accNoType: string
+  setAccNoType: React.Dispatch<React.SetStateAction<string>>
+  setRecipientAccount: React.Dispatch<React.SetStateAction<Account | null>>
+  recipientClient: string | null
+  setRecipientClient: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export default function RecipientsModal({
   bankAccounts,
-  fromAccount,
+  sender,
   onSubmit,
   onClose,
+  accNoType,
+  setAccNoType,
+  setRecipientAccount,
+  recipientClient,
+  setRecipientClient,
 }: RecipientsModalProps) {
-  const [, setToAccount] = useState<Account | null>(null)
   const [viewMode, setViewMode] = useState<
     'Saved recipients' | 'New recipient'
   >('Saved recipients')
-  const [newRecipient, setNewRecipient] = useState('')
-  const [accNoType, setAccNoType] = useState('')
+
   const dialogRef = useRef<HTMLDialogElement | null>(null)
   const [errors, setErrors] = useState<{
     accNoTypeError?: string
@@ -52,40 +60,56 @@ export default function RecipientsModal({
     }
   }
 
-  const handleRecipientSubmit = (account: Account | string) => {
+  function isFormValid(): boolean {
     const newErrors: typeof errors = {}
 
-    if (viewMode === 'New recipient') {
-      if (!accNoType)
-        newErrors.accNoTypeError = 'Please select an account number type'
+    if (!accNoType) {
+      newErrors.accNoTypeError = 'Please select an account number type'
+    }
 
-      if (!newRecipient) {
-        newErrors.recipientError = 'Account number is required'
-      } else if (!isValidAccountNumber(accNoType, newRecipient)) {
-        newErrors.recipientError = `Invalid ${accNoType} number`
-      }
-      setErrors(newErrors)
-      if (Object.keys(newErrors).length > 0) return
-      if (typeof account === 'string') {
-        setNewRecipient(newRecipient.trim())
-        onSubmit(newRecipient.trim())
-      }
+    if (!recipientClient || recipientClient.trim() === '') {
+      newErrors.recipientError = 'Account number is required'
+    } else if (!isValidAccountNumber(accNoType, recipientClient.trim())) {
+      newErrors.recipientError = `Invalid ${accNoType} number`
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleRecipientSubmit = (account: Account | string | null) => {
+    if (viewMode === 'New recipient') {
+      if (!isFormValid()) return
+      const trimmed = recipientClient?.trim() || ''
+      setRecipientClient(trimmed)
+      onSubmit(trimmed, accNoType)
     } else if (typeof account === 'object') {
-      setToAccount(account)
-      onSubmit(account)
+      setRecipientAccount(account)
+      onSubmit(account, '')
     }
 
     dialogRef.current?.close()
     onClose()
+
+    setAccNoType('')
   }
 
   return (
-    <dialog ref={dialogRef} className="modal">
+    <dialog
+      ref={dialogRef}
+      className="modal"
+      onClick={(e) => {
+        if (e.target === dialogRef.current) {
+          handleCancel()
+        }
+      }}
+    >
       <div
         className="modal-box max-h-[90vh] bg-white rounded-lg shadow-lg relative px-6 py-8 max-w-3xl 
                       sm:max-w-xl mx-auto text-[#141414] font-old"
       >
         <button
+          type="button"
           onClick={handleCancel}
           className="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl cursor-pointer"
           aria-label="Close"
@@ -102,8 +126,6 @@ export default function RecipientsModal({
                 : 'bg-transparent hover:cursor-pointer shadow-sm'
             }`}
             onClick={() => {
-              setToAccount(null)
-              setNewRecipient('')
               setViewMode('Saved recipients')
             }}
           >
@@ -118,8 +140,6 @@ export default function RecipientsModal({
                 : 'bg-transparent hover:cursor-pointer shadow-sm'
             }`}
             onClick={() => {
-              setToAccount(null)
-              setNewRecipient('')
               setViewMode('New recipient')
             }}
           >
@@ -132,8 +152,7 @@ export default function RecipientsModal({
             <div className="h-80">
               <p className="mb-4 text-xl">My bank accounts</p>
               {bankAccounts.map((account) => {
-                const isDisabled =
-                  fromAccount?.accountNumber === account.accountNumber
+                const isDisabled = sender?.accountNumber === account.accountNumber
 
                 return (
                   <div>
@@ -168,8 +187,9 @@ export default function RecipientsModal({
               <div className="relative w-full">
                 <input
                   id="newAccount"
+                  value={recipientClient || ''}
                   type="text"
-                  onChange={(e) => setNewRecipient(e.target.value)}
+                  onChange={(e) => setRecipientClient(e.target.value)}
                   className={`peer hover:cursor-pointer  text-black rounded 
                         p-4 w-full text-left  bg-white outline focus:outline-2
                         ${errors.recipientError ? ' outline-red-600 focus:outline-red-600  ' : ' outline-gray-500 focus:outline-black'}
@@ -180,7 +200,7 @@ export default function RecipientsModal({
                   htmlFor="newAccount"
                   className={`absolute hover:cursor-pointer left-4 px-1  transition-all duration-200 bg-white
                         ${
-                          newRecipient
+                          recipientClient
                             ? '-top-2.5 text-sm text-black font-semibold'
                             : 'top-4 text-base text-gray-400 bg-transparent'
                         }
@@ -251,7 +271,9 @@ export default function RecipientsModal({
               <div className="flex justify-end mt-4">
                 <button
                   type="button"
-                  onClick={() => handleRecipientSubmit(newRecipient)}
+                  onClick={() => {
+                    handleRecipientSubmit(recipientClient)
+                  }}
                   className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black font-semibold shadow-sm px-5 py-2 rounded transition-colors"
                 >
                   Done

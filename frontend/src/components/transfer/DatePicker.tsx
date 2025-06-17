@@ -2,7 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 
 const WEEK_DAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
-export default function DatePicker({ onDateChange, value, error }: { onDateChange: (date: string | null) => void, value: string | null, error: string | undefined }) {
+export default function DatePicker({
+  onDateChange,
+  value,
+  error,
+}: {
+  onDateChange: (date: string | null) => void
+  value: string | null
+  error: string | undefined
+}) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<string | null>(value)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -92,6 +100,9 @@ export default function DatePicker({ onDateChange, value, error }: { onDateChang
     }
   }, [])
 
+  // Today's date in yyyy-mm-dd format
+  const todayStr = formatDate(new Date())
+
   return (
     <div ref={wrapperRef} className="relative w-full">
       {/* Fake input */}
@@ -100,7 +111,11 @@ export default function DatePicker({ onDateChange, value, error }: { onDateChang
         role="textbox"
         tabIndex={0}
         className={`peer flex items-center border text-black rounded p-4 bg-white  w-full cursor-pointer relative
-        ${error ? 'border-red-600 border-0 focus:ring-red-900 focus:border-2 ' : 'border-gray-500 focus:ring-1 focus:ring-black'}`}
+        ${
+          error
+            ? 'border-red-600 border-0 focus:ring-red-900 focus:border-2 '
+            : 'border-gray-500 focus:ring-1 focus:ring-black'
+        }`}
       >
         <span className={selectedDate ? 'text-black' : 'text-gray-400'}>
           {selectedDate || 'yyyy-mm-dd'}
@@ -117,8 +132,6 @@ export default function DatePicker({ onDateChange, value, error }: { onDateChang
           </button>
         )}
       </div>
-
-      
 
       {/* Floating Label */}
       <label
@@ -205,16 +218,20 @@ export default function DatePicker({ onDateChange, value, error }: { onDateChang
                   .toString()
                   .padStart(2, '0')}-${day.toString().padStart(2, '0')}`
                 const isSelected = selectedDate === formattedDate
+                const isPastDate = formattedDate < todayStr // disable past dates
 
                 return (
                   <button
                     key={day}
                     type="button"
-                    onClick={() => handleDayClick(day, true)}
-                    className={`flex items-center justify-center h-9 w-9 rounded-md cursor-pointer ${
+                    onClick={() => !isPastDate && handleDayClick(day, true)}
+                    disabled={isPastDate}
+                    className={`flex items-center justify-center h-9 w-9 rounded-md  ${
                       isSelected
                         ? 'bg-black text-white'
-                        : 'hover:bg-gray-200 text-black'
+                        : isPastDate
+                        ? 'text-gray-400 cursor-default hover:cursor-default'
+                        : 'hover:bg-gray-200 text-black cursor-pointer'
                     }`}
                     aria-current={isSelected ? 'date' : undefined}
                   >
