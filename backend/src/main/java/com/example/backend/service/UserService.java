@@ -1,15 +1,19 @@
 package com.example.backend.service;
 
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
+import com.example.backend.dto.userDto.request.UpdateUserSettingsRequestDto;
 import com.example.backend.exception.custom.ApplicationNotFoundException;
+import com.example.backend.exception.custom.SettingsConfigNotFoundException;
 import com.example.backend.exception.custom.UserAlreadyExistsException;
 import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
+import com.example.backend.model.UserSettingsConfig;
 import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
 import com.example.backend.repository.ApplicationRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.UserSettingsRepository;
 import com.example.backend.security.ClerkService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,12 +30,14 @@ public class UserService {
 
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
+    private final UserSettingsRepository settingsRepository;
     private final PasswordEncoder passwordEncoder;
     private final ClerkService clerkService;
 
-    public UserService(ApplicationRepository applicationRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, ClerkService clerkService) {
+    public UserService(ApplicationRepository applicationRepository, UserRepository userRepository, UserSettingsRepository settingsRepository, PasswordEncoder passwordEncoder, ClerkService clerkService) {
         this.applicationRepository = applicationRepository;
         this.userRepository = userRepository;
+        this.settingsRepository = settingsRepository;
         this.passwordEncoder = passwordEncoder;
         this.clerkService = clerkService;
     }
@@ -136,5 +142,47 @@ public class UserService {
 
     public List<Application> getAllApplications() {
         return applicationRepository.findAll();
+    }
+
+    public UserSettingsConfig updateUserSettings(String userId, UpdateUserSettingsRequestDto dto) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        UserSettingsConfig settings = settingsRepository.findByUser(user)
+                .orElse(new UserSettingsConfig());
+
+        settings.setUser(user);
+        settings.setSmsNotifications(dto.smsNotifications());
+        settings.setEmailNotifications(dto.emailNotifications());
+        settings.setCardTransactionNotifications(dto.cardTransactionNotifications());
+        settings.setAtmWithdrawalNotifications(dto.atmWithdrawalNotifications());
+        settings.setDepositNotifications(dto.depositNotifications());
+        settings.setLanguage(dto.language());
+
+        return settingsRepository.save(settings);
+    }
+
+    public UserSettingsConfig getUserSettings(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return settingsRepository.findByUser(user).orElseThrow(SettingsConfigNotFoundException::new);
+    }
+
+    public UserSettingsConfig createDefaultSettings(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        UserSettingsConfig config = new UserSettingsConfig();
+        config.setUser(user);
+        applyDefaultSettings(config);
+
+        return config;
+    }
+
+    private void applyDefaultSettings(UserSettingsConfig config) {
+        config.setLanguage("en");
+        config.setEmailNotifications(true);
+        config.setSmsNotifications(true);
+        config.setDepositNotifications(true);
+        config.setAtmWithdrawalNotifications(true);
+        config.setCardTransactionNotifications(true);
     }
 }
