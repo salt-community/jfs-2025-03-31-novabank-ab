@@ -1,6 +1,7 @@
 package com.example.backend.dto.transactionDto.request;
 
 
+import com.example.backend.model.enums.PaymentType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -10,9 +11,11 @@ import java.util.UUID;
 
 public record TransactionRequestDto(
         @NotNull
-        UUID fromAccountId,
+        String fromAccountNo,
+        String toAccountNo,
+        String recipientNumber,
         @NotNull
-        UUID toAccountId,
+        PaymentType type,
         @NotNull
         LocalDate transactionDate,
         @NotNull
@@ -20,8 +23,6 @@ public record TransactionRequestDto(
         double amount,
         @NotNull
         String description,
-        @NotNull
         String userNote,
-        @NotNull
         String ocrNumber
 ) {}
