@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-type AccountType = 'Savings' | 'Personal'
+type AccountType = 'SAVINGS' | 'PERSONAL'
 type Currency = 'SEK' | 'EUR'
 
 type NewAccountModalProps = {
@@ -83,10 +83,10 @@ export default function NewAccountModal({
               <option value="" className="text-gray-400">
                 Select an account type
               </option>
-              <option className="text-black" value="Savings">
+              <option className="text-black" value="SAVINGS">
                 Savings
               </option>
-              <option className="text-black" value="Personal">
+              <option className="text-black" value="PERSONAL">
                 Personal
               </option>
             </select>

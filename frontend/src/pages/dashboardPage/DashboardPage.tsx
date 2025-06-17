@@ -17,9 +17,17 @@ export default function DashboardPage() {
     isError: isTransactionsError,
   } = useTransactions()
 
-  if (isAccountsLoading) return <div className="p-8">Loading accounts...</div>
-  if (isTransactionsLoading)
-    return <div className="p-8">Loading transactions...</div>
+  if (isAccountsLoading)
+    return (
+      <div className="p-20 flex justify-center text-5xl items-center">
+        <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+      </div>
+    )
+  if (isTransactionsLoading) return (
+    <div className="p-20 flex justify-center text-5xl items-center">
+      <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+    </div>
+  )
 
   if (isAccountsError)
     return <div className="p-8 text-red-500">Failed to load accounts</div>
