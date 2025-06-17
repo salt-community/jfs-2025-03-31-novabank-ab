@@ -16,13 +16,13 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
     console.log('Create account with:', type, currency)
     // Later: Trigger API create new account
   }
-  console.log('bankAccounts:', bankAccounts)
+  
   return (
     <div data-testid="accounts-board">
       <h1 className="text-3xl mb-10">My bank accounts</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
-          <div key={account.id}>
+          <div key={account.accountNumber}>
             <Link to="/accounts/$id" params={{ id: account.id }}>
               <AccountItem account={account} />
             </Link>
