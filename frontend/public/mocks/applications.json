@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1a2b3c4d-0001-0000-0000-000000000001",
+    "createdAt": "2025-06-15T09:12:34Z",
+    "status": "PENDING",
+    "firstName": "Alice",
+    "lastName": "Andersson",
+    "personalNumber": "850102-1234",
+    "email": "alice@example.com",
+    "phoneNumber": "+46701234567"
+  },
+  {
+    "id": "1a2b3c4d-0002-0000-0000-000000000002",
+    "createdAt": "2025-06-16T11:45:00Z",
+    "status": "PENDING",
+    "firstName": "Bertil",
+    "lastName": "Berg",
+    "personalNumber": "780501-5678",
+    "email": "bertil@example.com",
+    "phoneNumber": "+46709876543"
+  },
+  {
+    "id": "1a2b3c4d-0003-0000-0000-000000000003",
+    "createdAt": "2025-06-14T14:20:10Z",
+    "status": "APPROVED",
+    "firstName": "Carina",
+    "lastName": "Carlsson",
+    "personalNumber": "900303-4321",
+    "email": "carina@example.com",
+    "phoneNumber": "+46703451234"
+  },
+  {
+    "id": "1a2b3c4d-0004-0000-0000-000000000004",
+    "createdAt": "2025-06-13T08:05:55Z",
+    "status": "DISAPPROVED",
+    "firstName": "David",
+    "lastName": "Dahl",
+    "personalNumber": "650707-8765",
+    "email": "david@example.com",
+    "phoneNumber": "+46705678901"
+  },
+  {
+    "id": "1a2b3c4d-0005-0000-0000-000000000005",
+    "createdAt": "2025-06-16T16:30:00Z",
+    "status": "PENDING",
+    "firstName": "Eva",
+    "lastName": "Ek",
+    "personalNumber": "970101-1111",
+    "email": "eva@example.com",
+    "phoneNumber": "+46707891234"
+  }
+]
