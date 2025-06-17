@@ -29,7 +29,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Get a user", description = "Returns a user based on Clerk token userId (Requires JWT in header)")
+    @Operation(summary = "Get logged in user", description = "Returns a user based on Clerk token userId (Requires JWT in header)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
             @ApiResponse(responseCode = "404", description = "User Not Found"),
