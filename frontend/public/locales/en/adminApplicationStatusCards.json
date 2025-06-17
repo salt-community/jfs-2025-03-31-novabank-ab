@@ -1,0 +1,20 @@
+{
+  "label": {
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected"
+  },
+  "status": {
+    "pending": "Pending",
+    "Approved": "Approved",
+    "Rejected": "Rejected"
+  },
+  "boldText": {
+    "needsAttention": "needs attention",
+    "doingWell": "doing well"
+  },
+  "trend": {
+    "up": "Trending up this month",
+    "down": "Trending down this month"
+  }
+}
