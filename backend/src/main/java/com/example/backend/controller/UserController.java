@@ -3,9 +3,11 @@ package com.example.backend.controller;
 import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
 import com.example.backend.dto.userDto.request.ApplicationRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
+import com.example.backend.dto.userDto.request.UpdateUserSettingsRequestDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
+import com.example.backend.model.UserSettingsConfig;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -115,5 +117,46 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "Get user settings", description = "Retrieves the user's notification preferences and language")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved settings"),
+            @ApiResponse(responseCode = "404", description = "User or settings not found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected error")
+    })
+    @GetMapping("/settings")
+    public ResponseEntity<UserSettingsConfig> getUserSettings(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        UserSettingsConfig config = userService.getUserSettings(userId);
+        return ResponseEntity.ok(config);
+    }
+
+    @Operation(summary = "Create default user settings", description = "Creates a default version of user preferences")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully created settings"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected error")
+    })
+    @PostMapping("/settings")
+    public ResponseEntity<UserSettingsConfig> createDefaultSettings(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        UserSettingsConfig config = userService.createDefaultSettings(userId);
+        return ResponseEntity.ok(config);
+    }
+
+    @Operation(summary = "Update user settings", description = "Updates the user's notification preferences and language")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated settings"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected error")
+    })
+    @PutMapping("/settings")
+    public ResponseEntity<UserSettingsConfig> updateSettings(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+            @RequestBody UpdateUserSettingsRequestDto dto
+    ) {
+        String userId = jwt.getSubject();
+        UserSettingsConfig config = userService.updateUserSettings(userId, dto);
+        return ResponseEntity.ok(config);
+    }
 
 }
