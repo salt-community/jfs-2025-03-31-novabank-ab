@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
+import com.example.backend.dto.adminDto.response.ListUserResponseDto;
 import com.example.backend.dto.userDto.response.UserDTO;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
@@ -42,14 +43,14 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @GetMapping("/user")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
+    public ResponseEntity<ListUserResponseDto> getAllUsers() {
         List<UserDTO> dtos = userService.getAllUsers().stream()
                 .map(u -> new UserDTO(
                         u.getId().toString(),
                         u.getFirstName()
                 ))
                 .toList();
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(new ListUserResponseDto(dtos));
     }
 
     @Operation(summary = "Suspend a user by id", description = "Returns the suspended user")
