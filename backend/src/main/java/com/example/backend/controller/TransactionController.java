@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +49,10 @@ public class TransactionController {
         return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId, userId));
     }
 
+    @Operation(
+            summary = "Retrieve all transactions for a specific user",
+            description = "Returns all transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
+    )
     @GetMapping
     public ResponseEntity<List<Transaction>> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
