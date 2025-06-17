@@ -27,10 +27,10 @@ export default function   AccountItem({ account }: AccountItemProps) {
 
       <div className="flex items-center space-x-2">
         <span>
-          $
           {account.balance.toLocaleString(undefined, {
             minimumFractionDigits: 2,
           })}
+          &nbsp;SEK
         </span>
 
         <img

@@ -15,7 +15,10 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts/index'
+import { Route as AdminUsersRouteImport } from './routes/admin/users'
+import { Route as AdminTransactionsRouteImport } from './routes/admin/transactions'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
+import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AccountsIdRouteImport } from './routes/accounts/$id'
 
 const TransferRoute = TransferRouteImport.update({
@@ -48,9 +51,24 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   path: '/accounts/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
+  id: '/admin/transactions',
+  path: '/admin/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/admin/applications',
+  path: '/admin/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsIdRoute = AccountsIdRouteImport.update({
@@ -66,7 +84,10 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/accounts': typeof AccountsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -76,7 +97,10 @@ export interface FileRoutesByTo {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/accounts': typeof AccountsIndexRoute
 }
 export interface FileRoutesById {
@@ -87,7 +111,10 @@ export interface FileRoutesById {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/applications': typeof AdminApplicationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/accounts/': typeof AccountsIndexRoute
 }
 export interface FileRouteTypes {
@@ -99,7 +126,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/applications'
     | '/admin/dashboard'
+    | '/admin/transactions'
+    | '/admin/users'
     | '/accounts'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -109,7 +139,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/applications'
     | '/admin/dashboard'
+    | '/admin/transactions'
+    | '/admin/users'
     | '/accounts'
   id:
     | '__root__'
@@ -119,7 +152,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/applications'
     | '/admin/dashboard'
+    | '/admin/transactions'
+    | '/admin/users'
     | '/accounts/'
   fileRoutesById: FileRoutesById
 }
@@ -130,7 +166,10 @@ export interface RootRouteChildren {
   TransactionsRoute: typeof TransactionsRoute
   TransferRoute: typeof TransferRoute
   AccountsIdRoute: typeof AccountsIdRoute
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
@@ -178,11 +217,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/admin/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
       fullPath: '/admin/dashboard'
       preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/admin/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accounts/$id': {
@@ -202,7 +262,10 @@ const rootRouteChildren: RootRouteChildren = {
   TransactionsRoute: TransactionsRoute,
   TransferRoute: TransferRoute,
   AccountsIdRoute: AccountsIdRoute,
+  AdminApplicationsRoute: AdminApplicationsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AccountsIndexRoute: AccountsIndexRoute,
 }
 export const routeTree = rootRouteImport
