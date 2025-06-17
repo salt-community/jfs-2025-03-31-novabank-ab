@@ -14,9 +14,15 @@ const Settings = () => {
           <TabsContent value="personal">
             <h3 className="text-xl mb-2">First name:</h3>
             <input
-              className="bg-gray-200 rounded-xs p-1 w-[10vw]"
+              className="bg-gray-200 rounded-xs p-1 w-[10vw] mb-2"
               type="text"
               value={user?.firstName ?? ''}
+            ></input>
+            <h3 className="text-xl mb-2">Last name:</h3>
+            <input
+              className="bg-gray-200 rounded-xs p-1 w-[10vw] mb-2"
+              type="text"
+              value={user?.lastName ?? ''}
             ></input>
           </TabsContent>
         </div>
