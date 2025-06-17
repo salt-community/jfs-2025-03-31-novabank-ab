@@ -4,14 +4,19 @@ import { useState } from 'react'
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
   const [editingPhone, setEditingPhone] = useState<boolean>(false)
+  const [smsNotifications, setSmsNotifications] = useState(false)
+  const [emailNotifications, setEmailNotifications] = useState(false)
+  const [cardNotifications, setCardNotifications] = useState(false)
+  const [atmNotifications, setAtmNotifications] = useState(false)
+  const [depositNotifications, setDepositNotifications] = useState(false)
+  const [language, setLanguage] = useState('English')
   const { user } = useUser()
   return (
     <>
       <Tabs defaultValue="personal">
         <TabsList>
           <TabsTrigger value="personal">Personal</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="language">Language</TabsTrigger>
+          <TabsTrigger value="general">General</TabsTrigger>
         </TabsList>
         <div className="ml-5 mt-5">
           <TabsContent value="personal">
@@ -65,8 +70,70 @@ const Settings = () => {
             </div>
           </TabsContent>
         </div>
-        <TabsContent value="notifications">notifications BRO</TabsContent>
-        <TabsContent value="language">language BRO</TabsContent>
+        <TabsContent value="general">
+          <div className="flex flex-row">
+            <h3 className="text-xl mb-2 w-[15vw]">SMS notifications</h3>
+            <input
+              type="checkbox"
+              className="ml-2 mb-1"
+              checked={smsNotifications}
+              onChange={(e) => setSmsNotifications(e.target.checked)}
+            />
+          </div>
+          <div className="flex flex-row">
+            <h3 className="text-xl mb-2 w-[15vw]">Email notifications</h3>
+            <input
+              type="checkbox"
+              className="ml-2 mb-1"
+              checked={emailNotifications}
+              onChange={(e) => setEmailNotifications(e.target.checked)}
+            />
+          </div>
+          <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
+          <div className="flex flex-row">
+            <h3 className="text-xl mb-2 w-[15vw]">
+              Card transactions notifications
+            </h3>
+            <input
+              type="checkbox"
+              className="ml-2 mb-1"
+              checked={cardNotifications}
+              onChange={(e) => setCardNotifications(e.target.checked)}
+            />
+          </div>
+          <div className="flex flex-row">
+            <h3 className="text-xl mb-2 w-[15vw]">
+              ATM withdrawals notifications
+            </h3>
+            <input
+              type="checkbox"
+              className="ml-2 mb-1"
+              checked={atmNotifications}
+              onChange={(e) => setAtmNotifications(e.target.checked)}
+            />
+          </div>
+          <div className="flex flex-row">
+            <h3 className="text-xl mb-2 w-[15vw]">Deposits notifications</h3>
+            <input
+              type="checkbox"
+              className="ml-2 mb-1"
+              checked={depositNotifications}
+              onChange={(e) => setDepositNotifications(e.target.checked)}
+            />
+          </div>
+          <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
+          <div className="flex flex-row">
+            <h3 className="text-xl mb-2 w-[13vw]">Language</h3>
+            <select
+              className="w-[5vw]"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              <option value="English">English</option>
+              <option value="Swedish">Swedish</option>
+            </select>
+          </div>
+        </TabsContent>
       </Tabs>
     </>
   )
