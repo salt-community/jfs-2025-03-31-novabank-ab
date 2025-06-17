@@ -1,30 +1,34 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.BalanceUpdateRequestDto;
+import com.example.backend.dto.accountDto.request.BalanceUpdateRequestDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
+import com.example.backend.model.AccountNickname;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
+import com.example.backend.repository.AccountNicknameRepository;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AccountService {
 
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final AccountNicknameRepository accountNicknameRepository;
     private final Random random = new Random();
 
-    public AccountService(AccountRepository accountRepository,
-                          UserRepository userRepository) {
+    public AccountService(
+        AccountRepository accountRepository,
+        UserRepository userRepository,
+        AccountNicknameRepository accountNicknameRepository
+    ) {
         this.accountRepository = accountRepository;
         this.userRepository = userRepository;
+        this.accountNicknameRepository = accountNicknameRepository;
     }
 
     public Account getAccount(UUID accountId, String userId) {
@@ -65,6 +69,9 @@ public class AccountService {
 
     public void updateBalance(UUID accountId, String userId, double amount, BalanceUpdateRequestDto.UpdateType type) {
         Account account = getAccount(accountId, userId);
+        if (account.getStatus() == AccountStatus.CLOSED || account.getStatus() == AccountStatus.SUSPENDED) {
+            throw new AccountClosedException("Cannot update balance of inactive account");
+        }
 
         double newBalance = switch (type) {
             case DEPOSIT -> account.getBalance() + amount;
@@ -89,6 +96,38 @@ public class AccountService {
         Account account = getAccount(accountId, userId);
         accountRepository.delete(account);
     }
+
+    public void updateAccountNickname(String userId, UUID accountId, String name) {
+        Account account = getAccount(accountId, userId);
+        Optional<AccountNickname> pastNickname = accountNicknameRepository.findAccountNicknameByAccount_Id(accountId);
+        if (pastNickname.isPresent()) {
+            pastNickname.get().setNickname(name);
+            accountNicknameRepository.save(pastNickname.get());
+            return;
+        }
+        AccountNickname nickname = new AccountNickname(account, name);
+        accountNicknameRepository.save(nickname);
+    }
+
+    public String getAccountNickname(String userId, UUID accountId) {
+        Account account = getAccount(accountId, userId);
+        Optional<AccountNickname> nickname = accountNicknameRepository.findAccountNicknameByAccount_Id(accountId);
+        if (nickname.isEmpty()) {
+            return account.getAccountNumber();
+        }
+        return nickname.get().getNickname();
+    }
+
+    public void deleteAccountNickname(String userId, UUID accountId) {
+        Account account = getAccount(accountId, userId);
+        Optional<AccountNickname> nickname = accountNicknameRepository.findAccountNicknameByAccount_Id(accountId);
+        if (nickname.isEmpty()) {
+            throw new NicknameNotFoundException();
+        }
+        accountNicknameRepository.delete(nickname.get());
+    }
+
+    /* UTIL */
 
     private String generateUniqueAccountNumber() {
         String prefix = "1337-";

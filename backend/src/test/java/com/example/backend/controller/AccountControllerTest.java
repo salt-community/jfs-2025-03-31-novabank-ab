@@ -1,6 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CreateAccountRequestDto;
 import com.example.backend.exception.custom.AccountNotFoundException;
 import com.example.backend.exception.custom.UserUnauthorizedException;
 import com.example.backend.model.Account;

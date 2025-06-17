@@ -1,0 +1,31 @@
+type NotesProps = {
+  notes: string
+  setNotes: React.Dispatch<React.SetStateAction<string>>
+}
+
+export default function Notes({ notes, setNotes }: NotesProps) {
+  return (
+    <>
+      {/* Notes */}
+      <div className="relative w-full">
+        <textarea
+          id="notes"
+          value={notes}
+          rows={4}
+          className="peer text-black rounded px-5 pt-6 pb-2 bg-white outline outline-gray-500 focus:outline-2 focus:outline-black w-full placeholder-transparent resize-none"
+          onChange={(e) => {
+            setNotes(e.target.value)
+          }}
+        />
+        <label
+          htmlFor="notes"
+          className={`absolute left-4 px-1 bg-white transition-all duration-200
+                      ${notes ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
+                      peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
+        >
+          Notes <span className="text-xs">(optional)</span>
+        </label>
+      </div>
+    </>
+  )
+}

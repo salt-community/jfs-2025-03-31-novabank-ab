@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
-import type { CashFlowChartData } from '@/types/admin/cashFlowChartData'
+import type { GenericChartData } from '@/types/admin/inOutChartData'
 import type { ChartConfig } from '@/components/ui/chart'
 import {
   Card,
@@ -27,24 +27,25 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-const chartConfig = {
-  visitors: {
-    label: 'Visitors',
-  },
-  cash_in: {
-    label: 'Cash in',
-    color: 'gray',
-  },
-  cash_out: {
-    label: 'Cash out',
-    color: 'black',
-  },
-} satisfies ChartConfig
+type Props = {
+  data: GenericChartData
+}
 
-export function ChartAreaInteractive({ chartData }: CashFlowChartData) {
+export function ChartAreaInteractive({ data }: Props) {
   const [timeRange, setTimeRange] = React.useState('90d')
 
-  const filteredData = chartData.filter((item) => {
+  const chartConfig = {
+    value_in: {
+      label: data.in_name,
+      color: 'gray',
+    },
+    value_out: {
+      label: data.out_name,
+      color: 'black',
+    },
+  } satisfies ChartConfig
+
+  const filteredData = data.chartData.filter((item) => {
     const date = new Date(item.date)
     const referenceDate = new Date('2024-06-30')
     let daysToSubtract = 90
@@ -62,8 +63,8 @@ export function ChartAreaInteractive({ chartData }: CashFlowChartData) {
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Cash flow - Interactive</CardTitle>
-          <CardDescription>Showing total transaction traffic</CardDescription>
+          <CardTitle>{data.label}</CardTitle>
+          <CardDescription>{data.subtext}</CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger
@@ -92,27 +93,27 @@ export function ChartAreaInteractive({ chartData }: CashFlowChartData) {
         >
           <AreaChart data={filteredData}>
             <defs>
-              <linearGradient id="fillcash_in" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillvalue_in" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-cash_in)"
+                  stopColor="var(--color-value_in)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-cash_in)"
+                  stopColor="var(--color-value_in)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillcash_out" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillvalue_out" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-cash_out)"
+                  stopColor="var(--color-value_out)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-cash_out)"
+                  stopColor="var(--color-value_out)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -147,17 +148,17 @@ export function ChartAreaInteractive({ chartData }: CashFlowChartData) {
               }
             />
             <Area
-              dataKey="cash_out"
+              dataKey="value_out"
               type="natural"
-              fill="url(#fillcash_out)"
-              stroke="var(--color-cash_out)"
+              fill="url(#fillvalue_out)"
+              stroke="var(--color-value_out)"
               stackId="a"
             />
             <Area
-              dataKey="cash_in"
+              dataKey="value_in"
               type="natural"
-              fill="url(#fillcash_in)"
-              stroke="var(--color-cash_in)"
+              fill="url(#fillvalue_in)"
+              stroke="var(--color-value_in)"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />
