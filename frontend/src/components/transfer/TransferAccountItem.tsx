@@ -11,9 +11,9 @@ export default function TransferAccountItem({
 }: TransferAccountItemProps) {
   return (
     <div
-      className={` flex items-center justify-between px-4 py-3 shadow-md  duration-200
+      className={` border-1 flex items-center justify-between px-4 py-3 shadow-md bg-white duration-200
                       ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-[#FAFAFA]  cursor-pointer'}
-                      rounded-md`}
+                      rounded-lg`}
     >
       <div>
         <div>{account.type}</div>

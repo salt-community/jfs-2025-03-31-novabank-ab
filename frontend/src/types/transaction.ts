@@ -1,7 +1,12 @@
 export type Transaction = {
-  id: string
-  name: string
-  category: string
+  transactionId: string
+  fromAccount: string
+  toAccount: string
+  date: string
   amount: number
-  time: string
+  description: string
+  userNote: string
+  ocrNumber: string
+  type: string
+  status: string
 }

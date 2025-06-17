@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useGetUser, useUpdateUser } from '@/hooks'
 import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
 const Settings = () => {
@@ -11,6 +12,39 @@ const Settings = () => {
   const [depositNotifications, setDepositNotifications] = useState(false)
   const [language, setLanguage] = useState('English')
   const { user } = useUser()
+  const { data: userFromApi, isLoading, isError } = useGetUser(user?.id)
+  const [emailField, setEmailField] = useState<string>('')
+  const [phoneNumberField, setPhoneNumberField] = useState<string>('')
+  const updateUserMutation = useUpdateUser()
+
+  if (isLoading) return <div className="p-8">Loading user details...</div>
+  if (isError)
+    return <div className="p-8 text-red-500">Failed loading user details</div>
+
+  const updateUser = (whatToUpdate: string) => {
+    if (userFromApi) {
+      if (whatToUpdate === 'email') {
+        updateUserMutation.mutate({
+          email: emailField,
+          firstName: userFromApi.firstName,
+          lastName: userFromApi.lastName,
+          phoneNumber: userFromApi.phoneNumber,
+          role: 'USER',
+          status: 'ACTIVE',
+        })
+      } else if (whatToUpdate === 'phonenumber') {
+        updateUserMutation.mutate({
+          email: userFromApi.email,
+          firstName: userFromApi.firstName,
+          lastName: userFromApi.lastName,
+          phoneNumber: phoneNumberField,
+          role: 'USER',
+          status: 'ACTIVE',
+        })
+      }
+    }
+  }
+
   return (
     <>
       <Tabs defaultValue="personal">
@@ -25,28 +59,32 @@ const Settings = () => {
               readOnly
               className="bg-gray-300 rounded-xs p-1 w-[15vw] mb-2"
               type="text"
-              value={user?.firstName ?? ''}
+              value={userFromApi?.firstName ?? ''}
             ></input>
             <h3 className="text-xl mb-2">Last name:</h3>
             <input
               readOnly
               className="bg-gray-300 rounded-xs p-1 w-[15vw] mb-2"
               type="text"
-              value={user?.lastName ?? ''}
+              value={userFromApi?.lastName ?? ''}
             ></input>
             <h3 className="text-xl mb-2">Email:</h3>
             <div className="flex items-center text-center align-middle">
               <input
+                onChange={(e) => setEmailField(e.target.value)}
                 readOnly={!editingEmail}
                 className={`${editingEmail ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-[15vw] mb-2`}
                 type="text"
-                defaultValue={user?.primaryEmailAddress?.emailAddress ?? ''}
+                defaultValue={userFromApi?.email}
               ></input>
               <p
                 className="ml-2 mb-2 text-blue-500"
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
-                  setEditingEmail((prev) => !prev!)
+                  if (editingEmail) {
+                    updateUser('email')
+                  }
+                  setEditingEmail((prev) => !prev)
                 }}
               >
                 {editingEmail ? 'Save' : 'Edit'}
@@ -55,15 +93,21 @@ const Settings = () => {
             <h3 className="text-xl mb-2">Phone Number:</h3>
             <div className="flex items-center text-center align-middle">
               <input
+                onChange={(e) => setPhoneNumberField(e.target.value)}
                 readOnly={!editingPhone}
                 className={`${editingPhone ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-[15vw] mb-2`}
                 type="text"
-                defaultValue={user?.primaryPhoneNumber?.phoneNumber ?? ''}
+                defaultValue={userFromApi?.phoneNumber}
               />
               <p
                 className="ml-2 mb-2 text-blue-500"
                 style={{ cursor: 'pointer' }}
-                onClick={() => setEditingPhone((prev) => !prev)}
+                onClick={() => {
+                  if (editingPhone) {
+                    updateUser('phonenumber')
+                  }
+                  setEditingPhone((prev) => !prev)
+                }}
               >
                 {editingPhone ? 'Save' : 'Edit'}
               </p>

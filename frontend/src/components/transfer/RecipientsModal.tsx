@@ -7,7 +7,6 @@ type RecipientsModalProps = {
   sender: Account | null
   onSubmit: (recipient: Account | null | string, accNoType: string) => void
   onClose: () => void
-  accNoType: string
   setAccNoType: React.Dispatch<React.SetStateAction<string>>
   setRecipientAccount: React.Dispatch<React.SetStateAction<Account | null>>
   recipientClient: string | null
@@ -19,7 +18,6 @@ export default function RecipientsModal({
   sender,
   onSubmit,
   onClose,
-  accNoType,
   setAccNoType,
   setRecipientAccount,
   recipientClient,
@@ -30,6 +28,9 @@ export default function RecipientsModal({
   >('Saved recipients')
 
   const dialogRef = useRef<HTMLDialogElement | null>(null)
+  const [newRec, setNewRec] = useState<string | null>('')
+  const [ant, setAnt] = useState('')
+
   const [errors, setErrors] = useState<{
     accNoTypeError?: string
     recipientError?: string
@@ -45,16 +46,44 @@ export default function RecipientsModal({
     onClose()
   }
 
+  function normalizeInput(input: string): string {
+    return input
+      .replace(/[\uFF10-\uFF19]/g, (d) =>
+        String.fromCharCode(d.charCodeAt(0) - 0xff10 + 48),
+      )
+      .replace(/\uFF0D/g, '-') // Full-width hyphen to ASCII hyphen
+      .normalize('NFKC') // Unicode normalization form
+  }
+
   function isValidAccountNumber(type: string, value: string): boolean {
-    const cleaned = value.replace(/[\s-]/g, '') // remove spaces and dashes
+    const asciiValue = normalizeInput(value)
+
+    // Reject if contains spaces anywhere
+    if (/\s/.test(asciiValue)) return false
+
+    const hasHyphen = asciiValue.includes('-')
+    const cleaned = asciiValue.replace(/-/g, '')
 
     switch (type) {
       case 'Plusgiro':
-        return /^\d{2,8}$/.test(cleaned) || /^\d{2,7}-\d{1}$/.test(value) // original or hyphenated
+        if (hasHyphen) {
+          return /^\d{2,7}-\d{1}$/.test(asciiValue)
+        } else {
+          return /^\d{2,8}$/.test(cleaned)
+        }
+
       case 'Bankgiro':
-        return /^\d{7,8}$/.test(cleaned) || /^\d{3,4}-\d{4}$/.test(value)
+        if (hasHyphen) {
+          return /^\d{3,4}-\d{4}$/.test(asciiValue)
+        } else {
+          return /^\d{7,8}$/.test(cleaned)
+        }
+
       case 'Other account':
-        return /^\d{4,30}$/.test(cleaned) // Swedish bank account numbers vary greatly by bank
+        // Other accounts usually don't have hyphens
+        if (hasHyphen) return false
+        return /^\d{4,30}$/.test(cleaned)
+
       default:
         return false
     }
@@ -63,14 +92,14 @@ export default function RecipientsModal({
   function isFormValid(): boolean {
     const newErrors: typeof errors = {}
 
-    if (!accNoType) {
+    if (!ant) {
       newErrors.accNoTypeError = 'Please select an account number type'
     }
 
-    if (!recipientClient || recipientClient.trim() === '') {
+    if (!newRec || newRec.trim() === '') {
       newErrors.recipientError = 'Account number is required'
-    } else if (!isValidAccountNumber(accNoType, recipientClient.trim())) {
-      newErrors.recipientError = `Invalid ${accNoType} number`
+    } else if (!isValidAccountNumber(ant, newRec.trim())) {
+      newErrors.recipientError = `Invalid ${ant} number`
     }
 
     setErrors(newErrors)
@@ -80,18 +109,17 @@ export default function RecipientsModal({
   const handleRecipientSubmit = (account: Account | string | null) => {
     if (viewMode === 'New recipient') {
       if (!isFormValid()) return
-      const trimmed = recipientClient?.trim() || ''
+      const trimmed = newRec?.trim() || ''
       setRecipientClient(trimmed)
-      onSubmit(trimmed, accNoType)
+      setAccNoType(ant)
+      onSubmit(trimmed, ant)
     } else if (typeof account === 'object') {
       setRecipientAccount(account)
-      onSubmit(account, '')
+      onSubmit(account, 'Other account')
     }
 
     dialogRef.current?.close()
     onClose()
-
-    setAccNoType('')
   }
 
   return (
@@ -106,7 +134,7 @@ export default function RecipientsModal({
     >
       <div
         className="modal-box max-h-[90vh] bg-white rounded-lg shadow-lg relative px-6 py-8 max-w-3xl 
-                      sm:max-w-xl mx-auto text-[#141414] font-old"
+                      sm:max-w-xl text-[#141414]"
       >
         <button
           type="button"
@@ -152,32 +180,32 @@ export default function RecipientsModal({
             <div className="h-80">
               <p className="mb-4 text-xl">My bank accounts</p>
               {bankAccounts.map((account) => {
-                const isDisabled = sender?.accountNumber === account.accountNumber
+                const isDisabled =
+                  sender?.accountNumber === account.accountNumber
 
                 return (
-                  <div>
-                    <button
-                      key={account.accountNumber}
-                      type="button"
-                      onClick={() => {
-                        if (isDisabled) return
-                        handleRecipientSubmit(account)
-                      }}
-                      className={` w-full py-1 rounded 
+                  <button
+                    key={account.accountNumber}
+                    type="submit"
+                    onClick={() => {
+                      if (isDisabled) return
+                      setAccNoType('Other account')
+                      handleRecipientSubmit(account)
+                    }}
+                    className={` w-full py-1 rounded 
                     ${
                       isDisabled
                         ? ' text-gray-400 cursor-not-allowed'
                         : ' hover:cursor-pointer'
                     }`}
-                      disabled={isDisabled}
-                    >
-                      <TransferAccountItem
-                        key={account.accountNumber}
-                        account={account}
-                        isDisabled={isDisabled}
-                      />
-                    </button>
-                  </div>
+                    disabled={isDisabled}
+                  >
+                    <TransferAccountItem
+                      key={account.accountNumber}
+                      account={account}
+                      isDisabled={isDisabled}
+                    />
+                  </button>
                 )
               })}
             </div>
@@ -187,9 +215,9 @@ export default function RecipientsModal({
               <div className="relative w-full">
                 <input
                   id="newAccount"
-                  value={recipientClient || ''}
+                  value={newRec || ''}
                   type="text"
-                  onChange={(e) => setRecipientClient(e.target.value)}
+                  onChange={(e) => setNewRec(e.target.value)}
                   className={`peer hover:cursor-pointer  text-black rounded 
                         p-4 w-full text-left  bg-white outline focus:outline-2
                         ${errors.recipientError ? ' outline-red-600 focus:outline-red-600  ' : ' outline-gray-500 focus:outline-black'}
@@ -200,7 +228,7 @@ export default function RecipientsModal({
                   htmlFor="newAccount"
                   className={`absolute hover:cursor-pointer left-4 px-1  transition-all duration-200 bg-white
                         ${
-                          recipientClient
+                          newRec
                             ? '-top-2.5 text-sm text-black font-semibold'
                             : 'top-4 text-base text-gray-400 bg-transparent'
                         }
@@ -222,15 +250,13 @@ export default function RecipientsModal({
                 <select
                   id="accNoType"
                   name="accNoTypes"
-                  value={accNoType || ''}
-                  onChange={(e) => {
-                    setAccNoType(e.target.value)
-                  }}
-                  className={`peer hover:cursor-pointer rounded p-4 w-full outline outline-gray-500 
+                  value={ant || ''}
+                  onChange={(e) => setAnt(e.target.value)}
+                  className={`peer hover:cursor-pointer rounded p-4 pb-5 w-full outline outline-gray-500 
                               focus:outline-2 focus:outline-black text-left bg-white
                               ${errors.accNoTypeError ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
                               border-r-15 border-transparent
-                              ${accNoType ? ' text-black' : 'text-gray-400'}`}
+                              ${ant ? ' text-black' : 'text-gray-400'}`}
                 >
                   <option value="" className="text-gray-400">
                     Select an account number type
@@ -250,7 +276,7 @@ export default function RecipientsModal({
                   htmlFor="accNoType"
                   className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
               ${
-                accNoType
+                ant
                   ? '-top-2.5 font-semibold text-sm text-black'
                   : 'top-4 text-base text-gray-400 bg-transparent pr-20'
               }
