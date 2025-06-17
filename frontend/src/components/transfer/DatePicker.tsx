@@ -2,7 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 
 const WEEK_DAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
 
-export default function DatePicker({ onDateChange, value }: { onDateChange: (date: string | null) => void, value: string | null }) {
+export default function DatePicker({
+  onDateChange,
+  value,
+  error,
+}: {
+  onDateChange: (date: string | null) => void
+  value: string | null
+  error: string | undefined
+}) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<string | null>(value)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -92,6 +100,9 @@ export default function DatePicker({ onDateChange, value }: { onDateChange: (dat
     }
   }, [])
 
+  // Today's date in yyyy-mm-dd format
+  const todayStr = formatDate(new Date())
+
   return (
     <div ref={wrapperRef} className="relative w-full">
       {/* Fake input */}
@@ -99,7 +110,12 @@ export default function DatePicker({ onDateChange, value }: { onDateChange: (dat
         onClick={handleToggleCalendar}
         role="textbox"
         tabIndex={0}
-        className="peer flex items-center border border-gray-500 text-black rounded p-4 bg-white focus:ring-1 focus:ring-black w-full cursor-pointer relative"
+        className={`peer flex items-center border text-black rounded p-4 bg-white  w-full cursor-pointer relative
+        ${
+          error
+            ? 'border-red-600 border-0 focus:ring-red-900 focus:border-2 '
+            : 'border-gray-500 focus:ring-1 focus:ring-black'
+        }`}
       >
         <span className={selectedDate ? 'text-black' : 'text-gray-400'}>
           {selectedDate || 'yyyy-mm-dd'}
@@ -122,10 +138,11 @@ export default function DatePicker({ onDateChange, value }: { onDateChange: (dat
         className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
           ${
             selectedDate || isCalendarOpen
-              ? '-top-2.5 text-sm text-black'
+              ? '-top-2.5 text-sm text-black font-semibold'
               : 'top-4 text-base text-gray-400'
           }
-          peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-black peer-focus:bg-white
+          ${error ? ' peer-focus:text-red-600 ' : 'peer-focus:text-black'}
+          peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm peer-focus:bg-white
         `}
       >
         Transfer date
@@ -201,16 +218,20 @@ export default function DatePicker({ onDateChange, value }: { onDateChange: (dat
                   .toString()
                   .padStart(2, '0')}-${day.toString().padStart(2, '0')}`
                 const isSelected = selectedDate === formattedDate
+                const isPastDate = formattedDate < todayStr // disable past dates
 
                 return (
                   <button
                     key={day}
                     type="button"
-                    onClick={() => handleDayClick(day, true)}
-                    className={`flex items-center justify-center h-9 w-9 rounded-md cursor-pointer ${
+                    onClick={() => !isPastDate && handleDayClick(day, true)}
+                    disabled={isPastDate}
+                    className={`flex items-center justify-center h-9 w-9 rounded-md  ${
                       isSelected
                         ? 'bg-black text-white'
-                        : 'hover:bg-gray-200 text-black'
+                        : isPastDate
+                        ? 'text-gray-400 cursor-default hover:cursor-default'
+                        : 'hover:bg-gray-200 text-black cursor-pointer'
                     }`}
                     aria-current={isSelected ? 'date' : undefined}
                   >
