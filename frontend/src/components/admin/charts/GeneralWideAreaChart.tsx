@@ -31,7 +31,7 @@ type Props = {
   data: GenericChartData
 }
 
-export function ChartAreaInteractive({ data }: Props) {
+export function GeneralWideAreaChart({ data }: Props) {
   const [timeRange, setTimeRange] = React.useState('90d')
 
   const chartConfig = {

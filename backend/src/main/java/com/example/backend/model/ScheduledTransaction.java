@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,8 +21,9 @@ import java.util.UUID;
 public class ScheduledTransaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(nullable = false, updatable = false)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "VARCHAR(36)")
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
