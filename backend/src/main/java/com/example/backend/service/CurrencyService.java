@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.dto.currencyDto.request.CurrencyConversionRequestDto;
 import com.example.backend.dto.currencyDto.response.CurrencyConversionResultDto;
 import com.example.backend.dto.currencyDto.response.ExchangeRateResponseDto;
+import com.example.backend.exception.custom.CurrencyConversionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -49,13 +50,13 @@ public class CurrencyService {
     
     //TODO consider adding caching in future
     public ExchangeRateResponseDto getRateFromApi(String seriesCode) {
-
         String url = API_URL + "/swea/v1/Observations/Latest/" + seriesCode;
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Ocp-Apim-Subscription-Key", API_KEY);
-            HttpEntity<String> entity = new HttpEntity<>(headers);
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Ocp-Apim-Subscription-Key", API_KEY);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
             ResponseEntity<ExchangeRateResponseDto> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
@@ -63,12 +64,21 @@ public class CurrencyService {
                     ExchangeRateResponseDto.class
             );
 
-            return response.getBody();
+            ExchangeRateResponseDto dto = response.getBody();
 
+            if (dto == null || dto.getValue() == 0) {
+                throw new CurrencyConversionException("No valid data returned from external API for series: " + seriesCode);
+            }
+
+            return dto;
+
+        } catch (CurrencyConversionException e) {
+            throw e;
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching exchange rate from API.", e);
+            throw new CurrencyConversionException("Failed to fetch exchange rate for series: " + seriesCode, e);
         }
     }
+
 
     public ExchangeRateResponseDto getEffectiveRate(String from, String to) {
         String directCode = getCurrencyPairCode(from, to);
@@ -84,7 +94,7 @@ public class CurrencyService {
                 dto = getRateFromApi(inverseCode);
                 inverted = true;
             } catch (Exception ex) {
-                throw new RuntimeException("Could not fetch exchange rate: " + from + " to " + to);
+                throw new CurrencyConversionException("Unsupported currency par: " + from + " to " + to);
             }
         }
 
