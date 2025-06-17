@@ -34,6 +34,7 @@ public class ScheduledTransaction {
     private Account toAccount;
     @Column
     private String recipientNumber;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentType type;
     @Column(nullable = false)
