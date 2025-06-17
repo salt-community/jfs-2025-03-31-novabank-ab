@@ -25,7 +25,4 @@ public class Currency {
     @Enumerated(EnumType.STRING)
     private CurrencyAbbrevation abbrevation;
 
-    @OneToMany
-    @JoinColumn(name = "account_id")
-    private List<Account> accounts;
 }

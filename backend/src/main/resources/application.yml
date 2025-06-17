@@ -10,7 +10,6 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    ## lägg till liknande i .env SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/novabank
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
@@ -18,7 +17,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
