@@ -29,7 +29,7 @@ export async function approveApplication(token: string, id: string) {
 }
 
 export async function rejectApplication(token: string, id: string) {
-  const res = await fetch(`${API}admin/application/${id}?status=REJECTED`, {
+  const res = await fetch(`${API}admin/application/${id}?status=DISAPPROVED`, {
     method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,

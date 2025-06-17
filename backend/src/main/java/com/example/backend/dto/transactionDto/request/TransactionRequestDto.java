@@ -13,7 +13,6 @@ public record TransactionRequestDto(
         @NotNull
         String fromAccountNo,
         String toAccountNo,
-        String recipientNumber,
         @NotNull
         PaymentType type,
         @NotNull

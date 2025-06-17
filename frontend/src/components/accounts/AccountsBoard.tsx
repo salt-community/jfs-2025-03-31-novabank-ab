@@ -4,6 +4,7 @@ import AccountItem from './AccountItem'
 import NewAccountModal from './NewAccountModal'
 import type { Account } from '@/types'
 import { useState } from 'react'
+import { useCreateAccount } from '@/hooks'
 
 type AccountsBoardProps = {
   bankAccounts: Array<Account>
@@ -11,12 +12,27 @@ type AccountsBoardProps = {
 
 export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   const [showModal, setShowModal] = useState(false)
+  const createAccount = useCreateAccount()
 
   const handleModalSubmit = (type: string, currency: string) => {
     console.log('Create account with:', type, currency)
-    // Later: Trigger API create new account
+
+    createAccount.mutate(
+      {
+        type,
+        currency,
+      },
+      {
+        onSuccess: () => {
+          alert('Account created')
+          setShowModal(false)
+        },
+        onError: () => {
+          alert('NO ACCOUNT CREATED')
+        },
+      },
+    )
   }
-  
   return (
     <div data-testid="accounts-board">
       <h1 className="text-3xl mb-10">My bank accounts</h1>
