@@ -19,7 +19,7 @@ export async function getApplications(token: string): Promise<Application[]> {
 
 export async function approveApplication(token: string, id: string) {
   const res = await fetch(`${API}admin/application/${id}?status=APPROVED`, {
-    method: 'POST',
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export async function approveApplication(token: string, id: string) {
 
 export async function rejectApplication(token: string, id: string) {
   const res = await fetch(`${API}admin/application/${id}?status=REJECTED`, {
-    method: 'POST',
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
