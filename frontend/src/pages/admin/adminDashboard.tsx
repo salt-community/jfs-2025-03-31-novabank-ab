@@ -1,6 +1,6 @@
+import ApplicantStatusCards from '@/components/admin/ApplicantStatusCards'
 import ActiveUsersAreaChart from '@/components/admin/charts/ActiveUsersAreaChart'
 import CashFlowAreaChart from '@/components/admin/charts/CashFlowAreaChart'
-import SectionCard from '@/components/admin/SectionCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function AdminDashboard() {
@@ -18,27 +18,7 @@ export default function AdminDashboard() {
           <CashFlowAreaChart />
         </TabsContent>
       </Tabs>
-
-      <div className="grid grid-cols-3 gap-4">
-        <SectionCard
-          label="New Customers"
-          value="4440"
-          trajectory="-13%"
-          fineText="Acqusition needs attention"
-        />
-        <SectionCard
-          label="New Customers"
-          value="4440"
-          trajectory="-13%"
-          fineText="Acqusition needs attention"
-        />
-        <SectionCard
-          label="New Customers"
-          value="4440"
-          trajectory="-13%"
-          fineText="Acqusition needs attention"
-        />
-      </div>
+      <ApplicantStatusCards />
     </div>
   )
 }
