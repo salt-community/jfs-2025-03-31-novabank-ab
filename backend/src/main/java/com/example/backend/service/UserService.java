@@ -104,6 +104,12 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
 
+        if (dto.firstName() != null) {
+            user.setFirstName(dto.firstName());
+        }
+        if (dto.lastName() != null) {
+            user.setLastName(dto.lastName());
+        }
         if (dto.email() != null) {
             user.setEmail(dto.email());
         }
