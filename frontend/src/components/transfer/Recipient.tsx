@@ -22,7 +22,7 @@ export default function Recipient({
   setRecipientClient,
   setAccNoType,
 }: RecipientProps) {
-  const { data: bankAccounts = [], isLoading, isError } = useAccounts()
+  const { data: bankAccounts = [], isError } = useAccounts()
   const [showRecipientsModal, setShowRecipientsModal] = useState(false)
 
   const handleClearRecipient = () => {
