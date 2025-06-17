@@ -3,6 +3,7 @@ import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
+  const [editingPhone, setEditingPhone] = useState<boolean>(false)
   const { user } = useUser()
   return (
     <>
@@ -17,14 +18,14 @@ const Settings = () => {
             <h3 className="text-xl mb-2">First name:</h3>
             <input
               readOnly
-              className="bg-gray-200 rounded-xs p-1 w-[15vw] mb-2"
+              className="bg-gray-300 rounded-xs p-1 w-[15vw] mb-2"
               type="text"
               value={user?.firstName ?? ''}
             ></input>
             <h3 className="text-xl mb-2">Last name:</h3>
             <input
               readOnly
-              className="bg-gray-200 rounded-xs p-1 w-[15vw] mb-2"
+              className="bg-gray-300 rounded-xs p-1 w-[15vw] mb-2"
               type="text"
               value={user?.lastName ?? ''}
             ></input>
@@ -32,7 +33,7 @@ const Settings = () => {
             <div className="flex items-center text-center align-middle">
               <input
                 readOnly={!editingEmail}
-                className={`${editingEmail ? `bg-gray-100` : `bg-gray-200`} rounded-xs p-1 w-[15vw] mb-2`}
+                className={`${editingEmail ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-[15vw] mb-2`}
                 type="text"
                 defaultValue={user?.primaryEmailAddress?.emailAddress ?? ''}
               ></input>
@@ -47,11 +48,21 @@ const Settings = () => {
               </p>
             </div>
             <h3 className="text-xl mb-2">Phone Number:</h3>
-            <input
-              className="bg-gray-200 rounded-xs p-1 w-[15vw] mb-2"
-              type="text"
-              defaultValue={user?.primaryPhoneNumber?.phoneNumber ?? ''}
-            ></input>
+            <div className="flex items-center text-center align-middle">
+              <input
+                readOnly={!editingPhone}
+                className={`${editingPhone ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-[15vw] mb-2`}
+                type="text"
+                defaultValue={user?.primaryPhoneNumber?.phoneNumber ?? ''}
+              />
+              <p
+                className="ml-2 mb-2 text-blue-500"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setEditingPhone((prev) => !prev)}
+              >
+                {editingPhone ? 'Save' : 'Edit'}
+              </p>
+            </div>
           </TabsContent>
         </div>
         <TabsContent value="notifications">notifications BRO</TabsContent>
