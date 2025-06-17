@@ -2,7 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
-import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
@@ -136,24 +136,11 @@ public class TransactionService {
         accountRepository.save(from);
     }
 
-    public UnifiedTransactionDto getTransaction(UUID transactionId, String userId) {
-        String transactionType = "COMPLETED";
-        String scheduledTransactionType = "SCHEDULED";
+    public UnifiedTransactionResponseDto getTransaction(UUID transactionId, String userId) {
         Optional<Transaction> transactionOptional = transactionRepository.findById(transactionId);
         if (transactionOptional.isPresent()) {
             Transaction transaction = authorizeTransactionAccess(transactionOptional.get(), userId);
-            return new UnifiedTransactionDto(
-                    transaction.getId(),
-                    transaction.getFromAccount().getId(),
-                    transaction.getToAccount() != null ? transaction.getToAccount().getId() : null,
-                    transaction.getCreatedAt(),
-                    transaction.getAmount(),
-                    transaction.getDescription(),
-                    transaction.getUserNote(),
-                    transaction.getOcrNumber(),
-                    transactionType,
-                    null
-            );
+            return UnifiedTransactionResponseDto.fromTransaction(transaction);
         }
 
         Optional<ScheduledTransaction> scheduledTransactionOptional = scheduledTransactionRepository.findById(transactionId);
@@ -162,18 +149,7 @@ public class TransactionService {
             if (!Objects.equals(scheduledTransaction.getFromAccount().getUser().getId(), userId)) {
                 throw new UserUnauthorizedException("User not authorized to access this transaction");
             }
-            return new UnifiedTransactionDto(
-                    scheduledTransaction.getId(),
-                    scheduledTransaction.getFromAccount().getId(),
-                    scheduledTransaction.getToAccount() != null ? scheduledTransaction.getToAccount().getId() : null,
-                    scheduledTransaction.getScheduledDate(),
-                    scheduledTransaction.getAmount(),
-                    scheduledTransaction.getDescription(),
-                    scheduledTransaction.getUserNote(),
-                    scheduledTransaction.getOcrNumber(),
-                    scheduledTransactionType,
-                    scheduledTransaction.getStatus()
-            );
+            return UnifiedTransactionResponseDto.fromScheduledTransaction(scheduledTransaction);
         }
 
         throw new TransactionNotFoundException();
