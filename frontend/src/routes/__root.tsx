@@ -1,18 +1,19 @@
 import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
-import { SignedIn, SignedOut } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
 import Header from '@/components/generic/Header'
 import SideBar from '@/components/generic/SideBar'
 
 export const Route = createRootRoute({
   component: () => {
     const { location } = useRouterState()
+    const { user } = useUser()
     const isIndex = location.pathname === '/'
-
+    const isAdmin = user?.publicMetadata?.role === 'admin'
     return (
-      <div className="flex h-screen ">
+      <div className="flex min-h-screen font-quicksand">
         <SignedIn>
           <aside className="w-1/5 h-screen">
-            <SideBar />
+            <SideBar admin={isAdmin} />
           </aside>
           <main className="flex-1 my-20 mx-30 h-full bg-white text-black">
             <Outlet />
@@ -29,8 +30,8 @@ export const Route = createRootRoute({
             ) : (
               <>
                 <Header />
-                <div className="flex justify-center bg-white mt-40 text-4xl">
-                  <h1 style={{ fontFamily: "'Lato', sans-serif" }}>
+                <div className="flex justify-center mx-auto w-full text-center bg-white mt-40 text-4xl">
+                  <h1 className="" style={{ fontFamily: "'Lato', sans-serif" }}>
                     Please sign in to access this page
                   </h1>
                 </div>

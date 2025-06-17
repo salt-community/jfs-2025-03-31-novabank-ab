@@ -17,6 +17,10 @@ import { Route as SettingsImport } from './routes/settings'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as AccountsIndexImport } from './routes/accounts/index'
+import { Route as AdminUsersImport } from './routes/admin/users'
+import { Route as AdminTransactionsImport } from './routes/admin/transactions'
+import { Route as AdminDashboardImport } from './routes/admin/dashboard'
+import { Route as AdminApplicationsImport } from './routes/admin/applications'
 import { Route as AccountsIdImport } from './routes/accounts/$id'
 
 // Create/Update Routes
@@ -54,6 +58,30 @@ const IndexRoute = IndexImport.update({
 const AccountsIndexRoute = AccountsIndexImport.update({
   id: '/accounts/',
   path: '/accounts/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminUsersRoute = AdminUsersImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminTransactionsRoute = AdminTransactionsImport.update({
+  id: '/admin/transactions',
+  path: '/admin/transactions',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminDashboardRoute = AdminDashboardImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminApplicationsRoute = AdminApplicationsImport.update({
+  id: '/admin/applications',
+  path: '/admin/applications',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -109,6 +137,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsIdImport
       parentRoute: typeof rootRoute
     }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/admin/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/transactions': {
+      id: '/admin/transactions'
+      path: '/admin/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AdminTransactionsImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersImport
+      parentRoute: typeof rootRoute
+    }
     '/accounts/': {
       id: '/accounts/'
       path: '/accounts'
@@ -128,6 +184,10 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/accounts': typeof AccountsIndexRoute
 }
 
@@ -138,6 +198,10 @@ export interface FileRoutesByTo {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/accounts': typeof AccountsIndexRoute
 }
 
@@ -149,6 +213,10 @@ export interface FileRoutesById {
   '/transactions': typeof TransactionsRoute
   '/transfer': typeof TransferRoute
   '/accounts/$id': typeof AccountsIdRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/transactions': typeof AdminTransactionsRoute
+  '/admin/users': typeof AdminUsersRoute
   '/accounts/': typeof AccountsIndexRoute
 }
 
@@ -161,6 +229,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/applications'
+    | '/admin/dashboard'
+    | '/admin/transactions'
+    | '/admin/users'
     | '/accounts'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -170,6 +242,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/applications'
+    | '/admin/dashboard'
+    | '/admin/transactions'
+    | '/admin/users'
     | '/accounts'
   id:
     | '__root__'
@@ -179,6 +255,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/transfer'
     | '/accounts/$id'
+    | '/admin/applications'
+    | '/admin/dashboard'
+    | '/admin/transactions'
+    | '/admin/users'
     | '/accounts/'
   fileRoutesById: FileRoutesById
 }
@@ -190,6 +270,10 @@ export interface RootRouteChildren {
   TransactionsRoute: typeof TransactionsRoute
   TransferRoute: typeof TransferRoute
   AccountsIdRoute: typeof AccountsIdRoute
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminTransactionsRoute: typeof AdminTransactionsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
 }
 
@@ -200,6 +284,10 @@ const rootRouteChildren: RootRouteChildren = {
   TransactionsRoute: TransactionsRoute,
   TransferRoute: TransferRoute,
   AccountsIdRoute: AccountsIdRoute,
+  AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  AdminTransactionsRoute: AdminTransactionsRoute,
+  AdminUsersRoute: AdminUsersRoute,
   AccountsIndexRoute: AccountsIndexRoute,
 }
 
@@ -219,6 +307,10 @@ export const routeTree = rootRoute
         "/transactions",
         "/transfer",
         "/accounts/$id",
+        "/admin/applications",
+        "/admin/dashboard",
+        "/admin/transactions",
+        "/admin/users",
         "/accounts/"
       ]
     },
@@ -239,6 +331,18 @@ export const routeTree = rootRoute
     },
     "/accounts/$id": {
       "filePath": "accounts/$id.tsx"
+    },
+    "/admin/applications": {
+      "filePath": "admin/applications.tsx"
+    },
+    "/admin/dashboard": {
+      "filePath": "admin/dashboard.tsx"
+    },
+    "/admin/transactions": {
+      "filePath": "admin/transactions.tsx"
+    },
+    "/admin/users": {
+      "filePath": "admin/users.tsx"
     },
     "/accounts/": {
       "filePath": "accounts/index.tsx"

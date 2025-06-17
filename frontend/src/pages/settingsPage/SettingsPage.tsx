@@ -1,9 +1,11 @@
-import { UserButton } from '@clerk/clerk-react'
+import Settings from '@/components/settings/Settings'
+// import { UserButton } from '@clerk/clerk-react'
 
 export default function SettingsPage() {
   return (
     <>
-      <UserButton />
+      <h1 className="text-3xl mb-10">Settings</h1>
+      <Settings></Settings>
     </>
   )
 }
