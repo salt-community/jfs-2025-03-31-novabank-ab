@@ -54,8 +54,8 @@ public class TransactionController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
                     @ApiResponse(responseCode = "400", description = "Invalid input data"),
-                    @ApiResponse(responseCode = "404", description = "Account not found"),
-                    @ApiResponse(responseCode = "403", description = "One of the account is not active")
+                    @ApiResponse(responseCode = "403", description = "One of the account is not active"),
+                    @ApiResponse(responseCode = "404", description = "Account not found")
             }
     )
     @PostMapping
@@ -65,8 +65,6 @@ public class TransactionController {
         return ResponseEntity.ok().build();
     }
 
-
-    // TODO: Remove accountId and Change to set Status.CANCELED instead of Delete
     @Operation(
             summary = "Cancel a scheduled transaction",
             description = "Deletes (cancels) a specific scheduled transaction for the given account.",
@@ -75,55 +73,10 @@ public class TransactionController {
                     @ApiResponse(responseCode = "403", description = "Transaction does not belong to the given account"),
                     @ApiResponse(responseCode = "404", description = "Account or scheduled transaction not found")}
     )
-    @DeleteMapping("/cancel-scheduled/{accountId}/{transactionId}")
-    public ResponseEntity<Void> deleteScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId,@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    @DeleteMapping("/cancel-scheduled/{transactionId}")
+    public ResponseEntity<Void> deleteScheduledTransaction( @PathVariable UUID transactionId,@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        transactionService.deleteScheduledTransaction(accountId, transactionId,userId);
+        transactionService.deleteScheduledTransaction(transactionId,userId);
         return ResponseEntity.noContent().build();
     }
-
-     /*  @Operation(
-            summary = "Create a scheduled transaction",
-            description = "Adds a new scheduled (future-dated) transaction to the system based on the provided request data.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Scheduled transaction successfully created"),
-                    @ApiResponse(responseCode = "400", description = "Invalid input data"),
-                    @ApiResponse(responseCode = "404", description = "Account not found"),
-                    @ApiResponse(responseCode = "403", description = "One of the account is not active")
-            }
-    )
-    @PostMapping("/create-scheduled")
-    public ResponseEntity<?> addScheduledTransaction(@RequestBody ScheduledRequestDto dto) {
-//        transactionService.addScheduledTransaction(UUID.fromString(accountId),dto);
-        return ResponseEntity.ok().build();
-    }*/
-
-   /* @Operation(
-            summary = "Get a specific scheduled transaction",
-            description = "Retrieves details of a specific scheduled transaction for the given account.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "Scheduled transaction retrieved successfully"),
-                    @ApiResponse(responseCode = "403", description = "Transaction does not belong to the given account"),
-                    @ApiResponse(responseCode = "404", description = "Account or scheduled transaction not found")
-            }
-
-    )
-    @GetMapping("/scheduled-transaction/{accountId}/{transactionId}")
-    public ResponseEntity<?> getScheduledTransaction(@PathVariable UUID accountId, @PathVariable UUID transactionId) {
-        return ResponseEntity.ok(transactionService.getScheduledTransaction(accountId, transactionId,"mock"));
-    }*/
-
-  /*  @Operation(
-            summary = "Get all scheduled transactions for an account",
-            description = "Fetches a list of all scheduled transactions belonging to the given account.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "List of scheduled transactions retrieved successfully"),
-                    @ApiResponse(responseCode = "404", description = "Account not found")
-            }
-    )
-    @GetMapping("scheduled-transactions/{accountId}")
-    public ResponseEntity<?> getScheduledTransactions(@PathVariable String accountId) {
-        return ResponseEntity.ok().body(transactionService.getScheduledTransactions(UUID.fromString(accountId)));
-    }*/
-
 }

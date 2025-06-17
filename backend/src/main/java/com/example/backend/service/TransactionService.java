@@ -186,10 +186,8 @@ public class TransactionService {
         return new CombinedTransactionResponseDto(transactions, scheduledTransactions);
     }
 
-    public void deleteScheduledTransaction(UUID accountId, UUID transactionId, String userId) {
-        accountRepository.findById(accountId).orElseThrow(AccountNotFoundException::new);
+    public void deleteScheduledTransaction( UUID transactionId, String userId) {
         ScheduledTransaction transaction = scheduledTransactionRepository.findById(transactionId).orElseThrow(TransactionNotFoundException::new);
-
         if (!Objects.equals(transaction.getFromAccount().getUser().getId(), userId)) {
             throw new UserUnauthorizedException("User not authorized to delete this scheduled transaction");
         }
