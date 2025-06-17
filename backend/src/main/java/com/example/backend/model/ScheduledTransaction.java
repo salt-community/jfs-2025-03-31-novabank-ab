@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.model.enums.PaymentType;
 import com.example.backend.model.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,10 @@ public class ScheduledTransaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id", nullable = false)
     private Account toAccount;
+    @Column
+    private String recipientNumber;
+    @Column(nullable = false)
+    private PaymentType type;
     @Column(nullable = false)
     private double amount;
     @Column(nullable = false)
