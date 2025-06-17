@@ -2,7 +2,6 @@ package com.example.backend.exception;
 
 import com.example.backend.exception.custom.*;
 import com.example.backend.exception.dto.ErrorResponseDto;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -92,6 +91,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NicknameNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleNicknameNotFound(NicknameNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SettingsConfigNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleSettingsConfigNotFound(SettingsConfigNotFoundException e) {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
