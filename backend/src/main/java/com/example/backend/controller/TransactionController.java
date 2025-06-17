@@ -46,7 +46,7 @@ public class TransactionController {
     public ResponseEntity<CombinedTransactionResponseDto> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
                                                                              @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId, userId));
+        return ResponseEntity.ok().body(transactionService.getAllTransactionsByAccount(accountId, userId));
     }
 
     @Operation(

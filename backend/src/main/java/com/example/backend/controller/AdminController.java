@@ -1,13 +1,14 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.service.AccountService;
+import com.example.backend.service.TransactionService;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,10 +34,12 @@ public class AdminController {
 
     private final UserService userService;
     private final AccountService accountService;
+    private final TransactionService transactionService;
 
-    public AdminController(UserService userService, AccountService accountService) {
+    public AdminController(UserService userService, AccountService accountService, TransactionService transactionService) {
         this.userService = userService;
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     @Operation(summary = "Get all users", description = "Returns a list of all users")
@@ -135,4 +138,8 @@ public class AdminController {
         return ResponseEntity.ok(application);
     }
 
+    @GetMapping("/transaction-history")
+    public ResponseEntity<List<UnifiedTransactionDto>> getTransactionHistory() {
+        return ResponseEntity.ok(transactionService.getAllTransactionHistory());
+    }
 }

@@ -179,7 +179,7 @@ public class TransactionService {
         throw new TransactionNotFoundException();
     }
 
-    public CombinedTransactionResponseDto getAllTransactions(UUID accountId, String userId) {
+    public CombinedTransactionResponseDto getAllTransactionsByAccount(UUID accountId, String userId) {
         Account account = accountService.getAccount(accountId, userId);
         List<Transaction> transactions = transactionRepository.findByFromAccount_IdOrToAccount_Id(account.getId(), account.getId());
         List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findByFromAccount_Id(account.getId());
@@ -261,4 +261,21 @@ public class TransactionService {
     }
 
     private record TransactionData(Account from, Account to, String recipientNumber) {}
+
+    public List<UnifiedTransactionDto> getAllTransactionHistory() {
+        return transactionRepository.findAll().stream()
+                .map(tx -> new UnifiedTransactionDto(
+                        tx.getId(),
+                        tx.getFromAccount().getId(),
+                        tx.getToAccount() != null ? tx.getToAccount().getId() : null,
+                        tx.getCreatedAt(),
+                        tx.getAmount(),
+                        tx.getDescription(),
+                        tx.getUserNote(),
+                        tx.getOcrNumber(),
+                        "COMPLETED",
+                        null
+                ))
+                .toList();
+    }
 }
