@@ -2,7 +2,6 @@ package com.example.backend.exception;
 
 import com.example.backend.exception.custom.*;
 import com.example.backend.exception.dto.ErrorResponseDto;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -94,4 +93,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleNicknameNotFound(NicknameNotFoundException e) {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CurrencyConversionException.class)
+    public ResponseEntity<ErrorResponseDto> handleCurrencyConversion(CurrencyConversionException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
