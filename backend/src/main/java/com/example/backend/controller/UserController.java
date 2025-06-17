@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping({"/api/user", "/api/user/"})
@@ -49,8 +48,8 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "User already exists"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
-    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
     public ResponseEntity<Void> addUserFromApplication(@RequestBody AddNewUserRequestDto dto,
                                                        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         User created = userService.addUser(dto.applicationId());
@@ -101,17 +100,20 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @Operation(summary = "Get a application by id", description = "Returns the application")
+    @Operation(summary = "Delete a user by id (Requires ADMIN)", description = "Deletes the user from database")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
-            @ApiResponse(responseCode = "404", description = "Application Not Found"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+            @ApiResponse(responseCode = "204", description = "Successfully deleted User"),
+            @ApiResponse(responseCode = "404", description = "User Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
-    @GetMapping("/application/{applicationId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Application> getApplicationById(@PathVariable UUID applicationId) {
-        Application application = userService.getApplicationById(applicationId);
-        return ResponseEntity.ok(application);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(
+            @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
+    ) {
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
     }
+
 
 }
