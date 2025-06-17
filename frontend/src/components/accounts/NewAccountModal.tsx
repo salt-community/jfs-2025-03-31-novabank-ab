@@ -20,10 +20,6 @@ export default function NewAccountModal({
     accountType?: string
     currency?: string
   }>({})
-  const [errors, setErrors] = useState<{
-    accountType?: string
-    currency?: string
-  }>({})
 
   useEffect(() => {
     dialogRef.current?.showModal()
@@ -87,14 +83,12 @@ export default function NewAccountModal({
               <option value="" className="text-gray-400">
                 Select an account type
               </option>
-              <option className="text-black" value="Savings">
+              <option className="text-black" value="SAVINGS">
                 Savings
               </option>
-              <option className="text-black" value="Personal">
+              <option className="text-black" value="PERSONAL">
                 Personal
               </option>
-              <option value="SAVINGS">Savings</option>
-              <option value="PERSONAL">Personal</option>
             </select>
             <label
               htmlFor="accountType"
