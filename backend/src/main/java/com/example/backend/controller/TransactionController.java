@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
+import com.example.backend.model.Transaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,22 +43,18 @@ public class TransactionController {
             summary = "Retrieve all transactions for a specific account",
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
-    @GetMapping("/{accountId}/transaction-history")
+    @GetMapping("/{accountId}")
     public ResponseEntity<CombinedTransactionResponseDto> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
                                                                              @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId, userId));
     }
 
-    @GetMapping("/all-transactions")
-    public ResponseEntity<List<UnifiedTransactionDto>> getAllTransactionsHistory(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    @GetMapping
+    public ResponseEntity<List<Transaction>> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        List<UnifiedTransactionDto> list = transactionService.getTransactionHistory(userId);
-
-        return ResponseEntity.ok().body("Hello");
+        return ResponseEntity.ok().body(transactionService.getTransactionsByUser(userId));
     }
-
-
 
     @Operation(
             summary = "Create a new transaction",

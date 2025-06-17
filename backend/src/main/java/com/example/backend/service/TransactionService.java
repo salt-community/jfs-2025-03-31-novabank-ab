@@ -252,5 +252,13 @@ public class TransactionService {
                 || (tx.getToAccount() != null && Objects.equals(tx.getToAccount().getUser().getId(), userId));
     }
 
+    public List<Transaction> getTransactionsByUser(String userId) {
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        return accounts.stream()
+                .map(account -> transactionRepository.findByFromAccount_IdOrToAccount_Id(account.getId(), account.getId()))
+                .flatMap(List::stream)
+                .toList();
+    }
+
     private record TransactionData(Account from, Account to, String recipientNumber) {}
 }
