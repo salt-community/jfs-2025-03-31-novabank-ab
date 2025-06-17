@@ -3,16 +3,16 @@ import type { Application } from '@/types/Application'
 const API = import.meta.env.VITE_API_URL
 
 export async function getApplications(token: string): Promise<Application[]> {
-  //   const res = await fetch(`${API}/api/admin/application`, {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  const res = await fetch('/mocks/applications.json', {
-    method: 'GET',
-  })
+    const res = await fetch(`${API}/api/admin/application`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+  // const res = await fetch('/mocks/applications.json', {
+  //   method: 'GET',
+  // })
   if (!res.ok) throw new Error(`Fetch failed: ${res.status}`)
   return res.json()
 }

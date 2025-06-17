@@ -57,7 +57,7 @@ export default function TransferForm() {
 
     if (isSameDay(selectedDate, now)) {
       // Immediate transaction (transfer today)
-      const transactionPayload = {
+      /*       const transactionPayload = {
         toAccountNo: recipientAccount?.accountNumber ?? recipientClient,
         fromAccountNo: sender?.accountNumber ?? '',
         timestamp: new Date().toISOString(), // actual current timestamp for immediate transfer
@@ -65,13 +65,12 @@ export default function TransferForm() {
         description: notes || '', //what is description???
         OCR: ocr || '',
         userNote: notes || '',
-      }
-
+      } */
       // Send transactionPayload to immediate transaction API endpoint
       //console.log('Send immediate transaction:', transactionPayload)
     } else {
       // Scheduled transaction (transfer future date)
-      const scheduledPayload = {
+      /*      const scheduledPayload = {
         toAccountNo: recipientAccount?.accountNumber ?? recipientClient,
         fromAccountNo: sender?.accountNumber ?? '',
         scheduledTime: selectedDate.toISOString(), // scheduled transfer time
@@ -80,8 +79,7 @@ export default function TransferForm() {
         createdAt: new Date().toISOString(), // current timestamp for creation
         OCR: ocr || '',
         userNote: notes || '',
-      }
-
+      } */
       // Send scheduledPayload to scheduled transaction API endpoint
       //console.log('Send scheduled transaction:', scheduledPayload)
     }

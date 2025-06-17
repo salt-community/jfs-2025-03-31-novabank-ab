@@ -42,7 +42,9 @@ export default function AdminApplicationsPage() {
           <label className="mr-2 font-medium">Show:</label>
           <select
             value={filter}
-            onChange={(e) => setFilter(e.target.value as any)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setFilter(e.target.value as 'ALL' | ApplicationStatus)
+            }
             className="px-2 py-1 border rounded"
           >
             {STATUS_OPTIONS.map((s) => (
