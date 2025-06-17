@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
 import com.example.backend.dto.userDto.request.ApplicationRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
+import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.service.UserService;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping({"/api/user", "/api/user/"})
@@ -36,10 +36,10 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @GetMapping
-    public ResponseEntity<User> getUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<UserResponseDTO> getUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         User user = userService.getUser(userId);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(user));
     }
 
     @Operation(summary = "Create new User", description = "Returns User location in header")
@@ -65,11 +65,11 @@ public class UserController {
     })
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> getUser(
+    public ResponseEntity<UserResponseDTO> getUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
     ) {
         User user = userService.getUser(userId);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(user));
     }
 
     @Operation(summary = "Update user", description = "Returns the updated user (Requires JWT in header)")
@@ -79,13 +79,13 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @PutMapping
-    public ResponseEntity<User> updateUser(
+    public ResponseEntity<UserResponseDTO> updateUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestBody UpdateUserRequestDto dto
     ) {
         String userId = jwt.getSubject();
         User updatedUser = userService.updateUser(userId, dto);
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(updatedUser));
     }
 
     @Operation(summary = "Create register application", description = "Returns the location of the application")

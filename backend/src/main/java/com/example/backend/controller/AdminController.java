@@ -1,7 +1,8 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
-import com.example.backend.dto.userDto.response.UserDTO;
+import com.example.backend.dto.adminDto.response.ListUserResponseDto;
+import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
@@ -44,14 +45,11 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @GetMapping("/user")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> dtos = userService.getAllUsers().stream()
-                .map(u -> new UserDTO(
-                        u.getId(),
-                        u.getFirstName()
-                ))
+    public ResponseEntity<ListUserResponseDto> getAllUsers() {
+        List<UserResponseDTO> dtos = userService.getAllUsers().stream()
+                .map(UserResponseDTO::fromUser)
                 .toList();
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(new ListUserResponseDto(dtos));
     }
 
     @Operation(summary = "Change user status", description = "Activate or suspend a user based on action query parameter")
@@ -62,7 +60,7 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PatchMapping("/user/{userId}/status")
-    public ResponseEntity<User> updateUserStatus(
+    public ResponseEntity<UserResponseDTO> updateUserStatus(
             @Parameter(name = "userId", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp")
             @PathVariable String userId,
             @Parameter(
@@ -80,7 +78,7 @@ public class AdminController {
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid action: " + action);
         }
 
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(updatedUser));
     }
 
     @Operation(summary = "Change account status", description = "Activate or suspend an account based on query parameter")
