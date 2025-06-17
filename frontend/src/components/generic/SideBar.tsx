@@ -152,7 +152,9 @@ export default function SideBar({ admin }: Props) {
               : ''
           }`}
         >
-          <img src={isActive('/') ? yellowaccounticon : accounticon} />
+          <img
+            src={isActive('/admin/users') ? yellowaccounticon : accounticon}
+          />
           {t('admin.users')}
         </a>
 

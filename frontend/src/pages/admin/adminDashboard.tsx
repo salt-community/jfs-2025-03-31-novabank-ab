@@ -1,4 +1,4 @@
-import { ChartAreaInteractive } from '@/components/admin/chart-area-interactive'
+import { GeneralWideAreaChart } from '@/components/admin/GeneralWideAreaChart'
 import SectionCard from '@/components/admin/SectionCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { GenericChartData } from '@/types/admin/inOutChartData'
@@ -151,10 +151,10 @@ export default function AdminDashboard() {
           <TabsTrigger value="activeUsers">Active Users</TabsTrigger>
         </TabsList>
         <TabsContent value="activeUsers">
-          <ChartAreaInteractive data={fakeActiveUsers} />
+          <GeneralWideAreaChart data={fakeActiveUsers} />
         </TabsContent>
         <TabsContent value="cashFlow">
-          <ChartAreaInteractive data={fakeCashFlow} />
+          <GeneralWideAreaChart data={fakeCashFlow} />
         </TabsContent>
       </Tabs>
 
