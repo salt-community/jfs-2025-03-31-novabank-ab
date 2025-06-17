@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -11,10 +13,9 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   datasource:
     driver-class-name: org.h2.Driver
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    initialization-mode: always
+    url: ${SPRING_DATASOURCE_URL_DEV}
+    username: ${SPRING_DATASOURCE_USERNAME_DEV}
+    password: ${SPRING_DATASOURCE_PASSWORD_DEV}
   h2:
     console:
       enabled: true
