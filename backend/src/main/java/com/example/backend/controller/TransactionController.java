@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -42,11 +43,21 @@ public class TransactionController {
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
     @GetMapping("/{accountId}/transaction-history")
-    public ResponseEntity<CombinedTransactionResponseDto> getAllTransactions(@PathVariable UUID accountId,
+    public ResponseEntity<CombinedTransactionResponseDto> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
                                                                              @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getAllTransactions(accountId, userId));
     }
+
+    @GetMapping("/all-transactions")
+    public ResponseEntity<List<UnifiedTransactionDto>> getAllTransactionsHistory(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        List<UnifiedTransactionDto> list = transactionService.getTransactionHistory(userId);
+
+        return ResponseEntity.ok().body("Hello");
+    }
+
+
 
     @Operation(
             summary = "Create a new transaction",
