@@ -1,8 +1,4 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   config:
     import: optional:file:.env[.properties]
 
@@ -13,21 +9,20 @@ spring:
           issuer-uri: ${CLERK_ISSUER_URL}
 
   datasource:
-    driver-class-name: org.h2.Driver
+    driver-class-name: org.postgresql.Driver
+    ## lägg till liknande i .env SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/novabank
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
-    initialization-mode: always
 
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
-        type:
-          preferred_uuid_jdbc_type: CHAR
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   sql:
     init:

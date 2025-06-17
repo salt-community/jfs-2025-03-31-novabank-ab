@@ -15,6 +15,7 @@ import java.util.UUID;
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(nullable = false, updatable = false)
     private UUID id;
 
     @Column(unique = true)
