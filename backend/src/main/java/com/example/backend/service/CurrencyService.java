@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.currencyDto.request.CurrencyConversionRequestDto;
+import com.example.backend.dto.currencyDto.response.CurrencyConversionResultDto;
 import com.example.backend.dto.currencyDto.response.ExchangeRateResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -16,12 +18,6 @@ public class CurrencyService {
     private final String API_URL;
     private final String API_KEY;
 
-    /*
-    TODO work with scalability for other currencies than sek/eur
-    TODO check whether to add each currency or fix fancier formula
-     */
-
-
     public CurrencyService(
             @Value("${RIKSBANK_API_URL}") String apiUrl,
             @Value("${RIKSBANK_API_KEY}") String apiKey
@@ -31,15 +27,37 @@ public class CurrencyService {
         this.API_KEY = apiKey;
     }
 
+    public CurrencyConversionResultDto convertCurrency(CurrencyConversionRequestDto requestDto) {
+
+        String fromCurrency = requestDto.getFromCurrency();
+        String toCurrency = requestDto.getToCurrency();
+        double originalAmount = requestDto.getAmount();
+
+        ExchangeRateResponseDto exchangeRateDto = getEffectiveRate(fromCurrency, toCurrency);
+        double rate = exchangeRateDto.getValue();
+        double convertedAmount = originalAmount * rate;
+
+        return new CurrencyConversionResultDto(
+                fromCurrency,
+                toCurrency,
+                originalAmount,
+                convertedAmount,
+                rate,
+                exchangeRateDto.getDate()
+        );
+    }
+    
     //TODO consider adding caching in future
-    public ExchangeRateResponseDto fetchRateDto() {
+    public ExchangeRateResponseDto getRateFromApi(String seriesCode) {
+
+        String url = API_URL + "/swea/v1/Observations/Latest/" + seriesCode;
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Ocp-Apim-Subscription-Key", API_KEY);
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<ExchangeRateResponseDto> response = restTemplate.exchange(
-                    API_URL,
+                    url,
                     HttpMethod.GET,
                     entity,
                     ExchangeRateResponseDto.class
@@ -48,17 +66,35 @@ public class CurrencyService {
             return response.getBody();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error fetching exchange rate.", e);
+            throw new RuntimeException("Error fetching exchange rate from API.", e);
         }
     }
 
-    public double convertSekToEur(double sek) {
-        double rate = fetchRateDto().getValue();
-        return sek/rate;
+    public ExchangeRateResponseDto getEffectiveRate(String from, String to) {
+        String directCode = getCurrencyPairCode(from, to);
+        String inverseCode = getCurrencyPairCode(to, from);
+
+        ExchangeRateResponseDto dto;
+        boolean inverted = false;
+
+        try {
+            dto = getRateFromApi(directCode);
+        } catch (Exception e) {
+            try {
+                dto = getRateFromApi(inverseCode);
+                inverted = true;
+            } catch (Exception ex) {
+                throw new RuntimeException("Could not fetch exchange rate: " + from + " to " + to);
+            }
+        }
+
+        double rate = dto.getValue();
+        return new ExchangeRateResponseDto(dto.getDate(), inverted ? (1 / rate) : rate);
     }
 
-    public double convertEurToSek(double eur) {
-        double rate = fetchRateDto().getValue();
-        return eur * rate;
+    public String getCurrencyPairCode(String fromCurrency, String toCurrency) {
+        return (fromCurrency + toCurrency + "pmi").toLowerCase();
     }
+
+
 }
