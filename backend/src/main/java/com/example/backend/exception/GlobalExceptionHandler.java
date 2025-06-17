@@ -70,6 +70,11 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidUserCredentials(InvalidCredentialsException e) {
+        return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleTransactionNotFound(TransactionNotFoundException e) {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -78,5 +83,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ AccountNotAllowedException.class, AccessDeniedException.class })
     public ResponseEntity<ErrorResponseDto> handleForbidden(Exception e) {
         return buildResponse(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({ AccountClosedException.class })
+    public ResponseEntity<ErrorResponseDto> handleClosedAccount(Exception e) {
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NicknameNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleNicknameNotFound(NicknameNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

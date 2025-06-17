@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.accountDto.request;
 
 import com.example.backend.model.Account;
 import com.example.backend.model.Currency;
