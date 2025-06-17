@@ -7,6 +7,7 @@ import com.example.backend.model.Account;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
+import com.example.backend.model.enums.ApplicationStatus;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.TransactionService;
 import com.example.backend.service.UserService;
@@ -138,8 +139,17 @@ public class AdminController {
         return ResponseEntity.ok(application);
     }
 
+    @Operation(summary = "Get all transaction history", description = "Returns a list of all transactions")
     @GetMapping("/transaction-history")
     public ResponseEntity<List<UnifiedTransactionResponseDto>> getTransactionHistory() {
         return ResponseEntity.ok(transactionService.getAllTransactionHistory());
     }
+
+    @PatchMapping("/application/{applicationId}")
+    public ResponseEntity<Void> updateApplication(@PathVariable UUID applicationId, @RequestParam(name = "status") String status){
+        Application application = userService.getApplicationById(applicationId);
+        userService.updateApplication(application, status);
+        return ResponseEntity.ok().build();
+    }
+
 }
