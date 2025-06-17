@@ -22,7 +22,7 @@ export default function Recipient({
   setRecipientClient,
   setAccNoType,
 }: RecipientProps) {
-  const { data: bankAccounts = [], isLoading, isError } = useAccounts()
+  const { data: bankAccounts = [], isError } = useAccounts()
   const [showRecipientsModal, setShowRecipientsModal] = useState(false)
 
   const handleClearRecipient = () => {
@@ -44,8 +44,6 @@ export default function Recipient({
       setRecipientClient(null) // clear new recipient string
     }
   }
-
-  if (isLoading) return <div className="p-8">Loading accounts...</div>
 
   if (isError)
     return <div className="p-8 text-red-500">Failed to load accounts</div>
