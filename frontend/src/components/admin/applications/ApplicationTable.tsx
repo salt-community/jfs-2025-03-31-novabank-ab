@@ -23,6 +23,9 @@ export const ApplicationTable: React.FC<Props> = ({
           <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
             Applied
           </th>
+          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
+            Status
+          </th>
           <th className="px-4 py-2 text-center text-sm font-medium text-gray-700">
             Actions
           </th>
@@ -38,6 +41,7 @@ export const ApplicationTable: React.FC<Props> = ({
             <td className="px-4 py-2">
               {new Date(app.createdAt).toLocaleString()}
             </td>
+            <td className="px-4 py-2">{app.status}</td>
             <td className="px-4 py-2 text-center">
               <button
                 className="px-3 py-1 bg-[#FFB20F] text-black rounded hover:opacity-70 transition hover:cursor-pointer"
