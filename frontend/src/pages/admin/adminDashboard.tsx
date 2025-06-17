@@ -1,4 +1,4 @@
-import { GeneralWideAreaChart } from '@/components/admin/GeneralWideAreaChart'
+import { GeneralWideAreaChart } from '@/components/admin/charts/GeneralWideAreaChart'
 import SectionCard from '@/components/admin/SectionCard'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { GenericChartData } from '@/types/admin/inOutChartData'
