@@ -10,7 +10,6 @@ type RecipientProps = {
   setRecipientAccount: React.Dispatch<React.SetStateAction<Account | null>>
   recipientClient: string | null
   setRecipientClient: React.Dispatch<React.SetStateAction<string | null>>
-  accNoType: string
   setAccNoType: React.Dispatch<React.SetStateAction<string>>
 }
 
@@ -21,7 +20,6 @@ export default function Recipient({
   setRecipientAccount,
   recipientClient,
   setRecipientClient,
-  accNoType,
   setAccNoType,
 }: RecipientProps) {
   const { data: bankAccounts = [], isLoading, isError } = useAccounts()
@@ -42,6 +40,7 @@ export default function Recipient({
       setRecipientAccount(null) // clear previous selection
     } else {
       setRecipientAccount(account)
+      setAccNoType(accountNumberType)
       setRecipientClient(null) // clear new recipient string
     }
   }
@@ -53,7 +52,7 @@ export default function Recipient({
 
   return (
     <>
-      {/* To account */}
+      {/* Recipient */}
       <div className="relative w-full">
         <button
           id="toAccount"
@@ -64,7 +63,7 @@ export default function Recipient({
                       ${error ? 'outline-none border border-red-600 focus:ring-red-600 focus:border-2 ' : ''}`}
         >
           {recipientAccount
-            ? recipientAccount.type
+            ? `${recipientAccount.type} - ${recipientAccount.accountNumber}`
             : recipientClient
               ? recipientClient
               : 'Select an account'}
@@ -106,7 +105,6 @@ export default function Recipient({
           onClose={() => {
             setShowRecipientsModal(false)
           }}
-          accNoType={accNoType}
           setAccNoType={setAccNoType}
           setRecipientAccount={setRecipientAccount}
           recipientClient={recipientClient}
