@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitest/config'
+import path from 'path'
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
   test: {
     environment: 'jsdom', // simulates a browser environment (for DOM elements)
     setupFiles: ['./tests/setup.ts'], // uses this file to set up stuff

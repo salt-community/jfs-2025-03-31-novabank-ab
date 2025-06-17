@@ -3,6 +3,8 @@ import { TransactionList } from '@/components/generic'
 import { AccountGallery } from '@/components/dashboard'
 
 export default function DashboardPage() {
+  // TODO move hooks inside specific component, where it belongs
+
   const {
     data: accounts = [],
     isLoading: isAccountsLoading,
@@ -26,6 +28,7 @@ export default function DashboardPage() {
 
   return (
     <>
+      <h1 className="text-3xl mb-10">Dashboard</h1>
       <AccountGallery bankAccounts={accounts} />
       <TransactionList transactions={transactions} />
     </>
