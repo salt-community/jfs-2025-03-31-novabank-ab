@@ -12,7 +12,7 @@ export default function Notes({ notes, setNotes }: NotesProps) {
           id="notes"
           value={notes}
           rows={4}
-          className="peer text-black rounded px-5 pt-6 pb-2 bg-white outline outline-gray-500 focus:outline-2 focus:outline-black w-full placeholder-transparent resize-none"
+          className="peer text-black rounded-md shadow-md px-5 pt-6 pb-2 bg-white outline outline-gray-200 focus:outline-2 focus:outline-black w-full placeholder-transparent resize-none"
           onChange={(e) => {
             setNotes(e.target.value)
           }}

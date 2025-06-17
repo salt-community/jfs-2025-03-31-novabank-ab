@@ -17,8 +17,8 @@ export default function Amount({ amount, setAmount, error }: AmountProps) {
           onChange={(e) => {
             setAmount(e.target.value)
           }}
-          className={`peer rounded p-4 w-full border bg-white text-black
-                      ${error ? 'border-red-600 focus:ring-red-900 outline-none focus:border-2 ' : ' outline outline-gray-500 focus:outline-2 focus:outline-black'}`}
+          className={`peer rounded-md shadow-md p-4 w-full border bg-white text-black
+                      ${error ? 'border-red-600 focus:ring-red-900 outline-none focus:border-2 ' : ' outline outline-gray-200 focus:outline-2 focus:outline-black'}`}
         />
         <label
           htmlFor="amount"

@@ -35,7 +35,7 @@ export default function Sender({
             )
             setSender(selectedAccount || null)
           }}
-          className={` peer hover:cursor-pointer rounded p-4 w-full outline outline-gray-500 focus:outline-2 focus:outline-black text-left bg-white
+          className={` shadow-md peer hover:cursor-pointer rounded-md p-4 w-full outline outline-gray-200 focus:outline-2 focus:outline-black text-left bg-white
              ${error ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
               border-r-15 border-transparent 
               ${sender ? ' text-black' : 'text-gray-400'}`}

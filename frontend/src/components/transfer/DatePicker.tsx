@@ -110,11 +110,11 @@ export default function DatePicker({
         onClick={handleToggleCalendar}
         role="textbox"
         tabIndex={0}
-        className={`peer flex items-center border text-black rounded p-4 bg-white  w-full cursor-pointer relative
+        className={`peer flex items-center border text-black rounded-md shadow-md p-4 bg-white  w-full cursor-pointer relative
         ${
           error
             ? 'border-red-600 border-0 focus:ring-red-900 focus:border-2 '
-            : 'border-gray-500 focus:ring-1 focus:ring-black'
+            : 'border-gray-200 focus:ring-1 focus:ring-black'
         }`}
       >
         <span className={selectedDate ? 'text-black' : 'text-gray-400'}>

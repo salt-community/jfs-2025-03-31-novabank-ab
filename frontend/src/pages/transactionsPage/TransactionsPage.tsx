@@ -13,7 +13,7 @@ export default function TransactionsPage() {
 
   return (
     <div>
-      <h1 className="text-3xl mb-10">All transactions</h1>
+      <h1 className="text-3xl mb-20">All transactions</h1>
       <div className=" px-5  shadow-sm">
         {transactions.length === 0 ? (
           <div className="p-4 text-gray-500">No transactions found</div>
