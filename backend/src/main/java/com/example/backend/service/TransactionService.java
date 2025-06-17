@@ -238,9 +238,9 @@ public class TransactionService {
 
     private record TransactionData(Account from, Account to, String recipientNumber) {}
 
-    public List<UnifiedTransactionDto> getAllTransactionHistory() {
+    public List<UnifiedTransactionResponseDto> getAllTransactionHistory() {
         return transactionRepository.findAll().stream()
-                .map(tx -> new UnifiedTransactionDto(
+                .map(tx -> new UnifiedTransactionResponseDto(
                         tx.getId(),
                         tx.getFromAccount().getId(),
                         tx.getToAccount() != null ? tx.getToAccount().getId() : null,

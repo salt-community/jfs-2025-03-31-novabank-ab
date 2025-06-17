@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
-import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
 import com.example.backend.model.Application;
@@ -139,7 +139,7 @@ public class AdminController {
     }
 
     @GetMapping("/transaction-history")
-    public ResponseEntity<List<UnifiedTransactionDto>> getTransactionHistory() {
+    public ResponseEntity<List<UnifiedTransactionResponseDto>> getTransactionHistory() {
         return ResponseEntity.ok(transactionService.getAllTransactionHistory());
     }
 }
