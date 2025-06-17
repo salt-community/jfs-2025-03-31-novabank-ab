@@ -2,7 +2,8 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
-import com.example.backend.dto.transactionDto.response.UnifiedTransactionDto;
+import com.example.backend.dto.transactionDto.response.ListUnifiedTransactionResponseDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.model.Transaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +34,8 @@ public class TransactionController {
             description = "Fetches a single transaction from the database using its unique identifier (UUID)."
     )
     @GetMapping("/{transactionId}")
-    public ResponseEntity<UnifiedTransactionDto> getTransaction(@PathVariable UUID transactionId,
-                                                                @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<UnifiedTransactionResponseDto> getTransaction(@PathVariable UUID transactionId,
+                                                                        @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getTransaction(transactionId, userId));
     }
@@ -54,9 +56,10 @@ public class TransactionController {
             description = "Returns all transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
     )
     @GetMapping
-    public ResponseEntity<List<Transaction>> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<ListUnifiedTransactionResponseDto> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        return ResponseEntity.ok().body(transactionService.getTransactionsByUser(userId));
+        List<Transaction> transactions = transactionService.getTransactionsByUser(userId);
+        return ResponseEntity.ok().body(ListUnifiedTransactionResponseDto.fromTransactions(transactions));
     }
 
     @Operation(
