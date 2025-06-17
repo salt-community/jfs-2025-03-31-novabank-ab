@@ -4,6 +4,10 @@ import com.example.backend.dto.currencyDto.request.CurrencyConversionRequestDto;
 import com.example.backend.dto.currencyDto.response.CurrencyConversionResultDto;
 import com.example.backend.dto.currencyDto.response.ExchangeRateResponseDto;
 import com.example.backend.exception.custom.CurrencyConversionException;
+import com.example.backend.exception.custom.InvalidCurrencyException;
+import com.example.backend.model.Currency;
+import com.example.backend.model.enums.CurrencyAbbrevation;
+import com.example.backend.repository.CurrencyRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,18 +19,25 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CurrencyService {
 
+    private final CurrencyRepository currencyRepository;
     private final RestTemplate restTemplate;
     private final String API_URL;
     private final String API_KEY;
 
-    public CurrencyService(
+    public CurrencyService(CurrencyRepository currencyRepository,
             @Value("${RIKSBANK_API_URL}") String apiUrl,
             @Value("${RIKSBANK_API_KEY}") String apiKey
     ) {
+        this.currencyRepository = currencyRepository;
         this.restTemplate = new RestTemplate();
         this.API_URL = apiUrl;
         this.API_KEY = apiKey;
     }
+
+    public Currency getCurrencyFromAbbrevation(CurrencyAbbrevation abb) {
+        return currencyRepository.findByAbbrevation(abb).orElseThrow(InvalidCurrencyException::new);
+    }
+
 
     public CurrencyConversionResultDto convertCurrency(CurrencyConversionRequestDto requestDto) {
 
