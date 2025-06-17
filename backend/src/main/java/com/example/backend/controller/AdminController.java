@@ -1,13 +1,14 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
+import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.service.AccountService;
+import com.example.backend.service.TransactionService;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,10 +34,12 @@ public class AdminController {
 
     private final UserService userService;
     private final AccountService accountService;
+    private final TransactionService transactionService;
 
-    public AdminController(UserService userService, AccountService accountService) {
+    public AdminController(UserService userService, AccountService accountService, TransactionService transactionService) {
         this.userService = userService;
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     @Operation(summary = "Get all users", description = "Returns a list of all users")
@@ -133,6 +136,26 @@ public class AdminController {
     public ResponseEntity<Application> getApplicationById(@PathVariable UUID applicationId) {
         Application application = userService.getApplicationById(applicationId);
         return ResponseEntity.ok(application);
+    }
+
+    @Operation(summary = "Get all transaction history", description = "Returns a list of all transactions")
+    @GetMapping("/transaction-history")
+    public ResponseEntity<List<UnifiedTransactionResponseDto>> getTransactionHistory() {
+        return ResponseEntity.ok(transactionService.getAllTransactionHistory());
+    }
+
+    @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated application status"),
+            @ApiResponse(responseCode = "400", description = "Invalid action"),
+            @ApiResponse(responseCode = "404", description = "Application Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
+    @PatchMapping("/application/{applicationId}")
+    public ResponseEntity<Void> updateApplication(@PathVariable UUID applicationId, @RequestParam(name = "status") String status){
+        Application application = userService.getApplicationById(applicationId);
+        userService.updateApplication(application, status);
+        return ResponseEntity.ok().build();
     }
 
 }
