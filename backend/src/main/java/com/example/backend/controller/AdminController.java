@@ -1,9 +1,8 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
-import com.example.backend.dto.userDto.response.UserDTO;
+import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
@@ -20,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,11 +42,8 @@ public class AdminController {
     })
     @GetMapping("/user")
     public ResponseEntity<ListUserResponseDto> getAllUsers() {
-        List<UserDTO> dtos = userService.getAllUsers().stream()
-                .map(u -> new UserDTO(
-                        u.getId().toString(),
-                        u.getFirstName()
-                ))
+        List<UserResponseDTO> dtos = userService.getAllUsers().stream()
+                .map(UserResponseDTO::fromUser)
                 .toList();
         return ResponseEntity.ok(new ListUserResponseDto(dtos));
     }
@@ -60,11 +55,11 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PatchMapping("/user/{userId}/suspend")
-    public ResponseEntity<User> suspendUser(
+    public ResponseEntity<UserResponseDTO> suspendUser(
         @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
     ) {
         User suspended = userService.suspendUser(userId);
-        return ResponseEntity.ok(suspended);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(suspended));
     }
 
     @Operation(summary = "Activate a user by id", description = "Returns the re-activated user")
@@ -74,11 +69,11 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Unexpected Error")
     })
     @PatchMapping("/user/{userId}/activate")
-    public ResponseEntity<User> activateUser(
+    public ResponseEntity<UserResponseDTO> activateUser(
             @Parameter(name = "id", description = "User id", example = "user_2yMYqxXhoEDq64tfBlelGADfdlp") @PathVariable("userId") String userId
     ) {
         User activated = userService.activateUser(userId);
-        return ResponseEntity.ok(activated);
+        return ResponseEntity.ok(UserResponseDTO.fromUser(activated));
     }
 
     @Operation(summary = "Delete a user by id", description = "Deletes the user from database")
