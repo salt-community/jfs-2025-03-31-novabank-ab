@@ -127,4 +127,8 @@ public class UserService {
     public Application getApplicationById(UUID id) {
         return applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
     }
+
+    public List<Application> getAllApplications() {
+        return applicationRepository.findAll();
+    }
 }

@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
@@ -179,6 +180,23 @@ public class AccountController {
     ) {
         String userId = jwt.getSubject();
         accountService.deleteAccountNickname(userId, accountId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Delete a account by id (Requires ADMIN)", description = "Deletes the account from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted Account"),
+            @ApiResponse(responseCode = "404", description = "Account Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{accountId}")
+    public ResponseEntity<Void> deleteAccount(
+            @PathVariable @NotNull UUID accountId,
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        accountService.deleteAccount(accountId, userId);
         return ResponseEntity.noContent().build();
     }
 }
