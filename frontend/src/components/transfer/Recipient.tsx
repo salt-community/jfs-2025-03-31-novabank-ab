@@ -56,7 +56,7 @@ export default function Recipient({
           id="toAccount"
           type="button"
           onClick={() => setShowRecipientsModal(true)}
-          className={`peer hover:cursor-pointer rounded p-4 w-full text-left outline outline-gray-500 focus:outline-2 focus:outline-black bg-white
+          className={`peer hover:cursor-pointer rounded-md shadow-md p-4 w-full text-left outline outline-gray-200 focus:outline-2 focus:outline-black bg-white
                       ${recipientAccount || recipientClient ? 'text-black' : 'text-gray-400'}
                       ${error ? 'outline-none border border-red-600 focus:ring-red-600 focus:border-2 ' : ''}`}
         >

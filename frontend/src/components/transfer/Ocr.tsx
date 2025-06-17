@@ -15,7 +15,7 @@ export default function Ocr({ ocr, setOcr }: OcrProps) {
           onChange={(e) => {
             setOcr(e.target.value)
           }}
-          className="peer text-black rounded px-5 py-4 outline outline-gray-500 focus:outline-2 focus:outline-black w-full placeholder-transparent bg-white"
+          className="peer text-black rounded-md shadow-md px-5 py-4 outline outline-gray-200 focus:outline-2 focus:outline-black w-full placeholder-transparent bg-white"
           placeholder="OCR / Message"
         />
         <label
