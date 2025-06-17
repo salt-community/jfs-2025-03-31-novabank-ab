@@ -9,6 +9,7 @@ import com.example.backend.exception.custom.UserNotFoundException;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.model.UserSettingsConfig;
+import com.example.backend.model.enums.ApplicationStatus;
 import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
 import com.example.backend.repository.ApplicationRepository;
@@ -16,8 +17,10 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.UserSettingsRepository;
 import com.example.backend.security.ClerkService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -142,6 +145,18 @@ public class UserService {
 
     public List<Application> getAllApplications() {
         return applicationRepository.findAll();
+    }
+
+    public void updateApplication(Application application, String status) {
+        switch (status.toLowerCase()) {
+            case "approved" -> {
+                application.setStatus(ApplicationStatus.APPROVED);
+                addUser(application.getId());
+            }
+            case "reject" -> application.setStatus(ApplicationStatus.DISAPPROVED);
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: " + status);
+        }
+        applicationRepository.save(application);
     }
 
     public UserSettingsConfig updateUserSettings(String userId, UpdateUserSettingsRequestDto dto) {
