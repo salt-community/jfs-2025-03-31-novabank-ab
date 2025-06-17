@@ -175,19 +175,21 @@ export default function SideBar({ admin }: Props) {
         </a>
 
         <a
-          onClick={() => navigate({ to: '/admin/applicants' })}
+          onClick={() => navigate({ to: '/admin/applications' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
-            isActive('/admin/applicants')
+            isActive('/admin/applications')
               ? 'text-[#FFB20F] hover:opacity-100 underline'
               : ''
           }`}
         >
           <img
             src={
-              isActive('/admin/applicants') ? yellowtransfericon : transfericon
+              isActive('/admin/applications')
+                ? yellowtransfericon
+                : transfericon
             }
           />
-          {t('admin.applicants')}
+          {t('admin.applications')}
         </a>
       </div>
       <div className="mt-30">
