@@ -139,7 +139,7 @@ public class UserController {
     @PostMapping("/settings")
     public ResponseEntity<UserSettingsConfig> createDefaultSettings(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        UserSettingsConfig config = userService.createDefaultConfig(userId);
+        UserSettingsConfig config = userService.createDefaultSettings(userId);
         return ResponseEntity.ok(config);
     }
 
