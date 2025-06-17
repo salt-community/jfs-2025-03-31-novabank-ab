@@ -52,7 +52,7 @@ export default function NewAccountModal({
           &times;
         </button>
 
-        <h2 className="text-xl font-semibold mb-6">Create New Bank Account</h2>
+        <h2 className="text-xl mb-6">Create New Bank Account</h2>
 
         <div className="space-y-5">
           {/* Account Type */}
@@ -106,7 +106,7 @@ export default function NewAccountModal({
             <button
               type="button"
               onClick={handleContinue}
-              className="w-full px-5 py-2 bg-[#FFB20F] hover:bg-[#F5A700] text-black font-semibold shadow-sm rounded transition-colors"
+              className="w-full px-5 py-2 bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer text-black shadow-sm rounded transition-colors"
             >
               Continue
             </button>
