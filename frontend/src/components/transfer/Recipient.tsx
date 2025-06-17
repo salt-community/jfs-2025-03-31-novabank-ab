@@ -45,8 +45,6 @@ export default function Recipient({
     }
   }
 
-  if (isLoading) return <div className="p-8">Loading accounts...</div>
-
   if (isError)
     return <div className="p-8 text-red-500">Failed to load accounts</div>
 
