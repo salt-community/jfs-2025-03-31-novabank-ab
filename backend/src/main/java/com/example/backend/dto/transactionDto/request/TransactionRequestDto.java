@@ -12,7 +12,6 @@ import java.util.UUID;
 public record TransactionRequestDto(
         @NotNull
         String fromAccountNo,
-        @NotNull
         String toAccountNo,
         String recipientNumber,
         @NotNull
@@ -25,6 +24,5 @@ public record TransactionRequestDto(
         @NotNull
         String description,
         String userNote,
-        @NotNull
         String ocrNumber
 ) {}
