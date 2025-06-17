@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,4 +25,7 @@ public class Currency {
     @Enumerated(EnumType.STRING)
     private CurrencyAbbrevation abbrevation;
 
+    @OneToMany
+    @JoinColumn(name = "account_id")
+    private List<Account> accounts;
 }

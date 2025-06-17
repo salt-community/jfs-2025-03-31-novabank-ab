@@ -1,7 +1,15 @@
 {
-  "dashboard": "Dashboard",
-  "settings": "Settings",
-  "accounts": "Accounts",
-  "transactions": "Transactions",
-  "transfer": "Transfer"
+  "user": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "accounts": "Accounts",
+    "transactions": "Transactions",
+    "transfer": "Transfer"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "transactions": "Transactions",
+    "applications": "Applicants"
+  }
 }

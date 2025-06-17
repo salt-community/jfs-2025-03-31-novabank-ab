@@ -2,7 +2,6 @@ package com.example.backend.exception;
 
 import com.example.backend.exception.custom.*;
 import com.example.backend.exception.dto.ErrorResponseDto;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -70,6 +69,11 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidUserCredentials(InvalidCredentialsException e) {
+        return buildResponse(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleTransactionNotFound(TransactionNotFoundException e) {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -78,5 +82,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({ AccountNotAllowedException.class, AccessDeniedException.class })
     public ResponseEntity<ErrorResponseDto> handleForbidden(Exception e) {
         return buildResponse(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({ AccountClosedException.class })
+    public ResponseEntity<ErrorResponseDto> handleClosedAccount(Exception e) {
+        return buildResponse(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NicknameNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleNicknameNotFound(NicknameNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CurrencyConversionException.class)
+    public ResponseEntity<ErrorResponseDto> handleCurrencyConversion(CurrencyConversionException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(SettingsConfigNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleSettingsConfigNotFound(SettingsConfigNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

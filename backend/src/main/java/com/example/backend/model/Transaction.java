@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.model.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,11 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
+    @Column
+    private String recipientNumber;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentType type;
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)
@@ -39,5 +45,6 @@ public class Transaction {
     private String userNote;
     @Column(nullable = false)
     private String ocrNumber;
+
 
 }
