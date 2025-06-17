@@ -118,7 +118,6 @@ export default function SideBar({ admin }: Props) {
       </div>
     </aside>
   )
-
   const adminSideBar = (
     <aside className="w-70 fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
@@ -152,7 +151,9 @@ export default function SideBar({ admin }: Props) {
               : ''
           }`}
         >
-          <img src={isActive('/') ? yellowaccounticon : accounticon} />
+          <img
+            src={isActive('/admin/users') ? yellowaccounticon : accounticon}
+          />
           {t('admin.users')}
         </a>
 

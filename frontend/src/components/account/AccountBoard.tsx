@@ -31,46 +31,46 @@ const scheduledTransactionsMock: Array<ScheduledTransactionItemProps> = [
 
 const transactions: Array<Transaction> = [
   {
-    id: '1',
-    name: "MOCK Domino's Pizza",
-    category: 'Foodservice',
+    transactionId: '1',
+    description: "MOCK Domino's Pizza",
+    type: 'Foodservice',
     amount: -16.3,
-    time: '11:54 pm',
+    date: '11:54 pm',
   },
   {
-    id: '2',
-    name: 'MOCK YouTube Premium',
-    category: 'Streaming service',
+    transactionId: '2',
+    description: 'MOCK YouTube Premium',
+    type: 'Streaming service',
     amount: -6.0,
-    time: '06:30 pm',
+    date: '06:30 pm',
   },
   {
-    id: '3',
-    name: 'MOCK Cashbox terminal #17',
-    category: 'Replenishment',
+    transactionId: '3',
+    description: 'MOCK Cashbox terminal #17',
+    type: 'Replenishment',
     amount: 450.0,
-    time: '02:02 pm',
+    date: '02:02 pm',
   },
   {
-    id: '4',
-    name: 'MOCK Mom',
-    category: 'Incoming',
+    transactionId: '4',
+    description: 'MOCK Mom',
+    type: 'Incoming',
     amount: 300,
-    time: '2025-06-12 14:23',
+    date: '2025-06-12 14:23',
   },
   {
-    id: '5',
-    name: 'MOCK Dad',
-    category: 'Outgoing',
+    transactionId: '5',
+    description: 'MOCK Dad',
+    type: 'Outgoing',
     amount: -2500,
-    time: '2025-06-10 09:00',
+    date: '2025-06-10 09:00',
   },
   {
-    id: '6',
-    name: 'MOCK Joe Biden',
-    category: 'Outgoing',
+    transactionId: '6',
+    description: 'MOCK Joe Biden',
+    type: 'Outgoing',
     amount: -4000,
-    time: '2025-06-09 08:15',
+    date: '2025-06-09 08:15',
   },
 ]
 
@@ -123,10 +123,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           {transactions.map((t, index) => (
             <TransactionItem
               key={index}
-              name={t.name}
-              category={t.category}
+              name={t.description}
+              category={t.type}
               amount={t.amount}
-              time={t.time}
+              time={t.date}
             />
           ))}
         </div>
