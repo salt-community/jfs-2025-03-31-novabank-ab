@@ -28,10 +28,10 @@ export default function Sender({
         <select
           id="fromAccount"
           name="bankaccounts"
-          value={sender?.type || ''}
+          value={sender?.accountNumber || ''}
           onChange={(e) => {
             const selectedAccount = bankAccounts.find(
-              (acc) => acc.type === e.target.value,
+              (acc) => acc.accountNumber === e.target.value,
             )
             setSender(selectedAccount || null)
           }}
@@ -44,18 +44,19 @@ export default function Sender({
             Select an account
           </option>
           {bankAccounts.map((account) => {
-            const isDisabled = recipient?.accountNumber === account.accountNumber
+            const isDisabled =
+              recipient?.accountNumber === account.accountNumber
 
             return (
               <option
                 key={account.accountNumber}
-                value={account.type}
+                value={account.accountNumber}
                 disabled={isDisabled}
                 className={`text-black ${
                   isDisabled ? 'bg-gray-200 text-gray-400' : ''
                 }`}
               >
-                {account.type}
+                {account.type} - {account.accountNumber}
                 {isDisabled ? ' (Already selected as recipient)' : ''}
               </option>
             )
