@@ -26,12 +26,13 @@ public class CurrencyController {
             description = "Fetches the current exchange rate between two currencies " +
                     "and returns the converted amount, together with other relevant data " +
                     "such as current rate and date.")
-    @PostMapping("/convert")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully converted"),
-        @ApiResponse(responseCode = "400", description = "Invalid input or unsupported currency pair"),
-        @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+            @ApiResponse(responseCode = "200", description = "Successfully converted"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or unsupported currency pair"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
+    @PostMapping("/convert")
+
     public ResponseEntity<CurrencyConversionResultDto> convert(@RequestBody CurrencyConversionRequestDto request) {
         CurrencyConversionResultDto result = currencyService.convertCurrency(request);
         return ResponseEntity.ok(result);
