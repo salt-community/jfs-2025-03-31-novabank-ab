@@ -99,4 +99,9 @@ public class GlobalExceptionHandler {
         return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler(SettingsConfigNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleSettingsConfigNotFound(SettingsConfigNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

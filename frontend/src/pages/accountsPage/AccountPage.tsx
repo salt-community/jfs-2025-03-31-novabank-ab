@@ -1,12 +1,12 @@
 import AccountBoard from '@/components/account/AccountBoard'
-import { useAccountDetails } from '@/hooks'
+import { useAccount } from '@/hooks'
 
 type AccountPageProps = {
   id: string
 }
 
 export default function AccountPage({ id }: AccountPageProps) {
-  const { data: accountDetails = [], isLoading, isError } = useAccountDetails()
+  const { data: account, isLoading, isError } = useAccount(id)
 
   if (isLoading) return <div className="p-8">Loading account details...</div>
   if (isError)
@@ -14,7 +14,8 @@ export default function AccountPage({ id }: AccountPageProps) {
       <div className="p-8 text-red-500">Failed loading account details</div>
     )
 
-  const account = accountDetails.find((acc) => acc.number === id)
+  // TODO later on this will change to specifik hook, getAccountById
+  // const account = accountDetails.find((acc) => acc.accountNumber === id)
 
   // TODO is this really how we gonna handle this?
   if (account === undefined) {

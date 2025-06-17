@@ -1,3 +1,4 @@
 export * from './accounts'
+export * from './account'
 export * from './transactions'
 export * from './accountDetails'

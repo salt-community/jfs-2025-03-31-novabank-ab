@@ -2,11 +2,15 @@ import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import AccountCard from '../src/components/dashboard/AccountCard'
 import '@testing-library/jest-dom'
+import type { Account } from '@/types'
 
-const testAccount = {
-  name: 'Test Account',
-  number: '**** 1818',
+const testAccount: Account = {
+  id: 'testId-123456789',
   balance: 1803.98,
+  type: 'Test Account',
+  createdAt: '20250616',
+  status: 'Active',
+  accountNumber: '**** 1818',
 }
 
 describe('AccountCard', () => {
@@ -19,13 +23,13 @@ describe('AccountCard', () => {
     render(<AccountCard account={testAccount} />)
     const accountName = screen.getByTestId('account-name')
     expect(accountName).toBeInTheDocument()
-    expect(accountName).toHaveTextContent(testAccount.name)
+    expect(accountName).toHaveTextContent(testAccount.type)
   })
   it('should verify that the correct accountNumber is displayed', () => {
     render(<AccountCard account={testAccount} />)
     const accountNumber = screen.getByTestId('account-number')
     expect(accountNumber).toBeInTheDocument()
-    expect(accountNumber).toHaveTextContent(testAccount.number)
+    expect(accountNumber).toHaveTextContent(testAccount.accountNumber)
   })
   it('should verify that the correct balance is displayed', () => {
     render(<AccountCard account={testAccount} />)
