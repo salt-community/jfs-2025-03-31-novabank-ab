@@ -14,13 +14,18 @@ import yellowaccounticon from '../../assets/yellowaccounticon.svg'
 import yellowtransactionicon from '../../assets/yellowtransactionicon.svg'
 import yellowsettingsicon from '../../assets/yellowsettingsicon.svg'
 
-export default function SideBar() {
+type Props = {
+  admin: boolean
+}
+
+export default function SideBar({ admin }: Props) {
   const { t } = useTranslation('sidebar')
+
   const navigate = useNavigate()
   const { location } = useRouterState()
   const isActive = (path: string) => location.pathname.startsWith(path)
 
-  return (
+  const userSideBar = (
     <aside className="w-70 fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
         <img
@@ -42,7 +47,7 @@ export default function SideBar() {
             src={isActive('/dashboard') ? yellowhomeicon : homeicon}
             alt="Home"
           />
-          {t('dashboard')}
+          {t('user.dashboard')}
         </a>
 
         <a
@@ -54,7 +59,7 @@ export default function SideBar() {
           }`}
         >
           <img src={isActive('/accounts') ? yellowaccounticon : accounticon} />
-          {t('accounts')}
+          {t('user.accounts')}
         </a>
 
         <a
@@ -72,7 +77,7 @@ export default function SideBar() {
                 : transactionicon
             }
           />
-          {t('transactions')}
+          {t('user.transactions')}
         </a>
 
         <a
@@ -86,7 +91,7 @@ export default function SideBar() {
           <img
             src={isActive('/transfer') ? yellowtransfericon : transfericon}
           />
-          {t('transfer')}
+          {t('user.transfer')}
         </a>
 
         <a
@@ -100,17 +105,101 @@ export default function SideBar() {
           <img
             src={isActive('/settings') ? yellowsettingsicon : settingsicon}
           />
-          {t('settings')}
+          {t('user.settings')}
         </a>
-        <div className="mt-30">
-          <SignOutButton>
-            <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
-              <img src={signouticon} />
-              Sign out
-            </a>
-          </SignOutButton>
-        </div>
+      </div>
+      <div className="mt-30">
+        <SignOutButton>
+          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
+            <img src={signouticon} />
+            Sign out
+          </a>
+        </SignOutButton>
       </div>
     </aside>
   )
+
+  const adminSideBar = (
+    <aside className="w-70 fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-10 justify-between flex flex-col">
+      <a onClick={() => navigate({ to: '/' })}>
+        <img
+          src={novabankicon}
+          className="w-10 h-10 xl:h-20 xl:w-20 mb-15 mx-auto hover:cursor-pointer"
+        />
+      </a>
+
+      <div className="flex gap-8 flex-col list-none mx-auto">
+        <a
+          onClick={() => navigate({ to: '/admin/dashboard' })}
+          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+            isActive('/admin/dashboard')
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
+              : ''
+          }`}
+        >
+          <img
+            src={isActive('/admin/dashboard') ? yellowhomeicon : homeicon}
+            alt="Home"
+          />
+          {t('admin.dashboard')}
+        </a>
+
+        <a
+          onClick={() => navigate({ to: '/admin/users' })}
+          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+            isActive('/admin/users')
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
+              : ''
+          }`}
+        >
+          <img src={isActive('/') ? yellowaccounticon : accounticon} />
+          {t('admin.users')}
+        </a>
+
+        <a
+          onClick={() => navigate({ to: '/admin/transactions' })}
+          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+            isActive('/admin/transactions')
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
+              : ''
+          }`}
+        >
+          <img
+            src={
+              isActive('/admin/transactions')
+                ? yellowtransactionicon
+                : transactionicon
+            }
+          />
+          {t('admin.transactions')}
+        </a>
+
+        <a
+          onClick={() => navigate({ to: '/admin/applicants' })}
+          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+            isActive('/admin/applicants')
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
+              : ''
+          }`}
+        >
+          <img
+            src={
+              isActive('/admin/applicants') ? yellowtransfericon : transfericon
+            }
+          />
+          {t('admin.applicants')}
+        </a>
+      </div>
+      <div className="mt-30">
+        <SignOutButton>
+          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
+            <img src={signouticon} />
+            Sign out
+          </a>
+        </SignOutButton>
+      </div>
+    </aside>
+  )
+
+  return admin ? adminSideBar : userSideBar
 }
