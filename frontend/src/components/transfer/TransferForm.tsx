@@ -7,6 +7,7 @@ import Amount from './Amount'
 import TransferDate from './TransferDate'
 import Notes from './Notes'
 import Ocr from './Ocr'
+import { useRandomDescription } from '@/hooks/useRandomDesc'
 
 export default function TransferForm() {
   const [amount, setAmount] = useState('')
@@ -17,6 +18,7 @@ export default function TransferForm() {
   const [ocr, setOcr] = useState('')
   const [notes, setNotes] = useState('')
   const [accNoType, setAccNoType] = useState('')
+  const randomDesc = useRandomDescription()
 
   const [errors, setErrors] = useState<{
     sender?: string
@@ -46,45 +48,26 @@ export default function TransferForm() {
 
     if (!transferDate) return // safety check
 
-    const now = new Date()
     const selectedDate = new Date(transferDate)
 
-    // Helper to check if selectedDate is the same day as now
-    const isSameDay = (d1: Date, d2: Date) =>
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
+    const accountTypeForBackend =
+      accNoType === 'Other account'
+        ? 'INTERNAL_TRANSFER'
+        : accNoType.toUpperCase()
 
-    if (isSameDay(selectedDate, now)) {
-      // Immediate transaction (transfer today)
-      const transactionPayload = {
-        toAccountNo: recipientAccount?.accountNumber ?? recipientClient,
-        fromAccountNo: sender?.accountNumber ?? '',
-        timestamp: new Date().toISOString(), // actual current timestamp for immediate transfer
-        amount: parseFloat(amount),
-        description: notes || '', //what is description???
-        OCR: ocr || '',
-        userNote: notes || '',
-      }
-
-      // Send transactionPayload to immediate transaction API endpoint
-      //console.log('Send immediate transaction:', transactionPayload)
-    } else {
-      // Scheduled transaction (transfer future date)
-      const scheduledPayload = {
-        toAccountNo: recipientAccount?.accountNumber ?? recipientClient,
-        fromAccountNo: sender?.accountNumber ?? '',
-        scheduledTime: selectedDate.toISOString(), // scheduled transfer time
-        amount: parseFloat(amount),
-        description: notes || '',
-        createdAt: new Date().toISOString(), // current timestamp for creation
-        OCR: ocr || '',
-        userNote: notes || '',
-      }
-
-      // Send scheduledPayload to scheduled transaction API endpoint
-      //console.log('Send scheduled transaction:', scheduledPayload)
+    const transactionPayload = {
+      toAccountNo: recipientAccount?.accountNumber ?? recipientClient,
+      fromAccountNo: sender?.accountNumber,
+      timestamp: selectedDate.toISOString(), // scheduled transfer time
+      amount: parseFloat(amount),
+      description: randomDesc, //send random hardcoded desc data
+      OCR: ocr || '',
+      userNote: notes || '',
+      accountNoType: accountTypeForBackend,
     }
+
+    // Send transactionPayload to API endpoint
+    console.log(transactionPayload)
   }
 
   return (
@@ -104,7 +87,6 @@ export default function TransferForm() {
           setRecipientAccount={setRecipientAccount}
           recipientClient={recipientClient}
           setRecipientClient={setRecipientClient}
-          accNoType={accNoType}
           setAccNoType={setAccNoType}
         />
 
