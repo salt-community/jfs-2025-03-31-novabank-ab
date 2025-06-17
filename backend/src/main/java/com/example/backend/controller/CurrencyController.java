@@ -4,6 +4,7 @@ import com.example.backend.dto.currencyDto.request.CurrencyConversionRequestDto;
 import com.example.backend.dto.currencyDto.response.CurrencyConversionResultDto;
 import com.example.backend.service.CurrencyService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +25,9 @@ public class CurrencyController {
                     "and returns the converted amount, together with other relevant data " +
                     "such as current rate and date.")
     @PostMapping("/convert")
-    public CurrencyConversionResultDto convert(@RequestBody CurrencyConversionRequestDto request) {
-        return currencyService.convertCurrency(request);
+    public ResponseEntity<CurrencyConversionResultDto> convert(@RequestBody CurrencyConversionRequestDto request) {
+        CurrencyConversionResultDto result = currencyService.convertCurrency(request);
+        return ResponseEntity.ok(result);
     }
 
 }
