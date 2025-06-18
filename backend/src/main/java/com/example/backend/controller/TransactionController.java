@@ -1,6 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.ListUnifiedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
@@ -10,6 +9,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping({"/api/account/transaction", "/api/account/transaction/"})
+@RequestMapping({"/api/account", "/api/account/"})
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -33,7 +35,7 @@ public class TransactionController {
             summary = "Retrieve a specific transaction by ID",
             description = "Fetches a single transaction from the database using its unique identifier (UUID)."
     )
-    @GetMapping("/{transactionId}")
+    @GetMapping("/transaction/{transactionId}")
     public ResponseEntity<UnifiedTransactionResponseDto> getTransaction(@PathVariable UUID transactionId,
                                                                         @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
@@ -44,8 +46,8 @@ public class TransactionController {
             summary = "Retrieve all transactions for a specific account",
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
-    @GetMapping("/{accountId}")
-    public ResponseEntity<CombinedTransactionResponseDto> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
+    @GetMapping("/{accountId}/transaction")
+    public ResponseEntity<List<UnifiedTransactionResponseDto>> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
                                                                              @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getAllTransactionsByAccount(accountId, userId));
@@ -53,13 +55,18 @@ public class TransactionController {
 
     @Operation(
             summary = "Retrieve all transactions for a specific user",
-            description = "Returns all transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
+            description = "Returns paginated transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
     )
-    @GetMapping
-    public ResponseEntity<ListUnifiedTransactionResponseDto> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    @GetMapping("/all-transactions")
+    public ResponseEntity<Page<UnifiedTransactionResponseDto>> getAllTransactionsByUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         String userId = jwt.getSubject();
-        List<Transaction> transactions = transactionService.getTransactionsByUser(userId);
-        return ResponseEntity.ok().body(ListUnifiedTransactionResponseDto.fromTransactions(transactions));
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable);
+        return ResponseEntity.ok(transactions);
     }
 
     @Operation(
@@ -72,7 +79,7 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account not found")
             }
     )
-    @PostMapping
+    @PostMapping("/transaction")
     public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         transactionService.addTransaction(dto,userId);
