@@ -17,7 +17,6 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   const createAccount = useCreateAccount()
 
   const handleModalSubmit = (type: string, abbrevation: string) => {
-    console.log('Create account with:', type, abbrevation)
 
     createAccount.mutate(
       {

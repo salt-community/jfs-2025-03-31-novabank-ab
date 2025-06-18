@@ -16,7 +16,7 @@ export default function TransactionFormAccItem({
                       rounded-lg`}
     >
       <div>
-        <div>{account.type}</div>
+        <div className='text-left'>{account.type}</div>
         <div className="text-left text-sm text-gray-500">
           {account.accountNumber}
         </div>
@@ -28,7 +28,6 @@ export default function TransactionFormAccItem({
       )}
 
       <div className="text-right">
-        $
         {account.balance.toLocaleString(undefined, {
           minimumFractionDigits: 2,
         })}
