@@ -5,6 +5,7 @@ import com.example.backend.dto.userDto.request.ApplicationRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserSettingsRequestDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
+import com.example.backend.dto.userDto.response.UserSettingsResponseDTO;
 import com.example.backend.model.Application;
 import com.example.backend.model.User;
 import com.example.backend.model.UserSettingsConfig;
@@ -124,10 +125,17 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Unexpected error")
     })
     @GetMapping("/settings")
-    public ResponseEntity<UserSettingsConfig> getUserSettings(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<UserSettingsResponseDTO> getUserSettings(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         UserSettingsConfig config = userService.getUserSettings(userId);
-        return ResponseEntity.ok(config);
+        return ResponseEntity.ok(
+                new UserSettingsResponseDTO(
+                        config.isSmsNotifications(),
+                        config.isEmailNotifications(),
+                        config.isCardTransactionNotifications(),
+                        config.isAtmWithdrawalNotifications(),
+                        config.isDepositNotifications(),
+                        config.getLanguage()));
     }
 
     @Operation(summary = "Create default user settings", description = "Creates a default version of user preferences")

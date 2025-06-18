@@ -1,0 +1,18 @@
+{
+  "errorLoading": "Failed loading user details",
+  "personal": "Personal",
+  "general": "General",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "email": "Email",
+  "smsNotifications": "SMS notifications",
+  "emailNotifications": "Email notifications",
+  "cardTransactionNotifications": "Card transaction notifications",
+  "ATMWithdrawalsNotifications": "ATM withdrawal notifications",
+  "depositNotifications": "Deposit notifications",
+  "phoneNumber": "Phone number",
+  "language": "Language",
+  "english": "English",
+  "swedish": "Swedish",
+  "savePreferences": "Save Preferences"
+}
