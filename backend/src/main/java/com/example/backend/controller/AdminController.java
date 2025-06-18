@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
@@ -17,6 +18,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -136,13 +141,21 @@ public class AdminController {
     @GetMapping("/application/{applicationId}")
     public ResponseEntity<Application> getApplicationById(@PathVariable UUID applicationId) {
         Application application = userService.getApplicationById(applicationId);
-        return ResponseEntity.ok(application);
+        return ResponseEntity.ok().body(application);
     }
 
-    @Operation(summary = "Get all transaction history", description = "Returns a list of all transactions")
+    @Operation(
+            summary = "Get paginated transaction history",
+            description = "Returns a paginated list of all transactions"
+    )
     @GetMapping("/transaction-history")
-    public ResponseEntity<List<UnifiedTransactionResponseDto>> getTransactionHistory() {
-        return ResponseEntity.ok(transactionService.getAllTransactionHistory());
+    public ResponseEntity<Page<UnifiedTransactionResponseDto>> getTransactionHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<UnifiedTransactionResponseDto> transactions = transactionService.getAllTransactionHistory(pageable);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
@@ -159,4 +172,15 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Gets all accounts for one user", description = "Returns a list of all accounts for specific user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @GetMapping("/user/{userId}/accounts")
+    public ResponseEntity<ListAccountResponseDto> getUserAccounts(@PathVariable String userId) {
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        ListAccountResponseDto listOfAccount = ListAccountResponseDto.fromAccounts(accounts);
+        return ResponseEntity.ok().body(listOfAccount);
+    }
 }

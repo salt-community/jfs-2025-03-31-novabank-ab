@@ -1,29 +1,27 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Getter @Setter
+@Table(name = "account_nicknames")
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class AccountNickname {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @NonNull
+    @Column(nullable = false)
     private String nickname;
 
+    @NonNull
     @OneToOne(optional = true)
     private Account account;
 
-    public AccountNickname() {}
-
-    public AccountNickname(Account account, String nickname) {
-        this.nickname = nickname;
-        this.account = account;
-    }
 }

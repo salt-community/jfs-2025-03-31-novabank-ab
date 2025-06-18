@@ -3,11 +3,7 @@ package com.example.backend.model;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.BankAccountType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,17 +11,15 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Setter
+@Table(name = "accounts")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "accounts")
 public class Account {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,9 +27,11 @@ public class Account {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "currency_id", unique = false)
+    @JoinColumn(name = "currency_id")
     private Currency currency;
+
     private LocalDate createdAt;
+
     private double balance;
 
     @Enumerated(EnumType.STRING)
@@ -51,6 +47,4 @@ public class Account {
 
     @OneToMany(mappedBy = "toAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transaction> transactionsTo = new ArrayList<>();
-
-
 }

@@ -1,15 +1,16 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
-import com.example.backend.dto.transactionDto.response.ListUnifiedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
-import com.example.backend.model.Transaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -53,13 +54,18 @@ public class TransactionController {
 
     @Operation(
             summary = "Retrieve all transactions for a specific user",
-            description = "Returns all transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
+            description = "Returns paginated transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
     )
     @GetMapping("/all-transactions")
-    public ResponseEntity<ListUnifiedTransactionResponseDto> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Page<UnifiedTransactionResponseDto>> getAllTransactionsByUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
         String userId = jwt.getSubject();
-        List<Transaction> transactions = transactionService.getTransactionsByUser(userId);
-        return ResponseEntity.ok().body(ListUnifiedTransactionResponseDto.fromTransactions(transactions));
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Operation(
@@ -72,7 +78,7 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account not found")
             }
     )
-    @PostMapping("/transaction")
+    @PostMapping("/add-transaction")
     public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         transactionService.addTransaction(dto,userId);

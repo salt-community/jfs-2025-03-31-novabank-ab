@@ -48,21 +48,25 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           {data && data.filter((t) => t.status === 'PENDING').length > 0 ? (
             data
               .filter((t) => t.status === 'PENDING')
-              .map((t, index) => (
-                <ScheduledTransactionItem
-                  transactionId={t.transactionId}
-                  key={index}
-                  amount={t.amount}
-                  description={t.description}
-                  fromAccountId={t.fromAccount}
-                  ocrNumber={t.ocrNumber}
-                  scheduledDate={t.date}
-                  toAccountId={t.toAccount}
-                  userNote={t.userNote}
-                />
-              ))
+              .map((t) => {
+                const direction = t.toAccount === account.id ? 'in' : 'out'
+                return (
+                  <ScheduledTransactionItem
+                    transactionId={t.transactionId}
+                  key={t.transactionId}
+                    amount={t.amount}
+                    description={t.description}
+                    fromAccountId={t.fromAccount}
+                    ocrNumber={t.ocrNumber}
+                    scheduledDate={t.date}
+                    toAccountId={t.toAccount}
+                    userNote={t.userNote}
+                    direction={direction}
+                  />
+                )
+              })
           ) : (
-            <NoTransactionItem></NoTransactionItem>
+            <NoTransactionItem />
           )}
         </div>
       </div>
@@ -73,15 +77,19 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           {data && data.filter((t) => t.status === null).length > 0 ? (
             data
               .filter((t) => t.status === null)
-              .map((t, index) => (
-                <TransactionItem
-                  key={index}
-                  name={t.description}
-                  category={t.type}
-                  amount={t.amount}
-                  time={t.date}
-                />
-              ))
+              .map((t) => {
+                const direction = t.toAccount === account.id ? 'in' : 'out'
+                return (
+                  <TransactionItem
+                    key={t.transactionId}
+                    name={t.description}
+                    category={t.type}
+                    amount={t.amount}
+                    time={t.date}
+                    direction={direction}
+                  />
+                )
+              })
           ) : (
             <NoTransactionItem />
           )}
