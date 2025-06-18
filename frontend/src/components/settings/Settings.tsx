@@ -1,26 +1,42 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useGetUser, useUpdateUser } from '@/hooks'
+import { useGetUser, useUpdateUser, useGetUserSettings } from '@/hooks'
+import { useUpdateUserSettings } from '@/hooks/useUpdateUserNotifications'
 import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
+import type { UserSettings } from '@/types'
 import Spinner from '../generic/Spinner'
 
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
   const [editingPhone, setEditingPhone] = useState<boolean>(false)
-  const [smsNotifications, setSmsNotifications] = useState(false)
-  const [emailNotifications, setEmailNotifications] = useState(false)
-  const [cardNotifications, setCardNotifications] = useState(false)
-  const [atmNotifications, setAtmNotifications] = useState(false)
-  const [depositNotifications, setDepositNotifications] = useState(false)
-  const [language, setLanguage] = useState('English')
+  const [userNotificationSettings, setUserNotificationSettings] =
+    useState<UserSettings>({
+      atmWithdrawalNotifications: false,
+      cardTransactionNotifications: false,
+      depositNotifications: false,
+      emailNotifications: false,
+      language: 'en',
+      smsNotifications: false,
+    })
   const { user } = useUser()
-  const { data: userFromApi, isLoading, isError } = useGetUser(user?.id)
+  const {
+    data: userFromApi,
+    isLoading: userFromApiLoading,
+    isError: userFromApiError,
+  } = useGetUser(user?.id)
+  const {
+    data: userSettingsFromApi,
+    isLoading: userSettingsLoading,
+    isError: userSettingsError,
+  } = useGetUserSettings()
   const [emailField, setEmailField] = useState<string>('')
   const [phoneNumberField, setPhoneNumberField] = useState<string>('')
   const updateUserMutation = useUpdateUser()
+  const updateUserNotifications = useUpdateUserSettings()
 
-
-  if (isLoading) return <Spinner />
+  if (userFromApiLoading || userSettingsLoading)
+    return <Spinner />
+  if (userFromApiError || userSettingsError)
   if (isError)
     return <div className="p-8 text-red-500">Failed loading user details</div>
 
@@ -48,12 +64,24 @@ const Settings = () => {
     }
   }
 
+  const updateUserSettings = () => {
+    updateUserNotifications.mutate(userNotificationSettings)
+  }
+
   return (
     <>
       <Tabs defaultValue="personal">
         <TabsList>
           <TabsTrigger value="personal">Personal</TabsTrigger>
-          <TabsTrigger value="general">General</TabsTrigger>
+          <div
+            onClick={() => {
+              if (userSettingsFromApi) {
+                setUserNotificationSettings(userSettingsFromApi)
+              }
+            }}
+          >
+            <TabsTrigger value="general">General</TabsTrigger>
+          </div>
         </TabsList>
         <div className="ml-5 mt-5">
           <TabsContent value="personal">
@@ -117,14 +145,28 @@ const Settings = () => {
             </div>
           </TabsContent>
         </div>
+
         <TabsContent value="general">
           <div className="flex flex-row">
             <h3 className="text-xl mb-2 w-[15vw]">SMS notifications</h3>
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={smsNotifications}
-              onChange={(e) => setSmsNotifications(e.target.checked)}
+              checked={userNotificationSettings.smsNotifications}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: e.target.checked,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <div className="flex flex-row">
@@ -132,8 +174,20 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={emailNotifications}
-              onChange={(e) => setEmailNotifications(e.target.checked)}
+              checked={userNotificationSettings.emailNotifications}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications: e.target.checked,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
@@ -144,8 +198,20 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={cardNotifications}
-              onChange={(e) => setCardNotifications(e.target.checked)}
+              checked={userNotificationSettings.cardTransactionNotifications}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications: e.target.checked,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <div className="flex flex-row">
@@ -155,8 +221,20 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={atmNotifications}
-              onChange={(e) => setAtmNotifications(e.target.checked)}
+              checked={userNotificationSettings.atmWithdrawalNotifications}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications: e.target.checked,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <div className="flex flex-row">
@@ -164,8 +242,20 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={depositNotifications}
-              onChange={(e) => setDepositNotifications(e.target.checked)}
+              checked={userNotificationSettings.depositNotifications}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications: e.target.checked,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
@@ -173,14 +263,30 @@ const Settings = () => {
             <h3 className="text-xl mb-2 w-[13vw]">Language</h3>
             <select
               className="w-[5vw]"
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              value={`${userNotificationSettings.language === 'en' ? `English` : `Swedish`}`}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: `${e.target.value === 'English' ? `en` : `sv`}`,
+                })
+              }
             >
               <option value="English">English</option>
               <option value="Swedish">Swedish</option>
             </select>
           </div>
           <button
+            onClick={() => {
+              updateUserSettings()
+            }}
             type="submit"
             className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
           >
