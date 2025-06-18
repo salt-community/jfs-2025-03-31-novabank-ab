@@ -1,0 +1,44 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        type:
+          preferred_uuid_jdbc_type: CHAR
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: ${DB_DEV_URL}
+    username: ${DB_DEV_USERNAME}
+    password: ${DB_DEV_PASSWORD}
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  config:
+    import: optional:file:.env[.properties]
+
+  sql:
+    init:
+      mode: always
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLERK_ISSUER_URL}
+
+clerk:
+  api:
+    secret: ${CLERK_SECRET}
+
+logging:
+  level:
+    org.springdoc: ${SPRING_LOGGING_LEVEL:DEBUG}
+    org.springframework.web: ${SPRING_LOGGING_LEVEL:DEBUG}

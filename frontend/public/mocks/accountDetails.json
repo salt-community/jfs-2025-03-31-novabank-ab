@@ -1,0 +1,103 @@
+[
+  {
+    "name": "MOCK Savings",
+    "number": "****2201",
+    "balance": 4465.0,
+    "accountHolder": "Joe 'Joey' Biden",
+    "transactions": [
+      {
+        "id": "1",
+        "name": "MOCK Domino's Pizza",
+        "category": "Foodservice",
+        "amount": -16.3,
+        "time": "11:54 pm"
+      },
+      {
+        "id": "2",
+        "name": "MOCK YouTube Premium",
+        "category": "Streaming service",
+        "amount": -6.0,
+        "time": "06:30 pm"
+      },
+      {
+        "id": "3",
+        "name": "MOCK Cashbox terminal #17",
+        "category": "Replenishment",
+        "amount": 450.0,
+        "time": "02:02 pm"
+      }
+    ]
+  },
+  {
+    "name": "MOCK Personal",
+    "number": "****2202",
+    "balance": 12500.75,
+    "accountHolder": "Kamala 'VP' Harris",
+    "transactions": [
+      {
+        "id": "1",
+        "name": "MOCK Starbucks",
+        "category": "Coffee",
+        "amount": -5.5,
+        "time": "09:12 am"
+      },
+      {
+        "id": "2",
+        "name": "MOCK Spotify",
+        "category": "Streaming service",
+        "amount": -9.99,
+        "time": "07:00 am"
+      },
+      {
+        "id": "3",
+        "name": "MOCK Employer Inc.",
+        "category": "Salary",
+        "amount": 3000.0,
+        "time": "2025-06-01 08:00"
+      }
+    ]
+  },
+  {
+    "name": "MOCK Vacation",
+    "number": "****2203",
+    "balance": 3200.0,
+    "accountHolder": "Barack Obama",
+    "transactions": [
+      {
+        "id": "1",
+        "name": "MOCK Airbnb",
+        "category": "Lodging",
+        "amount": -1250.0,
+        "time": "2025-06-05 16:00"
+      },
+      {
+        "id": "2",
+        "name": "MOCK Ryanair",
+        "category": "Flight",
+        "amount": -199.99,
+        "time": "2025-06-04 10:30"
+      },
+      {
+        "id": "3",
+        "name": "MOCK ATM withdrawal",
+        "category": "Cash",
+        "amount": -500.0,
+        "time": "2025-06-03 14:12"
+      },
+      {
+        "id": "4",
+        "name": "MOCK Future 1",
+        "category": "Cash",
+        "amount": -500.0,
+        "time": "2025-07-20 14:12"
+      },
+      {
+        "id": "5",
+        "name": "MOCK Future 2",
+        "category": "Cash",
+        "amount": -500.0,
+        "time": "2025-07-23 14:12"
+      }
+    ]
+  }
+]

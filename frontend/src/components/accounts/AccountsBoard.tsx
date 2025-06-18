@@ -1,50 +1,67 @@
-const bankAccounts = [
-  {
-    accountName: 'Savings',
-    accountNumber: '**** 2201',
-    balance: 4465.23,
-  },
-  {
-    accountName: 'Personal',
-    accountNumber: '**** 7654',
-    balance: 532.78,
-  },
-  {
-    accountName: 'Family',
-    accountNumber: '**** 4720',
-    balance: 66004.65,
-  },
-]
-export default function AccountsBoard() {
+import { Link } from '@tanstack/react-router'
+import blackrightarrowicon from '../../assets/blackrightarrowicon.svg'
+import AccountItem from './AccountItem'
+import NewAccountModal from './NewAccountModal'
+import type { Account } from '@/types'
+import { useState } from 'react'
+import { useCreateAccount } from '@/hooks'
+import { useTranslation } from 'react-i18next'
+
+type AccountsBoardProps = {
+  bankAccounts: Array<Account>
+}
+
+export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
+  const { t } = useTranslation('accounts')
+  const [showModal, setShowModal] = useState(false)
+  const createAccount = useCreateAccount()
+
+  const handleModalSubmit = (type: string, abbrevation: string) => {
+
+    createAccount.mutate(
+      {
+        type,
+        abbrevation,
+      },
+      {
+        onSuccess: () => {
+          alert('Account created')
+          setShowModal(false)
+        },
+        onError: () => {
+          alert('NO ACCOUNT CREATED')
+        },
+      },
+    )
+  }
   return (
-    <div className="max-w-md mx-auto p-6 space-y-6">
-      <h1 className="text-2xl">My bank accounts ({bankAccounts.length})</h1>
+    <div data-testid="accounts-board">
+      <h1 className="text-3xl mb-20">{t('myBankAccounts')}</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
-          <div
-            key={account.accountNumber}
-            className="flex items-center justify-between border px-4 py-3 shadow-sm hover:bg-gray-200"
-          >
-            <div>
-              <div>{account.accountName}</div>
-              <div className="text-sm text-gray-500">
-                {account.accountNumber}
-              </div>
-            </div>
-            <div className="text-right ">
-              $
-              {account.balance.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-              })}
-              <span className="ml-2">{'>'}</span>
-            </div>
+          <div key={account.accountNumber}>
+            <Link to="/accounts/$id" params={{ id: account.id }}>
+              <AccountItem account={account} />
+            </Link>
           </div>
         ))}
-
-        <button className="w-full flex items-center justify-between bg-amber-400 hover:bg-amber-500 py-3 px-4 shadow">
-          <span className="text-lg">+ Open new account</span>
-          <span className="text-xl">{'>'}</span>
+        <button
+          className="mt-5 flex align-center items-center justify-between hover:cursor-pointer h-14 w-full px-5 py-2 bg-[#FFB20F] hover:bg-[#F5A700] text-black shadow-md rounded-lg transition-colors"
+          onClick={() => setShowModal(true)}
+        >
+          <span className="">{t('openNewAccount')}</span>
+          <img src={blackrightarrowicon} />
         </button>
+
+        {showModal && (
+          <NewAccountModal
+            onSubmit={(type, currency) => {
+              handleModalSubmit(type, currency)
+              setShowModal(false)
+            }}
+            onClose={() => setShowModal(false)}
+          />
+        )}
       </div>
     </div>
   )
