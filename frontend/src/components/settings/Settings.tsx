@@ -1,7 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useGetUser, useUpdateUser, useGetUserSettings } from '@/hooks'
+import { useUpdateUserSettings } from '@/hooks/useUpdateUserNotifications'
 import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
+import type { UserSettings } from '@/types'
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
   const [editingPhone, setEditingPhone] = useState<boolean>(false)
@@ -10,6 +12,15 @@ const Settings = () => {
   const [cardNotifications, setCardNotifications] = useState(false)
   const [atmNotifications, setAtmNotifications] = useState(false)
   const [depositNotifications, setDepositNotifications] = useState(false)
+  const [userNotificationSettings, setUserNotificationSettings] =
+    useState<UserSettings>({
+      atmWithdrawalNotifications: false,
+      cardTransactionNotifications: false,
+      depositNotifications: false,
+      emailNotifications: false,
+      language: 'en',
+      smsNotifications: false,
+    })
   const [language, setLanguage] = useState('English')
   const { user } = useUser()
   const {
@@ -25,6 +36,7 @@ const Settings = () => {
   const [emailField, setEmailField] = useState<string>('')
   const [phoneNumberField, setPhoneNumberField] = useState<string>('')
   const updateUserMutation = useUpdateUser()
+  const updateUserNotifications = useUpdateUserSettings()
 
   if (userFromApiLoading || userSettingsLoading)
     return <div className="p-8">Loading user details...</div>
@@ -53,6 +65,17 @@ const Settings = () => {
         })
       }
     }
+  }
+
+  const updateUserSettings = () => {
+    updateUserNotifications.mutate({
+      atmWithdrawalNotifications: atmNotifications,
+      cardTransactionNotifications: cardNotifications,
+      depositNotifications: depositNotifications,
+      emailNotifications: emailNotifications,
+      language: language === 'English' ? 'en' : 'sv',
+      smsNotifications: smsNotifications,
+    })
   }
 
   return (
@@ -125,19 +148,12 @@ const Settings = () => {
           </TabsContent>
         </div>
         <TabsContent value="general">
-          <p
-            onClick={() => {
-              console.log(userSettingsFromApi)
-            }}
-          >
-            hello
-          </p>
           <div className="flex flex-row">
             <h3 className="text-xl mb-2 w-[15vw]">SMS notifications</h3>
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={userSettingsFromApi?.smsNotifications}
+              checked={userNotificationSettings.smsNotifications}
               onChange={(e) => setSmsNotifications(e.target.checked)}
             />
           </div>
@@ -146,7 +162,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={userSettingsFromApi?.emailNotifications}
+              checked={userNotificationSettings.emailNotifications}
               onChange={(e) => setEmailNotifications(e.target.checked)}
             />
           </div>
@@ -158,7 +174,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={userSettingsFromApi?.cardTransactionNotifications}
+              checked={userNotificationSettings.cardTransactionNotifications}
               onChange={(e) => setCardNotifications(e.target.checked)}
             />
           </div>
@@ -169,7 +185,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={userSettingsFromApi?.atmWithdrawalNotifications}
+              checked={userNotificationSettings.atmWithdrawalNotifications}
               onChange={(e) => setAtmNotifications(e.target.checked)}
             />
           </div>
@@ -178,7 +194,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={userSettingsFromApi?.depositNotifications}
+              checked={userNotificationSettings.depositNotifications}
               onChange={(e) => setDepositNotifications(e.target.checked)}
             />
           </div>
@@ -187,7 +203,7 @@ const Settings = () => {
             <h3 className="text-xl mb-2 w-[13vw]">Language</h3>
             <select
               className="w-[5vw]"
-              value={`${userSettingsFromApi?.language === 'en' ? `English` : `Swedish`}`}
+              value={`${userNotificationSettings.language === 'en' ? `English` : `Swedish`}`}
               onChange={(e) => setLanguage(e.target.value)}
             >
               <option value="English">English</option>
@@ -195,6 +211,9 @@ const Settings = () => {
             </select>
           </div>
           <button
+            onClick={() => {
+              updateUserSettings()
+            }}
             type="submit"
             className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
           >
