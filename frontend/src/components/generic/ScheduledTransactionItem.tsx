@@ -9,6 +9,7 @@ export type ScheduledTransactionItemProps = {
   description: string
   userNote: string
   ocrNumber: string
+  direction: 'in' | 'out'
 }
 
 export function ScheduledTransactionItem({
@@ -16,6 +17,7 @@ export function ScheduledTransactionItem({
   description,
   scheduledDate,
   userNote,
+  direction,
 }: ScheduledTransactionItemProps) {
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -36,6 +38,13 @@ export function ScheduledTransactionItem({
     }
   }, [openMenu])
 
+  const formattedAmount =
+    direction === 'in'
+      ? `+${amount.toFixed(2)}`
+      : `-${Math.abs(amount).toFixed(2)}`
+  const amountColor =
+    direction === 'in' ? 'text-green-500' : 'text-gray-800'
+
   return (
     <div className="flex justify-between items-center py-3 border-b last:border-b-0">
       <div className="flex flex-col">
@@ -44,8 +53,8 @@ export function ScheduledTransactionItem({
       </div>
       <div className="flex flex-row justify-center align-middle items-center">
         <div className="flex flex-col items-end">
-          <span className="text-base font-medium text-gray-800">
-            {`-${Math.abs(amount).toFixed(2)}`}
+          <span className={`text-base font-medium ${amountColor}`}>
+            {formattedAmount}
           </span>
           <span className="text-xs text-gray-400">
             {scheduledDate.split('T')[0]}
