@@ -1,4 +1,13 @@
 {
   "myBankAccounts": "My bank accounts",
-  "openNewAccount": "Open new account"
+  "openNewAccount": "Open new account",
+  "selectAccountType": "Please select an account type",
+  "selectCurrency": "Please select a currency",
+  "selectAnAccountType": "Select an account type",
+  "savings": "Savings",
+  "personal": "Personal",
+  "accountType": "Account type",
+  "selectCurrencyOnly": "Select currency",
+  "currency": "Currency",
+  "done": "Done"
 }
