@@ -138,12 +138,11 @@ public class TransactionService {
     }
 
     public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable) {
-        List<UUID> accountIds = accountService.getAllUserAccounts(userId).stream()
-                .map(Account::getId)
-                .toList();
-
-        Page<Transaction> page = transactionRepository.findByAccountIds(accountIds, pageable);
-        return page.map(UnifiedTransactionResponseDto::fromTransaction);
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
+        Page<Transaction> transactions = transactionRepository
+                .findByFromAccount_IdInOrToAccount_IdIn(accountIds, accountIds, pageable);
+        return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
     public List<UnifiedTransactionResponseDto> getAllTransactionHistory() {
