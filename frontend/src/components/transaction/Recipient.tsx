@@ -69,7 +69,7 @@ export default function Recipient({
 
         <label
           htmlFor="toAccount"
-          className={`absolute hover:cursor-pointer left-4 px-1 transition-all duration-200 bg-white
+          className={`absolute hover:cursor-pointer left-4 px-1 transition-all duration-200 bg-white rounded-lg
                       ${
                         recipientAccount || recipientClient
                           ? '-top-2.5 font-semibold text-sm text-black'

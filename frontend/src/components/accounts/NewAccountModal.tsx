@@ -76,7 +76,7 @@ export default function NewAccountModal({
               value={accountType}
               id="accountType"
               onChange={(e) => setAccountType(e.target.value as AccountType)}
-              className={`peer hover:cursor-pointer rounded p-4 pb-5 w-full outline outline-gray-500 
+              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
                               focus:outline-2 focus:outline-black text-left bg-white
                               ${errors.accountType ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
                               border-r-15 border-transparent
@@ -117,7 +117,7 @@ export default function NewAccountModal({
               value={currency}
               id="currency"
               onChange={(e) => setCurrency(e.target.value as Currency)}
-              className={`peer hover:cursor-pointer rounded p-4 pb-5 w-full outline outline-gray-500 
+              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
                               focus:outline-2 focus:outline-black text-left bg-white
                               ${errors.currency ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
                               border-r-15 border-transparent
@@ -157,7 +157,7 @@ export default function NewAccountModal({
             <button
               type="button"
               onClick={handleSubmit}
-              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black font-semibold shadow-sm px-5 py-2 rounded transition-colors"
+              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
             >
               {t('done')}
             </button>
