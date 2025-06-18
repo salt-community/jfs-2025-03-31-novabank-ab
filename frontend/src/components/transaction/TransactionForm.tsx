@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Account } from '@/types'
@@ -11,6 +12,7 @@ import { useRandomDesc } from '@/hooks'
 import { useCreateTransaction } from '@/hooks'
 
 export default function TransactionForm() {
+  const { t } = useTranslation('accounts')
   const [amount, setAmount] = useState('')
   const [sender, setSender] = useState<Account | null>(null)
   const [recipientAccount, setRecipientAccount] = useState<Account | null>(null)
@@ -32,13 +34,14 @@ export default function TransactionForm() {
   const isFormValid = (): boolean => {
     const newErrors: typeof errors = {}
 
-    if (!sender) newErrors.sender = 'Please select a sender account'
+    if (!sender) newErrors.sender = t('pleaseSelectASenderAccount')
     const hasRecipient = !!recipientAccount || !!recipientClient
     if (!hasRecipient)
-      newErrors.recipientError = 'Please select a recipient account'
+      newErrors.recipientError = t('pleaseSelectARecipientAccount')
     if (!amount || parseFloat(amount) <= 0)
-      newErrors.amount = 'Please enter a valid amount'
-    if (!transactionDate) newErrors.transactionDate = 'Transaction date is required'
+      newErrors.amount = t('pleaseSelectAValidAmount')
+    if (!transactionDate)
+      newErrors.transactionDate = t('transactionDateIsRequired')
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -65,7 +68,7 @@ export default function TransactionForm() {
     const selectedDate = new Date(transactionDate)
 
     const accountTypeForBackend =
-      accNoType === 'Other account'
+      accNoType === t('otherAccount')
         ? 'INTERNAL_TRANSFER'
         : accNoType.toUpperCase()
 
@@ -141,7 +144,9 @@ export default function TransactionForm() {
                             : 'hover:bg-[#F5A700] hover:cursor-pointer'
                         }`}
           >
-            {createTransaction.isPending ? 'Processing...' : 'Submit'}
+            {createTransaction.isPending
+              ? `${t('processing')}...`
+              : t('submit')}
           </button>
         </div>
       </form>

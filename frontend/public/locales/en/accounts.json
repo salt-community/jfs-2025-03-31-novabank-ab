@@ -19,5 +19,12 @@
   "transactions": "Transactions",
   "failedToLoadTransactions": "Failed to load transactions",
   "allTransactions": "All transactions",
-  "noTransactionsFound": "No transactions found"
+  "noTransactionsFound": "No transactions found",
+  "pleaseSelectASenderAccount": "Please select a sender account",
+  "pleaseSelectARecipientAccount": "Please select a recipient account",
+  "pleaseSelectAValidAmount": "Please select a valid amount",
+  "transactionDateIsRequired": "Transaction date is required",
+  "otherAccount": "Other accuont",
+  "processing": "Processing",
+  "submit": "Submit"
 }

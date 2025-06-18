@@ -67,7 +67,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       </div>
 
       <div>
-        <h2 className="text-2xl mb-4">{t('transasctions')}</h2>
+        <h2 className="text-2xl mb-4">{t('transactions')}</h2>
         <div className="space-y-2">
           {data && data.filter((t) => t.status === null).length > 0 ? (
             data
