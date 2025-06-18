@@ -5,12 +5,14 @@ import NewAccountModal from './NewAccountModal'
 import type { Account } from '@/types'
 import { useState } from 'react'
 import { useCreateAccount } from '@/hooks'
+import { useTranslation } from 'react-i18next'
 
 type AccountsBoardProps = {
   bankAccounts: Array<Account>
 }
 
 export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
+  const { t } = useTranslation('accounts')
   const [showModal, setShowModal] = useState(false)
   const createAccount = useCreateAccount()
 
@@ -35,7 +37,7 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   }
   return (
     <div data-testid="accounts-board">
-      <h1 className="text-3xl mb-20">My bank accounts</h1>
+      <h1 className="text-3xl mb-20">{t('myBankAccounts')}</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
           <div key={account.accountNumber}>
@@ -48,7 +50,7 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
           className="mt-5 flex align-center items-center justify-between hover:cursor-pointer h-14 w-full px-5 py-2 bg-[#FFB20F] hover:bg-[#F5A700] text-black shadow-md rounded-lg transition-colors"
           onClick={() => setShowModal(true)}
         >
-          <span className="">Open new account</span>
+          <span className="">{t('openNewAccount')}</span>
           <img src={blackrightarrowicon} />
         </button>
 
