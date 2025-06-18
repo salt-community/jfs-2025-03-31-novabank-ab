@@ -16,5 +16,8 @@
   "accountStatus": "Account status",
   "accountNumber": "Account number",
   "scheduledTransasctions": "Scheduled transactions",
-  "transactions": "Transactions"
+  "transactions": "Transactions",
+  "failedToLoadTransactions": "Failed to load transactions",
+  "allTransactions": "All transactions",
+  "noTransactionsFound": "No transactions found"
 }
