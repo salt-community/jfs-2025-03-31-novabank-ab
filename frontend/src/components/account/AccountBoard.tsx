@@ -50,6 +50,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
               .filter((t) => t.status === 'PENDING')
               .map((t, index) => (
                 <ScheduledTransactionItem
+                  transactionId={t.transactionId}
                   key={index}
                   amount={t.amount}
                   description={t.description}

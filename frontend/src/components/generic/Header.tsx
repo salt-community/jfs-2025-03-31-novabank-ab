@@ -21,7 +21,7 @@ export default function Header() {
   const navigate = useNavigate()
   return (
     <header className="bg-black w-full">
-      <div className="flex items-center justify-between px-12">
+      <div className="flex items-center justify-between px-6">
         <img
           src={novabankicon}
           onClick={() => navigate({ to: '/' })}
