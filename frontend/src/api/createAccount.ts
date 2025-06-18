@@ -3,7 +3,7 @@ import type { Account } from '@/types'
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export async function createAccount(
-  account: { type: string; currency: string },
+  account: { type: string; abbreviation: string },
   token: string,
 ): Promise<Account> {
   const response = await fetch(BASE_URL.concat('account/'), {

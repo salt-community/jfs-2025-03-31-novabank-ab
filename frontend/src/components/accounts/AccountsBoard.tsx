@@ -14,13 +14,13 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   const [showModal, setShowModal] = useState(false)
   const createAccount = useCreateAccount()
 
-  const handleModalSubmit = (type: string, currency: string) => {
-    console.log('Create account with:', type, currency)
+  const handleModalSubmit = (type: string, abbreviation: string) => {
+    console.log('Create account with:', type, abbreviation)
 
     createAccount.mutate(
       {
         type,
-        currency,
+        abbreviation,
       },
       {
         onSuccess: () => {
