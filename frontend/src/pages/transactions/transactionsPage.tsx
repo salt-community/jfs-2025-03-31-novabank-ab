@@ -4,12 +4,17 @@ import { useGetAllTransactions } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 
 export default function TransactionsPage() {
-  const { data: transactions = [], isLoading, isError } = useGetAllTransactions()
- 
+  const {
+    data: transactions = [],
+    isLoading,
+    isError,
+  } = useGetAllTransactions()
+
   if (isLoading) return <Spinner />
   if (isError) {
     return <div className="p-8 text-red-500">Failed to load transactions</div>
   }
+  const seen = new Set()
 
   return (
     <div>
@@ -18,15 +23,21 @@ export default function TransactionsPage() {
         {transactions.length === 0 ? (
           <div className="p-4 text-gray-500">No transactions found</div>
         ) : (
-          transactions.map((tx: Transaction) => (
-            <TransactionItem
-              key={tx.transactionId}
-              name={tx.description}
-              category={tx.type}
-              amount={tx.amount}
-              time={tx.date}
-            />
-          ))
+          transactions
+            .filter((tx) => {
+              if (seen.has(tx.transactionId)) return false
+              seen.add(tx.transactionId)
+              return true
+            })
+            .map((tx: Transaction) => (
+              <TransactionItem
+                key={tx.transactionId}
+                name={tx.description}
+                category={tx.type}
+                amount={tx.amount}
+                time={tx.date}
+              />
+            ))
         )}
       </div>
     </div>
