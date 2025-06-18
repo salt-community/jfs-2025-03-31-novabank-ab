@@ -72,7 +72,7 @@ export default function TransferForm() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl">
+      <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl shadow-sm p-10">
         <Sender
           sender={sender}
           setSender={setSender}
@@ -106,8 +106,8 @@ export default function TransferForm() {
         <div className="relative w-full">
           <button
             type="submit"
-            className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold 
-                       shadow-sm px-5 py-4 rounded hover:cursor-pointer transition-colors w-full"
+            className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black 
+                       shadow-md px-5 py-4 rounded-lg hover:cursor-pointer transition-colors w-full"
           >
             Submit
           </button>
