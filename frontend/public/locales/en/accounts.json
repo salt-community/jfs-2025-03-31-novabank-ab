@@ -9,5 +9,12 @@
   "accountType": "Account type",
   "selectCurrencyOnly": "Select currency",
   "currency": "Currency",
-  "done": "Done"
+  "done": "Done",
+  "errorLoadingTransactions": "Error loading transasction",
+  "totalBalance": "Total balance",
+  "newTransfer": "New transfer",
+  "accountStatus": "Account status",
+  "accountNumber": "Account number",
+  "scheduledTransasctions": "Scheduled transactions",
+  "transactions": "Transactions"
 }
