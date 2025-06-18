@@ -21,7 +21,7 @@ export const ApplicationModal: React.FC<Props> = ({
   const isFinal = app.status === 'APPROVED' || app.status === 'DISAPPROVED'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-md w-full max-w-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Application Details</h2>
         <div className="space-y-2 text-sm mb-6">
