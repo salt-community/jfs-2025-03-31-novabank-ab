@@ -54,15 +54,6 @@ export default function TransactionsPage() {
                 />
               )
             })
-            .map((tx: Transaction) => (
-              <TransactionItem
-                key={tx.transactionId}
-                name={tx.description}
-                category={tx.type}
-                amount={tx.amount}
-                time={tx.date}
-              />
-            ))
         )}
       </div>
     </div>
