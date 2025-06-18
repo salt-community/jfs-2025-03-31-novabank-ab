@@ -13,7 +13,7 @@ export async function createTransaction(
   },
   token: string,
 ): Promise<boolean> {
-  const response = await fetch(BASE_URL.concat('account/transaction/'), {
+  const response = await fetch(BASE_URL.concat('account/transaction'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

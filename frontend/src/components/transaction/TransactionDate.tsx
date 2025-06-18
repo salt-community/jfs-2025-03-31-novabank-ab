@@ -15,7 +15,7 @@ export default function TransactionDate({
     <>
       {/* Transaction date */}
       <div className="relative w-full">
-        <div className={`${error ? 'border border-red-500 rounded' : ''}`}>
+        <div className={`${error ? 'border border-red-500 rounded-md ' : ''}`}>
           <DatePicker
             value={transactionDate}
             onDateChange={setTransactionDate}
