@@ -140,7 +140,7 @@ public class AdminController {
     @GetMapping("/application/{applicationId}")
     public ResponseEntity<Application> getApplicationById(@PathVariable UUID applicationId) {
         Application application = userService.getApplicationById(applicationId);
-        return ResponseEntity.ok(application);
+        return ResponseEntity.ok().body(application);
     }
 
     @Operation(
@@ -154,7 +154,7 @@ public class AdminController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<UnifiedTransactionResponseDto> transactions = transactionService.getAllTransactionHistory(pageable);
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
@@ -178,6 +178,6 @@ public class AdminController {
     })
     @GetMapping("/user/{userId}/accounts")
     public ResponseEntity<List<Account>> getUserAccounts(@PathVariable String userId) {
-        return ResponseEntity.ok(accountService.getAllUserAccounts(userId));
+        return ResponseEntity.ok().body(accountService.getAllUserAccounts(userId));
     }
 }
