@@ -24,8 +24,6 @@ export default function TransactionsPage() {
   }
   const seen = new Set()
 
-  const seen = new Set()
-
   return (
     <div>
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
