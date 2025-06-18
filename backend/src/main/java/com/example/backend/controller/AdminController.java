@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
@@ -177,7 +178,9 @@ public class AdminController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @GetMapping("/user/{userId}/accounts")
-    public ResponseEntity<List<Account>> getUserAccounts(@PathVariable String userId) {
-        return ResponseEntity.ok().body(accountService.getAllUserAccounts(userId));
+    public ResponseEntity<ListAccountResponseDto> getUserAccounts(@PathVariable String userId) {
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        ListAccountResponseDto listOfAccount = ListAccountResponseDto.fromAccounts(accounts);
+        return ResponseEntity.ok().body(listOfAccount);
     }
 }
