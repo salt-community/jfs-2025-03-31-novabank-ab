@@ -3,6 +3,7 @@ import { ScheduledTransactionItem } from '../generic'
 import type { ScheduledTransactionItemProps } from '../generic/'
 import { NoTransactionItem } from '../generic/'
 import type { Account, Transaction } from '@/types'
+import { useNavigate } from '@tanstack/react-router'
 
 type AccountBoardProps = {
   account: Account
@@ -105,6 +106,7 @@ const transactions: Array<Transaction> = [
 ]
 
 export default function AccountBoard({ account }: AccountBoardProps) {
+  const navigate = useNavigate()
   return (
     <div data-testid="account-board">
       <h1 className="text-4xl mb-20">{account.type}</h1>
@@ -112,7 +114,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
         <div>
           <p className="mt-4 text-gray-600 text2xl">Total balance</p>
           <p className="text-4xl font-bold">{account.balance}</p>
-          <button className="mt-4 px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-md shadow">
+          <button
+            onClick={() => navigate({ to: '/transfer' })}
+            className="mt-4 cursor-pointer px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-md shadow"
+          >
             + New transfer
           </button>
         </div>

@@ -1,4 +1,5 @@
 import AccountBoard from '@/components/account/AccountBoard'
+import Spinner from '@/components/generic/Spinner'
 import { useAccount } from '@/hooks'
 
 type AccountPageProps = {
@@ -8,7 +9,7 @@ type AccountPageProps = {
 export default function AccountPage({ id }: AccountPageProps) {
   const { data: account, isLoading, isError } = useAccount(id)
 
-  if (isLoading) return <div className="p-8">Loading account details...</div>
+  if (isLoading) return <Spinner />
   if (isError)
     return (
       <div className="p-8 text-red-500">Failed loading account details</div>

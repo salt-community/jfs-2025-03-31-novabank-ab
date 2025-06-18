@@ -22,11 +22,7 @@ export default function DashboardPage() {
     return (
       <Spinner />
     )
-  if (isTransactionsLoading) return (
-    <div className="p-20 flex justify-center text-5xl items-center">
-      <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
-    </div>
-  )
+  if (isTransactionsLoading) return <Spinner />
 
   if (isAccountsError)
     return <div className="p-8 text-red-500">Failed to load accounts</div>
