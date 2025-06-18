@@ -266,7 +266,7 @@ export function TotalTransactionsAreaChart() {
   if (!data) {
     return <div>No data found.</div>
   }
-  const chartMappedData = transactionsToChartData(fakeTransactions)
+  const chartMappedData = transactionsToChartData(data)
 
   const filteredData = chartMappedData.filter((item) => {
     const date = new Date(item.date)
