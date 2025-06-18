@@ -14,5 +14,5 @@ export async function getAllTransactions(token: string): Promise<Array<Transacti
 
   if (!res.ok) throw new Error('Failed to fetch transactions')
   const data = await res.json()
-  return data.transactions
+  return data.content
 }

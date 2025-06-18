@@ -65,7 +65,7 @@ public class TransactionController {
         String userId = jwt.getSubject();
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable);
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Operation(
