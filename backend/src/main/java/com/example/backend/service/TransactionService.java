@@ -13,6 +13,7 @@ import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,6 +86,7 @@ public class TransactionService {
         scheduledTransactionRepository.save(transaction);
     }
 
+    @Scheduled(cron = "0 0 9 * * *", zone = "Europe/Stockholm")
     @Transactional
     public void processScheduledTransactions() {
         LocalDateTime now = LocalDateTime.now();
@@ -129,7 +131,6 @@ public class TransactionService {
 
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
-
 
     public List<Transaction> getTransactionsByUser(String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
