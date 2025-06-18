@@ -105,7 +105,7 @@ public class AccountService {
             accountNicknameRepository.save(pastNickname.get());
             return;
         }
-        AccountNickname nickname = new AccountNickname(account, name);
+        AccountNickname nickname = new AccountNickname(name, account);
         accountNicknameRepository.save(nickname);
     }
 

@@ -2,51 +2,64 @@ package com.example.backend.model;
 
 import com.example.backend.model.enums.PaymentType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Setter
+@Table(name = "transactions")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
+@Builder
 public class Transaction {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_account_id")
     private Account fromAccount;
 
+    @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
+
     @Column
     private String recipientNumber;
+
+    @NonNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentType type;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @NonNull
     @Column(nullable = false)
     private double amount;
+
+    @NonNull
     @Column(nullable = false)
     private String description;
+
+    @NonNull
     @Column(nullable = false)
     private String userNote;
+
+    @NonNull
     @Column(nullable = false)
     private String ocrNumber;
 
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDateTime.now();
+    }
 
 }
