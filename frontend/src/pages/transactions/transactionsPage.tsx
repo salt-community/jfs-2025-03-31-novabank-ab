@@ -22,6 +22,7 @@ export default function TransactionsPage() {
       <div className="p-8 text-red-500">{t('failedToLoadTransactions')}</div>
     )
   }
+  const seen = new Set()
 
   const seen = new Set()
 
@@ -55,6 +56,15 @@ export default function TransactionsPage() {
                 />
               )
             })
+            .map((tx: Transaction) => (
+              <TransactionItem
+                key={tx.transactionId}
+                name={tx.description}
+                category={tx.type}
+                amount={tx.amount}
+                time={tx.date}
+              />
+            ))
         )}
       </div>
     </div>
