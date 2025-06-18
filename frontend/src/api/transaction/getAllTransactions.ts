@@ -2,8 +2,6 @@ import type { Transaction } from '@/types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
-//const BASE_URL = '/mocks/transactions.json'
-
 export async function getAllTransactions(token: string): Promise<Array<Transaction>> {
   const res = await fetch(BASE_URL.concat('account/all-transactions'), {
     method: 'GET',

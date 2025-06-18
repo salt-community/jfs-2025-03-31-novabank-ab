@@ -15,17 +15,3 @@ export function useGetAllTransactions() {
     },
   })
 }
-
-// Prepared for the real call later on
-
-// export function useTransactions() {
-//   const { getToken } = useAuth()
-
-//   return useQuery<Array<Transaction>>({
-//     queryKey: ['transactions'],
-//     queryFn: async () => {
-//       const token = await getToken()
-//       return getTransactions(token)
-//     },
-//   })
-// }

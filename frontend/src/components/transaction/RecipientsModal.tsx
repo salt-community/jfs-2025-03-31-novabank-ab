@@ -219,15 +219,15 @@ export default function RecipientsModal({
                   value={newRec || ''}
                   type="text"
                   onChange={(e) => setNewRec(e.target.value)}
-                  className={`peer hover:cursor-pointer  text-black rounded 
+                  className={`peer hover:cursor-pointer  text-black rounded-md shadow-md
                         p-4 w-full text-left  bg-white outline focus:outline-2
-                        ${errors.recipientError ? ' outline-red-600 focus:outline-red-600  ' : ' outline-gray-500 focus:outline-black'}
+                        ${errors.recipientError ? ' outline-red-600 focus:outline-red-600  ' : ' outline-gray-200 focus:outline-black'}
                         `}
                 />
 
                 <label
                   htmlFor="newAccount"
-                  className={`absolute hover:cursor-pointer left-4 px-1  transition-all duration-200 bg-white
+                  className={`absolute hover:cursor-pointer left-4 px-1  transition-all duration-200 bg-white rounded-lg
                         ${
                           newRec
                             ? '-top-2.5 text-sm text-black font-semibold'
@@ -253,7 +253,7 @@ export default function RecipientsModal({
                   name="accNoTypes"
                   value={ant || ''}
                   onChange={(e) => setAnt(e.target.value)}
-                  className={`peer hover:cursor-pointer rounded p-4 pb-5 w-full outline outline-gray-500 
+                  className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
                               focus:outline-2 focus:outline-black text-left bg-white
                               ${errors.accNoTypeError ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
                               border-r-15 border-transparent
@@ -275,7 +275,7 @@ export default function RecipientsModal({
 
                 <label
                   htmlFor="accNoType"
-                  className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+                  className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
               ${
                 ant
                   ? '-top-2.5 font-semibold text-sm text-black'
@@ -301,7 +301,7 @@ export default function RecipientsModal({
                   onClick={() => {
                     handleRecipientSubmit(recipientClient)
                   }}
-                  className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black font-semibold shadow-sm px-5 py-2 rounded transition-colors"
+                  className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
                 >
                   {t('done')}
                 </button>

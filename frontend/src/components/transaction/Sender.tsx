@@ -68,7 +68,7 @@ export default function Sender({
 
         <label
           htmlFor="fromAccount"
-          className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+          className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
               ${
                 sender
                   ? '-top-2.5 font-semibold text-sm text-black'

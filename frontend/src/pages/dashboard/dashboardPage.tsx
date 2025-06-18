@@ -4,7 +4,6 @@ import { AccountGallery } from '@/components/dashboard'
 import Spinner from '@/components/generic/Spinner'
 
 export default function DashboardPage() {
-  // TODO move hooks inside specific component, where it belongs
 
   const {
     data: accounts = [],

@@ -25,7 +25,7 @@ export default function Amount({ amount, setAmount, error }: AmountProps) {
         />
         <label
           htmlFor="amount"
-          className={`absolute left-4 px-1 bg-white transition-all duration-200
+          className={`absolute left-4 px-1 bg-white transition-all duration-200 rounded-lg
                       ${amount ? '-top-2.5 font-semibold text-sm text-black' : 'top-4 text-base text-gray-400 bg-transparent'}
                       ${error ? ' peer-focus:text-red-600 ' : 'peer-focus:text-black '}
                       peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm peer-focus:bg-white`}
