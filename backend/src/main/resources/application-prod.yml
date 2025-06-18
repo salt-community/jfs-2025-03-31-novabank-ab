@@ -2,11 +2,17 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLERK_ISSUER_URL}
+
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${DB_PROD_URL}
+    username: ${DB_PROD_USERNAME}
+    password: ${DB_PROD_PASSWORD}
 
   jpa:
     hibernate:
@@ -14,3 +20,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+clerk:
+  api:
+    secret: ${CLERK_SECRET}
+
+logging:
+  level:
+    org.springdoc: ${SPRING_LOGGING_LEVEL:INFO}
+    org.springframework.web: ${SPRING_LOGGING_LEVEL:INFO}
