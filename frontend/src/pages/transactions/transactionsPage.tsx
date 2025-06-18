@@ -40,8 +40,8 @@ export default function TransactionsPage() {
             .map((tx: Transaction) => {
               let direction: 'in' | 'out' = 'out'
 
-              if (myAccountIds.has(tx.toAccount)) direction = 'in'
-              if (myAccountIds.has(tx.fromAccount)) direction = 'out'
+              if (myAccountIds.has(tx.toAccountId)) direction = 'in'
+              if (myAccountIds.has(tx.fromAccountId)) direction = 'out'
 
               return (
                 <TransactionItem
