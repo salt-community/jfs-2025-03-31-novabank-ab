@@ -35,7 +35,7 @@ public class SecurityConfig {
     ) throws Exception {
         return http
                 .cors(withDefaults())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**","/api/user/application"))
                 .headers(headers -> headers.frameOptions().sameOrigin())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
