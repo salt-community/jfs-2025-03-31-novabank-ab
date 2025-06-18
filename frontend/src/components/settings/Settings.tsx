@@ -4,6 +4,8 @@ import { useUpdateUserSettings } from '@/hooks/useUpdateUserNotifications'
 import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
 import type { UserSettings } from '@/types'
+import Spinner from '../generic/Spinner'
+
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
   const [editingPhone, setEditingPhone] = useState<boolean>(false)
@@ -33,8 +35,9 @@ const Settings = () => {
   const updateUserNotifications = useUpdateUserSettings()
 
   if (userFromApiLoading || userSettingsLoading)
-    return <div className="p-8">Loading user details...</div>
+    return <Spinner />
   if (userFromApiError || userSettingsError)
+  if (isError)
     return <div className="p-8 text-red-500">Failed loading user details</div>
 
   const updateUser = (whatToUpdate: string) => {
