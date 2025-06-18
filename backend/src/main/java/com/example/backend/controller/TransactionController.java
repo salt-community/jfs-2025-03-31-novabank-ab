@@ -1,9 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
-import com.example.backend.dto.transactionDto.response.ListUnifiedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
-import com.example.backend.model.Transaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -64,7 +63,7 @@ public class TransactionController {
             @RequestParam(defaultValue = "10") int size
     ) {
         String userId = jwt.getSubject();
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable);
         return ResponseEntity.ok(transactions);
     }

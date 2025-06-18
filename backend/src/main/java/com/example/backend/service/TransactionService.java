@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.exception.custom.*;
@@ -18,10 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.*;
 
@@ -138,29 +135,16 @@ public class TransactionService {
     }
 
     public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable) {
-        List<UUID> accountIds = accountService.getAllUserAccounts(userId).stream()
-                .map(Account::getId)
-                .toList();
-
-        Page<Transaction> page = transactionRepository.findByAccountIds(accountIds, pageable);
-        return page.map(UnifiedTransactionResponseDto::fromTransaction);
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
+        Page<Transaction> transactions = transactionRepository
+                .findByFromAccount_IdInOrToAccount_IdIn(accountIds, accountIds, pageable);
+        return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
-    public List<UnifiedTransactionResponseDto> getAllTransactionHistory() {
-        return transactionRepository.findAll().stream()
-                .map(tx -> new UnifiedTransactionResponseDto(
-                        tx.getId(),
-                        tx.getFromAccount().getId(),
-                        tx.getToAccount() != null ? tx.getToAccount().getId() : null,
-                        tx.getCreatedAt(),
-                        tx.getAmount(),
-                        tx.getDescription(),
-                        tx.getUserNote(),
-                        tx.getOcrNumber(),
-                        "COMPLETED",
-                        null
-                ))
-                .toList();
+    public Page<UnifiedTransactionResponseDto> getAllTransactionHistory(Pageable pageable) {
+        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+        return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
     private record TransactionData(Account from, Account to, String recipientNumber) {}
