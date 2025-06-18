@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useAccounts } from '@/hooks'
 import type { Account } from '@/types'
 import Spinner from '../generic/Spinner'
@@ -15,12 +16,13 @@ export default function Sender({
   recipient,
   error,
 }: SenderProps) {
+  const { t } = useTranslation('accounts')
   const { data: bankAccounts = [], isLoading, isError } = useAccounts()
 
   if (isLoading) return <Spinner />
 
   if (isError)
-    return <div className="p-8 text-red-500">Failed to load accounts</div>
+    return <div className="p-8 text-red-500">{t('failedToLoadAccounts')}</div>
 
   return (
     <>
@@ -42,7 +44,7 @@ export default function Sender({
               ${sender ? ' text-black' : 'text-gray-400'}`}
         >
           <option value="" className="text-gray-400">
-            Select an account
+            {t('selectAnAccount')}
           </option>
           {bankAccounts.map((account) => {
             const isDisabled =
@@ -76,7 +78,7 @@ export default function Sender({
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
               peer-focus:bg-white `}
         >
-          Sender
+          {t('sender')}
         </label>
         {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
       </div>

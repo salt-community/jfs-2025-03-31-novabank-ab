@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 type AmountProps = {
   amount: string
   setAmount: React.Dispatch<React.SetStateAction<string>>
@@ -5,6 +7,7 @@ type AmountProps = {
 }
 
 export default function Amount({ amount, setAmount, error }: AmountProps) {
+  const { t } = useTranslation('accounts')
   return (
     <>
       {/* Amount */}
@@ -27,7 +30,7 @@ export default function Amount({ amount, setAmount, error }: AmountProps) {
                       ${error ? ' peer-focus:text-red-600 ' : 'peer-focus:text-black '}
                       peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm peer-focus:bg-white`}
         >
-          Amount
+          {t('amount')}
         </label>
         {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
       </div>

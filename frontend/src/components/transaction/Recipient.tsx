@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Account } from '@/types'
 import { useState } from 'react'
 import RecipientsModal from './RecipientsModal'
@@ -22,6 +23,7 @@ export default function Recipient({
   setRecipientClient,
   setAccNoType,
 }: RecipientProps) {
+  const { t } = useTranslation('accounts')
   const { data: bankAccounts = [], isError } = useAccounts()
   const [showRecipientsModal, setShowRecipientsModal] = useState(false)
 
@@ -46,7 +48,7 @@ export default function Recipient({
   }
 
   if (isError)
-    return <div className="p-8 text-red-500">Failed to load accounts</div>
+    return <div className="p-8 text-red-500">{t('failedToLoadAccounts')}</div>
 
   return (
     <>
@@ -80,7 +82,7 @@ export default function Recipient({
                       peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm  
                       peer-focus:bg-white`}
         >
-          Recipient
+          {t('recipient')}
         </label>
         {(recipientAccount || recipientClient) && (
           <button
