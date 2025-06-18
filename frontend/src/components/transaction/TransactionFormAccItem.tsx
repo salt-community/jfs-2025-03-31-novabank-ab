@@ -1,14 +1,14 @@
 import type { Account } from '@/types'
 
-type TransferAccountItemProps = {
+type TransactionFormAccItem = {
   account: Account
   isDisabled: boolean
 }
 
-export default function TransferAccountItem({
+export default function TransactionFormAccItem({
   account,
   isDisabled,
-}: TransferAccountItemProps) {
+}: TransactionFormAccItem) {
   return (
     <div
       className={` border-1 flex items-center justify-between px-4 py-3 shadow-md bg-white duration-200

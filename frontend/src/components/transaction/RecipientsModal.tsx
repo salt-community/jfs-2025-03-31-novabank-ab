@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import TransferAccountItem from './TransferAccountItem'
+import TransactionFormAccItem from './TransactionFormAccItem'
 import type { Account } from '@/types'
 
 type RecipientsModalProps = {
@@ -200,7 +200,7 @@ export default function RecipientsModal({
                     }`}
                     disabled={isDisabled}
                   >
-                    <TransferAccountItem
+                    <TransactionFormAccItem
                       key={account.accountNumber}
                       account={account}
                       isDisabled={isDisabled}

@@ -1,4 +1,4 @@
-import { useAccounts, useTransactions } from '@/hooks'
+import { useAccounts, useGetAllTransactions } from '@/hooks'
 import { TransactionList } from '@/components/generic'
 import { AccountGallery } from '@/components/dashboard'
 import Spinner from '@/components/generic/Spinner'
@@ -16,7 +16,7 @@ export default function DashboardPage() {
     data: transactions = [],
     isLoading: isTransactionsLoading,
     isError: isTransactionsError,
-  } = useTransactions()
+  } = useGetAllTransactions()
 
   if (isAccountsLoading)
     return (
