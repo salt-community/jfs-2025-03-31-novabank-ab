@@ -76,7 +76,6 @@ public class TransactionService {
         scheduledTransactions.forEach(st -> unifiedTransactions.add(UnifiedTransactionResponseDto.fromScheduledTransaction(st)));
 
         return unifiedTransactions;
-
     }
 
     public void deleteScheduledTransaction( UUID transactionId, String userId) {
