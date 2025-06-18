@@ -142,21 +142,9 @@ public class TransactionService {
         return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
-    public List<UnifiedTransactionResponseDto> getAllTransactionHistory() {
-        return transactionRepository.findAll().stream()
-                .map(tx -> new UnifiedTransactionResponseDto(
-                        tx.getId(),
-                        tx.getFromAccount().getId(),
-                        tx.getToAccount() != null ? tx.getToAccount().getId() : null,
-                        tx.getCreatedAt(),
-                        tx.getAmount(),
-                        tx.getDescription(),
-                        tx.getUserNote(),
-                        tx.getOcrNumber(),
-                        "COMPLETED",
-                        null
-                ))
-                .toList();
+    public Page<UnifiedTransactionResponseDto> getAllTransactionHistory(Pageable pageable) {
+        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+        return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
     private record TransactionData(Account from, Account to, String recipientNumber) {}

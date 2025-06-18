@@ -17,6 +17,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -139,10 +143,18 @@ public class AdminController {
         return ResponseEntity.ok(application);
     }
 
-    @Operation(summary = "Get all transaction history", description = "Returns a list of all transactions")
+    @Operation(
+            summary = "Get paginated transaction history",
+            description = "Returns a paginated list of all transactions"
+    )
     @GetMapping("/transaction-history")
-    public ResponseEntity<List<UnifiedTransactionResponseDto>> getTransactionHistory() {
-        return ResponseEntity.ok(transactionService.getAllTransactionHistory());
+    public ResponseEntity<Page<UnifiedTransactionResponseDto>> getTransactionHistory(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<UnifiedTransactionResponseDto> transactions = transactionService.getAllTransactionHistory(pageable);
+        return ResponseEntity.ok(transactions);
     }
 
     @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
