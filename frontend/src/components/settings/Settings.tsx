@@ -7,11 +7,6 @@ import type { UserSettings } from '@/types'
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
   const [editingPhone, setEditingPhone] = useState<boolean>(false)
-  const [smsNotifications, setSmsNotifications] = useState(false)
-  const [emailNotifications, setEmailNotifications] = useState(false)
-  const [cardNotifications, setCardNotifications] = useState(false)
-  const [atmNotifications, setAtmNotifications] = useState(false)
-  const [depositNotifications, setDepositNotifications] = useState(false)
   const [userNotificationSettings, setUserNotificationSettings] =
     useState<UserSettings>({
       atmWithdrawalNotifications: false,
@@ -21,7 +16,6 @@ const Settings = () => {
       language: 'en',
       smsNotifications: false,
     })
-  const [language, setLanguage] = useState('English')
   const { user } = useUser()
   const {
     data: userFromApi,
@@ -68,14 +62,7 @@ const Settings = () => {
   }
 
   const updateUserSettings = () => {
-    updateUserNotifications.mutate({
-      atmWithdrawalNotifications: atmNotifications,
-      cardTransactionNotifications: cardNotifications,
-      depositNotifications: depositNotifications,
-      emailNotifications: emailNotifications,
-      language: language === 'English' ? 'en' : 'sv',
-      smsNotifications: smsNotifications,
-    })
+    updateUserNotifications.mutate(userNotificationSettings)
   }
 
   return (
@@ -83,7 +70,15 @@ const Settings = () => {
       <Tabs defaultValue="personal">
         <TabsList>
           <TabsTrigger value="personal">Personal</TabsTrigger>
-          <TabsTrigger value="general">General</TabsTrigger>
+          <div
+            onClick={() => {
+              if (userSettingsFromApi) {
+                setUserNotificationSettings(userSettingsFromApi)
+              }
+            }}
+          >
+            <TabsTrigger value="general">General</TabsTrigger>
+          </div>
         </TabsList>
         <div className="ml-5 mt-5">
           <TabsContent value="personal">
@@ -147,6 +142,7 @@ const Settings = () => {
             </div>
           </TabsContent>
         </div>
+
         <TabsContent value="general">
           <div className="flex flex-row">
             <h3 className="text-xl mb-2 w-[15vw]">SMS notifications</h3>
@@ -154,7 +150,20 @@ const Settings = () => {
               type="checkbox"
               className="ml-2 mb-1"
               checked={userNotificationSettings.smsNotifications}
-              onChange={(e) => setSmsNotifications(e.target.checked)}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: e.target.checked,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <div className="flex flex-row">
@@ -163,7 +172,19 @@ const Settings = () => {
               type="checkbox"
               className="ml-2 mb-1"
               checked={userNotificationSettings.emailNotifications}
-              onChange={(e) => setEmailNotifications(e.target.checked)}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications: e.target.checked,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
@@ -175,7 +196,19 @@ const Settings = () => {
               type="checkbox"
               className="ml-2 mb-1"
               checked={userNotificationSettings.cardTransactionNotifications}
-              onChange={(e) => setCardNotifications(e.target.checked)}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications: e.target.checked,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <div className="flex flex-row">
@@ -186,7 +219,19 @@ const Settings = () => {
               type="checkbox"
               className="ml-2 mb-1"
               checked={userNotificationSettings.atmWithdrawalNotifications}
-              onChange={(e) => setAtmNotifications(e.target.checked)}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications: e.target.checked,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <div className="flex flex-row">
@@ -195,7 +240,19 @@ const Settings = () => {
               type="checkbox"
               className="ml-2 mb-1"
               checked={userNotificationSettings.depositNotifications}
-              onChange={(e) => setDepositNotifications(e.target.checked)}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications: e.target.checked,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: userNotificationSettings.language,
+                })
+              }
             />
           </div>
           <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
@@ -204,7 +261,20 @@ const Settings = () => {
             <select
               className="w-[5vw]"
               value={`${userNotificationSettings.language === 'en' ? `English` : `Swedish`}`}
-              onChange={(e) => setLanguage(e.target.value)}
+              onChange={(e) =>
+                setUserNotificationSettings({
+                  atmWithdrawalNotifications:
+                    userNotificationSettings.atmWithdrawalNotifications,
+                  cardTransactionNotifications:
+                    userNotificationSettings.cardTransactionNotifications,
+                  depositNotifications:
+                    userNotificationSettings.depositNotifications,
+                  emailNotifications:
+                    userNotificationSettings.emailNotifications,
+                  smsNotifications: userNotificationSettings.smsNotifications,
+                  language: `${e.target.value === 'English' ? `en` : `sv`}`,
+                })
+              }
             >
               <option value="English">English</option>
               <option value="Swedish">Swedish</option>
