@@ -34,10 +34,8 @@ const Settings = () => {
   const updateUserMutation = useUpdateUser()
   const updateUserNotifications = useUpdateUserSettings()
 
-  if (userFromApiLoading || userSettingsLoading)
-    return <Spinner />
+  if (userFromApiLoading || userSettingsLoading) return <Spinner />
   if (userFromApiError || userSettingsError)
-  if (isError)
     return <div className="p-8 text-red-500">Failed loading user details</div>
 
   const updateUser = (whatToUpdate: string) => {
