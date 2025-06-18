@@ -1,24 +1,24 @@
 import DatePicker from './DatePicker'
 
-type TransferDateProps = {
-  transferDate: string | null
-  setTransferDate: React.Dispatch<React.SetStateAction<string | null>>
+type TransactionDateProps = {
+  transactionDate: string | null
+  setTransactionDate: React.Dispatch<React.SetStateAction<string | null>>
   error: string | undefined
 }
 
-export default function TransferDate({
-  transferDate,
-  setTransferDate,
+export default function TransactionDate({
+  transactionDate,
+  setTransactionDate,
   error,
-}: TransferDateProps) {
+}: TransactionDateProps) {
   return (
     <>
-      {/* Transfer date */}
+      {/* Transaction date */}
       <div className="relative w-full">
         <div className={`${error ? 'border border-red-500 rounded' : ''}`}>
           <DatePicker
-            value={transferDate}
-            onDateChange={setTransferDate}
+            value={transactionDate}
+            onDateChange={setTransactionDate}
             error={error}
           />
         </div>

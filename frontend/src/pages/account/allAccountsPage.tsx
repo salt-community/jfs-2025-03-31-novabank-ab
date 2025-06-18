@@ -2,7 +2,7 @@ import { AccountsBoard } from '@/components/accounts'
 import Spinner from '@/components/generic/Spinner'
 import { useAccounts } from '@/hooks'
 
-export default function AccountsPage() {
+export default function AllAccountsPage() {
   const { data: accounts = [], isLoading, isError } = useAccounts()
 
   if (isLoading) return <Spinner />

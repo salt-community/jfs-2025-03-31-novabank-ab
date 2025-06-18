@@ -1,12 +1,11 @@
 import type { Transaction } from '@/types'
 import { TransactionItem } from '@/components/generic'
-import { useTransactions } from '@/hooks'
+import { useGetAllTransactions } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 
 export default function TransactionsPage() {
-  const { data: transactions = [], isLoading, isError } = useTransactions()
+  const { data: transactions = [], isLoading, isError } = useGetAllTransactions()
  
-
   if (isLoading) return <Spinner />
   if (isError) {
     return <div className="p-8 text-red-500">Failed to load transactions</div>

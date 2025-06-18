@@ -145,7 +145,7 @@ export default function DatePicker({
           peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm peer-focus:bg-white
         `}
       >
-        Transfer date
+        Transaction date
       </label>
 
       {/* Calendar popup */}

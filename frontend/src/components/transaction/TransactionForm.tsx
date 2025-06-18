@@ -4,27 +4,29 @@ import type { Account } from '@/types'
 import Sender from './Sender'
 import Recipient from './Recipient'
 import Amount from './Amount'
-import TransferDate from './TransferDate'
+import TransactionDate from './TransactionDate'
 import Notes from './Notes'
 import Ocr from './Ocr'
-import { useRandomDescription } from '@/hooks/useRandomDesc'
+import { useRandomDesc } from '@/hooks'
+import { useCreateTransaction } from '@/hooks'
 
-export default function TransferForm() {
+export default function TransactionForm() {
   const [amount, setAmount] = useState('')
   const [sender, setSender] = useState<Account | null>(null)
   const [recipientAccount, setRecipientAccount] = useState<Account | null>(null)
   const [recipientClient, setRecipientClient] = useState<string | null>(null)
-  const [transferDate, setTransferDate] = useState<string | null>(null)
+  const [transactionDate, setTransactionDate] = useState<string | null>(null)
   const [ocr, setOcr] = useState('')
   const [notes, setNotes] = useState('')
   const [accNoType, setAccNoType] = useState('')
-  const randomDesc = useRandomDescription()
+  const randomDesc = useRandomDesc()
+  const createTransaction = useCreateTransaction()
 
   const [errors, setErrors] = useState<{
     sender?: string
     recipientError?: string
     amount?: string
-    transferDate?: string
+    transactionDate?: string
   }>({})
 
   const isFormValid = (): boolean => {
@@ -36,19 +38,31 @@ export default function TransferForm() {
       newErrors.recipientError = 'Please select a recipient account'
     if (!amount || parseFloat(amount) <= 0)
       newErrors.amount = 'Please enter a valid amount'
-    if (!transferDate) newErrors.transferDate = 'Transfer date is required'
+    if (!transactionDate) newErrors.transactionDate = 'Transaction date is required'
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
+  }
+
+  const resetForm = () => {
+    setAmount('')
+    setSender(null)
+    setRecipientAccount(null)
+    setRecipientClient(null)
+    setTransactionDate(null)
+    setOcr('')
+    setNotes('')
+    setAccNoType('')
+    setErrors({})
   }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!isFormValid()) return
 
-    if (!transferDate) return // safety check
+    if (!transactionDate || !sender) return
 
-    const selectedDate = new Date(transferDate)
+    const selectedDate = new Date(transactionDate)
 
     const accountTypeForBackend =
       accNoType === 'Other account'
@@ -56,23 +70,36 @@ export default function TransferForm() {
         : accNoType.toUpperCase()
 
     const transactionPayload = {
-      toAccountNo: recipientAccount?.accountNumber ?? recipientClient,
       fromAccountNo: sender?.accountNumber,
-      timestamp: selectedDate.toISOString(), // scheduled transfer time
+      toAccountNo: recipientAccount?.accountNumber ?? recipientClient!,
+      type: accountTypeForBackend,
+      transactionDate: selectedDate.toISOString(), // scheduled transaction date
       amount: parseFloat(amount),
       description: randomDesc, //send random hardcoded desc data
-      OCR: ocr || '',
       userNote: notes || '',
-      accountNoType: accountTypeForBackend,
+      ocrNumber: ocr || '',
     }
 
     // Send transactionPayload to API endpoint
     console.log(transactionPayload)
+
+    createTransaction.mutate(transactionPayload, {
+      onSuccess: () => {
+        alert('Transaction created')
+        resetForm()
+      },
+      onError: () => {
+        alert('Failed to create transaction')
+      },
+    })
   }
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl shadow-sm p-10">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5 max-w-3xl shadow-sm p-10"
+      >
         <Sender
           sender={sender}
           setSender={setSender}
@@ -92,10 +119,10 @@ export default function TransferForm() {
 
         <Amount amount={amount} setAmount={setAmount} error={errors.amount} />
 
-        <TransferDate
-          transferDate={transferDate}
-          setTransferDate={setTransferDate}
-          error={errors.transferDate}
+        <TransactionDate
+          transactionDate={transactionDate}
+          setTransactionDate={setTransactionDate}
+          error={errors.transactionDate}
         />
 
         <Ocr ocr={ocr} setOcr={setOcr} />
@@ -106,10 +133,15 @@ export default function TransferForm() {
         <div className="relative w-full">
           <button
             type="submit"
-            className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black 
-                       shadow-md px-5 py-4 rounded-lg hover:cursor-pointer transition-colors w-full"
+            disabled={createTransaction.isPending}
+            className={`bg-[#FFB20F] mt-5 text-black shadow-md px-5 py-4 rounded-lg w-full transition-colors
+                        ${
+                          createTransaction.isPending
+                            ? 'opacity-50 cursor-not-allowed'
+                            : 'hover:bg-[#F5A700] hover:cursor-pointer'
+                        }`}
           >
-            Submit
+            {createTransaction.isPending ? 'Processing...' : 'Submit'}
           </button>
         </div>
       </form>
