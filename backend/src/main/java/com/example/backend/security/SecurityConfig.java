@@ -3,6 +3,7 @@ package com.example.backend.security;
 import com.example.backend.model.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,8 +26,38 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    //TODO review deprecated frameOptions() and h2 console below - works for now
+    // note: this one is for dev and h2-console, for prod scroll down
     @Bean
+    @Profile("dev")
+    public SecurityFilterChain devDefaultFilterChain(
+            HttpSecurity http,
+            JwtAuthenticationConverter jwtAuthenticationConverter
+    ) throws Exception {
+        return http
+                .cors(withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**","/api/user/application"))
+                .headers(headers -> headers.frameOptions().sameOrigin())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/h2-console/**",
+                                "/api/user/application"
+                        ).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
+                )
+                .build();
+    }
+
+    // prod here
+    @Bean
+    @Profile("prod")
     public SecurityFilterChain defaultFilterChain(
             HttpSecurity http,
             JwtAuthenticationConverter jwtAuthenticationConverter

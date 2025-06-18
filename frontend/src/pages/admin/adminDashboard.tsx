@@ -1,6 +1,6 @@
 import ApplicantStatusCards from '@/components/admin/ApplicantStatusCards'
 import ActiveUsersAreaChart from '@/components/admin/charts/ActiveUsersAreaChart'
-import CashFlowAreaChart from '@/components/admin/charts/CashFlowAreaChart'
+import { TotalTransactionsAreaChart } from '@/components/admin/charts/TotalTransactionsAreaChart'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function AdminDashboard() {
@@ -8,14 +8,16 @@ export default function AdminDashboard() {
     <div className="space-y-20 ">
       <Tabs defaultValue="activeUsers">
         <TabsList>
-          <TabsTrigger value="cashFlow">Cash Flow</TabsTrigger>
           <TabsTrigger value="activeUsers">Active Users</TabsTrigger>
+          <TabsTrigger value="totalTransactions">
+            Transactions Volume
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="activeUsers">
           <ActiveUsersAreaChart />
         </TabsContent>
-        <TabsContent value="cashFlow">
-          <CashFlowAreaChart />
+        <TabsContent value="totalTransactions">
+          <TotalTransactionsAreaChart />
         </TabsContent>
       </Tabs>
       <ApplicantStatusCards />
