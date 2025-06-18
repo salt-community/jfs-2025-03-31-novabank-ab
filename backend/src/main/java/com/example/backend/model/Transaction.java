@@ -6,15 +6,15 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Getter
-@Setter
 @Entity
 @Table(name = "transactions")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -22,6 +22,7 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_account_id", nullable = false)
     private Account fromAccount;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id")
@@ -53,4 +54,3 @@ public class Transaction {
         this.createdAt = LocalDateTime.now();
     }
 }
-
