@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { LabeledInput } from './LabeledInput'
-
-const PHONE_REGEX = /^\+\d{7,15}$/
+import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
 interface Props {
   value: string
@@ -14,7 +13,13 @@ export const PhoneInput: React.FC<Props> = ({ value, onChange }) => {
   const handle = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value
     onChange(v)
-    setError(PHONE_REGEX.test(v) ? '' : 'Must be “+” plus 7–15 digits')
+
+    const phoneNumber = parsePhoneNumberFromString(v)
+    if (!phoneNumber || !phoneNumber.isValid()) {
+      setError('Must be a valid international phone number (E.164)')
+    } else {
+      setError('')
+    }
   }
 
   return (
