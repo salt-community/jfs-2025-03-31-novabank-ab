@@ -26,5 +26,17 @@
   "transactionDateIsRequired": "Transaction date is required",
   "otherAccount": "Other accuont",
   "processing": "Processing",
-  "submit": "Submit"
+  "submit": "Submit",
+  "notes": "Notes",
+  "optional": "optional",
+  "ifApplicable": "if applicable",
+  "mo": "Mo",
+  "tu": "Tu",
+  "we": "We",
+  "th": "Th",
+  "fr": "Fr",
+  "sa": "Sa",
+  "su": "Su",
+  "transactionDate": "Transaction date",
+  "today": "Today"
 }

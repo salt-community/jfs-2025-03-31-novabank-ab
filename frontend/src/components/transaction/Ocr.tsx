@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next'
+
 type OcrProps = {
   ocr: string
   setOcr: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function Ocr({ ocr, setOcr }: OcrProps) {
+  const { t } = useTranslation('accounts')
   return (
     <>
       {/* OCR */}
@@ -24,7 +27,7 @@ export default function Ocr({ ocr, setOcr }: OcrProps) {
               ${ocr ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
               peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
         >
-          OCR <span className="text-xs">(if applicable)</span>
+          OCR <span className="text-xs">({t('ifApplicable')})</span>
         </label>
       </div>
     </>

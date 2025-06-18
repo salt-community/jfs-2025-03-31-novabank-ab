@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 type NotesProps = {
   notes: string
   setNotes: React.Dispatch<React.SetStateAction<string>>
 }
 
 export default function Notes({ notes, setNotes }: NotesProps) {
+  const { t } = useTranslation('accounts')
   return (
     <>
       {/* Notes */}
@@ -23,7 +25,7 @@ export default function Notes({ notes, setNotes }: NotesProps) {
                       ${notes ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
                       peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
         >
-          Notes <span className="text-xs">(optional)</span>
+          {t('notes')} <span className="text-xs">({t('optional')})</span>
         </label>
       </div>
     </>

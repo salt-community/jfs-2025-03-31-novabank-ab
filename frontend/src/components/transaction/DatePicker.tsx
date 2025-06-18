@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-
-const WEEK_DAYS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+import { useTranslation } from 'react-i18next'
 
 export default function DatePicker({
   onDateChange,
@@ -11,6 +10,16 @@ export default function DatePicker({
   value: string | null
   error: string | undefined
 }) {
+  const { t } = useTranslation('accounts')
+  const WEEK_DAYS = [
+    t('mo'),
+    t('tu'),
+    t('we'),
+    t('th'),
+    t('fr'),
+    t('sa'),
+    t('su'),
+  ]
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<string | null>(value)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -35,7 +44,9 @@ export default function DatePicker({
 
   const totalCells = 42
   const nextMonthDaysCount = totalCells - (firstDayIndex + daysInMonth)
-  const nextMonthDays = Array(nextMonthDaysCount).fill(0).map((_, i) => i + 1)
+  const nextMonthDays = Array(nextMonthDaysCount)
+    .fill(0)
+    .map((_, i) => i + 1)
 
   const handlePrevMonth = () => {
     const d = new Date(currentDate)
@@ -145,7 +156,7 @@ export default function DatePicker({
           peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm peer-focus:bg-white
         `}
       >
-        Transaction date
+        {t('transactionDate')}
       </label>
 
       {/* Calendar popup */}
@@ -184,7 +195,7 @@ export default function DatePicker({
               onClick={handleTodayClick}
               className="text-sm text-blue-600 hover:underline cursor-pointer"
             >
-              Today
+              {t('today')}
             </button>
           </div>
 
@@ -230,8 +241,8 @@ export default function DatePicker({
                       isSelected
                         ? 'bg-black text-white'
                         : isPastDate
-                        ? 'text-gray-400 cursor-default hover:cursor-default'
-                        : 'hover:bg-gray-200 text-black cursor-pointer'
+                          ? 'text-gray-400 cursor-default hover:cursor-default'
+                          : 'hover:bg-gray-200 text-black cursor-pointer'
                     }`}
                     aria-current={isSelected ? 'date' : undefined}
                   >
