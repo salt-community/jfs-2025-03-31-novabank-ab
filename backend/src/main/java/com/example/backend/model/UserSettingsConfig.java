@@ -23,11 +23,11 @@ public class UserSettingsConfig {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    private boolean smsNotifications;
-    private boolean emailNotifications;
-    private boolean cardTransactionNotifications;
-    private boolean atmWithdrawalNotifications;
-    private boolean depositNotifications;
+    private boolean smsNotifications = true;
+    private boolean emailNotifications = true;
+    private boolean cardTransactionNotifications = true;
+    private boolean atmWithdrawalNotifications = true;
+    private boolean depositNotifications = true;
 
     @NonNull
     @Column(nullable = false)

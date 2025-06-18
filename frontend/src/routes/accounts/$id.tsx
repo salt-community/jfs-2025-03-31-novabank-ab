@@ -1,5 +1,5 @@
 import { createFileRoute, useParams } from '@tanstack/react-router'
-import AccountPage from '@/pages/accountsPage/AccountPage'
+import AccountPage from '@/pages/account/accountPage'
 
 export const Route = createFileRoute('/accounts/$id')({
   component: RouteComponent,

@@ -5,6 +5,8 @@ import {
   approveApplication,
   rejectApplication,
 } from '@/api/application'
+import { sendRegisterApplication } from '@/api/application'
+import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 
 const TOKEN = import.meta.env.VITE_TOKEN || ''
 
@@ -34,5 +36,11 @@ export function useRejectApplication() {
       return rejectApplication(TOKEN, id)
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
+  })
+}
+
+export function useRegisterApplication() {
+  return useMutation<void, Error, ApplicationRequestDto>({
+    mutationFn: (dto) => sendRegisterApplication(dto),
   })
 }

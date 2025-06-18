@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import SettingsPage from '@/pages/settingsPage/SettingsPage'
+import SettingsPage from '@/pages/settings/settingsPage'
 
 export const Route = createFileRoute('/settings')({
   component: RouteComponent,
