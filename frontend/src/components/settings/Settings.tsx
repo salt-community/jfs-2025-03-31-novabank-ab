@@ -137,7 +137,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={smsNotifications}
+              checked={userSettingsFromApi?.smsNotifications}
               onChange={(e) => setSmsNotifications(e.target.checked)}
             />
           </div>
@@ -146,7 +146,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={emailNotifications}
+              checked={userSettingsFromApi?.emailNotifications}
               onChange={(e) => setEmailNotifications(e.target.checked)}
             />
           </div>
@@ -158,7 +158,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={cardNotifications}
+              checked={userSettingsFromApi?.cardTransactionNotifications}
               onChange={(e) => setCardNotifications(e.target.checked)}
             />
           </div>
@@ -169,7 +169,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={atmNotifications}
+              checked={userSettingsFromApi?.atmWithdrawalNotifications}
               onChange={(e) => setAtmNotifications(e.target.checked)}
             />
           </div>
@@ -178,7 +178,7 @@ const Settings = () => {
             <input
               type="checkbox"
               className="ml-2 mb-1"
-              checked={depositNotifications}
+              checked={userSettingsFromApi?.depositNotifications}
               onChange={(e) => setDepositNotifications(e.target.checked)}
             />
           </div>
@@ -187,7 +187,7 @@ const Settings = () => {
             <h3 className="text-xl mb-2 w-[13vw]">Language</h3>
             <select
               className="w-[5vw]"
-              value={language}
+              value={`${userSettingsFromApi?.language === 'en' ? `English` : `Swedish`}`}
               onChange={(e) => setLanguage(e.target.value)}
             >
               <option value="English">English</option>

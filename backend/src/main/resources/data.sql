@@ -39,13 +39,54 @@ INSERT INTO user_settings_configs (
     atm_withdrawal_notifications,
     deposit_notifications,
     language
-) VALUES (
-             'a97d9d4e-3f25-4bb9-9b3b-2e6f9b61fd3f', -- UUID for the settings row
-             'user_2yMZ4k4VMcQ4C3Yowv3JfXg0mOd',     -- Must match a real user in `users` table
-             true,   -- sms_notifications
-             true,   -- email_notifications
-             true,   -- card_transaction_notifications
-             false,  -- atm_withdrawal_notifications
-             true,   -- deposit_notifications
-             'en'    -- language
-         );
+) VALUES
+      (
+          'a97d9d4e-3f25-4bb9-9b3b-2e6f9b61fd3f',
+          'user_2yMZ4k4VMcQ4C3Yowv3JfXg0mOd',
+          true,
+          true,
+          true,
+          false,
+          true,
+          'en'
+      ),
+      (
+          'b87e8d1f-2b34-4a4e-8d7e-1f234fa1abc2',
+          'user_2yJpkDpb1EaHO7sAK8GVzXoQ3Hf',
+          true,
+          true,
+          true,
+          false,
+          true,
+          'en'
+      ),
+      (
+          'c58a9c8d-6e35-4d90-9f4e-a8ed3aa9ed12',
+          'user_2ya9D2bPCC3XYyGsklZRQPPBeb9',
+          true,
+          true,
+          true,
+          false,
+          true,
+          'en'
+      ),
+      (
+          'd29b8b5f-3b21-4d3b-b8cb-8d56c5a76f3e',
+          'user_2yMYqxXhoEDq64tfBlelGADfdlp',
+          true,
+          true,
+          true,
+          false,
+          true,
+          'en'
+      ),
+      (
+          'e91f6b88-7a62-4326-b68e-91b1d204f7e0',
+          'user_2fMYqxXhoEDq64tfBlelGADfdlp',
+          true,
+          true,
+          true,
+          false,
+          true,
+          'en'
+      );
