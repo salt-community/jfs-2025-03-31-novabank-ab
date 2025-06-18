@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping({"/api/account/transaction", "/api/account/transaction/"})
+@RequestMapping({"/api/account", "/api/account/"})
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -33,7 +33,7 @@ public class TransactionController {
             summary = "Retrieve a specific transaction by ID",
             description = "Fetches a single transaction from the database using its unique identifier (UUID)."
     )
-    @GetMapping("/{transactionId}")
+    @GetMapping("/transaction/{transactionId}")
     public ResponseEntity<UnifiedTransactionResponseDto> getTransaction(@PathVariable UUID transactionId,
                                                                         @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
@@ -44,8 +44,8 @@ public class TransactionController {
             summary = "Retrieve all transactions for a specific account",
             description = "Returns all transactions where the specified account is either the sender (fromAccount) or the receiver (toAccount)."
     )
-    @GetMapping("/{accountId}")
-    public ResponseEntity<CombinedTransactionResponseDto> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
+    @GetMapping("/{accountId}/transaction")
+    public ResponseEntity<List<UnifiedTransactionResponseDto>> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
                                                                              @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getAllTransactionsByAccount(accountId, userId));
@@ -72,7 +72,7 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account not found")
             }
     )
-    @PostMapping
+    @PostMapping("/transaction")
     public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         transactionService.addTransaction(dto,userId);

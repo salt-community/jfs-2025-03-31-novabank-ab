@@ -41,12 +41,12 @@ public class CurrencyService {
 
     public CurrencyConversionResultDto convertCurrency(CurrencyConversionRequestDto requestDto) {
 
-        String fromCurrency = requestDto.getFromCurrency();
-        String toCurrency = requestDto.getToCurrency();
-        double originalAmount = requestDto.getAmount();
+        String fromCurrency = requestDto.fromCurrency();
+        String toCurrency = requestDto.toCurrency();
+        double originalAmount = requestDto.amount();
 
         ExchangeRateResponseDto exchangeRateDto = getEffectiveRate(fromCurrency, toCurrency);
-        double rate = exchangeRateDto.getValue();
+        double rate = exchangeRateDto.value();
         double convertedAmount = originalAmount * rate;
 
         return new CurrencyConversionResultDto(
@@ -55,7 +55,7 @@ public class CurrencyService {
                 originalAmount,
                 convertedAmount,
                 rate,
-                exchangeRateDto.getDate()
+                exchangeRateDto.date()
         );
     }
     
@@ -77,7 +77,7 @@ public class CurrencyService {
 
             ExchangeRateResponseDto dto = response.getBody();
 
-            if (dto == null || dto.getValue() == 0) {
+            if (dto == null || dto.value() == 0) {
                 throw new CurrencyConversionException("No valid data returned from external API for series: " + seriesCode);
             }
 
@@ -109,8 +109,8 @@ public class CurrencyService {
             }
         }
 
-        double rate = dto.getValue();
-        return new ExchangeRateResponseDto(dto.getDate(), inverted ? (1 / rate) : rate);
+        double rate = dto.value();
+        return new ExchangeRateResponseDto(dto.date(), inverted ? (1 / rate) : rate);
     }
 
     public String getCurrencyPairCode(String fromCurrency, String toCurrency) {

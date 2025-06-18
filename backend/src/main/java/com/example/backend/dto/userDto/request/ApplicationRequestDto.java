@@ -2,14 +2,20 @@ package com.example.backend.dto.userDto.request;
 
 import com.example.backend.model.Application;
 import com.example.backend.model.enums.ApplicationStatus;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 public record ApplicationRequestDto(
+    @NotNull
     String firstName,
+    @NotNull
     String lastName,
+    @NotNull
     String email,
+    @NotNull
     String personalNumber,
+    @NotNull
     String phoneNumber
 ) {
     public Application toApplication() {
