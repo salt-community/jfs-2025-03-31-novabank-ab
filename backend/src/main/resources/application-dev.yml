@@ -16,11 +16,6 @@ spring:
     username: ${DB_DEV_USERNAME}
     password: ${DB_DEV_PASSWORD}
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
   config:
     import: optional:file:.env[.properties]
 
