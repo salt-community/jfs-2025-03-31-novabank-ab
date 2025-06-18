@@ -1,9 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
-import com.example.backend.dto.transactionDto.response.ListUnifiedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
-import com.example.backend.model.Transaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
