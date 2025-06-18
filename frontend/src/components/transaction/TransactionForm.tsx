@@ -29,6 +29,7 @@ export default function TransactionForm() {
     recipientError?: string
     amount?: string
     transactionDate?: string
+    ocr?: string
   }>({})
 
   const isFormValid = (): boolean => {
@@ -41,8 +42,11 @@ export default function TransactionForm() {
     if (!amount || parseFloat(amount) <= 0)
       newErrors.amount = t('pleaseSelectAValidAmount')
     if (!transactionDate)
+     
       newErrors.transactionDate = t('transactionDateIsRequired')
-
+    if (ocr && !/^\d+$/.test(ocr)) {
+      newErrors.ocr = 'OCR must contain digits only (0–9)'
+    }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -128,7 +132,7 @@ export default function TransactionForm() {
           error={errors.transactionDate}
         />
 
-        <Ocr ocr={ocr} setOcr={setOcr} />
+        <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr}/>
 
         <Notes notes={notes} setNotes={setNotes} />
 

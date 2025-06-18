@@ -38,5 +38,19 @@
   "sa": "Sa",
   "su": "Su",
   "transactionDate": "Transaction date",
-  "today": "Today"
+  "today": "Today",
+  "amount": "Amount",
+  "failedToLoadAccounts": "Failed to load accounts",
+  "selectAnAccount": "Select an account",
+  "sender": "Sender",
+  "recipient": "Recipient",
+  "savedRecipients": "Saved recipients",
+  "newRecipient": "New recipient",
+  "pleaseSelectAnAccountNumberType": "Please select an account number type",
+  "accountNumberIsRequired": "Account number is required",
+  "invalid": "Invalid",
+  "number": "number",
+  "close": "Close",
+  "selectAnAccountNumberType": "Select an account number type",
+  "accountNumberType": "Account number type"
 }
