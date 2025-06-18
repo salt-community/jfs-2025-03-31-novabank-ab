@@ -75,8 +75,13 @@ public class TransactionService {
         transactions.forEach(t -> unifiedTransactions.add(UnifiedTransactionResponseDto.fromTransaction(t)));
         scheduledTransactions.forEach(st -> unifiedTransactions.add(UnifiedTransactionResponseDto.fromScheduledTransaction(st)));
 
-        return unifiedTransactions;
+        unifiedTransactions.sort(
+                Comparator
+                        .comparing((UnifiedTransactionResponseDto dto) -> dto.status() == null)
+                        .thenComparing(UnifiedTransactionResponseDto::date, Comparator.reverseOrder())
+        );
 
+        return unifiedTransactions;
     }
 
     public void deleteScheduledTransaction( UUID transactionId, String userId) {

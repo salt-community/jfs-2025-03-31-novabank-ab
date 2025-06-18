@@ -171,4 +171,13 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Gets all accounts for one user", description = "Returns a list of all accounts for specific user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @GetMapping("/user/{userId}/accounts")
+    public ResponseEntity<List<Account>> getUserAccounts(@PathVariable String userId) {
+        return ResponseEntity.ok(accountService.getAllUserAccounts(userId));
+    }
 }
