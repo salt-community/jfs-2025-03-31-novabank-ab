@@ -55,7 +55,7 @@ public class TransactionController {
             summary = "Retrieve all transactions for a specific user",
             description = "Returns all transactions where the specified user is either the sender (fromUser) or the receiver (toUser)."
     )
-    @GetMapping
+    @GetMapping("/all-transactions")
     public ResponseEntity<ListUnifiedTransactionResponseDto> getAllTransactionsByUser(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         List<Transaction> transactions = transactionService.getTransactionsByUser(userId);
