@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useGetUser, useUpdateUser } from '@/hooks'
+import { useGetUser, useUpdateUser, useGetUserSettings } from '@/hooks'
 import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
 const Settings = () => {
@@ -12,13 +12,23 @@ const Settings = () => {
   const [depositNotifications, setDepositNotifications] = useState(false)
   const [language, setLanguage] = useState('English')
   const { user } = useUser()
-  const { data: userFromApi, isLoading, isError } = useGetUser(user?.id)
+  const {
+    data: userFromApi,
+    isLoading: userFromApiLoading,
+    isError: userFromApiError,
+  } = useGetUser(user?.id)
+  const {
+    data: userSettingsFromApi,
+    isLoading: userSettingsLoading,
+    isError: userSettingsError,
+  } = useGetUserSettings()
   const [emailField, setEmailField] = useState<string>('')
   const [phoneNumberField, setPhoneNumberField] = useState<string>('')
   const updateUserMutation = useUpdateUser()
 
-  if (isLoading) return <div className="p-8">Loading user details...</div>
-  if (isError)
+  if (userFromApiLoading || userSettingsLoading)
+    return <div className="p-8">Loading user details...</div>
+  if (userFromApiError || userSettingsError)
     return <div className="p-8 text-red-500">Failed loading user details</div>
 
   const updateUser = (whatToUpdate: string) => {
@@ -115,6 +125,13 @@ const Settings = () => {
           </TabsContent>
         </div>
         <TabsContent value="general">
+          <p
+            onClick={() => {
+              console.log(userSettingsFromApi)
+            }}
+          >
+            hello
+          </p>
           <div className="flex flex-row">
             <h3 className="text-xl mb-2 w-[15vw]">SMS notifications</h3>
             <input

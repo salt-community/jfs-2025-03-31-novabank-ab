@@ -29,3 +29,23 @@ INSERT INTO scheduled_transactions (id, from_account_id, to_account_id, recipien
                                                                                                                                                                                     ('69ca9a09-804d-4c67-9227-ea23569d4a31', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2345678901', 'INTERNAL_TRANSFER', 1000.00, '2025-06-19 08:00:00', 'PENDING', '2025-06-12 08:42:57', 'OCRS00001', 'Monthly transfer', 'Scheduled transfer'),
                                                                                                                                                                                     ('0e683c21-5ed5-4498-b7d4-a9d4e432be02', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'SE3456789012', 'BANKGIRO', 500.00, '2025-06-20 15:00:00', 'PENDING', '2025-06-12 09:00:00', 'OCRS00002', 'Rent payment', 'Monthly rent'),
                                                                                                                                                                                     ('4df15be9-12a2-4ee3-8f5c-c11dee6bae57', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'SE4567890123', 'PLUSGIRO', 750.00, '2025-06-21 12:00:00', 'PENDING', '2025-06-12 10:00:00', 'OCRS00003', 'Utility bill', 'Monthly utilities');
+-- User Settings
+INSERT INTO user_settings_configs (
+    id,
+    user_id,
+    sms_notifications,
+    email_notifications,
+    card_transaction_notifications,
+    atm_withdrawal_notifications,
+    deposit_notifications,
+    language
+) VALUES (
+             'a97d9d4e-3f25-4bb9-9b3b-2e6f9b61fd3f', -- UUID for the settings row
+             'user_2yMZ4k4VMcQ4C3Yowv3JfXg0mOd',     -- Must match a real user in `users` table
+             true,   -- sms_notifications
+             true,   -- email_notifications
+             true,   -- card_transaction_notifications
+             false,  -- atm_withdrawal_notifications
+             true,   -- deposit_notifications
+             'en'    -- language
+         );
