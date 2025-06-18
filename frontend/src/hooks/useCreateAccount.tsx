@@ -7,7 +7,7 @@ export function useCreateAccount() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: { type: string; abbreviation: string }) => {
+    mutationFn: async (data: { type: string; abbrevation: string }) => {
       const token = await getToken()
       if (!token) throw new Error('No auth token found')
       return createAccount(data, token)
