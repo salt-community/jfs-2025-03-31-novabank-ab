@@ -13,6 +13,8 @@ import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -135,13 +137,13 @@ public class TransactionService {
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
-    public List<Transaction> getTransactionsByUser(String userId) {
-        List<Account> accounts = accountService.getAllUserAccounts(userId);
-        return accounts.stream()
-                .flatMap(account -> transactionRepository
-                        .findByFromAccount_IdOrToAccount_Id(account.getId(), account.getId())
-                        .stream())
+    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable) {
+        List<UUID> accountIds = accountService.getAllUserAccounts(userId).stream()
+                .map(Account::getId)
                 .toList();
+
+        Page<Transaction> page = transactionRepository.findByAccountIds(accountIds, pageable);
+        return page.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
     public List<UnifiedTransactionResponseDto> getAllTransactionHistory() {
