@@ -19,7 +19,7 @@ export default function Notes({ notes, setNotes }: NotesProps) {
         />
         <label
           htmlFor="notes"
-          className={`absolute left-4 px-1 bg-white transition-all duration-200
+          className={`absolute left-4 px-1 bg-white transition-all duration-200 rounded-lg
                       ${notes ? '-top-2.5 text-sm font-semibold text-black' : 'top-4 text-gray-400'}
                       peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-black`}
         >

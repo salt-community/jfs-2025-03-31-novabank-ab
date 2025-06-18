@@ -105,7 +105,7 @@ export default function DatePicker({
 
   return (
     <div ref={wrapperRef} className="relative w-full">
-      {/* Fake input */}
+      
       <div
         onClick={handleToggleCalendar}
         role="textbox"
@@ -135,7 +135,7 @@ export default function DatePicker({
 
       {/* Floating Label */}
       <label
-        className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+        className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
           ${
             selectedDate || isCalendarOpen
               ? '-top-2.5 text-sm text-black font-semibold'
