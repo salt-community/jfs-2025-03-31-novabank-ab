@@ -2,6 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useGetUser, useUpdateUser } from '@/hooks'
 import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
+import Spinner from '../generic/Spinner'
+
 const Settings = () => {
   const [editingEmail, setEditingEmail] = useState<boolean>(false)
   const [editingPhone, setEditingPhone] = useState<boolean>(false)
@@ -17,7 +19,8 @@ const Settings = () => {
   const [phoneNumberField, setPhoneNumberField] = useState<string>('')
   const updateUserMutation = useUpdateUser()
 
-  if (isLoading) return <div className="p-8">Loading user details...</div>
+
+  if (isLoading) return <Spinner />
   if (isError)
     return <div className="p-8 text-red-500">Failed loading user details</div>
 

@@ -1,6 +1,7 @@
 import { useAccounts, useTransactions } from '@/hooks'
 import { TransactionList } from '@/components/generic'
 import { AccountGallery } from '@/components/dashboard'
+import Spinner from '@/components/generic/Spinner'
 
 export default function DashboardPage() {
   // TODO move hooks inside specific component, where it belongs
@@ -19,9 +20,7 @@ export default function DashboardPage() {
 
   if (isAccountsLoading)
     return (
-      <div className="p-20 flex justify-center text-5xl items-center">
-        <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
-      </div>
+      <Spinner />
     )
   if (isTransactionsLoading) return (
     <div className="p-20 flex justify-center text-5xl items-center">
