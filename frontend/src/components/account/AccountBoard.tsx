@@ -1,112 +1,22 @@
 import { TransactionItem } from '../generic/'
 import { ScheduledTransactionItem } from '../generic'
-import type { ScheduledTransactionItemProps } from '../generic/'
 import { NoTransactionItem } from '../generic/'
-import type { Account, Transaction } from '@/types'
+import type { Account } from '@/types'
 import { useNavigate } from '@tanstack/react-router'
+import { useAccountTransactions } from '@/hooks'
+import Spinner from '../generic/Spinner'
 
 type AccountBoardProps = {
   account: Account
 }
 
-const scheduledTransactionsMock: Array<ScheduledTransactionItemProps> = [
-  {
-    amount: 50,
-    description: 'Test Scheduled One',
-    fromAccountId: 'XXX 123',
-    ocrNumber: 'OCR TEST 1',
-    scheduledDate: '2025-06-16T11:45:28.624Z',
-    toAccountId: 'XXX 321',
-    userNote: 'Paying rent',
-  },
-  {
-    amount: 123,
-    description: 'Test Scheduled Two',
-    fromAccountId: 'XXX 123',
-    ocrNumber: 'OCR TEST 2',
-    scheduledDate: '2025-06-23T11:45:28.624Z',
-    toAccountId: 'XXX 321',
-    userNote: 'Paying Netflix',
-  },
-]
-
-const transactions: Array<Transaction> = [
-  {
-    transactionId: '1',
-    description: "MOCK Domino's Pizza",
-    type: 'Foodservice',
-    amount: -16.3,
-    date: '11:54 pm',
-    fromAccount: '',
-    ocrNumber: '',
-    status: '',
-    toAccount: '',
-    userNote: '',
-  },
-  {
-    transactionId: '2',
-    description: 'MOCK YouTube Premium',
-    type: 'Streaming service',
-    amount: -6.0,
-    date: '06:30 pm',
-    fromAccount: '',
-    ocrNumber: '',
-    status: '',
-    toAccount: '',
-    userNote: '',
-  },
-  {
-    transactionId: '3',
-    description: 'MOCK Cashbox terminal #17',
-    type: 'Replenishment',
-    amount: 450.0,
-    date: '02:02 pm',
-    fromAccount: '',
-    ocrNumber: '',
-    status: '',
-    toAccount: '',
-    userNote: '',
-  },
-  {
-    transactionId: '4',
-    description: 'MOCK Mom',
-    type: 'Incoming',
-    amount: 300,
-    date: '2025-06-12 14:23',
-    fromAccount: '',
-    ocrNumber: '',
-    status: '',
-    toAccount: '',
-    userNote: '',
-  },
-  {
-    transactionId: '5',
-    description: 'MOCK Dad',
-    type: 'Outgoing',
-    amount: -2500,
-    date: '2025-06-10 09:00',
-    fromAccount: '',
-    ocrNumber: '',
-    status: '',
-    toAccount: '',
-    userNote: '',
-  },
-  {
-    transactionId: '6',
-    description: 'MOCK Joe Biden',
-    type: 'Outgoing',
-    amount: -4000,
-    date: '2025-06-09 08:15',
-    fromAccount: '',
-    ocrNumber: '',
-    status: '',
-    toAccount: '',
-    userNote: '',
-  },
-]
-
 export default function AccountBoard({ account }: AccountBoardProps) {
   const navigate = useNavigate()
+  const { data, isLoading, isError } = useAccountTransactions(account.id)
+  
+  if (isLoading) return <Spinner />
+  if (isError) return <div>Error loading transactions</div>
+  console.log('Account transactions:', data)
   return (
     <div data-testid="account-board">
       <h1 className="text-4xl mb-20">{account.type}</h1>
@@ -133,19 +43,21 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div className="mb-8">
         <h2 className="text-2xl mb-4">Scheduled Transactions</h2>
         <div className="space-y-2">
-          {scheduledTransactionsMock.length > 0 ? (
-            scheduledTransactionsMock.map((st, index) => (
-              <ScheduledTransactionItem
-                key={index}
-                amount={st.amount}
-                description={st.description}
-                fromAccountId={st.fromAccountId}
-                ocrNumber={st.ocrNumber}
-                scheduledDate={st.scheduledDate}
-                toAccountId={st.toAccountId}
-                userNote={st.userNote}
-              />
-            ))
+          {data && data.filter((t) => t.status === 'PENDING').length > 0 ? (
+            data
+              .filter((t) => t.status === 'PENDING')
+              .map((t, index) => (
+                <ScheduledTransactionItem
+                  key={index}
+                  amount={t.amount}
+                  description={t.description}
+                  fromAccountId={t.fromAccount}
+                  ocrNumber={t.ocrNumber}
+                  scheduledDate={t.date}
+                  toAccountId={t.toAccount}
+                  userNote={t.userNote}
+                />
+              ))
           ) : (
             <NoTransactionItem></NoTransactionItem>
           )}
@@ -155,15 +67,21 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div>
         <h2 className="text-2xl mb-4">Transactions</h2>
         <div className="space-y-2">
-          {transactions.map((t, index) => (
-            <TransactionItem
-              key={index}
-              name={t.description}
-              category={t.type}
-              amount={t.amount}
-              time={t.date}
-            />
-          ))}
+          {data && data.filter((t) => t.status === null).length > 0 ? (
+            data
+              .filter((t) => t.status === null)
+              .map((t, index) => (
+                <TransactionItem
+                  key={index}
+                  name={t.description}
+                  category={t.type}
+                  amount={t.amount}
+                  time={t.date}
+                />
+              ))
+          ) : (
+            <NoTransactionItem />
+          )}
         </div>
       </div>
     </div>
