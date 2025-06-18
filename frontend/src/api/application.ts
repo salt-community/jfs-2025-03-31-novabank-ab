@@ -1,4 +1,5 @@
 import type { Application } from '@/types/Application'
+import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 
 const API = import.meta.env.VITE_BASE_URL
 
@@ -37,4 +38,15 @@ export async function rejectApplication(token: string, id: string) {
     },
   })
   if (!res.ok) throw new Error(`Reject failed: ${res.status}`)
+}
+
+export async function sendRegisterApplication(
+  dto: ApplicationRequestDto,
+): Promise<void> {
+  const res = await fetch(`${API}user/application`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dto),
+  })
+  if (res.status !== 201) throw new Error(`Registration failed: ${res.status}`)
 }
