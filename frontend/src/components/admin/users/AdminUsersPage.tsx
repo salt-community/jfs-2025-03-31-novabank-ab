@@ -1,25 +1,27 @@
 import { useState } from 'react'
-import { useUsers, useUpdateUserStatus } from '@/hooks/useUsers'
-import { useUserAccounts } from '@/hooks/useUsers'
+import {
+  useUsers,
+  useUpdateUserStatus,
+  useUserAccounts,
+} from '@/hooks/useUsers'
 import { SearchBar } from './SearchBar'
 import { UsersTable } from './UsersTable'
-import { AccountsModal } from './AccountsModal'
-import type { User } from '@/types/admin/user'
+import { ReviewModal } from './ReviewModal'
 
 export default function AdminUsersPage() {
   const { data: users = [], isLoading } = useUsers()
   const update = useUpdateUserStatus()
   const [search, setSearch] = useState('')
-  const [selectedUser, setSelectedUser] = useState<User | null>(null)
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
 
   const { data: accounts = [], isLoading: loadingAcc } = useUserAccounts(
-    selectedUser?.id || '',
+    selectedUserId ?? '',
   )
 
   if (isLoading)
     return (
       <div className="p-20 flex justify-center text-5xl items-center">
-        <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+        <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]" />
       </div>
     )
 
@@ -27,37 +29,41 @@ export default function AdminUsersPage() {
     u.email.toLowerCase().includes(search.trim().toLowerCase()),
   )
 
-  const handleActivate = (id: string) =>
-    update.mutate({ id, action: 'activate' })
-  const handleSuspend = (id: string) => update.mutate({ id, action: 'suspend' })
-  const handleViewAccounts = (user: User) => setSelectedUser(user)
-
-  const handleCloseModal = () => setSelectedUser(null)
-
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-semibold">Manage Users</h1>
+    <>
+      <div className="p-6">
+        <h1 className="text-3xl mb-10">Manage Users</h1>
 
-      <SearchBar
-        value={search}
-        onChange={setSearch}
-        placeholder="Search by email…"
-      />
+        {/* Search control */}
+        <div className="mb-4">
+          <SearchBar
+            value={search}
+            onChange={setSearch}
+            placeholder="Search by email…"
+          />
+        </div>
 
-      <UsersTable
-        users={filtered}
-        isUpdating={update.isPending}
-        onActivate={handleActivate}
-        onSuspend={handleSuspend}
-        onViewAccounts={handleViewAccounts}
-      />
+        {/* Users table */}
+        <UsersTable
+          users={filtered}
+          isUpdating={update.isPending}
+          onReview={(user) => setSelectedUserId(user.id)}
+        />
+      </div>
 
-      <AccountsModal
-        isOpen={Boolean(selectedUser)}
-        onClose={handleCloseModal}
-        accounts={accounts}
-        isLoading={loadingAcc}
-      />
-    </div>
+      {/* Review modal */}
+      {selectedUserId && (
+        <ReviewModal
+          isOpen
+          user={users.find((u) => u.id === selectedUserId) ?? null}
+          accounts={accounts}
+          isLoading={loadingAcc}
+          isUpdating={update.isPending}
+          onClose={() => setSelectedUserId(null)}
+          onActivate={(id) => update.mutate({ id, action: 'activate' })}
+          onSuspend={(id) => update.mutate({ id, action: 'suspend' })}
+        />
+      )}
+    </>
   )
 }
