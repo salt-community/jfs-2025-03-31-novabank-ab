@@ -11,5 +11,7 @@
     "users": "Users",
     "transactions": "Transactions",
     "applications": "Applicants"
-  }
+  },
+  "signOut": "Sign out",
+  "signIn": "Sign in"
 }

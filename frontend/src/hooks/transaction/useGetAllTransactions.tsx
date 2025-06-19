@@ -1,17 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
-import type { Transaction } from '@/types'
+import type { TransactionResponse } from '@/types'
 import { getAllTransactions } from '@/api'
 
-export function useGetAllTransactions() {
+export function useGetAllTransactions(page: number = 0, size: number = 10) {
   const { getToken } = useAuth()
 
-  return useQuery<Array<Transaction>>({
-    queryKey: ['transactions'],
+  return useQuery<TransactionResponse>({
+    queryKey: ['transactions', page, size],
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('No auth token found')
-      return getAllTransactions(token)
+      return getAllTransactions(token, page, size)
     },
+    staleTime: 1000 * 60,
   })
 }

@@ -24,7 +24,7 @@
   "pleaseSelectARecipientAccount": "Please select a recipient account",
   "pleaseSelectAValidAmount": "Please select a valid amount",
   "transactionDateIsRequired": "Transaction date is required",
-  "otherAccount": "Other accuont",
+  "otherAccount": "Other account",
   "processing": "Processing",
   "submit": "Submit",
   "notes": "Notes",
@@ -52,5 +52,12 @@
   "number": "number",
   "close": "Close",
   "selectAnAccountNumberType": "Select an account number type",
-  "accountNumberType": "Account number type"
+  "accountNumberType": "Account number type",
+  "page": "Page",
+  "next": "Next",
+  "previous": "Previous",
+  "cancelTransaction": "Cancel transaction",
+  "totalBalanceLowerCase": "total balance",
+  "recentTransactions": "Recent transactions",
+  "seeAll": "See all"
 }
