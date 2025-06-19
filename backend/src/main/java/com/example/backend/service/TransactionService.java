@@ -44,6 +44,8 @@ public class TransactionService {
     public void addTransaction(TransactionRequestDto dto, String userId) {
         TransactionData data = prepareTransactionData(dto, userId);
         boolean isScheduled = dto.transactionDate().isAfter(LocalDate.now(ZoneOffset.UTC));
+        System.out.println(isScheduled);
+        System.out.println(dto.transactionDate().isAfter(LocalDate.now(ZoneOffset.UTC)));
         processTransaction(dto, data, isScheduled);
     }
 
@@ -184,7 +186,7 @@ public class TransactionService {
             ScheduledTransaction scheduled = new ScheduledTransaction(
                     null,
                     data.from(),
-                    data.to(),
+                    null,
                     data.recipientNumber(),
                     dto.type(),
                     dto.amount(),
@@ -243,9 +245,8 @@ public class TransactionService {
                 throw new AccountNotAllowedException("To account is not active.");
             }
 
-        }
-        if(dto.type() == PaymentType.BANKGIRO || dto.type() ==PaymentType.PLUSGIRO) {
-            if (dto.toAccountNo() == null) {
+        } else if(dto.type() == PaymentType.BANKGIRO || dto.type() ==PaymentType.PLUSGIRO) {
+            if (dto.toAccountNo() == null || dto.toAccountNo().isBlank()) {
                 throw new AccountNotFoundException("To account not found");
             }
             recipientNumber = dto.toAccountNo();
