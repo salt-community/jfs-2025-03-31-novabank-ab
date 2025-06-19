@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public record LoginResponseDto(
         @NotNull String userId,
         @NotNull LocalDateTime timestamp,
-        @NotNull UserStatus status
+        UserStatus status
 ) {
     public static LoginResponseDto fromUser(User user) {
         return new LoginResponseDto(user.getId(), LocalDateTime.now(), user.getStatus());

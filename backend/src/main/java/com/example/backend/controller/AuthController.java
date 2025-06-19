@@ -38,6 +38,6 @@ public class AuthController {
     public ResponseEntity<LoginResponseDto> logout(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         log.info("User with ID: {} logging out", userId);
-        return ResponseEntity.ok(new LoginResponseDto(userId, LocalDateTime.now()));
+        return ResponseEntity.ok(new LoginResponseDto(userId, LocalDateTime.now(), null));
     }
 }
