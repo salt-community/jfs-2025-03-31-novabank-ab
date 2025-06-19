@@ -7,33 +7,38 @@ import {
 } from '@/api/application'
 import { sendRegisterApplication } from '@/api/application'
 import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
+import { useAuth } from '@clerk/clerk-react'
 
-const TOKEN = import.meta.env.VITE_TOKEN || ''
-
-export function useApplications() {
+export async function useApplications() {
+  const { getToken } = useAuth()
+  const token = await getToken()
   return useQuery<Application[], Error>({
     queryKey: ['applications'],
     queryFn: async () => {
-      return getApplications(TOKEN)
+      return getApplications(token || '')
     },
   })
 }
 
-export function useApproveApplication() {
+export async function useApproveApplication() {
   const qc = useQueryClient()
+  const { getToken } = useAuth()
+  const token = await getToken()
   return useMutation<void, Error, string>({
     mutationFn: (id) => {
-      return approveApplication(TOKEN, id)
+      return approveApplication(token || '', id)
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
   })
 }
 
-export function useRejectApplication() {
+export async function useRejectApplication() {
   const qc = useQueryClient()
+  const { getToken } = useAuth()
+  const token = await getToken()
   return useMutation<void, Error, string>({
     mutationFn: (id) => {
-      return rejectApplication(TOKEN, id)
+      return rejectApplication(token || '', id)
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
   })
