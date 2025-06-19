@@ -1,6 +1,6 @@
 type AllTransactionsItemProps = {
   description: string
-  sender: string | undefined
+  theAccount: string | undefined
   accountNoType: string
   amount: number
   time: string
@@ -9,7 +9,7 @@ type AllTransactionsItemProps = {
 
 export function AllTransactionsItem({
   description,
-  sender,
+  theAccount,
   accountNoType,
   amount,
   time,
@@ -26,9 +26,15 @@ export function AllTransactionsItem({
       data-testid="transaction-item"
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-800">{description}</span> 
-        <span className="text-xs text-gray-500">From {sender}</span>
-        {accountNoType === 'INTERNAL_TRANSFER' ? '' : (<span className="text-xs text-gray-500 italic">{accountNoType}</span>)}
+        <span className="text-base text-gray-800">{description}</span>
+        <span className="text-xs text-gray-500">
+          {isIncoming ? 'To ' : 'From '} {theAccount}
+        </span>
+        {accountNoType === 'INTERNAL_TRANSFER' ? (
+          ''
+        ) : (
+          <span className="text-xs text-gray-500 italic">{accountNoType}</span>
+        )}
       </div>
       <div className="flex flex-col items-end">
         <span
