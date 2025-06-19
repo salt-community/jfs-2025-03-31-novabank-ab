@@ -35,6 +35,9 @@ export function useApproveApplication() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] })
     },
+    onError: (error) => {
+      alert('Error approving application:' + error)
+    },
   })
 }
 
@@ -51,6 +54,9 @@ export function useRejectApplication() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] })
     },
+    onError: (error) => {
+      alert('Error rejecting application:' + error)
+    },
   })
 }
 
@@ -58,6 +64,13 @@ export function useRegisterApplication() {
   return useMutation<void, Error, ApplicationRequestDto, unknown>({
     mutationFn: async (dto) => {
       return sendRegisterApplication(dto)
+    },
+    onSuccess: () => {
+      alert('Application submitted successfully!')
+    },
+    onError: (error) => {
+      console.log('Error submitting application:', error)
+      alert('Error submitting application: ' + error.message)
     },
   })
 }
