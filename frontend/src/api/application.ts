@@ -11,10 +11,10 @@ export async function getApplications(token: string): Promise<Application[]> {
       'Content-Type': 'application/json',
     },
   })
-  // const res = await fetch('/mocks/applications.json', {
-  //   method: 'GET',
-  // })
-  if (!res.ok) throw new Error(`Fetch failed: ${res.status}`)
+  if (res.status !== 200) {
+    const err = await res.json()
+    throw new Error(err.message ?? `getApplications failed: ${res.status}`)
+  }
   return res.json()
 }
 
@@ -26,7 +26,10 @@ export async function approveApplication(token: string, id: string) {
       'Content-Type': 'application/json',
     },
   })
-  if (!res.ok) throw new Error(`Approve failed: ${res.status}`)
+  if (res.status !== 200) {
+    const err = await res.json()
+    throw new Error(err.message ?? `Approve failed: ${res.status}`)
+  }
 }
 
 export async function rejectApplication(token: string, id: string) {
@@ -37,7 +40,10 @@ export async function rejectApplication(token: string, id: string) {
       'Content-Type': 'application/json',
     },
   })
-  if (!res.ok) throw new Error(`Reject failed: ${res.status}`)
+  if (res.status !== 200) {
+    const err = await res.json()
+    throw new Error(err.message ?? `Reject failed: ${res.status}`)
+  }
 }
 
 export async function sendRegisterApplication(
@@ -48,5 +54,8 @@ export async function sendRegisterApplication(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dto),
   })
-  if (res.status !== 201) throw new Error(`Registration failed: ${res.status}`)
+  if (res.status !== 201) {
+    const err = await res.json()
+    throw new Error(err.message ?? `Registration failed: ${res.status}`)
+  }
 }
