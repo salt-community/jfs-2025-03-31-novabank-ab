@@ -136,6 +136,7 @@ public class UserService {
     }
 
     public Application sendRegisterApplication(Application application) {
+        application.setCreatedAt(LocalDateTime.now());
         return applicationRepository.save(application);
     }
 
@@ -151,6 +152,7 @@ public class UserService {
         switch (status) {
             case ApplicationStatus.APPROVED -> {
                 application.setStatus(ApplicationStatus.APPROVED);
+                application.setUpdatedAt(LocalDateTime.now());
                 addUser(application.getId());
             }
             case ApplicationStatus.DISAPPROVED -> application.setStatus(ApplicationStatus.DISAPPROVED);

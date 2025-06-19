@@ -20,6 +20,7 @@ public class Application {
     private UUID id;
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
