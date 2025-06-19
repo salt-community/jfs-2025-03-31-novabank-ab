@@ -69,7 +69,6 @@ export function useRegisterApplication() {
       alert('Application submitted successfully!')
     },
     onError: (error) => {
-      console.log('Error submitting application:', error)
       alert('Error submitting application: ' + error.message)
     },
   })
