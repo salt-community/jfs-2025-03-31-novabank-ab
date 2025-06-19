@@ -23,9 +23,9 @@ function LandingPage() {
               >
                 Welcome to the future of finance
                 <br />
-                <h1 className="text-yellow-400 mt-4 drop-shadow-lg">
+                <p className="text-yellow-400 mt-4 drop-shadow-lg">
                   Nova Bank
-                </h1>
+                </p>
               </h1>
               <h2
                 className="text-2xl text-white mb-8 drop-shadow-lg animate-fade-in"
