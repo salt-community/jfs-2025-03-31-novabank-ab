@@ -4,6 +4,7 @@ type TransactionItemProps = {
   amount: number
   date: string
   direction: 'in' | 'out'
+  category: string
 }
 
 export function TransactionItem({
@@ -12,6 +13,7 @@ export function TransactionItem({
   amount,
   date,
   direction,
+  category
 }: TransactionItemProps) {
   const isIncoming = direction === 'in'
 
@@ -28,6 +30,7 @@ export function TransactionItem({
     >
       <div className="flex flex-col">
         <span className="text-base text-gray-800">{accType}</span>
+        <span className="text-xs text-gray-500">{category === null ? 'null' : category}</span>
         {showAccNoType && (
           <span className="text-xs text-gray-500 italic">{accNoType}</span>
         )}

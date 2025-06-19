@@ -88,6 +88,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
                     amount={t.amount}
                     date={t.date}
                     direction={direction}
+                    category={t.category}
                   />
                 )
               })
