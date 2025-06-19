@@ -7,20 +7,21 @@ import { AccountsModal } from './AccountsModal'
 import type { User } from '@/types/admin/user'
 
 export default function AdminUsersPage() {
-  const { data: users = [], isLoading, isError, error } = useUsers()
+  const { data: users = [], isLoading } = useUsers()
   const update = useUpdateUserStatus()
   const [search, setSearch] = useState('')
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
-  const {
-    data: accounts = [],
-    isLoading: loadingAcc,
-    error: accError,
-  } = useUserAccounts(selectedUser?.id || '')
+  const { data: accounts = [], isLoading: loadingAcc } = useUserAccounts(
+    selectedUser?.id || '',
+  )
 
-  if (isLoading) return <p className="p-4 text-center">Loading users…</p>
-  if (isError)
-    return <p className="p-4 text-center text-red-600">{error.message}</p>
+  if (isLoading)
+    return (
+      <div className="p-20 flex justify-center text-5xl items-center">
+        <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+      </div>
+    )
 
   const filtered = users.filter((u) =>
     u.email.toLowerCase().includes(search.trim().toLowerCase()),
@@ -43,10 +44,6 @@ export default function AdminUsersPage() {
         placeholder="Search by email…"
       />
 
-      {update.isError && (
-        <p className="text-red-600">Error: {update.error?.message}</p>
-      )}
-
       <UsersTable
         users={filtered}
         isUpdating={update.isPending}
@@ -60,7 +57,6 @@ export default function AdminUsersPage() {
         onClose={handleCloseModal}
         accounts={accounts}
         isLoading={loadingAcc}
-        error={accError ?? undefined}
       />
     </div>
   )
