@@ -57,5 +57,7 @@
   "next": "Next",
   "previous": "Previous",
   "cancelTransaction": "Cancel transaction",
-  "totalBalanceLowerCase": "total balance"
+  "totalBalanceLowerCase": "total balance",
+  "recentTransactions": "Recent transactions",
+  "seeAll": "See all"
 }

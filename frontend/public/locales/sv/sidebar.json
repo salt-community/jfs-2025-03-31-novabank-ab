@@ -11,5 +11,7 @@
     "users": "Användare",
     "transactions": "Transaktioner",
     "applications": "Ansökningar"
-  }
+  },
+  "signOut": "Logga ut",
+  "signIn": "Logga in"
 }
