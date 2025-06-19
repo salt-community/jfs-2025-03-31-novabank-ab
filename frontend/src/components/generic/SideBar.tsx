@@ -38,7 +38,7 @@ export default function SideBar({ admin }: Props) {
         />
       </a>
 
-      <div className="flex gap-8 flex-col list-none mx-auto">
+      <div className="flex gap-8 flex-col list-none mx-auto ">
         <a
           onClick={() => navigate({ to: '/dashboard' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
@@ -112,7 +112,7 @@ export default function SideBar({ admin }: Props) {
           <span className="hidden lg:inline">{t('user.settings')}</span>
         </a>
       </div>
-      <div className="mt-30">
+      <div className=" mb-10 mx-auto">
         <SignOutButton>
           <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
             <img src={signouticon} />
