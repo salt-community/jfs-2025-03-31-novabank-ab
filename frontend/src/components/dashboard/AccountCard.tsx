@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { Account } from '@/types'
 
 type AccountCardProps = {
@@ -5,6 +6,7 @@ type AccountCardProps = {
 }
 
 export default function AccountCard({ account }: AccountCardProps) {
+  const { t } = useTranslation('accounts')
   return (
     <>
       <div
@@ -23,7 +25,7 @@ export default function AccountCard({ account }: AccountCardProps) {
           <h4 className="text-xl font-semibold" data-testid="account-balance">
             {account.balance} SEK
           </h4>
-          <p className="text-xs text-gray-500">total balance</p>
+          <p className="text-xs text-gray-500">{t('totalBalanceLowerCase')}</p>
         </div>
       </div>
     </>
