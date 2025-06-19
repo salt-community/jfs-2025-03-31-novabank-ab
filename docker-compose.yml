@@ -19,14 +19,14 @@ services:
     networks:
       - app-network
 
-  frontend:
-    build:
-      context: .
-      dockerfile: ./frontend/Dockerfile
-    ports:
-      - "80:80"
-    networks:
-      - app-network
+  # frontend:
+  #   build:
+  #    context: .
+  #   dockerfile: ./frontend/Dockerfile
+  #ports:
+  #  - "80:80"
+  #networks:
+  #  - app-network
 
   db:
     image: postgres:15
