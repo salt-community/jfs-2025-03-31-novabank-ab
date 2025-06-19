@@ -1,0 +1,15 @@
+{
+  "user": {
+    "dashboard": "Översikt",
+    "settings": "Inställningar",
+    "accounts": "Konton",
+    "transactions": "Transaktioner",
+    "transfer": "Överföring"
+  },
+  "admin": {
+    "dashboard": "Översikt",
+    "users": "Användare",
+    "transactions": "Transaktioner",
+    "applications": "Ansökningar"
+  }
+}
