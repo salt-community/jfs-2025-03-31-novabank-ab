@@ -48,7 +48,7 @@ public record UnifiedTransactionResponseDto(
         return new UnifiedTransactionResponseDto(
                 transaction.getId(),
                 transaction.getFromAccount().getId(),
-                transaction.getToAccount().getId(),
+                transaction.getToAccount() != null ? transaction.getToAccount().getId() : null,
                 transaction.getCreatedAt(),
                 transaction.getAmount(),
                 transaction.getDescription(),
