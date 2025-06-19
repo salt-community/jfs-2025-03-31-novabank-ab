@@ -56,5 +56,6 @@
   "page": "Sida",
   "next": "Nästa",
   "previous": "Föregående",
-  "cancelTransaction": "Avbryt transaktion"
+  "cancelTransaction": "Avbryt transaktion",
+  "totalBalanceLowerCase": "total saldo"
 }

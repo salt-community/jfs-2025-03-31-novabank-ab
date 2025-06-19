@@ -56,5 +56,6 @@
   "page": "Page",
   "next": "Next",
   "previous": "Previous",
-  "cancelTransaction": "Cancel transaction"
+  "cancelTransaction": "Cancel transaction",
+  "totalBalanceLowerCase": "total balance"
 }
