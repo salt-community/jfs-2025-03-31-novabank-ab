@@ -27,6 +27,7 @@ public record ApplicationRequestDto(
         application.setPersonalNumber(this.personalNumber);
         application.setPhoneNumber(this.phoneNumber);
         application.setStatus(ApplicationStatus.PENDING);
+        application.setCreatedAt(LocalDateTime.now());
         return application;
     }
 }

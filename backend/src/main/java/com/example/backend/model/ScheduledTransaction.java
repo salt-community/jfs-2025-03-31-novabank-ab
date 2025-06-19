@@ -67,6 +67,9 @@ public class ScheduledTransaction {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = true)
+    private String category;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

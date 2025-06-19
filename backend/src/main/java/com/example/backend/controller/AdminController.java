@@ -183,4 +183,9 @@ public class AdminController {
         ListAccountResponseDto listOfAccount = ListAccountResponseDto.fromAccounts(accounts);
         return ResponseEntity.ok().body(listOfAccount);
     }
+
+    @GetMapping("/all-accounts")
+    public ResponseEntity<ListAccountResponseDto> getAllAccounts() {
+        return ResponseEntity.ok().body(ListAccountResponseDto.fromAccounts(accountService.getAllAccounts()));
+    }
 }
