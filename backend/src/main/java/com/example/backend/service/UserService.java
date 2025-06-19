@@ -140,7 +140,7 @@ public class UserService {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
 
-        if(applicationRepository.existByPhoneNumber(application.getPhoneNumber())){
+        if(applicationRepository.existsByPhoneNumber(application.getPhoneNumber())){
             throw new UserAlreadyExistsException("User with this phone number already exists");
         }
         application.setCreatedAt(LocalDateTime.now());
