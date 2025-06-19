@@ -27,7 +27,7 @@ export default function ApplicantStatusCards() {
         badgeColor="green"
         label={t('label.approved')}
         value={approved.length.toString()}
-        trajectory="-13%"
+        trajectory="+13%"
         fineText="Acqusition needs attention"
         redirectLink="admin/applications"
       />
