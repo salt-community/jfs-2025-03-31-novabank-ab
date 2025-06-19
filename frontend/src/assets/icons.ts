@@ -1,0 +1,13 @@
+export { default as homeicon } from './homeicon.svg'
+export { default as accounticon } from './accounticon.svg'
+export { default as transactionicon } from './transactionicon.svg'
+export { default as transfericon } from './transfericon.svg'
+export { default as settingsicon } from './settingsicon.svg'
+export { default as signouticon } from './signouticon.svg'
+export { default as novabankicon } from './NovaBankTransparentLogo.png'
+
+export { default as yellowhomeicon } from './yellowhomeicon.svg'
+export { default as yellowaccounticon } from './yellowaccounticon.svg'
+export { default as yellowtransactionicon } from './yellowtransactionicon.svg'
+export { default as yellowtransfericon } from './yellowtransfericon.svg'
+export { default as yellowsettingsicon } from './yellowsettingsicon.svg'
