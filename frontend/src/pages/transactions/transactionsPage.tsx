@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Transaction } from '@/types'
-import { TransactionItem } from '@/components/generic'
-import { useGetAllTransactions, useAccounts } from '@/hooks'
+import type { Transaction } from '@/types'import { useGetAllTransactions, useAccounts } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
+import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -49,7 +48,7 @@ export default function TransactionsPage() {
               if (myAccountIds.has(tx.fromAccountId)) direction = 'out'
 
               return (
-                <TransactionItem
+                <AllTransactionsItem
                   key={tx.transactionId}
                   name={tx.description}
                   category={tx.type}
