@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.userDto.response.LoginResponseDto;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.Role;
 import com.example.backend.security.SecurityUtil;
@@ -23,11 +24,11 @@ public class AuthController {
     private final SecurityUtil securityUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<LoginResponseDto> login(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         Role role = securityUtil.extractRoleFromJWT(jwt);
         User user = authService.loginUser(userId, role);
         log.info("User with ID: {} and Role: {} logging in", userId, role);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(LoginResponseDto.fromUser(user));
     }
 }
