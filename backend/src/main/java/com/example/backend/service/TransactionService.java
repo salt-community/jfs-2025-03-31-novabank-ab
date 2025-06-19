@@ -82,7 +82,6 @@ public class TransactionService {
                         .comparing((UnifiedTransactionResponseDto dto) -> dto.status() == null)
                         .thenComparing(UnifiedTransactionResponseDto::date, Comparator.reverseOrder())
         );
-
         return unifiedTransactions;
     }
 
