@@ -147,13 +147,13 @@ public class UserService {
         return applicationRepository.findAll();
     }
 
-    public void updateApplication(Application application, String status) {
-        switch (status.toLowerCase()) {
-            case "approved" -> {
+    public void updateApplication(Application application, ApplicationStatus status) {
+        switch (status) {
+            case ApplicationStatus.APPROVED -> {
                 application.setStatus(ApplicationStatus.APPROVED);
                 addUser(application.getId());
             }
-            case "reject" -> application.setStatus(ApplicationStatus.DISAPPROVED);
+            case ApplicationStatus.DISAPPROVED -> application.setStatus(ApplicationStatus.DISAPPROVED);
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: " + status);
         }
         applicationRepository.save(application);

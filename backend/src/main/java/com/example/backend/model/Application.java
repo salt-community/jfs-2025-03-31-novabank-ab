@@ -2,35 +2,41 @@ package com.example.backend.model;
 
 import com.example.backend.model.enums.ApplicationStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(name = "applications")
 @Getter
 @Setter
-@Table(name = "applications")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Application {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    UUID id;
+    private UUID id;
 
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    ApplicationStatus status;
+    private ApplicationStatus status;
 
     @Column(nullable = false)
-    String firstName;
+    private String firstName;
+
     @Column(nullable = false)
-    String lastName;
+    private String lastName;
+
     @Column(nullable = false)
-    String personalNumber;
+    private String personalNumber;
+
     @Column(nullable = false)
-    String email;
+    private String email;
+
     @Column(nullable = false)
-    String phoneNumber;
+    private String phoneNumber;
+
 }

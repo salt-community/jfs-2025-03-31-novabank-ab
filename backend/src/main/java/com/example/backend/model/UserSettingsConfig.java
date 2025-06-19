@@ -1,35 +1,46 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
+@Table(name = "user_settings_configs")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_settings_configs")
+@Builder
 public class UserSettingsConfig {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @NonNull
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    private boolean smsNotifications;
-    private boolean emailNotifications;
-    private boolean cardTransactionNotifications;
-    private boolean atmWithdrawalNotifications;
-    private boolean depositNotifications;
+    private boolean smsNotifications = true;
+    private boolean emailNotifications = true;
+    private boolean cardTransactionNotifications = true;
+    private boolean atmWithdrawalNotifications = true;
+    private boolean depositNotifications = true;
 
+    @NonNull
     @Column(nullable = false)
     private String language;
+
+    @PrePersist
+    public void prePersist() {
+        this.smsNotifications = true;
+        this.emailNotifications = true;
+        this.cardTransactionNotifications = true;
+        this.atmWithdrawalNotifications = true;
+        this.depositNotifications = true;
+        this.language = "en";
+    }
+
 }

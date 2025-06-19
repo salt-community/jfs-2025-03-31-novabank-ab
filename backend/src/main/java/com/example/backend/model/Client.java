@@ -1,8 +1,7 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -10,8 +9,11 @@ import java.util.UUID;
  * EXTERNAL CLIENT
  */
 @Entity
-@Getter @Setter
 @Table(name = "clients")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -20,5 +22,4 @@ public class Client {
     @Column(unique = true)
     private String accountNumber;
 
-    public Client() {}
 }

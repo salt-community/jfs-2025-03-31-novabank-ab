@@ -1,6 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 
-type AccountType = 'Savings' | 'Personal'
+type AccountType = 'SAVINGS' | 'PERSONAL'
 type Currency = 'SEK' | 'EUR'
 
 type NewAccountModalProps = {
@@ -12,11 +13,15 @@ export default function NewAccountModal({
   onSubmit,
   onClose,
 }: NewAccountModalProps) {
+  const { t } = useTranslation('accounts')
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
   const [accountType, setAccountType] = useState<AccountType | ''>('')
   const [currency, setCurrency] = useState<Currency | ''>('')
-  const [errors, setErrors] = useState<{ accountType?: string; currency?: string }>({})
+  const [errors, setErrors] = useState<{
+    accountType?: string
+    currency?: string
+  }>({})
 
   useEffect(() => {
     dialogRef.current?.showModal()
@@ -27,11 +32,11 @@ export default function NewAccountModal({
     onClose()
   }
 
-  const handleContinue = () => {
+  const handleSubmit = () => {
     const newErrors: typeof errors = {}
 
-    if (!accountType) newErrors.accountType = 'Please select an account type'
-    if (!currency) newErrors.currency = 'Please select a currency'
+    if (!accountType) newErrors.accountType = t('selectAccountType')
+    if (!currency) newErrors.currency = t('selectCurrency')
 
     setErrors(newErrors)
     if (Object.keys(newErrors).length > 0) return
@@ -42,8 +47,19 @@ export default function NewAccountModal({
   }
 
   return (
-    <dialog ref={dialogRef} className="modal">
-      <div className="modal-box max-w-md bg-white rounded-lg shadow-lg px-6 py-8 text-[#141414] font-old relative">
+    <dialog
+      ref={dialogRef}
+      className="modal"
+      onClick={(e) => {
+        if (e.target === dialogRef.current) {
+          handleCancel()
+        }
+      }}
+    >
+      <div
+        className="modal-box max-h-[90vh] bg-white p-10 rounded-lg shadow-lg relative  max-w-3xl 
+                      sm:max-w-xl text-[#141414]"
+      >
         <button
           onClick={handleCancel}
           className="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl cursor-pointer"
@@ -52,26 +68,43 @@ export default function NewAccountModal({
           &times;
         </button>
 
-        <h2 className="text-xl font-semibold mb-6">Create New Bank Account</h2>
-
-        <div className="space-y-5">
+        <div className="space-y-5 p-8 h-100">
+          <p className="mb-10 text-center text-xl">{t('openNewAccount')}</p>
           {/* Account Type */}
           <div className="relative w-full">
             <select
               value={accountType}
+              id="accountType"
               onChange={(e) => setAccountType(e.target.value as AccountType)}
-              className={`peer w-full p-4 rounded bg-white outline ${
-                errors.accountType ? 'outline-red-600' : 'outline-gray-500'
-              } focus:outline-2 focus:outline-black text-left`}
+              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
+                              focus:outline-2 focus:outline-black text-left bg-white
+                              ${errors.accountType ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
+                              border-r-15 border-transparent
+                              ${accountType ? ' text-black' : 'text-gray-400'}`}
             >
               <option value="" className="text-gray-400">
-                Select account type
+                {t('selectAnAccountType')}
               </option>
-              <option value="Savings">Savings</option>
-              <option value="Personal">Personal</option>
+              <option className="text-black" value="SAVINGS">
+                {t('savings')}
+              </option>
+              <option className="text-black" value="PERSONAL">
+                {t('personal')}
+              </option>
             </select>
-            <label className="absolute left-4 px-1 -top-2.5 text-sm text-black bg-white transition-all">
-              Account Type
+            <label
+              htmlFor="accountType"
+              className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+              ${
+                accountType
+                  ? '-top-2.5 font-semibold text-sm text-black'
+                  : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+              }
+              ${errors.accountType ? 'peer-focus:text-red-600 ' : 'peer-focus:text-black'}
+              peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
+              peer-focus:bg-white `}
+            >
+              {t('accountType')}
             </label>
             {errors.accountType && (
               <p className="text-red-600 text-sm mt-1">{errors.accountType}</p>
@@ -82,19 +115,37 @@ export default function NewAccountModal({
           <div className="relative w-full">
             <select
               value={currency}
+              id="currency"
               onChange={(e) => setCurrency(e.target.value as Currency)}
-              className={`peer w-full p-4 rounded bg-white outline ${
-                errors.currency ? 'outline-red-600' : 'outline-gray-500'
-              } focus:outline-2 focus:outline-black text-left`}
+              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
+                              focus:outline-2 focus:outline-black text-left bg-white
+                              ${errors.currency ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
+                              border-r-15 border-transparent
+                              ${currency ? ' text-black' : 'text-gray-400'}`}
             >
               <option value="" className="text-gray-400">
-                Select currency
+                {t('selectCurrencyOnly')}
               </option>
-              <option value="SEK">SEK</option>
-              <option value="EUR">EUR</option>
+              <option className="text-black" value="SEK">
+                SEK
+              </option>
+              <option className="text-black" value="EUR">
+                EUR
+              </option>
             </select>
-            <label className="absolute left-4 px-1 -top-2.5 text-sm text-black bg-white transition-all">
-              Currency
+            <label
+              htmlFor="currency"
+              className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+              ${
+                currency
+                  ? '-top-2.5 font-semibold text-sm text-black'
+                  : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+              }
+              ${errors.currency ? 'peer-focus:text-red-600 ' : 'peer-focus:text-black'}
+              peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
+              peer-focus:bg-white `}
+            >
+              {t('currency')}
             </label>
             {errors.currency && (
               <p className="text-red-600 text-sm mt-1">{errors.currency}</p>
@@ -105,10 +156,10 @@ export default function NewAccountModal({
           <div className="flex justify-end mt-6">
             <button
               type="button"
-              onClick={handleContinue}
-              className="w-full px-5 py-2 bg-[#FFB20F] hover:bg-[#F5A700] text-black font-semibold shadow-sm rounded transition-colors"
+              onClick={handleSubmit}
+              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
             >
-              Continue
+              {t('done')}
             </button>
           </div>
         </div>

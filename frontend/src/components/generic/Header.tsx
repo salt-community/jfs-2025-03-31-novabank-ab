@@ -21,7 +21,7 @@ export default function Header() {
   const navigate = useNavigate()
   return (
     <header className="bg-black w-full">
-      <div className="flex items-center justify-between px-12">
+      <div className="flex items-center justify-between px-6">
         <img
           src={novabankicon}
           onClick={() => navigate({ to: '/' })}
@@ -30,7 +30,7 @@ export default function Header() {
         />
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#FFB20F] text-white hover:cursor-pointer hover:underline underline-offset-5 hover:bg-[#F5A700] hover:opacity-100">
+            <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#FFB20F] text-white hover:cursor-pointer underline-offset-5 hover:bg-[#F5A700] hover:opacity-100">
               Sign In
               <img src={signinicon} />
             </button>

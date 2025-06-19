@@ -10,7 +10,7 @@ export const Route = createRootRoute({
     const isIndex = location.pathname === '/'
     const isAdmin = user?.publicMetadata?.role === 'admin'
     return (
-      <div className="flex min-h-screen font-quicksand">
+      <div className="flex min-h-screen font-lato">
         <SignedIn>
           <aside className="w-1/5 h-screen">
             <SideBar admin={isAdmin} />
