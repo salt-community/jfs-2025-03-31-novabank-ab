@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type AmountProps = {
@@ -6,13 +7,37 @@ type AmountProps = {
   error: string | undefined
 }
 
-export default function Amount({ amount, setAmount, error }: AmountProps) {
+export default function Amount({
+  amount,
+  setAmount,
+  error,
+}: AmountProps) {
   const { t } = useTranslation('accounts')
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    const inputEl = inputRef.current
+    if (!inputEl) return
+
+    function preventScroll(e: WheelEvent) {
+      if (document.activeElement === inputEl) {
+        e.preventDefault()
+      }
+    }
+
+    inputEl.addEventListener('wheel', preventScroll, { passive: false })
+
+    return () => {
+      inputEl.removeEventListener('wheel', preventScroll)
+    }
+  }, [])
+
   return (
     <>
       {/* Amount */}
       <div className="relative w-full">
         <input
+          ref={inputRef}
           min="0"
           type="number"
           id="amount"

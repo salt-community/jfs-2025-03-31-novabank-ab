@@ -64,6 +64,7 @@ export default function RecipientsModal({
 
     const hasHyphen = asciiValue.includes('-')
     const cleaned = asciiValue.replace(/-/g, '')
+    const upper = cleaned.toUpperCase()
 
     switch (type) {
       case 'Plusgiro':
@@ -80,10 +81,14 @@ export default function RecipientsModal({
           return /^\d{7,8}$/.test(cleaned)
         }
 
-      case t('otherAccount'):
-        // Other accounts usually don't have hyphens
+      case t('otherAccount'): {
         if (hasHyphen) return false
-        return /^\d{4,30}$/.test(cleaned)
+
+        const isPlainNumber = /^\d{4,30}$/.test(cleaned)
+        const isSwedishIBAN = /^SE\d{10}$/.test(upper) // SE + 10 digits
+
+        return isPlainNumber || isSwedishIBAN
+      }
 
       default:
         return false
@@ -110,7 +115,7 @@ export default function RecipientsModal({
   const handleRecipientSubmit = (account: Account | string | null) => {
     if (viewMode === t('newRecipient')) {
       if (!isFormValid()) return
-      const trimmed = newRec?.trim() || ''
+      const trimmed = newRec?.trim().toUpperCase() || ''
       setRecipientClient(trimmed)
       setAccNoType(ant)
       onSubmit(trimmed, ant)

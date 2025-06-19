@@ -36,17 +36,29 @@ export default function TransactionForm() {
     const newErrors: typeof errors = {}
 
     if (!sender) newErrors.sender = t('pleaseSelectASenderAccount')
+
     const hasRecipient = !!recipientAccount || !!recipientClient
     if (!hasRecipient)
       newErrors.recipientError = t('pleaseSelectARecipientAccount')
-    if (!amount || parseFloat(amount) <= 0)
+
+    const parsedAmount = parseFloat(amount)
+    if (!amount || parsedAmount <= 0) {
       newErrors.amount = t('pleaseSelectAValidAmount')
-    if (!transactionDate)
-     
-      newErrors.transactionDate = t('transactionDateIsRequired')
-    if (ocr && !/^\d+$/.test(ocr)) {
-      newErrors.ocr = 'OCR must contain digits only (0–9)'
+    } else if (sender && parsedAmount > sender.balance) {
+      newErrors.amount = t('amountExceedsBalance', {
+        max: sender.balance.toFixed(2),
+      })
     }
+
+    if (!transactionDate)
+      newErrors.transactionDate = t('transactionDateIsRequired')
+
+    if ((accNoType === 'Plusgiro' || accNoType === 'Bankgiro') && !ocr) {
+      newErrors.ocr = t('ocrIsRequired')
+    } else if (ocr && !/^\d+$/.test(ocr)) {
+      newErrors.ocr = t('ocrOnlyDigits')
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -76,13 +88,16 @@ export default function TransactionForm() {
         ? 'INTERNAL_TRANSFER'
         : accNoType.toUpperCase()
 
+    const descForBackend =
+      accNoType === t('otherAccount') ? 'Internal Transfer' : randomDesc
+
     const transactionPayload = {
       fromAccountNo: sender?.accountNumber,
       toAccountNo: recipientAccount?.accountNumber ?? recipientClient!,
       type: accountTypeForBackend,
       transactionDate: selectedDate.toISOString(), // scheduled transaction date
       amount: parseFloat(amount),
-      description: randomDesc, //send random hardcoded desc data
+      description: descForBackend,
       userNote: notes || '',
       ocrNumber: ocr || '',
     }
@@ -132,7 +147,7 @@ export default function TransactionForm() {
           error={errors.transactionDate}
         />
 
-        <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr}/>
+        <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr} />
 
         <Notes notes={notes} setNotes={setNotes} />
 
