@@ -39,6 +39,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
                 category={tx.type}
                 amount={tx.amount}
                 time={tx.date}
+                direction={'out'}
               />
             ))
         )}

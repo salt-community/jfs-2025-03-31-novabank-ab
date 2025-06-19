@@ -52,5 +52,8 @@
   "number": "number",
   "close": "Close",
   "selectAnAccountNumberType": "Select an account number type",
-  "accountNumberType": "Account number type"
+  "accountNumberType": "Account number type",
+  "page": "Page",
+  "next": "Next",
+  "previous": "Previous"
 }

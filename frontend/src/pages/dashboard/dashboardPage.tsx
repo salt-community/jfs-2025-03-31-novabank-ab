@@ -12,7 +12,7 @@ export default function DashboardPage() {
   } = useAccounts()
 
   const {
-    data: transactions = [],
+    data: transactions,
     isLoading: isTransactionsLoading,
     isError: isTransactionsError,
   } = useGetAllTransactions()
@@ -32,7 +32,7 @@ export default function DashboardPage() {
     <>
       <h1 className="text-3xl mb-20">Dashboard</h1>
       <AccountGallery bankAccounts={accounts} />
-      <TransactionList transactions={transactions} />
+      <TransactionList transactions={transactions?.content ?? []} />
     </>
   )
 }
