@@ -30,7 +30,7 @@ public class ScheduledTransaction {
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String recipientNumber;
 
     @NonNull()
