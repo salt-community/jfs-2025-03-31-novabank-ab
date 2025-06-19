@@ -143,7 +143,7 @@ public class UserService {
         if(applicationRepository.existsByPhoneNumber(application.getPhoneNumber())){
             throw new UserAlreadyExistsException("User with this phone number already exists");
         }
-        application.setCreatedAt(LocalDateTime.now());
+
         return applicationRepository.save(application);
     }
 
