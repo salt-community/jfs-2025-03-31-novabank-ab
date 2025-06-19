@@ -8,6 +8,7 @@ export const Route = createRootRoute({
     const { location } = useRouterState()
     const { user } = useUser()
     const isIndex = location.pathname === '/'
+    const isRegister = location.pathname === '/register'
     const isAdmin = user?.publicMetadata?.role === 'admin'
     return (
       <div className="flex min-h-screen font-lato">
@@ -22,7 +23,7 @@ export const Route = createRootRoute({
 
         <SignedOut>
           <div className="flex flex-col w-screen h-screen">
-            {isIndex ? (
+            {isIndex || isRegister ? (
               <>
                 <Header />
                 <Outlet />
