@@ -55,5 +55,6 @@
   "accountNumberType": "Account number type",
   "page": "Page",
   "next": "Next",
-  "previous": "Previous"
+  "previous": "Previous",
+  "cancelTransaction": "Cancel transaction"
 }
