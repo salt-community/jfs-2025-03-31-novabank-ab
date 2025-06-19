@@ -10,9 +10,8 @@ export type ScheduledTransactionItemProps = {
   amount: number
   scheduledDate: string
   description: string
-  userNote: string
   ocrNumber: string
-  direction: 'in' | 'out'
+  accountNoType: string 
 }
 
 export function ScheduledTransactionItem({
@@ -20,8 +19,8 @@ export function ScheduledTransactionItem({
   amount,
   description,
   scheduledDate,
-  userNote,
-  direction,
+ 
+  accountNoType,
 }: ScheduledTransactionItemProps) {
   const { t } = useTranslation('accounts')
   const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -58,26 +57,32 @@ export function ScheduledTransactionItem({
     })
   }
 
-  const formattedAmount =
-    direction === 'in'
-      ? `+${amount.toFixed(2)}`
-      : `-${Math.abs(amount).toFixed(2)}`
-  const amountColor = direction === 'in' ? 'text-green-500' : 'text-gray-800'
+  // Always outgoing for this component, so show negative amount
+  const formattedAmount = `-${Math.abs(amount).toFixed(2)}`
+  const amountColor = 'text-gray-800'
+
+  // Format date to YYYY-MM-DD
+  const formattedDate = scheduledDate.split('T')[0]
+
+  // Show accountNoType only if it's "plus" or "bankgiro"
+  const showAccountNoType =
+    accountNoType === 'PLUSGIRO' || accountNoType === 'BANKGIRO'
 
   return (
     <div className="flex justify-between items-center py-3 border-b last:border-b-0">
       <div className="flex flex-col">
         <span className="text-base text-gray-800">{description}</span>
-        <span className="text-xs text-gray-500">Note: {userNote}</span>
+       
+        {showAccountNoType && (
+          <span className="text-xs text-gray-500 italic">{accountNoType}</span>
+        )}
       </div>
       <div className="flex flex-row justify-center align-middle items-center">
         <div className="flex flex-col items-end">
           <span className={`text-base font-medium ${amountColor}`}>
             {formattedAmount}
           </span>
-          <span className="text-xs text-gray-400">
-            {scheduledDate.split('T')[0]}
-          </span>
+          <span className="text-xs text-gray-400">Created on {formattedDate}</span>
         </div>
 
         <div
@@ -89,7 +94,7 @@ export function ScheduledTransactionItem({
           <ThreeDotsIcon width={24} />
           {openMenu && (
             <div
-              className="w-50"
+              className="w-50 bg-white"
               style={{
                 position: 'absolute',
                 right: 0,
