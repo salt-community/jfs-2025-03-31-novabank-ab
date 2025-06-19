@@ -16,6 +16,7 @@ import {
   yellowsettingsicon,
 } from '@/assets/icons'
 import UserBottomNav from './UserBottomNav'
+import UserTopNav from './UserTopNav'
 
 type Props = {
   admin: boolean
@@ -211,6 +212,7 @@ export default function SideBar({ admin }: Props) {
     adminSideBar
   ) : (
     <>
+      <UserTopNav />
       {userSideBar}
       <UserBottomNav />
     </>
