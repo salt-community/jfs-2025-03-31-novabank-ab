@@ -82,7 +82,6 @@ public class TransactionService {
                         .comparing((UnifiedTransactionResponseDto dto) -> dto.status() == null)
                         .thenComparing(UnifiedTransactionResponseDto::date, Comparator.reverseOrder())
         );
-
         return unifiedTransactions;
     }
 
@@ -186,8 +185,8 @@ public class TransactionService {
             ScheduledTransaction scheduled = new ScheduledTransaction(
                     null,
                     data.from(),
-                    null,
-                    data.recipientNumber(),
+                    dto.type() == PaymentType.INTERNAL_TRANSFER ? data.to() : null,
+                    dto.type() == PaymentType.INTERNAL_TRANSFER ? null : data.recipientNumber(),
                     dto.type(),
                     dto.amount(),
                     dto.transactionDate().atStartOfDay(),

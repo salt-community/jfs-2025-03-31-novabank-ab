@@ -63,7 +63,7 @@ public record UnifiedTransactionResponseDto(
         return new UnifiedTransactionResponseDto(
                 scheduledTransaction.getId(),
                 scheduledTransaction.getFromAccount().getId(),
-                scheduledTransaction.getToAccount().getId(),
+                scheduledTransaction.getToAccount() != null ? scheduledTransaction.getToAccount().getId() : null,
                 scheduledTransaction.getCreatedAt(),
                 scheduledTransaction.getAmount(),
                 scheduledTransaction.getDescription(),
