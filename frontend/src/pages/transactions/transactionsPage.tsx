@@ -19,6 +19,7 @@ export default function TransactionsPage() {
   const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
 
   const myAccountIds = new Set(accounts?.map((a) => a.id))
+  const theAcc = accounts?.find((a) => a.id)
 
   if (isLoading || accountsLoading) return <Spinner />
   if (isError || !data) {
@@ -51,8 +52,9 @@ export default function TransactionsPage() {
               return (
                 <AllTransactionsItem
                   key={tx.transactionId}
-                  name={tx.description}
-                  category={tx.type}
+                  description={tx.description}
+                  sender={theAcc?.type}
+                  accountNoType={tx.type}
                   amount={tx.amount}
                   time={tx.date}
                   direction={direction}
