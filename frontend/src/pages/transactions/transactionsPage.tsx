@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Transaction } from '@/types'import { useGetAllTransactions, useAccounts } from '@/hooks'
+import type { Transaction } from '@/types'
+import { useGetAllTransactions, useAccounts } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 
