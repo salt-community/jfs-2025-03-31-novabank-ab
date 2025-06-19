@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ApplicationRepository extends JpaRepository<Application, UUID> {}
+public interface ApplicationRepository extends JpaRepository<Application, UUID> {
+    boolean existsByEmail(String email);
+    boolean existByPhoneNumber(String phoneNumber);
+}
