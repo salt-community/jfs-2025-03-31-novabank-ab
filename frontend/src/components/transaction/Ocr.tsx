@@ -8,6 +8,9 @@ type OcrProps = {
 
 export default function Ocr({ ocr, setOcr, error }: OcrProps) {
   const { t } = useTranslation('accounts')
+  const handleClearOcr = () => {
+    setOcr('')
+  }
   return (
     <>
       {/* OCR */}
@@ -31,6 +34,16 @@ export default function Ocr({ ocr, setOcr, error }: OcrProps) {
         >
           OCR <span className="text-xs">({t('ifApplicable')})</span>
         </label>
+        {ocr && (
+          <button
+            onClick={handleClearOcr}
+            type="button"
+            aria-label="Clear date"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:cursor-pointer"
+          >
+            &#10005;
+          </button>
+        )}
         {error && <p className="text-red-600 text-sm mt-1">{error}</p>}
       </div>
     </>

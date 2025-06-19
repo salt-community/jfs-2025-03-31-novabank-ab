@@ -7,40 +7,57 @@ import {
 } from '@/api/application'
 import { sendRegisterApplication } from '@/api/application'
 import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
-
-const TOKEN = import.meta.env.VITE_TOKEN || ''
+import { useAuth } from '@clerk/clerk-react'
 
 export function useApplications() {
+  const { getToken } = useAuth()
+
   return useQuery<Application[], Error>({
     queryKey: ['applications'],
     queryFn: async () => {
-      return getApplications(TOKEN)
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return getApplications(token)
     },
   })
 }
 
 export function useApproveApplication() {
-  const qc = useQueryClient()
-  return useMutation<void, Error, string>({
-    mutationFn: (id) => {
-      return approveApplication(TOKEN, id)
+  const queryClient = useQueryClient()
+  const { getToken } = useAuth()
+
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: async (id) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return approveApplication(token, id)
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] })
+    },
   })
 }
 
 export function useRejectApplication() {
-  const qc = useQueryClient()
-  return useMutation<void, Error, string>({
-    mutationFn: (id) => {
-      return rejectApplication(TOKEN, id)
+  const queryClient = useQueryClient()
+  const { getToken } = useAuth()
+
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: async (id) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return rejectApplication(token, id)
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] })
+    },
   })
 }
 
 export function useRegisterApplication() {
-  return useMutation<void, Error, ApplicationRequestDto>({
-    mutationFn: (dto) => sendRegisterApplication(dto),
+  return useMutation<void, Error, ApplicationRequestDto, unknown>({
+    mutationFn: async (dto) => {
+      return sendRegisterApplication(dto)
+    },
   })
 }

@@ -1,5 +1,5 @@
 export type UsersData = {
-  Users: Array<User>
+  users: Array<User>
 }
 
 export interface User {

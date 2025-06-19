@@ -1,35 +1,57 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import type { User } from '@/types/admin/user'
-import { getAllUsers, updateUserStatus } from '@/api/admin/users'
 import type { AccountDTO } from '@/types/admin/AccountDTO'
-import { getUserAccounts } from '@/api/admin/users'
-const TOKEN = import.meta.env.VITE_TOKEN || ''
+import {
+  getAllUsers,
+  getUserAccounts,
+  updateUserStatus,
+} from '@/api/admin/users'
+import { useAuth } from '@clerk/clerk-react'
 
 export function useUsers() {
+  const { getToken } = useAuth()
+
   return useQuery<User[], Error>({
     queryKey: ['users'],
-    queryFn: () => getAllUsers(TOKEN),
+    queryFn: async () => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return getAllUsers(token)
+    },
   })
 }
 
 export function useUpdateUserStatus() {
-  const qc = useQueryClient()
+  const queryClient = useQueryClient()
+  const { getToken } = useAuth()
+
   return useMutation<
     User,
     Error,
-    { id: string; action: 'activate' | 'suspend' }
+    { id: string; action: 'activate' | 'suspend' },
+    unknown
   >({
-    mutationFn: ({ id, action }) => updateUserStatus(TOKEN, id, action),
+    mutationFn: async ({ id, action }) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return updateUserStatus(token, id, action)
+    },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['users'] })
+      queryClient.invalidateQueries({ queryKey: ['users'] })
     },
   })
 }
 
 export function useUserAccounts(userId: string) {
+  const { getToken } = useAuth()
+
   return useQuery<AccountDTO[], Error>({
     queryKey: ['user', userId, 'accounts'],
-    queryFn: () => getUserAccounts(TOKEN, userId),
+    queryFn: async () => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return getUserAccounts(token, userId)
+    },
     enabled: Boolean(userId),
   })
 }
