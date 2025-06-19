@@ -243,7 +243,11 @@ public class TransactionService {
                 throw new AccountNotAllowedException("To account is not active.");
             }
 
-        } else {
+        }
+        if(dto.type() == PaymentType.BANKGIRO || dto.type() ==PaymentType.PLUSGIRO) {
+            if (dto.toAccountNo() == null) {
+                throw new AccountNotFoundException("To account not found");
+            }
             recipientNumber = dto.toAccountNo();
         }
 

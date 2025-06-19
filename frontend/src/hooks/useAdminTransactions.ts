@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
-import type { Transaction } from '@/types'
+import type { TransactionResponse } from '@/types'
 
 export function useAdminTransactions() {
   const { getToken } = useAuth()
 
-  return useQuery<Array<Transaction>>({
+  return useQuery<TransactionResponse>({
     queryKey: ['adminTransactions'],
     queryFn: async () => {
       const token = await getToken()
@@ -19,7 +19,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export async function getAdminTransactions(
   token: string,
-): Promise<Array<Transaction>> {
+): Promise<TransactionResponse> {
   const res = await fetch(BASE_URL.concat('admin/transaction-history'), {
     method: 'GET',
     headers: {
