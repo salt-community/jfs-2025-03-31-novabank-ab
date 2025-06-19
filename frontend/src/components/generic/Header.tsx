@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import signinicon from '../../assets/signinicon.svg'
 import novabankicon from '../../assets/NovaBankTransparentLogo.png'
+import { useTranslation } from 'react-i18next'
 
 function RedirectOnSignIn() {
   const { user } = useUser()
@@ -18,10 +19,11 @@ function RedirectOnSignIn() {
 }
 
 export default function Header() {
+  const { t } = useTranslation('sidebar')
   const navigate = useNavigate()
   return (
     <header className="bg-black w-full">
-      <div className="flex items-center justify-between px-12">
+      <div className="flex items-center justify-between px-6">
         <img
           src={novabankicon}
           onClick={() => navigate({ to: '/' })}
@@ -31,7 +33,7 @@ export default function Header() {
         <SignedOut>
           <SignInButton mode="modal">
             <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#FFB20F] text-white hover:cursor-pointer underline-offset-5 hover:bg-[#F5A700] hover:opacity-100">
-              Sign In
+              {t('signIn')}
               <img src={signinicon} />
             </button>
           </SignInButton>

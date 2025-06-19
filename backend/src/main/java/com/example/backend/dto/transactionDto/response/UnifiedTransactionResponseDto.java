@@ -21,16 +21,16 @@ public record UnifiedTransactionResponseDto(
 ) {
 
     public UnifiedTransactionResponseDto(
-        UUID transactionId,
-        UUID fromAccountId,
-        UUID toAccountId,
-        LocalDateTime date,
-        double amount,
-        String description,
-        String userNote,
-        String ocrNumber,
-        String type,
-        TransactionStatus status
+            UUID transactionId,
+            UUID fromAccountId,
+            UUID toAccountId,
+            LocalDateTime date,
+            double amount,
+            String description,
+            String userNote,
+            String ocrNumber,
+            String type,
+            TransactionStatus status
     ) {
         this.transactionId = transactionId;
         this.fromAccountId = fromAccountId;
@@ -46,31 +46,31 @@ public record UnifiedTransactionResponseDto(
 
     public static UnifiedTransactionResponseDto fromTransaction(Transaction transaction) {
         return new UnifiedTransactionResponseDto(
-            transaction.getId(),
-            transaction.getFromAccount().getId(),
-            transaction.getToAccount().getId(),
-            transaction.getCreatedAt(),
-            transaction.getAmount(),
-            transaction.getDescription(),
-            transaction.getUserNote(),
-            transaction.getOcrNumber(),
-            transaction.getType().name(),
-            null
+                transaction.getId(),
+                transaction.getFromAccount().getId(),
+                transaction.getToAccount() != null ? transaction.getToAccount().getId() : null,
+                transaction.getCreatedAt(),
+                transaction.getAmount(),
+                transaction.getDescription(),
+                transaction.getUserNote(),
+                transaction.getOcrNumber(),
+                transaction.getType().name(),
+                null
         );
     }
 
     public static UnifiedTransactionResponseDto fromScheduledTransaction(ScheduledTransaction scheduledTransaction) {
         return new UnifiedTransactionResponseDto(
-            scheduledTransaction.getId(),
-            scheduledTransaction.getFromAccount().getId(),
-            scheduledTransaction.getToAccount().getId(),
-            scheduledTransaction.getCreatedAt(),
-            scheduledTransaction.getAmount(),
-            scheduledTransaction.getDescription(),
-            scheduledTransaction.getUserNote(),
-            scheduledTransaction.getOcrNumber(),
-            scheduledTransaction.getType().name(),
-            scheduledTransaction.getStatus()
+                scheduledTransaction.getId(),
+                scheduledTransaction.getFromAccount().getId(),
+                scheduledTransaction.getToAccount().getId(),
+                scheduledTransaction.getCreatedAt(),
+                scheduledTransaction.getAmount(),
+                scheduledTransaction.getDescription(),
+                scheduledTransaction.getUserNote(),
+                scheduledTransaction.getOcrNumber(),
+                scheduledTransaction.getType().name(),
+                scheduledTransaction.getStatus()
         );
     }
 }

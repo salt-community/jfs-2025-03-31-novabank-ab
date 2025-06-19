@@ -12,6 +12,7 @@ import java.util.UUID;
 public record TransactionRequestDto(
         @NotNull
         String fromAccountNo,
+        @NotNull
         String toAccountNo,
         @NotNull
         PaymentType type,

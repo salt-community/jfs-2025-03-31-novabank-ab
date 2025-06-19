@@ -2,38 +2,41 @@ package com.example.backend.model;
 
 import com.example.backend.model.enums.ApplicationStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(name = "applications")
 @Getter
 @Setter
-@Table(name = "applications")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Application {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "VARCHAR(36)")
-    UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    ApplicationStatus status;
+    private ApplicationStatus status;
 
     @Column(nullable = false)
-    String firstName;
+    private String firstName;
+
     @Column(nullable = false)
-    String lastName;
+    private String lastName;
+
     @Column(nullable = false)
-    String personalNumber;
+    private String personalNumber;
+
     @Column(nullable = false)
-    String email;
+    private String email;
+
     @Column(nullable = false)
-    String phoneNumber;
+    private String phoneNumber;
+
 }

@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.transactionDto.response.CombinedTransactionResponseDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.exception.custom.*;
@@ -13,17 +12,15 @@ import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TransactionService {
@@ -47,6 +44,8 @@ public class TransactionService {
     public void addTransaction(TransactionRequestDto dto, String userId) {
         TransactionData data = prepareTransactionData(dto, userId);
         boolean isScheduled = dto.transactionDate().isAfter(LocalDate.now(ZoneOffset.UTC));
+        System.out.println(isScheduled);
+        System.out.println(dto.transactionDate().isAfter(LocalDate.now(ZoneOffset.UTC)));
         processTransaction(dto, data, isScheduled);
     }
 
@@ -69,11 +68,22 @@ public class TransactionService {
         throw new TransactionNotFoundException();
     }
 
-    public CombinedTransactionResponseDto getAllTransactionsByAccount(UUID accountId, String userId) {
+    public List<UnifiedTransactionResponseDto> getAllTransactionsByAccount(UUID accountId, String userId) {
         Account account = accountService.getAccount(accountId, userId);
         List<Transaction> transactions = transactionRepository.findByFromAccount_IdOrToAccount_Id(account.getId(), account.getId());
         List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findByFromAccount_Id(account.getId());
-        return new CombinedTransactionResponseDto(transactions, scheduledTransactions);
+
+        List<UnifiedTransactionResponseDto> unifiedTransactions = new ArrayList<>();
+        transactions.forEach(t -> unifiedTransactions.add(UnifiedTransactionResponseDto.fromTransaction(t)));
+        scheduledTransactions.forEach(st -> unifiedTransactions.add(UnifiedTransactionResponseDto.fromScheduledTransaction(st)));
+
+        unifiedTransactions.sort(
+                Comparator
+                        .comparing((UnifiedTransactionResponseDto dto) -> dto.status() == null)
+                        .thenComparing(UnifiedTransactionResponseDto::date, Comparator.reverseOrder())
+        );
+
+        return unifiedTransactions;
     }
 
     public void deleteScheduledTransaction( UUID transactionId, String userId) {
@@ -85,6 +95,7 @@ public class TransactionService {
         scheduledTransactionRepository.save(transaction);
     }
 
+    @Scheduled(cron = "0 0 9 * * *", zone = "Europe/Stockholm")
     @Transactional
     public void processScheduledTransactions() {
         LocalDateTime now = LocalDateTime.now();
@@ -130,31 +141,17 @@ public class TransactionService {
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
-
-    public List<Transaction> getTransactionsByUser(String userId) {
+    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
-        return accounts.stream()
-                .flatMap(account -> transactionRepository
-                        .findByFromAccount_IdOrToAccount_Id(account.getId(), account.getId())
-                        .stream())
-                .toList();
+        List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
+        Page<Transaction> transactions = transactionRepository
+                .findByFromAccount_IdInOrToAccount_IdIn(accountIds, accountIds, pageable);
+        return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
-    public List<UnifiedTransactionResponseDto> getAllTransactionHistory() {
-        return transactionRepository.findAll().stream()
-                .map(tx -> new UnifiedTransactionResponseDto(
-                        tx.getId(),
-                        tx.getFromAccount().getId(),
-                        tx.getToAccount() != null ? tx.getToAccount().getId() : null,
-                        tx.getCreatedAt(),
-                        tx.getAmount(),
-                        tx.getDescription(),
-                        tx.getUserNote(),
-                        tx.getOcrNumber(),
-                        "COMPLETED",
-                        null
-                ))
-                .toList();
+    public Page<UnifiedTransactionResponseDto> getAllTransactionHistory(Pageable pageable) {
+        Page<Transaction> transactions = transactionRepository.findAll(pageable);
+        return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 
     private record TransactionData(Account from, Account to, String recipientNumber) {}
@@ -189,7 +186,7 @@ public class TransactionService {
             ScheduledTransaction scheduled = new ScheduledTransaction(
                     null,
                     data.from(),
-                    data.to(),
+                    null,
                     data.recipientNumber(),
                     dto.type(),
                     dto.amount(),
@@ -248,7 +245,10 @@ public class TransactionService {
                 throw new AccountNotAllowedException("To account is not active.");
             }
 
-        } else {
+        } else if(dto.type() == PaymentType.BANKGIRO || dto.type() ==PaymentType.PLUSGIRO) {
+            if (dto.toAccountNo() == null || dto.toAccountNo().isBlank()) {
+                throw new AccountNotFoundException("To account not found");
+            }
             recipientNumber = dto.toAccountNo();
         }
 

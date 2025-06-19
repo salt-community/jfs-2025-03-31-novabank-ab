@@ -11,3 +11,4 @@ export type ChartData = {
   value_in: number
   value_out: number
 }
+

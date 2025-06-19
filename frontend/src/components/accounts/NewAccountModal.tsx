@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 
 type AccountType = 'SAVINGS' | 'PERSONAL'
@@ -12,6 +13,7 @@ export default function NewAccountModal({
   onSubmit,
   onClose,
 }: NewAccountModalProps) {
+  const { t } = useTranslation('accounts')
   const dialogRef = useRef<HTMLDialogElement | null>(null)
 
   const [accountType, setAccountType] = useState<AccountType | ''>('')
@@ -33,8 +35,8 @@ export default function NewAccountModal({
   const handleSubmit = () => {
     const newErrors: typeof errors = {}
 
-    if (!accountType) newErrors.accountType = 'Please select an account type'
-    if (!currency) newErrors.currency = 'Please select a currency'
+    if (!accountType) newErrors.accountType = t('selectAccountType')
+    if (!currency) newErrors.currency = t('selectCurrency')
 
     setErrors(newErrors)
     if (Object.keys(newErrors).length > 0) return
@@ -67,27 +69,27 @@ export default function NewAccountModal({
         </button>
 
         <div className="space-y-5 p-8 h-100">
-          <p className="mb-10 text-center text-xl">Open new account</p>
+          <p className="mb-10 text-center text-xl">{t('openNewAccount')}</p>
           {/* Account Type */}
           <div className="relative w-full">
             <select
               value={accountType}
               id="accountType"
               onChange={(e) => setAccountType(e.target.value as AccountType)}
-              className={`peer hover:cursor-pointer rounded p-4 pb-5 w-full outline outline-gray-500 
+              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
                               focus:outline-2 focus:outline-black text-left bg-white
                               ${errors.accountType ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
                               border-r-15 border-transparent
                               ${accountType ? ' text-black' : 'text-gray-400'}`}
             >
               <option value="" className="text-gray-400">
-                Select an account type
+                {t('selectAnAccountType')}
               </option>
               <option className="text-black" value="SAVINGS">
-                Savings
+                {t('savings')}
               </option>
               <option className="text-black" value="PERSONAL">
-                Personal
+                {t('personal')}
               </option>
             </select>
             <label
@@ -102,7 +104,7 @@ export default function NewAccountModal({
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
               peer-focus:bg-white `}
             >
-              Account type
+              {t('accountType')}
             </label>
             {errors.accountType && (
               <p className="text-red-600 text-sm mt-1">{errors.accountType}</p>
@@ -115,14 +117,14 @@ export default function NewAccountModal({
               value={currency}
               id="currency"
               onChange={(e) => setCurrency(e.target.value as Currency)}
-              className={`peer hover:cursor-pointer rounded p-4 pb-5 w-full outline outline-gray-500 
+              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
                               focus:outline-2 focus:outline-black text-left bg-white
                               ${errors.currency ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
                               border-r-15 border-transparent
                               ${currency ? ' text-black' : 'text-gray-400'}`}
             >
               <option value="" className="text-gray-400">
-                Select currency
+                {t('selectCurrencyOnly')}
               </option>
               <option className="text-black" value="SEK">
                 SEK
@@ -143,7 +145,7 @@ export default function NewAccountModal({
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
               peer-focus:bg-white `}
             >
-              Currency
+              {t('currency')}
             </label>
             {errors.currency && (
               <p className="text-red-600 text-sm mt-1">{errors.currency}</p>
@@ -155,9 +157,9 @@ export default function NewAccountModal({
             <button
               type="button"
               onClick={handleSubmit}
-              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black font-semibold shadow-sm px-5 py-2 rounded transition-colors"
+              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
             >
-              Done
+              {t('done')}
             </button>
           </div>
         </div>

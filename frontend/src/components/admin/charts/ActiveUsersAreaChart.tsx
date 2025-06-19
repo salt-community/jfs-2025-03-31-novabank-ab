@@ -1,9 +1,8 @@
-import { useAccounts } from '@/hooks'
+//import { useAdminUser } from '@/hooks/useAdminUsers'
 import { GeneralWideAreaChart } from './GeneralWideAreaChart'
 import type { GenericChartData } from '@/types/admin/inOutChartData'
 
 export default function ActiveUsersAreaChart() {
-  const { data, isLoading, error } = useAccounts()
   const fakeActiveUsers: GenericChartData = {
     label: 'ACTIVE USERS',
     subtext: 'SHOWING USER ACTIVITY',
@@ -42,6 +41,8 @@ export default function ActiveUsersAreaChart() {
       { date: '2024-05-30', value_in: 280, value_out: 1 },
     ],
   }
+  /* const { data, error, isLoading } = useAdminUser()
+
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -51,10 +52,9 @@ export default function ActiveUsersAreaChart() {
   if (!data) {
     return <div>No data found.</div>
   }
+  console.log(data, data) */
   return (
     <div>
-      {data[0].id}
-      <br />
       <GeneralWideAreaChart data={fakeActiveUsers} />
     </div>
   )

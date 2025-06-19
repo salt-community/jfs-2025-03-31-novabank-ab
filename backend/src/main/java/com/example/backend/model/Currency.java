@@ -2,33 +2,30 @@ package com.example.backend.model;
 
 import com.example.backend.model.enums.CurrencyAbbrevation;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Table(name = "currencies")
 @Setter
 @Getter
-@Table(name = "currencies")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Currency {
 
-    public Currency() {}
-
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "VARCHAR(36)")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String name;
 
     @Enumerated(EnumType.STRING)
     private CurrencyAbbrevation abbrevation;
 
-    @OneToMany
-    @JoinColumn(name = "account_ids")
-    private List<Account> accounts;
+    @OneToMany(mappedBy = "currency", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Account> accounts = new ArrayList<>();
 
 }

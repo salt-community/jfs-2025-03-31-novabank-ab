@@ -16,7 +16,10 @@ public class SecurityUtil {
 
     public Role extractRoleFromJWT(Jwt jwt) {
         @SuppressWarnings("unchecked")
-        Map<String,?> metadata = jwt.getClaim("metadata");
+        Map<String,?> metadata = jwt.getClaim("publicMetadata");
+        if (metadata == null) {
+            metadata = jwt.getClaim("metadata");
+        }
 
         String userRole = Optional.ofNullable(metadata)
                 .map(m -> (String) m.get("role"))
