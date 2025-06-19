@@ -1,18 +1,14 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.transactionDto.request.ClientTransactionRequestDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.exception.custom.*;
-import com.example.backend.model.Account;
-import com.example.backend.model.Client;
-import com.example.backend.model.ScheduledTransaction;
-import com.example.backend.model.Transaction;
+import com.example.backend.model.*;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.PaymentType;
 import com.example.backend.model.enums.TransactionStatus;
-import com.example.backend.repository.AccountRepository;
-import com.example.backend.repository.ScheduledTransactionRepository;
-import com.example.backend.repository.TransactionRepository;
+import com.example.backend.repository.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -263,5 +259,58 @@ public class TransactionService {
         }
 
         return new TransactionData(from, to, recipientNumber);
+    }
+
+    public List<ClientTransaction> getAllClientTransactionsByAccount(UUID accountId, String userId) {
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        if (optionalAccount.isEmpty()) throw new AccountNotFoundException();
+        Account account = optionalAccount.get();
+        if (!Objects.equals(account.getUser().getId(), userId)) throw new UserUnauthorizedException("User not authorized to access this clients transactions");
+        return clientTransactionRepository.findAllByFromAccount(account);
+    }
+
+    public List<ClientScheduledTransaction> getAllClientScheduledTransactionsByAccount(UUID accountId, String userId) {
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        if (optionalAccount.isEmpty()) throw new AccountNotFoundException();
+        Account account = optionalAccount.get();
+        if (!Objects.equals(account.getUser().getId(), userId)) throw new UserUnauthorizedException("User not authorized to access this clients scheduled transactions");
+        return clientScheduledTransactionRepository.findAllByFromAccount(account);
+    }
+
+//    public Client getClient(UUID clientId) {
+//        Optional<Client> client = clientRepository.findById(clientId);
+//        if (client.isEmpty()) throw new ClientNotFoundException();
+//        return client.get();
+//    }
+
+    public Client getClientByAccountNo(String accountNo) {
+        Optional<Client> client = clientRepository.getClientByAccountNumber(accountNo);
+        if (client.isEmpty()) throw new ClientNotFoundException();
+        return client.get();
+    }
+
+    @Transactional
+    public void addClientTransaction(ClientTransactionRequestDto dto, String userId) {
+        Optional<Account> accountOptional = accountRepository.findByAccountNumber(dto.fromAccountNo());
+        if (accountOptional.isEmpty()) throw new AccountNotFoundException();
+        User user = accountOptional.get().getUser();
+        if (!user.getId().equals(userId)) throw new UserUnauthorizedException("User not authorized to add transaction to this client");
+
+        Client client;
+        try {
+            client = getClientByAccountNo(dto.toClientNo());
+        } catch (ClientNotFoundException e) {
+            client = new Client();
+            client.setAccountNumber(dto.toClientNo());
+            clientRepository.save(client);
+        }
+
+        if (dto.transactionDate().equals(LocalDate.now())) {
+            ClientTransaction clientTransaction = dto.toClientTransaction(accountOptional.get(), client);;
+            clientTransactionRepository.save(clientTransaction);
+        } else {
+            ClientScheduledTransaction clientScheduledTransaction = dto.toClientScheduledTransaction(accountOptional.get(), client);
+            clientScheduledTransactionRepository.save(clientScheduledTransaction);
+        }
     }
 }

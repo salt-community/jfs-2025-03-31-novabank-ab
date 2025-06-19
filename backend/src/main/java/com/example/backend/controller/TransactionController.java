@@ -1,11 +1,16 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.transactionDto.request.ClientTransactionRequestDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
+import com.example.backend.dto.transactionDto.response.CombinedClientTransactionResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
+import com.example.backend.model.ClientScheduledTransaction;
+import com.example.backend.model.ClientTransaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -98,5 +103,42 @@ public class TransactionController {
         String userId = jwt.getSubject();
         transactionService.deleteScheduledTransaction(transactionId,userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+        summary = "Get all transactions and scheduled transactions with external clients",
+        description = "Returns a list of transactions and another list of scheduled transactions",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Transactions retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Account not found")
+        }
+    )
+    @GetMapping("/{accountId}/client")
+    public ResponseEntity<CombinedClientTransactionResponseDto> getAllTransactionsToClients(
+        @PathVariable UUID accountId,
+        @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        List<ClientTransaction> clientTransactions = transactionService.getAllClientTransactionsByAccount(accountId, userId);
+        List<ClientScheduledTransaction> clientScheduledTransactions = transactionService.getAllClientScheduledTransactionsByAccount(accountId, userId);
+        return ResponseEntity.ok(CombinedClientTransactionResponseDto.fromLists(clientTransactions, clientScheduledTransactions));
+    }
+
+
+    @Operation(
+        summary = "Make transaction with external client",
+        description = "Makes a transaction with a client from another bank",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Transactions retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid transaction date"),
+            @ApiResponse(responseCode = "400", description = "Invalid client account number"),
+            @ApiResponse(responseCode = "404", description = "Account not found")
+        }
+    )
+    @PostMapping("/client")
+    public ResponseEntity<Void> addClientTransaction(@RequestBody @Valid ClientTransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        transactionService.addClientTransaction(dto, userId);
+        return ResponseEntity.ok().build();
     }
 }

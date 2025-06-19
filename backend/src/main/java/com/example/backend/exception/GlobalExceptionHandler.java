@@ -104,4 +104,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDto> handleSettingsConfigNotFound(SettingsConfigNotFoundException e) {
         return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleClientNotFoundException(ClientNotFoundException e) {
+        return buildResponse(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidTransactionDateException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidTransactionDate(InvalidTransactionDateException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidAccountNumberException.class)
+    public ResponseEntity<ErrorResponseDto> handleInvalidClientAccountNumber(InvalidAccountNumberException e) {
+        return buildResponse(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

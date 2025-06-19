@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.model.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,10 @@ public class ClientTransaction {
     @JoinColumn(name = "to_client_id")
     private Client toClient;
     @Column(nullable = false)
+
+    @Enumerated(EnumType.STRING)
+    private PaymentType type;
+
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private double amount;
@@ -35,4 +40,25 @@ public class ClientTransaction {
 
     public ClientTransaction() {}
 
+    public ClientTransaction(
+        UUID id,
+        Account fromAccount,
+        Client toClient,
+        PaymentType type,
+        LocalDateTime createdAt,
+        double amount,
+        String description,
+        String userNote,
+        String ocrNumber
+    ) {
+        this.id = id;
+        this.fromAccount = fromAccount;
+        this.toClient = toClient;
+        this.type = type;
+        this.createdAt = createdAt;
+        this.amount = amount;
+        this.description = description;
+        this.userNote = userNote;
+        this.ocrNumber = ocrNumber;
+    }
 }
