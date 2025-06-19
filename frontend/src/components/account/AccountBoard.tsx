@@ -49,10 +49,6 @@ export default function AccountBoard({ account }: AccountBoardProps) {
             data
               .filter((t) => t.status === 'PENDING')
               .map((t) => {
-                const direction =
-                  t.toAccountId?.toString() === account.id.toString()
-                    ? 'in'
-                    : 'out'
                 return (
                   <ScheduledTransactionItem
                     transactionId={t.transactionId}
@@ -63,8 +59,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
                     ocrNumber={t.ocrNumber}
                     scheduledDate={t.date}
                     toAccountId={t.toAccountId}
-                    userNote={t.userNote}
-                    direction={direction}
+                    accountNoType={t.type}
                   />
                 )
               })
@@ -88,10 +83,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
                 return (
                   <TransactionItem
                     key={t.transactionId}
-                    name={t.description}
-                    category={t.type}
+                    accType={t.description}
+                    accNoType={t.type}
                     amount={t.amount}
-                    time={t.date}
+                    date={t.date}
                     direction={direction}
                   />
                 )
