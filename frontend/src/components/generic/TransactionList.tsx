@@ -1,23 +1,25 @@
 import { useNavigate } from '@tanstack/react-router'
 import { TransactionItem } from '../generic'
 import type { Transaction } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 type TransactionListProps = {
   transactions: Array<Transaction>
 }
 
 export function TransactionList({ transactions }: TransactionListProps) {
+  const { t } = useTranslation('accounts')
   const navigate = useNavigate()
   const seen = new Set()
   return (
     <div className="mt-10" data-testid="transaction-list">
       <div className="flex flex-row justify-between items-baseline">
-        <h1 className="text-2xl mb-5">Recent transactions</h1>
+        <h1 className="text-2xl mb-5">{t('recentTransactions')}</h1>
         <a
           onClick={() => navigate({ to: '/transactions' })}
           className="text-md text-black hover:opacity-70 underline-offset-5 hover:cursor-pointer"
         >
-          See all
+          {t('seeAll')}
         </a>
       </div>
 

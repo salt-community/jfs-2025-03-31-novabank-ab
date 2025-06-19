@@ -292,7 +292,7 @@ const Settings = () => {
             type="submit"
             className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
           >
-            Save Preferences
+            {t('savePreferences')}
           </button>
         </TabsContent>
       </Tabs>
