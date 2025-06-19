@@ -3,33 +3,39 @@ import type { User } from '@/types/admin/user'
 import { getAllUsers, updateUserStatus } from '@/api/admin/users'
 import type { AccountDTO } from '@/types/admin/AccountDTO'
 import { getUserAccounts } from '@/api/admin/users'
-const TOKEN = import.meta.env.VITE_TOKEN || ''
+import { useAuth } from '@clerk/clerk-react'
 
-export function useUsers() {
+export async function useUsers() {
+  const { getToken } = useAuth()
+  const token = await getToken()
   return useQuery<User[], Error>({
     queryKey: ['users'],
-    queryFn: () => getAllUsers(TOKEN),
+    queryFn: () => getAllUsers(token || ''),
   })
 }
 
-export function useUpdateUserStatus() {
+export async function useUpdateUserStatus() {
   const qc = useQueryClient()
+  const { getToken } = useAuth()
+  const token = await getToken()
   return useMutation<
     User,
     Error,
     { id: string; action: 'activate' | 'suspend' }
   >({
-    mutationFn: ({ id, action }) => updateUserStatus(TOKEN, id, action),
+    mutationFn: ({ id, action }) => updateUserStatus(token || '', id, action),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['users'] })
     },
   })
 }
 
-export function useUserAccounts(userId: string) {
+export async function useUserAccounts(userId: string) {
+  const { getToken } = useAuth()
+  const token = await getToken()
   return useQuery<AccountDTO[], Error>({
     queryKey: ['user', userId, 'accounts'],
-    queryFn: () => getUserAccounts(TOKEN, userId),
+    queryFn: () => getUserAccounts(token || '', userId),
     enabled: Boolean(userId),
   })
 }
