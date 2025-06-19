@@ -50,6 +50,9 @@ public class Transaction {
     @Column(nullable = false)
     private String ocrNumber;
 
+    @Column(nullable = true)
+    private String category;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

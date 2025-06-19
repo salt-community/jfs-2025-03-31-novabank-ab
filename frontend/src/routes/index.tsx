@@ -7,36 +7,75 @@ export const Route = createFileRoute('/')({
 })
 
 function LandingPage() {
+  const navigate = useNavigate()
   return (
-    <>
+    <div className="h-2000 flex justify-center bg-gradient-to-tr from-sky-700 to-[#FFB20F] relative">
       <SignedIn>
         <RedirectOnSignIn />
       </SignedIn>
       <SignedOut>
-        <div className="flex justify-between text-black">
-          <div className="flex flex-col justify-center">
-            <h1
-              className="text-left mt-20 ml-5 underline underline-offset-6 text-4xl pb-10 pt-3 rounded-4xl"
-              style={{ fontFamily: "'Lato', sans-serif" }}
-            >
-              Welcome to the future of finance - Nova Bank
-            </h1>
-            <h2
-              className="ml-5 text-2xl pb-5 pt-3 leading-12 rounded-4xl"
-              style={{ fontFamily: "'Lato', sans-serif" }}
-            >
-              Let us take your banking to the next level<br></br>Register for
-              free today
-            </h2>
+        <div className="mt-10">
+          <div className="flex flex-col md:flex-row justify-between w-full max-w-6xl mx-auto px-6 py-16">
+            <div className="backdrop-blur-xl bg-black border border-yellow-300/80 rounded-3xl shadow-2xl p-10 md:w-1/2 animate-fade-in-up">
+              <h1
+                className="text-5xl font-semibold text-white mb-6 drop-shadow-lg animate-slide-in-left"
+                style={{ fontFamily: "'Lato', sans-serif" }}
+              >
+                Welcome to the future of finance
+                <br />
+                <h1 className="text-yellow-400 mt-4 drop-shadow-lg">
+                  Nova Bank
+                </h1>
+              </h1>
+              <h2
+                className="text-2xl text-white mb-8 drop-shadow-lg animate-fade-in"
+                style={{ fontFamily: "'Lato', sans-serif" }}
+              >
+                Let us take your banking to the next level
+                <br />
+                Register for free today
+              </h2>
+              <button
+                className=" px-8 py-3 bg-yellow-400 border-2 border-yellow-300/80 cursor-pointer text-black rounded-4xl hover:opacity-70 "
+                style={{ fontFamily: "'Lato', sans-serif" }}
+                onClick={() => navigate({ to: '/register' })} 
+              >
+                Register Here
+              </button>
+            </div>
+            <div className="">
+              <img
+                src="/PhonePlaceholder.png"
+                alt="Landing Page Illustration"
+                className="w-full animate-fade-in-up h-120 max-w-md mx-auto"
+              />
+            </div>
           </div>
-          <img
-            src="Manhattan.jpg"
-            alt="Manhattan"
-            className="w-[40%] mt-20 rounded-l-4xl"
-          />
         </div>
       </SignedOut>
-    </>
+
+      <style>
+        {`
+          @keyframes fade-in-up {
+            0% { opacity: 0; transform: translateY(40px);}
+            100% { opacity: 1; transform: translateY(0);}
+          }
+          .animate-fade-in-up { animation: fade-in-up 1s cubic-bezier(.4,0,.2,1) both; }
+
+          @keyframes slide-in-left {
+            0% { opacity: 0; transform: translateX(-40px);}
+            100% { opacity: 1; transform: translateX(0);}
+          }
+          .animate-slide-in-left { animation: slide-in-left 1s 0.2s cubic-bezier(.4,0,.2,1) both; }
+
+          @keyframes fade-in {
+            0% { opacity: 0;}
+            100% { opacity: 1;}
+          }
+          .animate-fade-in { animation: fade-in 1.5s 0.5s both; }
+        `}
+      </style>
+    </div>
   )
 }
 

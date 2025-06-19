@@ -27,10 +27,10 @@ public class ScheduledTransaction {
     private Account fromAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_account_id", nullable = false)
+    @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String recipientNumber;
 
     @NonNull()
@@ -66,6 +66,9 @@ public class ScheduledTransaction {
     @NonNull
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = true)
+    private String category;
 
     @PrePersist
     public void prePersist() {

@@ -17,33 +17,9 @@ public record UnifiedTransactionResponseDto(
         String userNote,
         String ocrNumber,
         String type,
-        TransactionStatus status
+        TransactionStatus status,
+        String category
 ) {
-
-    public UnifiedTransactionResponseDto(
-            UUID transactionId,
-            UUID fromAccountId,
-            UUID toAccountId,
-            LocalDateTime date,
-            double amount,
-            String description,
-            String userNote,
-            String ocrNumber,
-            String type,
-            TransactionStatus status
-    ) {
-        this.transactionId = transactionId;
-        this.fromAccountId = fromAccountId;
-        this.toAccountId = toAccountId;
-        this.date = date;
-        this.amount = amount;
-        this.description = description;
-        this.userNote = userNote;
-        this.ocrNumber = ocrNumber;
-        this.type = type;
-        this.status = status;
-    }
-
     public static UnifiedTransactionResponseDto fromTransaction(Transaction transaction) {
         return new UnifiedTransactionResponseDto(
                 transaction.getId(),
@@ -55,7 +31,8 @@ public record UnifiedTransactionResponseDto(
                 transaction.getUserNote(),
                 transaction.getOcrNumber(),
                 transaction.getType().name(),
-                null
+                null,
+                transaction.getCategory()
         );
     }
 
@@ -63,14 +40,15 @@ public record UnifiedTransactionResponseDto(
         return new UnifiedTransactionResponseDto(
                 scheduledTransaction.getId(),
                 scheduledTransaction.getFromAccount().getId(),
-                scheduledTransaction.getToAccount().getId(),
+                scheduledTransaction.getToAccount() != null ? scheduledTransaction.getToAccount().getId() : null,
                 scheduledTransaction.getCreatedAt(),
                 scheduledTransaction.getAmount(),
                 scheduledTransaction.getDescription(),
                 scheduledTransaction.getUserNote(),
                 scheduledTransaction.getOcrNumber(),
                 scheduledTransaction.getType().name(),
-                scheduledTransaction.getStatus()
+                scheduledTransaction.getStatus(),
+                scheduledTransaction.getCategory()
         );
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @RestController
 @RequestMapping({"/api/auth", "/api/auth/"})
@@ -30,5 +32,12 @@ public class AuthController {
         User user = authService.loginUser(userId, role);
         log.info("User with ID: {} and Role: {} logging in", userId, role);
         return ResponseEntity.ok(LoginResponseDto.fromUser(user));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<LoginResponseDto> logout(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+        String userId = jwt.getSubject();
+        log.info("User with ID: {} logging out", userId);
+        return ResponseEntity.ok(new LoginResponseDto(userId, LocalDateTime.now(), null));
     }
 }

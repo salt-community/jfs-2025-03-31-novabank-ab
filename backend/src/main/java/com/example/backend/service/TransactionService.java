@@ -29,24 +29,33 @@ public class TransactionService {
     private final ScheduledTransactionRepository scheduledTransactionRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final GeminiService geminiService;
 
     public TransactionService(TransactionRepository transactionRepository,
                               ScheduledTransactionRepository scheduledTransactionRepository,
                               AccountRepository accountRepository,
-                              AccountService accountService) {
+                              AccountService accountService, GeminiService geminiService) {
         this.transactionRepository = transactionRepository;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
+        this.geminiService = geminiService;
     }
 
     @Transactional
     public void addTransaction(TransactionRequestDto dto, String userId) {
         TransactionData data = prepareTransactionData(dto, userId);
         boolean isScheduled = dto.transactionDate().isAfter(LocalDate.now(ZoneOffset.UTC));
+        String category = geminiService.classifyTransaction(
+                dto.description(),
+                dto.amount(),
+                dto.userNote()
+        );
+
         System.out.println(isScheduled);
         System.out.println(dto.transactionDate().isAfter(LocalDate.now(ZoneOffset.UTC)));
-        processTransaction(dto, data, isScheduled);
+
+        processTransaction(dto, data, isScheduled, category);
     }
 
     public UnifiedTransactionResponseDto getTransaction(UUID transactionId, String userId) {
@@ -82,7 +91,6 @@ public class TransactionService {
                         .comparing((UnifiedTransactionResponseDto dto) -> dto.status() == null)
                         .thenComparing(UnifiedTransactionResponseDto::date, Comparator.reverseOrder())
         );
-
         return unifiedTransactions;
     }
 
@@ -132,7 +140,8 @@ public class TransactionService {
                     scheduledTransaction.getAmount(),
                     scheduledTransaction.getDescription(),
                     scheduledTransaction.getUserNote(),
-                    scheduledTransaction.getOcrNumber()
+                    scheduledTransaction.getOcrNumber(),
+                    scheduledTransaction.getCategory()
             );
             transactionRepository.save(transaction);
             scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
@@ -181,13 +190,13 @@ public class TransactionService {
         return Objects.equals(tx.getFromAccount().getUser().getId(), userId)
                 || (tx.getToAccount() != null && Objects.equals(tx.getToAccount().getUser().getId(), userId));
     }
-    private void processTransaction(TransactionRequestDto dto, TransactionData data, boolean isScheduled) {
+    private void processTransaction(TransactionRequestDto dto, TransactionData data, boolean isScheduled, String category) {
         if (isScheduled) {
             ScheduledTransaction scheduled = new ScheduledTransaction(
                     null,
                     data.from(),
-                    null,
-                    data.recipientNumber(),
+                    dto.type() == PaymentType.INTERNAL_TRANSFER ? data.to() : null,
+                    dto.type() == PaymentType.INTERNAL_TRANSFER ? null : data.recipientNumber(),
                     dto.type(),
                     dto.amount(),
                     dto.transactionDate().atStartOfDay(),
@@ -195,7 +204,8 @@ public class TransactionService {
                     LocalDateTime.now(),
                     dto.ocrNumber(),
                     dto.userNote(),
-                    dto.description()
+                    dto.description(),
+                    category
             );
             scheduledTransactionRepository.save(scheduled);
         } else {
@@ -214,7 +224,8 @@ public class TransactionService {
                     dto.amount(),
                     dto.description(),
                     dto.userNote(),
-                    dto.ocrNumber()
+                    dto.ocrNumber(),
+                    category
             );
             transactionRepository.save(transaction);
         }
