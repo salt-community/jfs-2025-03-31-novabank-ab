@@ -1,0 +1,18 @@
+{
+  "errorLoading": "Misslyckades med att ladda användardetaljer",
+  "personal": "Personligt",
+  "general": "Allmänt",
+  "firstName": "Förnamn",
+  "lastName": "Efternamn",
+  "email": "E-post",
+  "smsNotifications": "SMS-notiser",
+  "emailNotifications": "E-postnotiser",
+  "cardTransactionNotifications": "Korttransaktionsnotiser",
+  "ATMWithdrawalsNotifications": "Bankomatuttagsnotiser",
+  "depositNotifications": "Insättningsnotiser",
+  "phoneNumber": "Telefonnummer",
+  "language": "Språk",
+  "english": "Engelska",
+  "swedish": "Svenska",
+  "savePreferences": "Spara inställningar"
+}
