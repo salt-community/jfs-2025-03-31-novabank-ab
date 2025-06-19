@@ -50,7 +50,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
               .filter((t) => t.status === 'PENDING')
               .map((t) => {
                 const direction =
-                  t.toAccount?.toString() === account.id.toString()
+                  t.toAccountId?.toString() === account.id.toString()
                     ? 'in'
                     : 'out'
                 return (
@@ -59,10 +59,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
                     key={t.transactionId}
                     amount={t.amount}
                     description={t.description}
-                    fromAccountId={t.fromAccount}
+                    fromAccountId={t.fromAccountId}
                     ocrNumber={t.ocrNumber}
                     scheduledDate={t.date}
-                    toAccountId={t.toAccount}
+                    toAccountId={t.toAccountId}
                     userNote={t.userNote}
                     direction={direction}
                   />
@@ -82,7 +82,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
               .filter((t) => t.status === null)
               .map((t) => {
                 const direction =
-                  t.toAccount?.toString() === account.id.toString()
+                  t.toAccountId?.toString() === account.id.toString()
                     ? 'in'
                     : 'out'
                 return (
