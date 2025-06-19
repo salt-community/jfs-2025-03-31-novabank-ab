@@ -1,18 +1,22 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
 import { SignOutButton } from '@clerk/clerk-react'
-import homeicon from '../../assets/homeicon.svg'
-import accounticon from '../../assets/accounticon.svg'
-import transactionicon from '../../assets/transactionicon.svg'
-import transfericon from '../../assets/transfericon.svg'
-import settingsicon from '../../assets/settingsicon.svg'
-import novabankicon from '../../assets/NovaBankTransparentLogo.png'
-import signouticon from '../../assets/signouticon.svg'
-import yellowhomeicon from '../../assets/yellowhomeicon.svg'
-import yellowtransfericon from '../../assets/yellowtransfericon.svg'
-import yellowaccounticon from '../../assets/yellowaccounticon.svg'
-import yellowtransactionicon from '../../assets/yellowtransactionicon.svg'
-import yellowsettingsicon from '../../assets/yellowsettingsicon.svg'
+import {
+  homeicon,
+  accounticon,
+  transactionicon,
+  transfericon,
+  settingsicon,
+  signouticon,
+  novabankicon,
+  yellowhomeicon,
+  yellowaccounticon,
+  yellowtransactionicon,
+  yellowtransfericon,
+  yellowsettingsicon,
+} from '@/assets/icons'
+import UserBottomNav from './UserBottomNav'
+import UserTopNav from './UserTopNav'
 
 type Props = {
   admin: boolean
@@ -26,7 +30,7 @@ export default function SideBar({ admin }: Props) {
   const isActive = (path: string) => location.pathname.startsWith(path)
 
   const userSideBar = (
-    <aside className="w-70 fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-10 justify-between flex flex-col">
+    <aside className="hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
@@ -47,7 +51,7 @@ export default function SideBar({ admin }: Props) {
             src={isActive('/dashboard') ? yellowhomeicon : homeicon}
             alt="Home"
           />
-          {t('user.dashboard')}
+          <span className="hidden lg:inline">{t('user.dashboard')}</span>
         </a>
 
         <a
@@ -59,7 +63,7 @@ export default function SideBar({ admin }: Props) {
           }`}
         >
           <img src={isActive('/accounts') ? yellowaccounticon : accounticon} />
-          {t('user.accounts')}
+          <span className="hidden lg:inline">{t('user.accounts')}</span>
         </a>
 
         <a
@@ -77,7 +81,7 @@ export default function SideBar({ admin }: Props) {
                 : transactionicon
             }
           />
-          {t('user.transactions')}
+          <span className="hidden lg:inline"> {t('user.transactions')}</span>
         </a>
 
         <a
@@ -91,7 +95,7 @@ export default function SideBar({ admin }: Props) {
           <img
             src={isActive('/transfer') ? yellowtransfericon : transfericon}
           />
-          {t('user.transfer')}
+          <span className="hidden lg:inline">{t('user.transfer')}</span>
         </a>
 
         <a
@@ -105,14 +109,14 @@ export default function SideBar({ admin }: Props) {
           <img
             src={isActive('/settings') ? yellowsettingsicon : settingsicon}
           />
-          {t('user.settings')}
+          <span className="hidden lg:inline">{t('user.settings')}</span>
         </a>
       </div>
       <div className="mt-30">
         <SignOutButton>
           <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
             <img src={signouticon} />
-            Sign out
+            {t('signOut')}
           </a>
         </SignOutButton>
       </div>
@@ -197,12 +201,20 @@ export default function SideBar({ admin }: Props) {
         <SignOutButton>
           <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
             <img src={signouticon} />
-            Sign out
+            {t('signOut')}
           </a>
         </SignOutButton>
       </div>
     </aside>
   )
 
-  return admin ? adminSideBar : userSideBar
+  return admin ? (
+    adminSideBar
+  ) : (
+    <>
+      <UserTopNav />
+      {userSideBar}
+      <UserBottomNav />
+    </>
+  )
 }

@@ -2,17 +2,35 @@ import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { SignedIn, SignedOut, useAuth, useUser } from '@clerk/clerk-react'
 import Header from '@/components/generic/Header'
 import SideBar from '@/components/generic/SideBar'
+import { useGetUserSettings } from '@/hooks'
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { login } from '@/api'
 
 export const Route = createRootRoute({
   component: () => {
+    const { i18n } = useTranslation()
     const { location } = useRouterState()
     const isIndex = location.pathname === '/'
     const isRegister = location.pathname === '/register'
     const { user, isLoaded: isUserLoaded, isSignedIn } = useUser()
     const { signOut, getToken } = useAuth()
     const isAdmin = user?.publicMetadata?.role === 'admin'
+    const {
+      data: userSettingsFromApi,
+      // isLoading: userSettingsLoading,
+      // isError: userSettingsError,
+    } = useGetUserSettings()
+
+    useEffect(() => {
+      if (userSettingsFromApi) {
+        if (userSettingsFromApi.language === 'en') {
+          i18n.changeLanguage('en')
+        } else {
+          i18n.changeLanguage('sv')
+        }
+      }
+    }, [userSettingsFromApi])
 
     useEffect(() => {
       const doLogin = async () => {

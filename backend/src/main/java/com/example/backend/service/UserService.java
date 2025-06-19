@@ -136,6 +136,14 @@ public class UserService {
     }
 
     public Application sendRegisterApplication(Application application) {
+        if (applicationRepository.existsByEmail(application.getEmail())) {
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
+
+        if(applicationRepository.existsByPhoneNumber(application.getPhoneNumber())){
+            throw new UserAlreadyExistsException("User with this phone number already exists");
+        }
+        application.setCreatedAt(LocalDateTime.now());
         return applicationRepository.save(application);
     }
 
@@ -151,6 +159,7 @@ public class UserService {
         switch (status) {
             case ApplicationStatus.APPROVED -> {
                 application.setStatus(ApplicationStatus.APPROVED);
+                application.setUpdatedAt(LocalDateTime.now());
                 addUser(application.getId());
             }
             case ApplicationStatus.DISAPPROVED -> application.setStatus(ApplicationStatus.DISAPPROVED);

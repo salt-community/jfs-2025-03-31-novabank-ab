@@ -85,26 +85,26 @@ const Settings = () => {
         </TabsList>
         <div className="ml-5 mt-5">
           <TabsContent value="personal">
-            <h3 className="text-xl mb-2">{t('firstName')}:</h3>
+            <h3 className="text-2xl mb-4">{t('firstName')}:</h3>
             <input
               readOnly
-              className="bg-gray-300 rounded-xs p-1 w-[15vw] mb-2"
+              className="bg-gray-300 rounded-xs p-1 w-100 mb-2"
               type="text"
               value={userFromApi?.firstName ?? ''}
             ></input>
-            <h3 className="text-xl mb-2">{t('lastName')}:</h3>
+            <h3 className="text-2xl mb-4">{t('lastName')}:</h3>
             <input
               readOnly
-              className="bg-gray-300 rounded-xs p-1 w-[15vw] mb-2"
+              className="bg-gray-300 rounded-xs p-1 w-100 mb-2"
               type="text"
               value={userFromApi?.lastName ?? ''}
             ></input>
-            <h3 className="text-xl mb-2">{t('email')}:</h3>
+            <h3 className="text-2xl mb-4">{t('email')}:</h3>
             <div className="flex items-center text-center align-middle">
               <input
                 onChange={(e) => setEmailField(e.target.value)}
                 readOnly={!editingEmail}
-                className={`${editingEmail ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-[15vw] mb-2`}
+                className={`${editingEmail ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-100 mb-2`}
                 type="text"
                 defaultValue={userFromApi?.email}
               ></input>
@@ -121,12 +121,12 @@ const Settings = () => {
                 {editingEmail ? 'Save' : 'Edit'}
               </p>
             </div>
-            <h3 className="text-xl mb-2">{t('phoneNumber')}:</h3>
+            <h3 className="text-2xl mb-4">{t('phoneNumber')}:</h3>
             <div className="flex items-center text-center align-middle">
               <input
                 onChange={(e) => setPhoneNumberField(e.target.value)}
                 readOnly={!editingPhone}
-                className={`${editingPhone ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-[15vw] mb-2`}
+                className={`${editingPhone ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-100 mb-2`}
                 type="text"
                 defaultValue={userFromApi?.phoneNumber}
               />
@@ -148,7 +148,7 @@ const Settings = () => {
 
         <TabsContent value="general">
           <div className="flex flex-row">
-            <h3 className="text-xl mb-2 w-[15vw]">{t('smsNotifications')}</h3>
+            <h3 className="text-2xl mb-4 w-100">{t('smsNotifications')}</h3>
             <input
               type="checkbox"
               className="ml-2 mb-1"
@@ -170,7 +170,7 @@ const Settings = () => {
             />
           </div>
           <div className="flex flex-row">
-            <h3 className="text-xl mb-2 w-[15vw]">{t('emailNotifications')}</h3>
+            <h3 className="text-2xl mb-4 w-100">{t('emailNotifications')}</h3>
             <input
               type="checkbox"
               className="ml-2 mb-1"
@@ -192,7 +192,7 @@ const Settings = () => {
           </div>
           <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
           <div className="flex flex-row">
-            <h3 className="text-xl mb-2 w-[15vw]">
+            <h3 className="text-2xl mb-4 w-100">
               {t('cardTransactionNotifications')}
             </h3>
             <input
@@ -215,7 +215,7 @@ const Settings = () => {
             />
           </div>
           <div className="flex flex-row">
-            <h3 className="text-xl mb-2 w-[15vw]">
+            <h3 className="text-2xl mb-4 w-100">
               {t('ATMWithdrawalsNotifications')}
             </h3>
             <input
@@ -238,9 +238,7 @@ const Settings = () => {
             />
           </div>
           <div className="flex flex-row">
-            <h3 className="text-xl mb-2 w-[15vw]">
-              {t('depositNotifications')}
-            </h3>
+            <h3 className="text-2xl mb-4 w-100">{t('depositNotifications')}</h3>
             <input
               type="checkbox"
               className="ml-2 mb-1"
@@ -262,9 +260,9 @@ const Settings = () => {
           </div>
           <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
           <div className="flex flex-row">
-            <h3 className="text-xl mb-2 w-[13vw]">{t('language')}</h3>
+            <h3 className="text-2xl mb-4 w-71">{t('language')}</h3>
             <select
-              className="w-[5vw]"
+              className="w-35"
               value={`${userNotificationSettings.language === 'en' ? `English` : `Swedish`}`}
               onChange={(e) =>
                 setUserNotificationSettings({
@@ -292,7 +290,7 @@ const Settings = () => {
             type="submit"
             className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
           >
-            Save Preferences
+            {t('savePreferences')}
           </button>
         </TabsContent>
       </Tabs>

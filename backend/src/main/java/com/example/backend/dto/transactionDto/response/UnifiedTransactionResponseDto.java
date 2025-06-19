@@ -48,7 +48,7 @@ public record UnifiedTransactionResponseDto(
         return new UnifiedTransactionResponseDto(
                 transaction.getId(),
                 transaction.getFromAccount().getId(),
-                transaction.getToAccount().getId(),
+                transaction.getToAccount() != null ? transaction.getToAccount().getId() : null,
                 transaction.getCreatedAt(),
                 transaction.getAmount(),
                 transaction.getDescription(),
@@ -63,7 +63,7 @@ public record UnifiedTransactionResponseDto(
         return new UnifiedTransactionResponseDto(
                 scheduledTransaction.getId(),
                 scheduledTransaction.getFromAccount().getId(),
-                scheduledTransaction.getToAccount().getId(),
+                scheduledTransaction.getToAccount().getId() != null ? scheduledTransaction.getToAccount().getId() : null,
                 scheduledTransaction.getCreatedAt(),
                 scheduledTransaction.getAmount(),
                 scheduledTransaction.getDescription(),
