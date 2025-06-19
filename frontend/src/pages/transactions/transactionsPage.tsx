@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Transaction } from '@/types'
-import { TransactionItem } from '@/components/generic'
 import { useGetAllTransactions, useAccounts } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
+import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -19,6 +19,7 @@ export default function TransactionsPage() {
   const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
 
   const myAccountIds = new Set(accounts?.map((a) => a.id))
+  const theAcc = accounts?.find((a) => a.id)
 
   if (isLoading || accountsLoading) return <Spinner />
   if (isError || !data) {
@@ -49,10 +50,11 @@ export default function TransactionsPage() {
               if (myAccountIds.has(tx.fromAccountId)) direction = 'out'
 
               return (
-                <TransactionItem
+                <AllTransactionsItem
                   key={tx.transactionId}
-                  name={tx.description}
-                  category={tx.type}
+                  description={tx.description}
+                  sender={theAcc?.type}
+                  accountNoType={tx.type}
                   amount={tx.amount}
                   time={tx.date}
                   direction={direction}

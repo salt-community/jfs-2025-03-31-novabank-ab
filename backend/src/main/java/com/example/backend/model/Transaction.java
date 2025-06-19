@@ -28,6 +28,7 @@ public class Transaction {
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
+    @Column(nullable = true)
     private String recipientNumber;
 
     @Enumerated(EnumType.STRING)

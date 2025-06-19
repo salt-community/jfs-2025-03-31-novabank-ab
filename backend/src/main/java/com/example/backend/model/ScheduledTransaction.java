@@ -26,15 +26,14 @@ public class ScheduledTransaction {
     @JoinColumn(name = "from_account_id", nullable = false)
     private Account fromAccount;
 
-    @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_account_id", nullable = false)
+    @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
-    @Column
+    @Column(nullable = true)
     private String recipientNumber;
 
-    @NonNull
+    @NonNull()
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentType type;

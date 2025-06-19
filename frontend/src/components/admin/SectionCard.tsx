@@ -31,7 +31,7 @@ export default function SectionCard({
   badgeColor,
   redirectLink,
 }: Props) {
-  const trendUp = () => (trajectory.substring(0, 0) === '-' ? true : false)
+  const trendUp = () => (trajectory.startsWith('-') ? false : true)
   const icon = (className: string) =>
     trendUp() ? (
       <TrendingUpIcon className={className} />

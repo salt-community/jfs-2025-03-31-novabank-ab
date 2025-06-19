@@ -1,5 +1,5 @@
 import ApplicantStatusCards from '@/components/admin/ApplicantStatusCards'
-import ActiveUsersAreaChart from '@/components/admin/charts/ActiveUsersAreaChart'
+import { ChartRadialStacked } from '@/components/admin/charts/ChartRadialStacked'
 import { TotalTransactionsAreaChart } from '@/components/admin/charts/TotalTransactionsAreaChart'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -14,7 +14,7 @@ export default function AdminDashboard() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="activeUsers">
-          <ActiveUsersAreaChart />
+          <ChartRadialStacked />
         </TabsContent>
         <TabsContent value="totalTransactions">
           <TotalTransactionsAreaChart />
