@@ -17,15 +17,18 @@ const STATUS_OPTIONS: Array<ApplicationStatus | 'ALL'> = [
 ]
 
 export default function AdminApplicationsPage() {
-  const { data = [], isLoading, isError, error } = useApplications()
+  const { data = [], isLoading } = useApplications()
   const approve = useApproveApplication()
   const reject = useRejectApplication()
   const [selected, setSelected] = useState<Application | null>(null)
   const [filter, setFilter] = useState<'ALL' | ApplicationStatus>('ALL')
 
-  if (isLoading) return <p className="p-4 text-center">Loading…</p>
-  if (isError)
-    return <p className="p-4 text-center text-red-600">{error.message}</p>
+  if (isLoading)
+    return (
+      <div className="p-20 flex justify-center text-5xl items-center">
+        <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+      </div>
+    )
 
   // apply filter
   const filtered = data.filter((app) =>

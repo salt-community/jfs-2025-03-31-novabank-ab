@@ -1,19 +1,25 @@
 type TransactionItemProps = {
-  name: string
-  category: string
+  accType: string
+  accNoType: string
   amount: number
-  time: string
+  date: string
   direction: 'in' | 'out'
 }
 
 export function TransactionItem({
-  name,
-  category,
+  accType,
+  accNoType,
   amount,
-  time,
+  date,
   direction,
 }: TransactionItemProps) {
   const isIncoming = direction === 'in'
+
+  // Format date to YYYY-MM-DD
+  const formattedDate = date.split('T')[0]
+
+  // Only show if category is PLUSGIRO or BANKGIRO
+  const showAccNoType = accNoType === 'PLUSGIRO' || accNoType === 'BANKGIRO'
 
   return (
     <div
@@ -21,8 +27,10 @@ export function TransactionItem({
       data-testid="transaction-item"
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-800">{name}</span>
-        <span className="text-xs text-gray-500">{category}</span>
+        <span className="text-base text-gray-800">{accType}</span>
+        {showAccNoType && (
+          <span className="text-xs text-gray-500 italic">{accNoType}</span>
+        )}
       </div>
       <div className="flex flex-col items-end">
         <span
@@ -32,7 +40,7 @@ export function TransactionItem({
         >
           {isIncoming ? `+${amount.toFixed(2)}` : `-${amount.toFixed(2)}`}
         </span>
-        <span className="text-xs text-gray-400">{time}</span>
+        <span className="text-xs text-gray-400">{formattedDate}</span>
       </div>
     </div>
   )
