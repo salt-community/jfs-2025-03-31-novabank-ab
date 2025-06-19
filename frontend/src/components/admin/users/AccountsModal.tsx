@@ -6,7 +6,6 @@ interface Props {
   onClose: () => void
   accounts: AccountDTO[]
   isLoading: boolean
-  error?: Error
 }
 
 export const AccountsModal: React.FC<Props> = ({
@@ -14,7 +13,6 @@ export const AccountsModal: React.FC<Props> = ({
   onClose,
   accounts,
   isLoading,
-  error,
 }) => {
   if (!isOpen) return null
 
@@ -23,9 +21,9 @@ export const AccountsModal: React.FC<Props> = ({
       <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6">
         <h2 className="text-xl font-semibold mb-4">User Accounts</h2>
         {isLoading ? (
-          <p>Loading accounts…</p>
-        ) : error ? (
-          <p className="text-red-600">Error: {error.message}</p>
+          <div className="p-20 flex justify-center text-5xl items-center">
+            <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+          </div>
         ) : accounts.length === 0 ? (
           <p className="text-gray-500">No accounts found.</p>
         ) : (
