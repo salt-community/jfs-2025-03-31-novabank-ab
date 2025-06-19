@@ -13,4 +13,5 @@ export interface Application {
   personalNumber: string
   email: string
   phoneNumber: string
+  updatedAt: Date
 }
