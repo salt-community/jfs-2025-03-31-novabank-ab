@@ -9,43 +9,55 @@ import { sendRegisterApplication } from '@/api/application'
 import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 import { useAuth } from '@clerk/clerk-react'
 
-export async function useApplications() {
+export function useApplications() {
   const { getToken } = useAuth()
-  const token = await getToken()
+
   return useQuery<Application[], Error>({
     queryKey: ['applications'],
     queryFn: async () => {
-      return getApplications(token || '')
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return getApplications(token)
     },
   })
 }
 
-export async function useApproveApplication() {
-  const qc = useQueryClient()
+export function useApproveApplication() {
+  const queryClient = useQueryClient()
   const { getToken } = useAuth()
-  const token = await getToken()
-  return useMutation<void, Error, string>({
-    mutationFn: (id) => {
-      return approveApplication(token || '', id)
+
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: async (id) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return approveApplication(token, id)
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] })
+    },
   })
 }
 
-export async function useRejectApplication() {
-  const qc = useQueryClient()
+export function useRejectApplication() {
+  const queryClient = useQueryClient()
   const { getToken } = useAuth()
-  const token = await getToken()
-  return useMutation<void, Error, string>({
-    mutationFn: (id) => {
-      return rejectApplication(token || '', id)
+
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: async (id) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return rejectApplication(token, id)
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['applications'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['applications'] })
+    },
   })
 }
 
 export function useRegisterApplication() {
-  return useMutation<void, Error, ApplicationRequestDto>({
-    mutationFn: (dto) => sendRegisterApplication(dto),
+  return useMutation<void, Error, ApplicationRequestDto, unknown>({
+    mutationFn: async (dto) => {
+      return sendRegisterApplication(dto)
+    },
   })
 }
