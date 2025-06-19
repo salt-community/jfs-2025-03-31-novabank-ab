@@ -1,15 +1,43 @@
 import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, useAuth, useUser } from '@clerk/clerk-react'
 import Header from '@/components/generic/Header'
 import SideBar from '@/components/generic/SideBar'
+import { useEffect } from 'react'
+import { login } from '@/api'
 
 export const Route = createRootRoute({
   component: () => {
     const { location } = useRouterState()
-    const { user } = useUser()
     const isIndex = location.pathname === '/'
     const isRegister = location.pathname === '/register'
+    const { user, isLoaded: isUserLoaded, isSignedIn } = useUser()
+    const { signOut, getToken } = useAuth()
     const isAdmin = user?.publicMetadata?.role === 'admin'
+
+    useEffect(() => {
+      const doLogin = async () => {
+        if (!isUserLoaded) return
+
+        if (!isSignedIn || !user) return
+
+        const token = await getToken()
+        if (!token) {
+          console.error('No token found; signing out.')
+          await signOut()
+          return
+        }
+
+        const success = await login(token)
+        if (!success) {
+          console.error('Login failed; signing out.') //Need a Toast probably
+          setTimeout(async () => {
+            await signOut()
+          }, 2000)
+        }
+      }
+
+      doLogin()
+    }, [isUserLoaded, isSignedIn, user, getToken, signOut])
     return (
       <div className="flex min-h-screen font-lato">
         <SignedIn>
