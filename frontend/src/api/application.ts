@@ -15,7 +15,7 @@ export async function getApplications(token: string): Promise<Application[]> {
   //   method: 'GET',
   // })
   if (!res.ok) throw new Error(`Fetch failed: ${res.status}`)
-  return res.json()
+  return await res.json()
 }
 
 export async function approveApplication(token: string, id: string) {
