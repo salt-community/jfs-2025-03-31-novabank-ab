@@ -1,19 +1,24 @@
 type AllTransactionsItemProps = {
-  name: string
-  category: string
+  description: string
+  sender: string | undefined
+  accountNoType: string
   amount: number
   time: string
   direction: 'in' | 'out'
 }
 
 export function AllTransactionsItem({
-  name,
-  category,
+  description,
+  sender,
+  accountNoType,
   amount,
   time,
   direction,
 }: AllTransactionsItemProps) {
   const isIncoming = direction === 'in'
+
+  // Format the time string to only show date (YYYY-MM-DD)
+  const formattedDate = new Date(time).toISOString().slice(0, 10)
 
   return (
     <div
@@ -21,8 +26,9 @@ export function AllTransactionsItem({
       data-testid="transaction-item"
     >
       <div className="flex flex-col">
-        <span className="text-base text-gray-800">{name}</span>
-        <span className="text-xs text-gray-500">{category}</span>
+        <span className="text-base text-gray-800">{description}</span> 
+        <span className="text-xs text-gray-500">From {sender}</span>
+        {accountNoType === 'INTERNAL_TRANSFER' ? '' : (<span className="text-xs text-gray-500 italic">{accountNoType}</span>)}
       </div>
       <div className="flex flex-col items-end">
         <span
@@ -32,7 +38,7 @@ export function AllTransactionsItem({
         >
           {isIncoming ? `+${amount.toFixed(2)}` : `-${amount.toFixed(2)}`}
         </span>
-        <span className="text-xs text-gray-400">{time}</span>
+        <span className="text-xs text-gray-400">{formattedDate}</span>
       </div>
     </div>
   )
