@@ -112,7 +112,7 @@ export default function SideBar({ admin }: Props) {
         <SignOutButton>
           <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
             <img src={signouticon} />
-            Sign out
+            {t('signOut')}
           </a>
         </SignOutButton>
       </div>
@@ -197,7 +197,7 @@ export default function SideBar({ admin }: Props) {
         <SignOutButton>
           <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
             <img src={signouticon} />
-            Sign out
+            {t('signOut')}
           </a>
         </SignOutButton>
       </div>

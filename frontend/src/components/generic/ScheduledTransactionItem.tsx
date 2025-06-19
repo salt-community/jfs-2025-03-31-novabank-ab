@@ -1,6 +1,7 @@
 import ThreeDotsIcon from '@/assets/ThreeDotsIcon'
 import { useEffect, useRef, useState } from 'react'
 import { useCancelTransaction } from '@/hooks/useCancelTransaction'
+import { useTranslation } from 'react-i18next'
 
 export type ScheduledTransactionItemProps = {
   transactionId: string
@@ -22,6 +23,7 @@ export function ScheduledTransactionItem({
   userNote,
   direction,
 }: ScheduledTransactionItemProps) {
+  const { t } = useTranslation('accounts')
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -44,30 +46,23 @@ export function ScheduledTransactionItem({
   const cancelTransaction = useCancelTransaction()
 
   const handleCancel = (transactionId: string) => {
-
-    cancelTransaction.mutate(
-      
-        transactionId,
-      {
-        onSuccess: () => {
-          alert('Transaction canceled!')
-        },
-        onError: (error) => {
-          alert(
-            'Failed: ' + (error instanceof Error ? error.message : String(error)),
-          )
-        },
-      }
-    )
+    cancelTransaction.mutate(transactionId, {
+      onSuccess: () => {
+        alert('Transaction canceled!')
+      },
+      onError: (error) => {
+        alert(
+          'Failed: ' + (error instanceof Error ? error.message : String(error)),
+        )
+      },
+    })
   }
-
 
   const formattedAmount =
     direction === 'in'
       ? `+${amount.toFixed(2)}`
       : `-${Math.abs(amount).toFixed(2)}`
-  const amountColor =
-    direction === 'in' ? 'text-green-500' : 'text-gray-800'
+  const amountColor = direction === 'in' ? 'text-green-500' : 'text-gray-800'
 
   return (
     <div className="flex justify-between items-center py-3 border-b last:border-b-0">
@@ -94,7 +89,7 @@ export function ScheduledTransactionItem({
           <ThreeDotsIcon width={24} />
           {openMenu && (
             <div
-              className='bg-red-500'
+              className="w-50"
               style={{
                 position: 'absolute',
                 right: 0,
@@ -106,11 +101,11 @@ export function ScheduledTransactionItem({
               }}
             >
               <div
-                className='text-white text-center'
+                className="text-center"
                 style={{ padding: '10px', cursor: 'pointer' }}
-                onClick={() => handleCancel(transactionId)} 
+                onClick={() => handleCancel(transactionId)}
               >
-                Cancel Transaction
+                {t('cancelTransaction')}
               </div>
             </div>
           )}

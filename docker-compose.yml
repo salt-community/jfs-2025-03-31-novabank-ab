@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file:
+      - ./backend/.env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DB_DEV_URL=jdbc:postgresql://db:5432/novabank
+      - DB_DEV_USERNAME=postgres
+      - DB_DEV_PASSWORD=postgres
+    networks:
+      - app-network
+
+  # frontend:
+  #   build:
+  #    context: .
+  #    dockerfile: ./frontend/Dockerfile
+  #ports:
+  #  - "80:80"
+  #networks:
+  #  - app-network
+
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_DB=novabank
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+volumes:
+  db_data:
+
+networks:
+  app-network:

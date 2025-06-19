@@ -1,0 +1,20 @@
+{
+  "label": {
+    "pending": "Väntar",
+    "approved": "Godkänd",
+    "rejected": "Avslagen"
+  },
+  "status": {
+    "pending": "Väntar",
+    "Approved": "Godkänd",
+    "Rejected": "Avslagen"
+  },
+  "boldText": {
+    "needsAttention": "kräver uppmärksamhet",
+    "doingWell": "går bra"
+  },
+  "trend": {
+    "up": "Trendar uppåt den här månaden",
+    "down": "Trendar nedåt den här månaden"
+  }
+}

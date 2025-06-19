@@ -136,6 +136,13 @@ public class UserService {
     }
 
     public Application sendRegisterApplication(Application application) {
+        if (applicationRepository.existsByEmail(application.getEmail())) {
+            throw new UserAlreadyExistsException("User with this email already exists");
+        }
+
+        if(applicationRepository.existsByPhoneNumber(application.getPhoneNumber())){
+            throw new UserAlreadyExistsException("User with this phone number already exists");
+        }
         application.setCreatedAt(LocalDateTime.now());
         return applicationRepository.save(application);
     }
