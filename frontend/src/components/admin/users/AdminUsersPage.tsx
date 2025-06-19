@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useUsers, useUpdateUserStatus } from '@/hooks/useUsers'
 import { useUserAccounts } from '@/hooks/useUsers'
 import { SearchBar } from './SearchBar'
