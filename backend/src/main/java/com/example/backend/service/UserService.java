@@ -76,7 +76,10 @@ public class UserService {
                 new ArrayList<>()
         );
 
-        log.info(String.valueOf(user));
+        UserSettingsConfig settingsConfig = new UserSettingsConfig();
+        settingsConfig.setUser(user);
+        settingsRepository.save(settingsConfig);
+
         return userRepository.save(user);
     }
 
