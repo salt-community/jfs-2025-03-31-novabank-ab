@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "applications")
+@Table(name = "user_applications")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Application {
+public class UserApplication {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -6,7 +6,7 @@ import com.example.backend.exception.custom.ApplicationNotFoundException;
 import com.example.backend.exception.custom.SettingsConfigNotFoundException;
 import com.example.backend.exception.custom.UserAlreadyExistsException;
 import com.example.backend.exception.custom.UserNotFoundException;
-import com.example.backend.model.Application;
+import com.example.backend.model.UserApplication;
 import com.example.backend.model.User;
 import com.example.backend.model.UserSettingsConfig;
 import com.example.backend.model.enums.ApplicationStatus;
@@ -46,29 +46,29 @@ public class UserService {
     }
 
     public User addUser(UUID applicationId) {
-        Application application = applicationRepository
+        UserApplication userApplication = applicationRepository
                 .findById(applicationId).orElseThrow(ApplicationNotFoundException::new);
 
-        if (userRepository.existsByEmail(application.getEmail())) {
+        if (userRepository.existsByEmail(userApplication.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
 
         String generatedPassword = UUID.randomUUID().toString();
         String userId = clerkService.createClerkUser(
-                application.getEmail(),
-                application.getFirstName(),
-                application.getLastName(),
-                application.getPhoneNumber(),
+                userApplication.getEmail(),
+                userApplication.getFirstName(),
+                userApplication.getLastName(),
+                userApplication.getPhoneNumber(),
                 generatedPassword
         );
 
         User user = new User(
                 userId,
                 passwordEncoder.encode(generatedPassword),
-                application.getFirstName(),
-                application.getLastName(),
-                application.getEmail(),
-                application.getPhoneNumber(),
+                userApplication.getFirstName(),
+                userApplication.getLastName(),
+                userApplication.getEmail(),
+                userApplication.getPhoneNumber(),
                 Role.USER,
                 UserStatus.ACTIVE,
                 LocalDateTime.now(),
@@ -138,37 +138,37 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Application sendRegisterApplication(Application application) {
-        if (applicationRepository.existsByEmail(application.getEmail())) {
+    public UserApplication sendRegisterApplication(UserApplication userApplication) {
+        if (applicationRepository.existsByEmail(userApplication.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
 
-        if(applicationRepository.existsByPhoneNumber(application.getPhoneNumber())){
+        if(applicationRepository.existsByPhoneNumber(userApplication.getPhoneNumber())){
             throw new UserAlreadyExistsException("User with this phone number already exists");
         }
 
-        return applicationRepository.save(application);
+        return applicationRepository.save(userApplication);
     }
 
-    public Application getApplicationById(UUID id) {
+    public UserApplication getApplicationById(UUID id) {
         return applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
     }
 
-    public List<Application> getAllApplications() {
+    public List<UserApplication> getAllApplications() {
         return applicationRepository.findAll();
     }
 
-    public void updateApplication(Application application, ApplicationStatus status) {
+    public void updateApplication(UserApplication userApplication, ApplicationStatus status) {
         switch (status) {
             case ApplicationStatus.APPROVED -> {
-                application.setStatus(ApplicationStatus.APPROVED);
-                application.setUpdatedAt(LocalDateTime.now());
-                addUser(application.getId());
+                userApplication.setStatus(ApplicationStatus.APPROVED);
+                userApplication.setUpdatedAt(LocalDateTime.now());
+                addUser(userApplication.getId());
             }
-            case ApplicationStatus.DISAPPROVED -> application.setStatus(ApplicationStatus.DISAPPROVED);
+            case ApplicationStatus.DISAPPROVED -> userApplication.setStatus(ApplicationStatus.DISAPPROVED);
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: " + status);
         }
-        applicationRepository.save(application);
+        applicationRepository.save(userApplication);
     }
 
     public UserSettingsConfig updateUserSettings(String userId, UpdateUserSettingsRequestDto dto) {
