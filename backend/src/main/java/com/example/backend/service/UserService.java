@@ -12,7 +12,7 @@ import com.example.backend.model.UserSettingsConfig;
 import com.example.backend.model.enums.ApplicationStatus;
 import com.example.backend.model.enums.Role;
 import com.example.backend.model.enums.UserStatus;
-import com.example.backend.repository.ApplicationRepository;
+import com.example.backend.repository.UserApplicationRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.UserSettingsRepository;
 import com.example.backend.security.ClerkService;
@@ -31,14 +31,14 @@ import java.util.UUID;
 @Service
 public class UserService {
 
-    private final ApplicationRepository applicationRepository;
+    private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
     private final UserSettingsRepository settingsRepository;
     private final PasswordEncoder passwordEncoder;
     private final ClerkService clerkService;
 
-    public UserService(ApplicationRepository applicationRepository, UserRepository userRepository, UserSettingsRepository settingsRepository, PasswordEncoder passwordEncoder, ClerkService clerkService) {
-        this.applicationRepository = applicationRepository;
+    public UserService(UserApplicationRepository userApplicationRepository, UserRepository userRepository, UserSettingsRepository settingsRepository, PasswordEncoder passwordEncoder, ClerkService clerkService) {
+        this.userApplicationRepository = userApplicationRepository;
         this.userRepository = userRepository;
         this.settingsRepository = settingsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -46,7 +46,7 @@ public class UserService {
     }
 
     public User addUser(UUID applicationId) {
-        UserApplication userApplication = applicationRepository
+        UserApplication userApplication = userApplicationRepository
                 .findById(applicationId).orElseThrow(ApplicationNotFoundException::new);
 
         if (userRepository.existsByEmail(userApplication.getEmail())) {
@@ -139,23 +139,23 @@ public class UserService {
     }
 
     public UserApplication sendRegisterApplication(UserApplication userApplication) {
-        if (applicationRepository.existsByEmail(userApplication.getEmail())) {
+        if (userApplicationRepository.existsByEmail(userApplication.getEmail())) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
 
-        if(applicationRepository.existsByPhoneNumber(userApplication.getPhoneNumber())){
+        if(userApplicationRepository.existsByPhoneNumber(userApplication.getPhoneNumber())){
             throw new UserAlreadyExistsException("User with this phone number already exists");
         }
 
-        return applicationRepository.save(userApplication);
+        return userApplicationRepository.save(userApplication);
     }
 
     public UserApplication getApplicationById(UUID id) {
-        return applicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
+        return userApplicationRepository.findById(id).orElseThrow(ApplicationNotFoundException::new);
     }
 
     public List<UserApplication> getAllApplications() {
-        return applicationRepository.findAll();
+        return userApplicationRepository.findAll();
     }
 
     public void updateApplication(UserApplication userApplication, ApplicationStatus status) {
@@ -168,7 +168,7 @@ public class UserService {
             case ApplicationStatus.DISAPPROVED -> userApplication.setStatus(ApplicationStatus.DISAPPROVED);
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: " + status);
         }
-        applicationRepository.save(userApplication);
+        userApplicationRepository.save(userApplication);
     }
 
     public UserSettingsConfig updateUserSettings(String userId, UpdateUserSettingsRequestDto dto) {
