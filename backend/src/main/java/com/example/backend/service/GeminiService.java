@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.geminiDto.request.TransactionSearchInputDto;
 import com.example.backend.dto.geminiDto.response.GeminiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,9 +8,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +45,62 @@ public class GeminiService {
         }
 
         return "unknown";
+    }
+
+    public List<UUID> searchRelevantTransactions(String query, List<TransactionSearchInputDto> transactions) {
+        StringBuilder prompt = new StringBuilder("""
+        You are helping a Swedish user find relevant transactions based on a search query.
+        Respond with only the IDs of transactions that match the query.
+
+        Match can be based on the description, user note, category, or type of expense.
+        Consider the user's intent and infer context from descriptions or notes.
+
+        Return the IDs as a plain list, comma-separated. No explanation.
+
+        Query: %s
+
+        Transactions:
+        """.formatted(query));
+
+        for (TransactionSearchInputDto t : transactions) {
+            prompt.append("- ID: %s | Category: %s | Description: %s | Note: %s | Amount: %.2f%n".formatted(
+                    t.id(), t.category(), t.description(), t.userNote() != null ? t.userNote() : "N/A", t.amount()
+            ));
+        }
+
+        Map<String, Object> body = Map.of(
+                "contents", List.of(
+                        Map.of("parts", List.of(Map.of("text", prompt.toString())))
+                )
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+
+        try {
+            String fullUrl = URL + "?key=" + apiKey;
+            ResponseEntity<GeminiResponseDto> response = restTemplate.exchange(
+                    fullUrl, HttpMethod.POST, entity, GeminiResponseDto.class
+            );
+
+            String resultText = Objects.requireNonNull(response.getBody())
+                    .candidates()
+                    .getFirst()
+                    .content()
+                    .parts()
+                    .getFirst()
+                    .text();
+
+            return Arrays.stream(resultText.split(","))
+                    .map(String::trim)
+                    .map(UUID::fromString)
+                    .toList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     private static Map<String, Object> getClassifyTransactionBody(String description, double amount, String recipient) {
