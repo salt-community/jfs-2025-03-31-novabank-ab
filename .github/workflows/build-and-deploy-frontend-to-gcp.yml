@@ -41,7 +41,7 @@ jobs:
       - name: Build
         run: |
           cd frontend
-          VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} npm run build
+          VITE_CLERK_PUBLISHABLE_KEY=${{ vars.VITE_CLERK_PUBLISHABLE_KEY }} VITE_BASE_URL=${{ vars.VITE_BASE_URL }} npm run build
 
       - name: Upload artifact to gh
         uses: "actions/upload-artifact@v4"

@@ -3,7 +3,6 @@ package com.example.backend.model;
 import com.example.backend.model.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -20,20 +19,18 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_account_id")
+    @JoinColumn(name = "from_account_id", nullable = false)
     private Account fromAccount;
 
-    @NonNull
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
-    @Column
+    @Column(nullable = true)
     private String recipientNumber;
 
-    @NonNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentType type;
@@ -41,25 +38,23 @@ public class Transaction {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @NonNull
     @Column(nullable = false)
     private double amount;
 
-    @NonNull
     @Column(nullable = false)
     private String description;
 
-    @NonNull
     @Column(nullable = false)
     private String userNote;
 
-    @NonNull
     @Column(nullable = false)
     private String ocrNumber;
+
+    @Column(nullable = true)
+    private String category;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
-
 }

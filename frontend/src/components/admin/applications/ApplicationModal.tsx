@@ -21,35 +21,43 @@ export const ApplicationModal: React.FC<Props> = ({
   const isFinal = app.status === 'APPROVED' || app.status === 'DISAPPROVED'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 backdrop-blur-sm">
       <div className="bg-white rounded-lg shadow-md w-full max-w-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Application Details</h2>
         <div className="space-y-2 text-sm mb-6">
-          <p>
-            <strong>ID:</strong> {app.id}
-          </p>
-          <p>
-            <strong>Created At:</strong>{' '}
-            {new Date(app.createdAt).toLocaleString()}
-          </p>
-          <p>
-            <strong>Status:</strong> {app.status}
-          </p>
-          <p>
-            <strong>First Name:</strong> {app.firstName}
-          </p>
-          <p>
-            <strong>Last Name:</strong> {app.lastName}
-          </p>
-          <p>
-            <strong>Personal Number:</strong> {app.personalNumber}
-          </p>
-          <p>
-            <strong>Email:</strong> {app.email}
-          </p>
-          <p>
-            <strong>Phone Number:</strong> {app.phoneNumber}
-          </p>
+          {isLoadingApprove || isLoadingReject ? (
+            <div className="p-20 flex justify-center text-5xl items-center">
+              <span className="animate-spin rounded-full h-30 w-30 border-t-3 border-b-3 border-[#FFB20F]"></span>
+            </div>
+          ) : (
+            <div>
+              <p>
+                <strong>ID:</strong> {app.id}
+              </p>
+              <p>
+                <strong>Created At:</strong>{' '}
+                {new Date(app.createdAt).toLocaleString()}
+              </p>
+              <p>
+                <strong>Status:</strong> {app.status}
+              </p>
+              <p>
+                <strong>First Name:</strong> {app.firstName}
+              </p>
+              <p>
+                <strong>Last Name:</strong> {app.lastName}
+              </p>
+              <p>
+                <strong>Personal Number:</strong> {app.personalNumber}
+              </p>
+              <p>
+                <strong>Email:</strong> {app.email}
+              </p>
+              <p>
+                <strong>Phone Number:</strong> {app.phoneNumber}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="mt-6 flex justify-end space-x-3">

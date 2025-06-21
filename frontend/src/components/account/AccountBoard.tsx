@@ -48,20 +48,23 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           {data && data.filter((t) => t.status === 'PENDING').length > 0 ? (
             data
               .filter((t) => t.status === 'PENDING')
-              .map((t, index) => (
-                <ScheduledTransactionItem
-                  key={index}
-                  amount={t.amount}
-                  description={t.description}
-                  fromAccountId={t.fromAccount}
-                  ocrNumber={t.ocrNumber}
-                  scheduledDate={t.date}
-                  toAccountId={t.toAccount}
-                  userNote={t.userNote}
-                />
-              ))
+              .map((t) => {
+                return (
+                  <ScheduledTransactionItem
+                    transactionId={t.transactionId}
+                    key={t.transactionId}
+                    amount={t.amount}
+                    description={t.description}
+                    fromAccountId={t.fromAccountId}
+                    ocrNumber={t.ocrNumber}
+                    scheduledDate={t.date}
+                    toAccountId={t.toAccountId}
+                    accountNoType={t.type}
+                  />
+                )
+              })
           ) : (
-            <NoTransactionItem></NoTransactionItem>
+            <NoTransactionItem />
           )}
         </div>
       </div>
@@ -72,15 +75,22 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           {data && data.filter((t) => t.status === null).length > 0 ? (
             data
               .filter((t) => t.status === null)
-              .map((t, index) => (
-                <TransactionItem
-                  key={index}
-                  name={t.description}
-                  category={t.type}
-                  amount={t.amount}
-                  time={t.date}
-                />
-              ))
+              .map((t) => {
+                const direction =
+                  t.toAccountId?.toString() === account.id.toString()
+                    ? 'in'
+                    : 'out'
+                return (
+                  <TransactionItem
+                    key={t.transactionId}
+                    accType={t.description}
+                    accNoType={t.type}
+                    amount={t.amount}
+                    date={t.date}
+                    direction={direction}
+                  />
+                )
+              })
           ) : (
             <NoTransactionItem />
           )}

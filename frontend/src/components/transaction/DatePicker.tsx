@@ -11,15 +11,7 @@ export default function DatePicker({
   error: string | undefined
 }) {
   const { t } = useTranslation('accounts')
-  const WEEK_DAYS = [
-    t('mo'),
-    t('tu'),
-    t('we'),
-    t('th'),
-    t('fr'),
-    t('sa'),
-    t('su'),
-  ]
+  const WEEK_DAYS = [t('mo'), t('tu'), t('we'), t('th'), t('fr'), t('sa'), t('su')]
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState<string | null>(value)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
@@ -69,9 +61,7 @@ export default function DatePicker({
 
   const handleDayClick = (day: number, isCurrentMonth: boolean) => {
     if (!isCurrentMonth) return
-    const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day
-      .toString()
-      .padStart(2, '0')}`
+    const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
     setSelectedDate(dateStr)
     onDateChange(dateStr)
     setIsCalendarOpen(false)
@@ -87,7 +77,7 @@ export default function DatePicker({
   }
 
   const handleClearDate = (e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent toggling calendar open/close
+    e.stopPropagation()
     setSelectedDate(null)
     onDateChange(null)
   }
@@ -98,10 +88,7 @@ export default function DatePicker({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
-      ) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         setIsCalendarOpen(false)
       }
     }
@@ -111,12 +98,63 @@ export default function DatePicker({
     }
   }, [])
 
-  // Today's date in yyyy-mm-dd format
   const todayStr = formatDate(new Date())
+
+  // Swedish red days
+  const getSwedishRedDays = (year: number): string[] => {
+    return [
+      `${year}-01-01`,
+      `${year}-01-06`,
+      `${year}-05-01`,
+      `${year}-06-06`,
+      `${year}-12-25`,
+      `${year}-12-26`,
+      ...getEasterRelatedHolidays(year),
+    ]
+  }
+
+  const getEasterRelatedHolidays = (year: number): string[] => {
+    const easter = calculateEasterDate(year)
+    const goodFriday = new Date(easter)
+    goodFriday.setDate(easter.getDate() - 2)
+
+    const easterMonday = new Date(easter)
+    easterMonday.setDate(easter.getDate() + 1)
+
+    const ascensionDay = new Date(easter)
+    ascensionDay.setDate(easter.getDate() + 39)
+
+    const pentecost = new Date(easter)
+    pentecost.setDate(easter.getDate() + 49)
+
+    const format = (d: Date) =>
+      `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`
+
+    return [
+      format(goodFriday),
+      format(easterMonday),
+      format(ascensionDay),
+      format(pentecost),
+    ]
+  }
+
+  const calculateEasterDate = (year: number): Date => {
+    const f = Math.floor
+    const G = year % 19
+    const C = f(year / 100)
+    const H = (C - f(C / 4) - f((8 * C + 13) / 25) + 19 * G + 15) % 30
+    const I = H - f(H / 28) * (1 - f(29 / (H + 1)) * f((21 - G) / 11))
+    const J = (year + f(year / 4) + I + 2 - C + f(C / 4)) % 7
+    const L = I - J
+    const month = 3 + f((L + 40) / 44)
+    const day = L + 28 - 31 * f(month / 4)
+    return new Date(year, month - 1, day)
+  }
+
+  const redDays = getSwedishRedDays(year)
 
   return (
     <div ref={wrapperRef} className="relative w-full">
-      
       <div
         onClick={handleToggleCalendar}
         role="textbox"
@@ -144,7 +182,6 @@ export default function DatePicker({
         )}
       </div>
 
-      {/* Floating Label */}
       <label
         className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
           ${
@@ -159,10 +196,8 @@ export default function DatePicker({
         {t('transactionDate')}
       </label>
 
-      {/* Calendar popup */}
       {isCalendarOpen && (
         <div className="absolute z-10 mt-2 left-0 rounded-lg border border-black bg-white p-4 shadow-lg w-[300px]">
-          {/* Header */}
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={handlePrevMonth}
@@ -188,7 +223,6 @@ export default function DatePicker({
             </button>
           </div>
 
-          {/* Today clickable text */}
           <div className="mb-2 text-right">
             <button
               type="button"
@@ -199,7 +233,6 @@ export default function DatePicker({
             </button>
           </div>
 
-          {/* Weekday labels */}
           <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-black">
             {WEEK_DAYS.map((day) => (
               <div key={day} className="py-1">
@@ -208,9 +241,7 @@ export default function DatePicker({
             ))}
           </div>
 
-          {/* Days grid */}
           <div className="grid grid-cols-7 gap-1 mt-1 text-center text-sm text-black">
-            {/* Previous month trailing days */}
             {prevMonthDays.map((day) => (
               <div
                 key={`prev-${day}`}
@@ -220,28 +251,31 @@ export default function DatePicker({
               </div>
             ))}
 
-            {/* Current month days */}
             {Array(daysInMonth)
               .fill(0)
               .map((_, i) => {
                 const day = i + 1
-                const formattedDate = `${year}-${(month + 1)
-                  .toString()
-                  .padStart(2, '0')}-${day.toString().padStart(2, '0')}`
+                const date = new Date(year, month, day)
+                const formattedDate = formatDate(date)
                 const isSelected = selectedDate === formattedDate
-                const isPastDate = formattedDate < todayStr // disable past dates
+                const isPastDate = formattedDate < todayStr
+                const isWeekend = date.getDay() === 0 || date.getDay() === 6
+                const isRedDay = redDays.includes(formattedDate)
+                const isDisabled = isPastDate || isWeekend || isRedDay
 
                 return (
                   <button
                     key={day}
                     type="button"
-                    onClick={() => !isPastDate && handleDayClick(day, true)}
-                    disabled={isPastDate}
-                    className={`flex items-center justify-center h-9 w-9 rounded-md  ${
+                    onClick={() => !isDisabled && handleDayClick(day, true)}
+                    disabled={isDisabled}
+                    className={`flex items-center justify-center h-9 w-9 rounded-md ${
                       isSelected
                         ? 'bg-black text-white'
-                        : isPastDate
-                          ? 'text-gray-400 cursor-default hover:cursor-default'
+                        : isDisabled
+                          ? isRedDay
+                            ? 'bg-red-200 text-red-700 cursor-not-allowed'
+                            : 'text-gray-400 cursor-default hover:cursor-default'
                           : 'hover:bg-gray-200 text-black cursor-pointer'
                     }`}
                     aria-current={isSelected ? 'date' : undefined}
@@ -251,7 +285,6 @@ export default function DatePicker({
                 )
               })}
 
-            {/* Next month leading days */}
             {nextMonthDays.map((day) => (
               <div
                 key={`next-${day}`}

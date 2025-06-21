@@ -1,7 +1,12 @@
 export type UsersData = {
-  Users: Array<User>
+  users: Array<User>
 }
 
-type User = {
-  data: unknown
+export interface User {
+  id: string
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber: string
+  status: string
 }

@@ -9,20 +9,23 @@ INSERT INTO users (id, password, first_name, last_name, email, phone_number, rol
                                                                                                                        ('user_2yJpkDpb1EaHO7sAK8GVzXoQ3Hf', '123', 'Nikita', 'Biden', 'nikita.egelrud@appliedtechnology.se', '0700000001', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
                                                                                                                        ('user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '123', 'Elias', 'User', 'elias@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
                                                                                                                        ('user_2yMYqxXhoEDq64tfBlelGADfdlp', '123', 'Amanda', 'User', 'amanda@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
-                                                                                                                       ('user_2fMYqxXhoEDq64tfBlelGADfdlp', '123', 'Admin', 'Adminson', 'admin@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
+                                                                                                                       ('user_2fMYqxXhoEDq64tfBlelGADfdlp', '123', 'Admin', 'Adminson', 'admin@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
+                                                                                                                       ('user_2ySF29vY9WkpDkENO9IiVgjuECS', '123', 'David', 'Aslan', 'david.aslan@appliedtechnology.se', '0700000003', 'ADMIN', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
+
 
 -- Accounts
 INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
                                                                                                        ('c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', 'user_2yMZ4k4VMcQ4C3Yowv3JfXg0mOd', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 9370.00, 'PERSONAL', 'ACTIVE', 'SE1234567890'),
                                                                                                        ('3587b71d-5845-4ba3-b667-e556bdf845be', 'user_2yJpkDpb1EaHO7sAK8GVzXoQ3Hf', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 1763.50, 'SAVINGS', 'ACTIVE', 'SE2345678901'),
                                                                                                        ('7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 7459.75, 'PERSONAL', 'ACTIVE', 'SE3456789012'),
-                                                                                                       ('67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 25000.00, 'PERSONAL', 'ACTIVE', 'SE4567890123');
+                                                                                                       ('67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 25000.00, 'PERSONAL', 'ACTIVE', 'SE4567890123'),
+                                                                                                       ('67d654c1-1532-4cf4-8d4f-55ef8fe12717', 'user_2ySF29vY9WkpDkENO9IiVgjuECS', '9fa9391c-b25a-4933-8c58-e9c7c77f3620', '2025-06-12', 25000.00, 'PERSONAL', 'ACTIVE', 'SE4567890143');
 
--- Transactions
+
 INSERT INTO transactions (id, from_account_id, to_account_id, recipient_number, type, created_at, amount, description, user_note, ocr_number) VALUES
-                                                                                                                                                  ('2fcbbb39-06f2-4d67-a054-2da86129ee28', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2345678901', 'INTERNAL_TRANSFER', '2025-06-12 08:42:57', 188.00, 'Monthly rent', 'Rent June 2025', 'OCR00001'),
-                                                                                                                                                  ('fa70865e-e018-410a-99a1-018ea90a3ce6', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'SE3456789012', 'BANKGIRO', '2025-06-12 09:15:00', 632.50, 'Utilities payment', 'Electricity bill', 'OCR00002'),
-                                                                                                                                                  ('62e1632f-e075-4add-984f-a3a7787efb83', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'SE4567890123', 'PLUSGIRO', '2025-06-12 10:30:00', 670.25, 'Invoice payment', 'Invoice #12345', 'OCR00003'),
+                                                                                                                                                  ('00000000-0000-0000-0000-000000000101', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2345678901', 'INTERNAL_TRANSFER', '2025-06-12 08:00:01', 100.00, 'Test transaction 1', 'Note 1', 'OCR00101'),
+                                                                                                                                                  ('00000000-0000-0000-0000-000000000102', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2345678901', 'INTERNAL_TRANSFER', '2025-06-12 08:10:01', 101.00, 'Test transaction 2', 'Note 2', 'OCR00102'),
+                                                                                                                                                  ('00000000-0000-0000-0000-000000000103', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2345678901', 'INTERNAL_TRANSFER', '2025-06-12 08:20:01', 102.00, 'Test transaction 3', 'Note 3', 'OCR00103'),
                                                                                                                                                   ('f577ca18-f42b-46e0-853e-823f77c51d28', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'SE8287592604', 'PLUSGIRO', '2025-03-20 22:02:33', 619.91, 'Online purchase', 'ICA groceries', 'OCR00004'),
                                                                                                                                                   ('d22a5167-5d00-4816-91f3-ccc6e0675ce3', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'SE4153256215', 'INTERNAL_TRANSFER', '2025-06-07 15:09:22', 673.32, 'Invoice payment', 'Train ticket', 'OCR00005'),
                                                                                                                                                   ('2f2a6fe2-8aa4-4ea2-ba4f-d1a70d43c7da', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2433426957', 'BANKGIRO', '2025-04-26 13:05:24', 765.35, 'Subscription fee', 'ICA groceries', 'OCR00006'),
@@ -124,69 +127,38 @@ INSERT INTO transactions (id, from_account_id, to_account_id, recipient_number, 
                                                                                                                                                   ('c3f0bc4c-658d-4a55-b7cb-12bb3cd187df', '3587b71d-5845-4ba3-b667-e556bdf845be', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', 'SE4828161697', 'BANKGIRO', '2025-04-23 15:08:55', 837.92, 'Travel expense', 'Invoice #12345', 'OCR00102'),
                                                                                                                                                   ('8a29c5a5-a627-4806-9d6e-e8cbca5059a0', '3587b71d-5845-4ba3-b667-e556bdf845be', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', 'SE6987861918', 'BANKGIRO', '2025-02-09 14:23:18', 683.99, 'Online purchase', 'Invoice #12345', 'OCR00103');
 
+
+
+INSERT INTO user_settings_configs (
+    id, user_id, sms_notifications, email_notifications,
+    card_transaction_notifications, atm_withdrawal_notifications,
+    deposit_notifications, language
+) VALUES
+      ('3f3c6c6d-1f43-4f0c-9d11-aaa111aaa111', 'user_2yMZ4k4VMcQ4C3Yowv3JfXg0mOd', true, true, true, true, true, 'en'),
+      ('3f3c6c6d-1f43-4f0c-9d11-aaa222aaa222', 'user_2yJpkDpb1EaHO7sAK8GVzXoQ3Hf', true, true, true, true, true, 'en'),
+      ('3f3c6c6d-1f43-4f0c-9d11-aaa333aaa333', 'user_2ya9D2bPCC3XYyGsklZRQPPBeb9', true, true, true, true, true, 'en'),
+      ('3f3c6c6d-1f43-4f0c-9d11-aaa444aaa444', 'user_2yMYqxXhoEDq64tfBlelGADfdlp', true, true, true, true, true, 'en'),
+      ('3f3c6c6d-1f43-4f0c-9d11-aaa555aaa555', 'user_2fMYqxXhoEDq64tfBlelGADfdlp', true, true, true, true, true, 'en');
+
+
+
+
+
+
+
 -- Scheduled Transactions
 INSERT INTO scheduled_transactions (id, from_account_id, to_account_id, recipient_number, type, amount, scheduled_date, status, created_at, ocr_number, user_note, description) VALUES
                                                                                                                                                                                     ('69ca9a09-804d-4c67-9227-ea23569d4a31', 'c1b35a93-9671-43c1-a0fe-aa4c2e9d2aec', '3587b71d-5845-4ba3-b667-e556bdf845be', 'SE2345678901', 'INTERNAL_TRANSFER', 1000.00, '2025-06-19 08:00:00', 'PENDING', '2025-06-12 08:42:57', 'OCRS00001', 'Monthly transfer', 'Scheduled transfer'),
                                                                                                                                                                                     ('0e683c21-5ed5-4498-b7d4-a9d4e432be02', '3587b71d-5845-4ba3-b667-e556bdf845be', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', 'SE3456789012', 'BANKGIRO', 500.00, '2025-06-20 15:00:00', 'PENDING', '2025-06-12 09:00:00', 'OCRS00002', 'Rent payment', 'Monthly rent'),
                                                                                                                                                                                     ('4df15be9-12a2-4ee3-8f5c-c11dee6bae57', '7915a5bd-ddcc-4a40-8343-dee3a2188cf0', '67d254c1-1532-4cf4-8d4f-55ef8fe12717', 'SE4567890123', 'PLUSGIRO', 750.00, '2025-06-21 12:00:00', 'PENDING', '2025-06-12 10:00:00', 'OCRS00003', 'Utility bill', 'Monthly utilities');
--- User Settings
-INSERT INTO user_settings_configs (
-    id,
-    user_id,
-    sms_notifications,
-    email_notifications,
-    card_transaction_notifications,
-    atm_withdrawal_notifications,
-    deposit_notifications,
-    language
-) VALUES
-      (
-          'a97d9d4e-3f25-4bb9-9b3b-2e6f9b61fd3f',
-          'user_2yMZ4k4VMcQ4C3Yowv3JfXg0mOd',
-          true,
-          true,
-          true,
-          false,
-          true,
-          'en'
-      ),
-      (
-          'b87e8d1f-2b34-4a4e-8d7e-1f234fa1abc2',
-          'user_2yJpkDpb1EaHO7sAK8GVzXoQ3Hf',
-          true,
-          true,
-          true,
-          false,
-          true,
-          'en'
-      ),
-      (
-          'c58a9c8d-6e35-4d90-9f4e-a8ed3aa9ed12',
-          'user_2ya9D2bPCC3XYyGsklZRQPPBeb9',
-          true,
-          true,
-          true,
-          false,
-          true,
-          'en'
-      ),
-      (
-          'd29b8b5f-3b21-4d3b-b8cb-8d56c5a76f3e',
-          'user_2yMYqxXhoEDq64tfBlelGADfdlp',
-          true,
-          true,
-          true,
-          false,
-          true,
-          'en'
-      ),
-      (
-          'e91f6b88-7a62-4326-b68e-91b1d204f7e0',
-          'user_2fMYqxXhoEDq64tfBlelGADfdlp',
-          true,
-          true,
-          true,
-          false,
-          true,
-          'en'
-      );
+-- Ludwig Hahn: user record
+INSERT INTO users (id, password, first_name, last_name, email, phone_number, role, status, created_at, last_login) VALUES
+    ('user_2yijisgr6eNN2b8wUSiEMG5PiXi', '123', 'Ludwig', 'Hahn', 'ludwig.hahn@appliedtechnology.se', '0700000004', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
+
+-- Ludwig Hahn: one PERSONAL SEK account
+INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
+    ('d2f9b8f3-1a2e-4c6d-9f7b-8a9b0c1d2e3f', 'user_2yijisgr6eNN2b8wUSiEMG5PiXi', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 0.00, 'PERSONAL', 'ACTIVE', 'SE5678901234');
+
+-- Ludwig Hahn: default notification settings
+INSERT INTO user_settings_configs (id, user_id, sms_notifications, email_notifications, card_transaction_notifications, atm_withdrawal_notifications, deposit_notifications, language) VALUES
+    ('3f3c6c6d-1f43-4f0c-9d11-aaa666aaa666', 'user_2yijisgr6eNN2b8wUSiEMG5PiXi', true, true, true, true, true, 'en');

@@ -4,7 +4,6 @@ import com.example.backend.model.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,7 +24,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
 
     // note: this one is for dev and h2-console, for prod scroll down
@@ -38,7 +37,6 @@ public class SecurityConfig {
         return http
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**","/api/user/application"))
-                .headers(headers -> headers.frameOptions().sameOrigin())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -105,6 +103,8 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
+                "http://localhost:80",
+                "http://localhost",
                 "https://novabank-ab-frontend-876198057788.europe-north2.run.app/",
                 "http://localhost:3000"
         ));

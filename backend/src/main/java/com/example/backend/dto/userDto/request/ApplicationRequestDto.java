@@ -1,6 +1,6 @@
 package com.example.backend.dto.userDto.request;
 
-import com.example.backend.model.Application;
+import com.example.backend.model.UserApplication;
 import com.example.backend.model.enums.ApplicationStatus;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,15 +18,16 @@ public record ApplicationRequestDto(
     @NotNull
     String phoneNumber
 ) {
-    public Application toApplication() {
-        Application application = new Application();
-        application.setCreatedAt(LocalDateTime.now());
-        application.setEmail(this.email);
-        application.setFirstName(this.firstName);
-        application.setLastName(this.lastName);
-        application.setPersonalNumber(this.personalNumber);
-        application.setPhoneNumber(this.phoneNumber);
-        application.setStatus(ApplicationStatus.PENDING);
-        return application;
+    public UserApplication toApplication() {
+        UserApplication userApplication = new UserApplication();
+        userApplication.setCreatedAt(LocalDateTime.now());
+        userApplication.setEmail(this.email);
+        userApplication.setFirstName(this.firstName);
+        userApplication.setLastName(this.lastName);
+        userApplication.setPersonalNumber(this.personalNumber);
+        userApplication.setPhoneNumber(this.phoneNumber);
+        userApplication.setStatus(ApplicationStatus.PENDING);
+        userApplication.setCreatedAt(LocalDateTime.now());
+        return userApplication;
     }
 }

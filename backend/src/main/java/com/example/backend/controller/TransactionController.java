@@ -65,7 +65,7 @@ public class TransactionController {
         String userId = jwt.getSubject();
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable);
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Operation(
@@ -78,7 +78,7 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account not found")
             }
     )
-    @PostMapping("/transaction")
+    @PostMapping("/add-transaction")
     public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         transactionService.addTransaction(dto,userId);

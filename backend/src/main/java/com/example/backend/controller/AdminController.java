@@ -1,10 +1,11 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
-import com.example.backend.model.Application;
+import com.example.backend.model.UserApplication;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.ApplicationStatus;
@@ -126,9 +127,9 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @GetMapping("/application")
-    public ResponseEntity<List<Application>> getAllApplications() {
-        List<Application> applications = userService.getAllApplications();
-        return ResponseEntity.ok(applications);
+    public ResponseEntity<List<UserApplication>> getAllApplications() {
+        List<UserApplication> userApplications = userService.getAllApplications();
+        return ResponseEntity.ok(userApplications);
     }
 
     @Operation(summary = "Get a application by id", description = "Returns the application")
@@ -138,9 +139,9 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @GetMapping("/application/{applicationId}")
-    public ResponseEntity<Application> getApplicationById(@PathVariable UUID applicationId) {
-        Application application = userService.getApplicationById(applicationId);
-        return ResponseEntity.ok(application);
+    public ResponseEntity<UserApplication> getApplicationById(@PathVariable UUID applicationId) {
+        UserApplication userApplication = userService.getApplicationById(applicationId);
+        return ResponseEntity.ok().body(userApplication);
     }
 
     @Operation(
@@ -154,7 +155,7 @@ public class AdminController {
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<UnifiedTransactionResponseDto> transactions = transactionService.getAllTransactionHistory(pageable);
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok().body(transactions);
     }
 
     @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
@@ -166,9 +167,25 @@ public class AdminController {
     })
     @PatchMapping("/application/{applicationId}")
     public ResponseEntity<Void> updateApplication(@PathVariable UUID applicationId, @RequestParam(name = "status") ApplicationStatus status){
-        Application application = userService.getApplicationById(applicationId);
-        userService.updateApplication(application, status);
+        UserApplication userApplication = userService.getApplicationById(applicationId);
+        userService.updateApplication(userApplication, status);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Gets all accounts for one user", description = "Returns a list of all accounts for specific user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    @GetMapping("/user/{userId}/accounts")
+    public ResponseEntity<ListAccountResponseDto> getUserAccounts(@PathVariable String userId) {
+        List<Account> accounts = accountService.getAllUserAccounts(userId);
+        ListAccountResponseDto listOfAccount = ListAccountResponseDto.fromAccounts(accounts);
+        return ResponseEntity.ok().body(listOfAccount);
+    }
+
+    @GetMapping("/all-accounts")
+    public ResponseEntity<ListAccountResponseDto> getAllAccounts() {
+        return ResponseEntity.ok().body(ListAccountResponseDto.fromAccounts(accountService.getAllAccounts()));
+    }
 }
