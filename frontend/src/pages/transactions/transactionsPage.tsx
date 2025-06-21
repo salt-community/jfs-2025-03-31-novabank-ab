@@ -19,6 +19,8 @@ export default function TransactionsPage() {
   const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
     useState<Array<TransactionFromId>>([])
 
+  const [heightAiDiv, setHeightAiDiv] = useState<string>('max-h-0')
+
   const sendQueryToAi = useAiSearchBar()
 
   const sendIdsAndGetTransactions = useGetTransactionsFromIdsGivenByAi()
@@ -126,7 +128,9 @@ export default function TransactionsPage() {
                       sendIdsAndGetTransactions.mutate(data, {
                         onSuccess(data) {
                           setTransactionsFromIdsGivenByAi(data)
-                          console.log(data)
+                          setTimeout(() => {
+                            setHeightAiDiv('max-h-[2000px]')
+                          }, 200)
                         },
                       })
                     },
@@ -156,7 +160,9 @@ export default function TransactionsPage() {
 
       <div className="px-5 shadow-sm">
         {transactionsFromIdsGivenByAi.length > 0 && (
-          <div>
+          <div
+            className={`${heightAiDiv} overflow-hidden transition-[max-height] duration-1500 ease-in-out`}
+          >
             <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
             {transactionsFromIdsGivenByAi.map((tx) => (
               <TransactionFromAi
@@ -177,7 +183,12 @@ export default function TransactionsPage() {
             <div className="flex justify-center">
               <button
                 className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
-                onClick={() => setTransactionsFromIdsGivenByAi([])}
+                onClick={() => {
+                  setHeightAiDiv('max-h-0')
+                  setTimeout(() => {
+                    setTransactionsFromIdsGivenByAi([])
+                  }, 1500)
+                }}
               >
                 {t('close')}
               </button>
