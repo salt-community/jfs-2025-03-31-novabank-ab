@@ -1,15 +1,34 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetAllTransactions, useAccounts } from '@/hooks'
+import {
+  useGetAllTransactions,
+  useAccounts,
+  useAiSearchBar,
+  useGetTransactionsFromIdsGivenByAi,
+} from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
+import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
+import type { TransactionFromId } from '@/types'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
   const [page, setPage] = useState(0)
   const pageSize = 10
 
+  const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
+    useState<Array<TransactionFromId>>([])
+
+  const [heightAiDiv, setHeightAiDiv] = useState<string>('max-h-0')
+
+  const sendQueryToAi = useAiSearchBar()
+
+  const sendIdsAndGetTransactions = useGetTransactionsFromIdsGivenByAi()
+
   const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
+
+  const [aiSearchBarInputContent, setAiSearchBarInputContent] =
+    useState<string>('')
 
   const { data, isLoading, isError } = useGetAllTransactions(page, pageSize)
 
@@ -100,17 +119,83 @@ export default function TransactionsPage() {
           } transition-[width] duration-300 ease-in-out bg-gray-200 rounded-sm flex items-center px-2`}
         >
           <input
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                sendQueryToAi.mutate(
+                  { query: aiSearchBarInputContent },
+                  {
+                    onSuccess(data) {
+                      sendIdsAndGetTransactions.mutate(data, {
+                        onSuccess(data) {
+                          setTransactionsFromIdsGivenByAi(data)
+                          setTimeout(() => {
+                            setHeightAiDiv('max-h-[2000px]')
+                          }, 200)
+                        },
+                      })
+                    },
+                  },
+                )
+                setAiSearchBarInputContent('')
+                setSearchBarOpen(false)
+              }
+              if (e.key === 'Escape') {
+                setAiSearchBarInputContent('')
+                setSearchBarOpen(false)
+              }
+            }}
+            onChange={(e) => {
+              setAiSearchBarInputContent(e.target.value)
+            }}
             className="w-full bg-transparent outline-none p-1"
             onClick={() => setSearchBarOpen((prev) => !prev)}
             placeholder={
-              searchBarOpen ? 'What do you want to find today?' : 'AI Assistant'
+              searchBarOpen ? t('whatDoYouWantToFindToday') : t('aiAssistant')
             }
+            value={aiSearchBarInputContent}
           />
           <p className="ml-2">🔍</p>
         </div>
       </div>
 
       <div className="px-5 shadow-sm">
+        {transactionsFromIdsGivenByAi.length > 0 && (
+          <div
+            className={`${heightAiDiv} overflow-hidden transition-[max-height] duration-1500 ease-in-out`}
+          >
+            <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
+            {transactionsFromIdsGivenByAi.map((tx) => (
+              <TransactionFromAi
+                key={tx.transactionId}
+                amount={tx.amount}
+                date={tx.date}
+                description={tx.description}
+                userNote={tx.userNote}
+                category={tx.category}
+                fromAccountId={tx.fromAccountId}
+                ocrNumber={tx.ocrNumber}
+                status={tx.status}
+                toAccountId={tx.toAccountId}
+                transactionId={tx.transactionId}
+                type={tx.type}
+              />
+            ))}
+            <div className="flex justify-center">
+              <button
+                className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
+                onClick={() => {
+                  setHeightAiDiv('max-h-0')
+                  setTimeout(() => {
+                    setTransactionsFromIdsGivenByAi([])
+                  }, 1500)
+                }}
+              >
+                {t('close')}
+              </button>
+            </div>
+            <h1 className="text-2xl mt-3 mb-3">{t('allTransactions')}</h1>
+          </div>
+        )}
         {transactionEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
