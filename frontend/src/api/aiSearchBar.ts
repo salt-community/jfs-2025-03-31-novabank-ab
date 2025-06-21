@@ -1,11 +1,12 @@
-import type { aiSearchBarQuery } from '@/types'
+import type { aiSearchBarQuery, aiTransactionIds } from '@/types'
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export async function sendTransacionSearchQuery(
   query: aiSearchBarQuery,
   token: string,
-): Promise<boolean> {
-  const response = await fetch(BASE_URL.concat('gemini/search-transactions/'), {
+): Promise<aiTransactionIds> {
+  // change return type accordingly, e.g. `Promise<SearchResultType>`
+  const response = await fetch(BASE_URL.concat('gemini/search-transactions'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -19,5 +20,6 @@ export async function sendTransacionSearchQuery(
     throw new Error('Failed to send search query')
   }
 
-  return response.ok
+  const data = await response.json()
+  return data
 }

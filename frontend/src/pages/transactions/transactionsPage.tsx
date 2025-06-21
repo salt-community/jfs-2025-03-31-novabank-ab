@@ -1,13 +1,19 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetAllTransactions, useAccounts } from '@/hooks'
+import { useGetAllTransactions, useAccounts, useAiSearchBar } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
+import type { aiTransactionIds } from '@/types'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
   const [page, setPage] = useState(0)
   const pageSize = 10
+
+  const [aiTransactionsFoundFromQuery, setAiTransactionsFoundFromQuery] =
+    useState<aiTransactionIds>({ matchingTransactionIds: [] })
+
+  const sendQueryToAi = useAiSearchBar()
 
   const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
 
@@ -105,8 +111,14 @@ export default function TransactionsPage() {
           <input
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                //use send query to ai here
-                console.log(aiSearchBarInputContent)
+                sendQueryToAi.mutate(
+                  { query: aiSearchBarInputContent },
+                  {
+                    onSuccess(data) {
+                      setAiTransactionsFoundFromQuery(data)
+                    },
+                  },
+                )
                 setAiSearchBarInputContent('')
                 setSearchBarOpen(false)
               }
@@ -130,6 +142,22 @@ export default function TransactionsPage() {
       </div>
 
       <div className="px-5 shadow-sm">
+        {aiTransactionsFoundFromQuery.matchingTransactionIds.length > 0 && (
+          <>
+            {aiTransactionsFoundFromQuery?.matchingTransactionIds?.map(
+              (transactionId) => <p key={transactionId}>{transactionId}</p>,
+            )}
+            <button
+              onClick={() =>
+                setAiTransactionsFoundFromQuery({
+                  matchingTransactionIds: [],
+                })
+              }
+            >
+              Close
+            </button>
+          </>
+        )}
         {transactionEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
