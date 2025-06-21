@@ -11,6 +11,9 @@ export default function TransactionsPage() {
 
   const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
 
+  const [aiSearchBarInputContent, setAiSearchBarInputContent] =
+    useState<string>('')
+
   const { data, isLoading, isError } = useGetAllTransactions(page, pageSize)
 
   const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
@@ -100,11 +103,27 @@ export default function TransactionsPage() {
           } transition-[width] duration-300 ease-in-out bg-gray-200 rounded-sm flex items-center px-2`}
         >
           <input
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                //use send query to ai here
+                console.log(aiSearchBarInputContent)
+                setAiSearchBarInputContent('')
+                setSearchBarOpen(false)
+              }
+              if (e.key === 'Escape') {
+                setAiSearchBarInputContent('')
+                setSearchBarOpen(false)
+              }
+            }}
+            onChange={(e) => {
+              setAiSearchBarInputContent(e.target.value)
+            }}
             className="w-full bg-transparent outline-none p-1"
             onClick={() => setSearchBarOpen((prev) => !prev)}
             placeholder={
               searchBarOpen ? 'What do you want to find today?' : 'AI Assistant'
             }
+            value={aiSearchBarInputContent}
           />
           <p className="ml-2">🔍</p>
         </div>
