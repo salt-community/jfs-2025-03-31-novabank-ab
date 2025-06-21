@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.dto.geminiDto.request.TransactionSearchInputDto;
 import com.example.backend.dto.geminiDto.response.GeminiResponseDto;
+import com.example.backend.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -47,24 +48,24 @@ public class GeminiService {
         return "unknown";
     }
 
-    public List<UUID> searchRelevantTransactions(String query, List<TransactionSearchInputDto> transactions) {
+    public List<UUID> searchRelevantTransactions(String query, String userId, List<Transaction> allUserTransactions) {
         StringBuilder prompt = new StringBuilder("""
-        You are helping a Swedish user find relevant transactions based on a search query.
-        Respond with only the IDs of transactions that match the query.
+                You are helping a Swedish user find relevant transactions based on a search query.
+                Respond with only the IDs of transactions that match the query.
+                
+                Match can be based on the description, user note, category, or type of expense.
+                Consider the user's intent and infer context from descriptions or notes.
+                
+                Return the IDs as a plain list, comma-separated. No explanation.
+                
+                Query: %s
+                
+                Transactions:
+                """.formatted(query));
 
-        Match can be based on the description, user note, category, or type of expense.
-        Consider the user's intent and infer context from descriptions or notes.
-
-        Return the IDs as a plain list, comma-separated. No explanation.
-
-        Query: %s
-
-        Transactions:
-        """.formatted(query));
-
-        for (TransactionSearchInputDto t : transactions) {
+        for (Transaction t : allUserTransactions) {
             prompt.append("- ID: %s | Category: %s | Description: %s | Note: %s | Amount: %.2f%n".formatted(
-                    t.id(), t.category(), t.description(), t.userNote() != null ? t.userNote() : "N/A", t.amount()
+                    t.getId(), t.getCategory(), t.getDescription(), t.getUserNote() != null ? t.getUserNote() : "N/A", t.getAmount()
             ));
         }
 
@@ -105,22 +106,22 @@ public class GeminiService {
 
     private static Map<String, Object> getClassifyTransactionBody(String description, double amount, String recipient) {
         String prompt = """
-            You are classifying a bank transaction for a Swedish user.
-            Use Swedish context and common transaction patterns in Sweden when assigning a category.
-        
-            Classify the following transaction into exactly one of these categories:
-            [food, leisure, utilities, rent, salary, travel, other].
-        
-            If you are unsure, guess the most likely category based on the available information.
-            Do not explain your answer. Only return the category name in lowercase.
-        
-            Transaction:
-            - Description: %s
-            - Amount: %.2f
-            - Recipient: %s
-        
-            Category:
-            """.formatted(description, amount, recipient != null ? recipient : "unknown");
+                You are classifying a bank transaction for a Swedish user.
+                Use Swedish context and common transaction patterns in Sweden when assigning a category.
+                
+                Classify the following transaction into exactly one of these categories:
+                [food, leisure, utilities, rent, salary, travel, other].
+                
+                If you are unsure, guess the most likely category based on the available information.
+                Do not explain your answer. Only return the category name in lowercase.
+                
+                Transaction:
+                - Description: %s
+                - Amount: %.2f
+                - Recipient: %s
+                
+                Category:
+                """.formatted(description, amount, recipient != null ? recipient : "unknown");
 
         return Map.of(
                 "contents", List.of(
