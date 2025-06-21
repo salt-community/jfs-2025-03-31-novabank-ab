@@ -1,19 +1,27 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGetAllTransactions, useAccounts, useAiSearchBar } from '@/hooks'
+import {
+  useGetAllTransactions,
+  useAccounts,
+  useAiSearchBar,
+  useGetTransactionsFromIdsGivenByAi,
+} from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
-import type { aiTransactionIds } from '@/types'
+import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
+import type { TransactionFromId } from '@/types'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
   const [page, setPage] = useState(0)
   const pageSize = 10
 
-  const [aiTransactionsFoundFromQuery, setAiTransactionsFoundFromQuery] =
-    useState<aiTransactionIds>({ matchingTransactionIds: [] })
+  const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
+    useState<Array<TransactionFromId>>([])
 
   const sendQueryToAi = useAiSearchBar()
+
+  const sendIdsAndGetTransactions = useGetTransactionsFromIdsGivenByAi()
 
   const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
 
@@ -115,7 +123,12 @@ export default function TransactionsPage() {
                   { query: aiSearchBarInputContent },
                   {
                     onSuccess(data) {
-                      setAiTransactionsFoundFromQuery(data)
+                      sendIdsAndGetTransactions.mutate(data, {
+                        onSuccess(data) {
+                          setTransactionsFromIdsGivenByAi(data)
+                          console.log(data)
+                        },
+                      })
                     },
                   },
                 )
@@ -133,7 +146,7 @@ export default function TransactionsPage() {
             className="w-full bg-transparent outline-none p-1"
             onClick={() => setSearchBarOpen((prev) => !prev)}
             placeholder={
-              searchBarOpen ? 'What do you want to find today?' : 'AI Assistant'
+              searchBarOpen ? t('whatDoYouWantToFindToday') : t('aiAssistant')
             }
             value={aiSearchBarInputContent}
           />
@@ -142,21 +155,35 @@ export default function TransactionsPage() {
       </div>
 
       <div className="px-5 shadow-sm">
-        {aiTransactionsFoundFromQuery.matchingTransactionIds.length > 0 && (
-          <>
-            {aiTransactionsFoundFromQuery?.matchingTransactionIds?.map(
-              (transactionId) => <p key={transactionId}>{transactionId}</p>,
-            )}
-            <button
-              onClick={() =>
-                setAiTransactionsFoundFromQuery({
-                  matchingTransactionIds: [],
-                })
-              }
-            >
-              Close
-            </button>
-          </>
+        {transactionsFromIdsGivenByAi.length > 0 && (
+          <div>
+            <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
+            {transactionsFromIdsGivenByAi.map((tx) => (
+              <TransactionFromAi
+                key={tx.transactionId}
+                amount={tx.amount}
+                date={tx.date}
+                description={tx.description}
+                userNote={tx.userNote}
+                category={tx.category}
+                fromAccountId={tx.fromAccountId}
+                ocrNumber={tx.ocrNumber}
+                status={tx.status}
+                toAccountId={tx.toAccountId}
+                transactionId={tx.transactionId}
+                type={tx.type}
+              />
+            ))}
+            <div className="flex justify-center">
+              <button
+                className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
+                onClick={() => setTransactionsFromIdsGivenByAi([])}
+              >
+                {t('close')}
+              </button>
+            </div>
+            <h1 className="text-2xl mt-3 mb-3">{t('allTransactions')}</h1>
+          </div>
         )}
         {transactionEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
