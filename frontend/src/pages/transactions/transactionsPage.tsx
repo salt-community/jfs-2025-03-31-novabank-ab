@@ -9,11 +9,9 @@ export default function TransactionsPage() {
   const [page, setPage] = useState(0)
   const pageSize = 10
 
-  const {
-    data,
-    isLoading,
-    isError,
-  } = useGetAllTransactions(page, pageSize)
+  const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
+
+  const { data, isLoading, isError } = useGetAllTransactions(page, pageSize)
 
   const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
 
@@ -95,7 +93,15 @@ export default function TransactionsPage() {
   return (
     <div>
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
-
+      <input
+        className={`${searchBarOpen ? 'w-full' : 'w-30'} mb-5 bg-gray-200 rounded-sm transition-[width] duration-300 ease-in-out`}
+        onClick={() => setSearchBarOpen((prev) => !prev)}
+        placeholder={
+          searchBarOpen
+            ? '🔍 What do you want to find today?'
+            : '🔍 AI Assistant'
+        }
+      />
       <div className="px-5 shadow-sm">
         {transactionEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
