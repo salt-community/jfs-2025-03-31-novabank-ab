@@ -12,7 +12,7 @@ import {
   yellowsettingsicon,
 } from '@/assets/icons'
 
-export default function UserBottomNav() {
+export function UserBottomNav() {
   const navigate = useNavigate()
   const { location } = useRouterState()
   const isActive = (path: string) => location.pathname.startsWith(path)

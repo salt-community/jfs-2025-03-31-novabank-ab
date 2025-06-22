@@ -18,7 +18,7 @@ function RedirectOnSignIn() {
   return null
 }
 
-export default function Header() {
+export function Header() {
   const { t } = useTranslation('sidebar')
   const navigate = useNavigate()
   return (
