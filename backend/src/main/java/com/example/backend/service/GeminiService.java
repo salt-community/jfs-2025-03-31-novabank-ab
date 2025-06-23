@@ -58,6 +58,8 @@ public class GeminiService {
                 
                 Return the IDs as a plain list, comma-separated. No explanation.
                 
+                If the query does not make sense, return an empty list. No explanation
+                
                 Query: %s
                 
                 Transactions:
