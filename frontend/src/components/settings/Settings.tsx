@@ -83,33 +83,33 @@ const Settings = () => {
             <TabsTrigger value="general">{t('general')}</TabsTrigger>
           </div>
         </TabsList>
-        <div className="ml-5 mt-5">
+        <div className="max-w-lg shadow-sm p-5 mt-5">
           <TabsContent value="personal">
             <h3 className="text-2xl mb-4">{t('firstName')}:</h3>
             <input
               readOnly
-              className="bg-gray-300 rounded-xs p-1 w-100 mb-2"
+              className="shadow-sm p-1 w-100 mb-2"
               type="text"
               value={userFromApi?.firstName ?? ''}
             ></input>
-            <h3 className="text-2xl mb-4">{t('lastName')}:</h3>
+            <h3 className="text-2xl mb-4 mt-4">{t('lastName')}:</h3>
             <input
               readOnly
-              className="bg-gray-300 rounded-xs p-1 w-100 mb-2"
+              className="shadow-sm p-1 w-100 mb-2"
               type="text"
               value={userFromApi?.lastName ?? ''}
             ></input>
-            <h3 className="text-2xl mb-4">{t('email')}:</h3>
+            <h3 className="text-2xl mb-4 mt-4">{t('email')}:</h3>
             <div className="flex items-center text-center align-middle">
               <input
                 onChange={(e) => setEmailField(e.target.value)}
                 readOnly={!editingEmail}
-                className={`${editingEmail ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-100 mb-2`}
+                className={`${editingEmail ? `border-1` : `shadow-sm border-1 border-transparent`} rounded-xs p-1 w-100 mb-2`}
                 type="text"
                 defaultValue={userFromApi?.email}
               ></input>
               <p
-                className="ml-2 mb-2 text-blue-500"
+                className="ml-6 text-md text-black hover:opacity-70 underline-offset-5 hover:cursor-pointer"
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   if (editingEmail) {
@@ -121,17 +121,17 @@ const Settings = () => {
                 {editingEmail ? 'Save' : 'Edit'}
               </p>
             </div>
-            <h3 className="text-2xl mb-4">{t('phoneNumber')}:</h3>
+            <h3 className="text-2xl mb-4 mt-4">{t('phoneNumber')}:</h3>
             <div className="flex items-center text-center align-middle">
               <input
                 onChange={(e) => setPhoneNumberField(e.target.value)}
                 readOnly={!editingPhone}
-                className={`${editingPhone ? `bg-gray-200` : `bg-gray-300`} rounded-xs p-1 w-100 mb-2`}
+                className={`${editingPhone ? `border-1` : `shadow-sm border-1 border-transparent`} rounded-xs p-1 w-100 mb-2`}
                 type="text"
                 defaultValue={userFromApi?.phoneNumber}
               />
               <p
-                className="ml-2 mb-2 text-blue-500"
+                className="ml-6 text-md text-black hover:opacity-70 underline-offset-5 hover:cursor-pointer"
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   if (editingPhone) {
@@ -144,155 +144,154 @@ const Settings = () => {
               </p>
             </div>
           </TabsContent>
+          <TabsContent value="general">
+            <div className="flex flex-row items-center mb-8 w-full">
+              <h3 className="text-2xl w-100">{t('smsNotifications')}</h3>
+              <input
+                type="checkbox"
+                className="ml-2 mb-1 cursor-pointer"
+                checked={userNotificationSettings.smsNotifications}
+                onChange={(e) =>
+                  setUserNotificationSettings({
+                    atmWithdrawalNotifications:
+                      userNotificationSettings.atmWithdrawalNotifications,
+                    cardTransactionNotifications:
+                      userNotificationSettings.cardTransactionNotifications,
+                    depositNotifications:
+                      userNotificationSettings.depositNotifications,
+                    emailNotifications:
+                      userNotificationSettings.emailNotifications,
+                    smsNotifications: e.target.checked,
+                    language: userNotificationSettings.language,
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-row items-center mb-8 w-full">
+              <h3 className="text-2xl w-100">{t('emailNotifications')}</h3>
+              <input
+                type="checkbox"
+                className="ml-2 mb-1 cursor-pointer"
+                checked={userNotificationSettings.emailNotifications}
+                onChange={(e) =>
+                  setUserNotificationSettings({
+                    atmWithdrawalNotifications:
+                      userNotificationSettings.atmWithdrawalNotifications,
+                    cardTransactionNotifications:
+                      userNotificationSettings.cardTransactionNotifications,
+                    depositNotifications:
+                      userNotificationSettings.depositNotifications,
+                    emailNotifications: e.target.checked,
+                    smsNotifications: userNotificationSettings.smsNotifications,
+                    language: userNotificationSettings.language,
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-row items-center mb-8 w-full">
+              <h3 className="text-2xl w-100">
+                {t('cardTransactionNotifications')}
+              </h3>
+              <input
+                type="checkbox"
+                className="ml-2 mb-1 cursor-pointer"
+                checked={userNotificationSettings.cardTransactionNotifications}
+                onChange={(e) =>
+                  setUserNotificationSettings({
+                    atmWithdrawalNotifications:
+                      userNotificationSettings.atmWithdrawalNotifications,
+                    cardTransactionNotifications: e.target.checked,
+                    depositNotifications:
+                      userNotificationSettings.depositNotifications,
+                    emailNotifications:
+                      userNotificationSettings.emailNotifications,
+                    smsNotifications: userNotificationSettings.smsNotifications,
+                    language: userNotificationSettings.language,
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-row items-center mb-8 w-full">
+              <h3 className="text-2xl w-100">
+                {t('ATMWithdrawalsNotifications')}
+              </h3>
+              <input
+                type="checkbox"
+                className="ml-2 mb-1 cursor-pointer"
+                checked={userNotificationSettings.atmWithdrawalNotifications}
+                onChange={(e) =>
+                  setUserNotificationSettings({
+                    atmWithdrawalNotifications: e.target.checked,
+                    cardTransactionNotifications:
+                      userNotificationSettings.cardTransactionNotifications,
+                    depositNotifications:
+                      userNotificationSettings.depositNotifications,
+                    emailNotifications:
+                      userNotificationSettings.emailNotifications,
+                    smsNotifications: userNotificationSettings.smsNotifications,
+                    language: userNotificationSettings.language,
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-row items-center mb-8 w-full">
+              <h3 className="text-2xl w-100">{t('depositNotifications')}</h3>
+              <input
+                type="checkbox"
+                className="ml-2 mb-1 cursor-pointer"
+                checked={userNotificationSettings.depositNotifications}
+                onChange={(e) =>
+                  setUserNotificationSettings({
+                    atmWithdrawalNotifications:
+                      userNotificationSettings.atmWithdrawalNotifications,
+                    cardTransactionNotifications:
+                      userNotificationSettings.cardTransactionNotifications,
+                    depositNotifications: e.target.checked,
+                    emailNotifications:
+                      userNotificationSettings.emailNotifications,
+                    smsNotifications: userNotificationSettings.smsNotifications,
+                    language: userNotificationSettings.language,
+                  })
+                }
+              />
+            </div>
+            <div className="flex flex-row items-center mb-8 w-full">
+              <h3 className="text-2xl w-71">{t('language')}</h3>
+              <select
+                className="w-35 h-8 shadow-sm"
+                value={`${userNotificationSettings.language === 'en' ? `English` : `Swedish`}`}
+                onChange={(e) =>
+                  setUserNotificationSettings({
+                    atmWithdrawalNotifications:
+                      userNotificationSettings.atmWithdrawalNotifications,
+                    cardTransactionNotifications:
+                      userNotificationSettings.cardTransactionNotifications,
+                    depositNotifications:
+                      userNotificationSettings.depositNotifications,
+                    emailNotifications:
+                      userNotificationSettings.emailNotifications,
+                    smsNotifications: userNotificationSettings.smsNotifications,
+                    language: `${e.target.value === 'English' ? `en` : `sv`}`,
+                  })
+                }
+              >
+                <option value="English">{t('english')}</option>
+                <option value="Swedish">{t('swedish')}</option>
+              </select>
+            </div>
+            <div className="flex justify-center mt-5">
+              <button
+                onClick={() => {
+                  updateUserSettings()
+                }}
+                type="submit"
+                className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black shadow-sm py-2 rounded-4xl hover:cursor-pointer transition-colors w-[10vw]"
+              >
+                {t('savePreferences')}
+              </button>
+            </div>
+          </TabsContent>
         </div>
-
-        <TabsContent value="general">
-          <div className="flex flex-row">
-            <h3 className="text-2xl mb-4 w-100">{t('smsNotifications')}</h3>
-            <input
-              type="checkbox"
-              className="ml-2 mb-1"
-              checked={userNotificationSettings.smsNotifications}
-              onChange={(e) =>
-                setUserNotificationSettings({
-                  atmWithdrawalNotifications:
-                    userNotificationSettings.atmWithdrawalNotifications,
-                  cardTransactionNotifications:
-                    userNotificationSettings.cardTransactionNotifications,
-                  depositNotifications:
-                    userNotificationSettings.depositNotifications,
-                  emailNotifications:
-                    userNotificationSettings.emailNotifications,
-                  smsNotifications: e.target.checked,
-                  language: userNotificationSettings.language,
-                })
-              }
-            />
-          </div>
-          <div className="flex flex-row">
-            <h3 className="text-2xl mb-4 w-100">{t('emailNotifications')}</h3>
-            <input
-              type="checkbox"
-              className="ml-2 mb-1"
-              checked={userNotificationSettings.emailNotifications}
-              onChange={(e) =>
-                setUserNotificationSettings({
-                  atmWithdrawalNotifications:
-                    userNotificationSettings.atmWithdrawalNotifications,
-                  cardTransactionNotifications:
-                    userNotificationSettings.cardTransactionNotifications,
-                  depositNotifications:
-                    userNotificationSettings.depositNotifications,
-                  emailNotifications: e.target.checked,
-                  smsNotifications: userNotificationSettings.smsNotifications,
-                  language: userNotificationSettings.language,
-                })
-              }
-            />
-          </div>
-          <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
-          <div className="flex flex-row">
-            <h3 className="text-2xl mb-4 w-100">
-              {t('cardTransactionNotifications')}
-            </h3>
-            <input
-              type="checkbox"
-              className="ml-2 mb-1"
-              checked={userNotificationSettings.cardTransactionNotifications}
-              onChange={(e) =>
-                setUserNotificationSettings({
-                  atmWithdrawalNotifications:
-                    userNotificationSettings.atmWithdrawalNotifications,
-                  cardTransactionNotifications: e.target.checked,
-                  depositNotifications:
-                    userNotificationSettings.depositNotifications,
-                  emailNotifications:
-                    userNotificationSettings.emailNotifications,
-                  smsNotifications: userNotificationSettings.smsNotifications,
-                  language: userNotificationSettings.language,
-                })
-              }
-            />
-          </div>
-          <div className="flex flex-row">
-            <h3 className="text-2xl mb-4 w-100">
-              {t('ATMWithdrawalsNotifications')}
-            </h3>
-            <input
-              type="checkbox"
-              className="ml-2 mb-1"
-              checked={userNotificationSettings.atmWithdrawalNotifications}
-              onChange={(e) =>
-                setUserNotificationSettings({
-                  atmWithdrawalNotifications: e.target.checked,
-                  cardTransactionNotifications:
-                    userNotificationSettings.cardTransactionNotifications,
-                  depositNotifications:
-                    userNotificationSettings.depositNotifications,
-                  emailNotifications:
-                    userNotificationSettings.emailNotifications,
-                  smsNotifications: userNotificationSettings.smsNotifications,
-                  language: userNotificationSettings.language,
-                })
-              }
-            />
-          </div>
-          <div className="flex flex-row">
-            <h3 className="text-2xl mb-4 w-100">{t('depositNotifications')}</h3>
-            <input
-              type="checkbox"
-              className="ml-2 mb-1"
-              checked={userNotificationSettings.depositNotifications}
-              onChange={(e) =>
-                setUserNotificationSettings({
-                  atmWithdrawalNotifications:
-                    userNotificationSettings.atmWithdrawalNotifications,
-                  cardTransactionNotifications:
-                    userNotificationSettings.cardTransactionNotifications,
-                  depositNotifications: e.target.checked,
-                  emailNotifications:
-                    userNotificationSettings.emailNotifications,
-                  smsNotifications: userNotificationSettings.smsNotifications,
-                  language: userNotificationSettings.language,
-                })
-              }
-            />
-          </div>
-          <hr className="mt-3 mb-3 w-[12vw] h-0.5 bg-gray-300 border-0" />
-          <div className="flex flex-row">
-            <h3 className="text-2xl mb-4 w-71">{t('language')}</h3>
-            <select
-              className="w-35"
-              value={`${userNotificationSettings.language === 'en' ? `English` : `Swedish`}`}
-              onChange={(e) =>
-                setUserNotificationSettings({
-                  atmWithdrawalNotifications:
-                    userNotificationSettings.atmWithdrawalNotifications,
-                  cardTransactionNotifications:
-                    userNotificationSettings.cardTransactionNotifications,
-                  depositNotifications:
-                    userNotificationSettings.depositNotifications,
-                  emailNotifications:
-                    userNotificationSettings.emailNotifications,
-                  smsNotifications: userNotificationSettings.smsNotifications,
-                  language: `${e.target.value === 'English' ? `en` : `sv`}`,
-                })
-              }
-            >
-              <option value="English">{t('english')}</option>
-              <option value="Swedish">{t('swedish')}</option>
-            </select>
-          </div>
-          <button
-            onClick={() => {
-              updateUserSettings()
-            }}
-            type="submit"
-            className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
-          >
-            {t('savePreferences')}
-          </button>
-        </TabsContent>
       </Tabs>
     </>
   )
