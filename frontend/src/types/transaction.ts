@@ -11,6 +11,7 @@ export interface Transaction {
   ocrNumber: string
   type: TransactionType
   status: string | null
+  category: string
 }
 
 export interface Sort {

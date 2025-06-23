@@ -1,12 +1,12 @@
-import { TransactionItem } from '../generic/'
-import { ScheduledTransactionItem } from '../generic'
-import { NoTransactionItem } from '../generic/'
+import { ScheduledTransactionItem } from '../generic/transaction-items/ScheduledTransactionItem'
 import type { Account } from '@/types'
 import { useNavigate } from '@tanstack/react-router'
 import { useAccountTransactions } from '@/hooks'
 import Spinner from '../generic/Spinner'
 import { useTranslation } from 'react-i18next'
 import { yellowgoback } from '@/assets/icons'
+import { TransactionItem } from '../generic/transaction-items/TransactionItem'
+import useFetchEntries from '@/hooks/useFetchEntries'
 
 type AccountBoardProps = {
   account: Account
@@ -15,11 +15,19 @@ type AccountBoardProps = {
 export default function AccountBoard({ account }: AccountBoardProps) {
   const { t } = useTranslation('accounts')
   const navigate = useNavigate()
-  const { data, isLoading, isError } = useAccountTransactions(account.id)
+  const {
+    data: transactions = [],
+    isLoading,
+    isError,
+  } = useAccountTransactions(account.id)
 
   if (isLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
-  console.log('Account transactions:', data)
+
+  const { entries: allEntries, isLoading: allLoading } =
+    useFetchEntries(transactions)
+  if (allLoading) return <Spinner />
+
   return (
     <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
       <a
@@ -54,8 +62,9 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div className="mb-8">
         <h2 className="text-2xl mb-4">{t('scheduledTransasctions')}</h2>
         <div className="space-y-2">
-          {data && data.filter((t) => t.status === 'PENDING').length > 0 ? (
-            data
+          {transactions &&
+          transactions.filter((t) => t.status === 'PENDING').length > 0 ? (
+            transactions
               .filter((t) => t.status === 'PENDING')
               .map((t) => {
                 return (
@@ -69,11 +78,12 @@ export default function AccountBoard({ account }: AccountBoardProps) {
                     scheduledDate={t.date}
                     toAccountId={t.toAccountId}
                     accountNoType={t.type}
+                    category={t.category}
                   />
                 )
               })
           ) : (
-            <NoTransactionItem />
+            <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           )}
         </div>
       </div>
@@ -81,27 +91,21 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div>
         <h2 className="text-2xl mb-4">{t('transactions')}</h2>
         <div className="space-y-2">
-          {data && data.filter((t) => t.status === null).length > 0 ? (
-            data
-              .filter((t) => t.status === null)
-              .map((t) => {
-                const direction =
-                  t.toAccountId?.toString() === account.id.toString()
-                    ? 'in'
-                    : 'out'
-                return (
-                  <TransactionItem
-                    key={t.transactionId}
-                    accType={t.description}
-                    accNoType={t.type}
-                    amount={t.amount}
-                    date={t.date}
-                    direction={direction}
-                  />
-                )
-              })
+          {allEntries.length === 0 ? (
+            <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           ) : (
-            <NoTransactionItem />
+            allEntries.map((tx) => (
+              <TransactionItem
+                key={tx.key}
+                description={tx.description}
+                theAccount={tx.theAccount}
+                accountNoType={tx.accountNoType}
+                amount={tx.amount}
+                time={tx.time}
+                direction={tx.direction}
+                category={tx.category}
+              />
+            ))
           )}
         </div>
       </div>
