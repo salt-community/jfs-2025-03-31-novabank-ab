@@ -10,6 +10,7 @@ import Notes from './Notes'
 import Ocr from './Ocr'
 import { useRandomDesc } from '@/hooks'
 import { useCreateTransaction } from '@/hooks'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function TransactionForm() {
   const { t } = useTranslation('accounts')
@@ -23,6 +24,7 @@ export default function TransactionForm() {
   const [accNoType, setAccNoType] = useState('')
   const randomDesc = useRandomDesc()
   const createTransaction = useCreateTransaction()
+  const queryClient = useQueryClient()
 
   const [errors, setErrors] = useState<{
     sender?: string
@@ -102,11 +104,9 @@ export default function TransactionForm() {
       ocrNumber: ocr || '',
     }
 
-    // Send transactionPayload to API endpoint
-    console.log(transactionPayload)
-
     createTransaction.mutate(transactionPayload, {
       onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['accounts'] })
         alert('Transaction created')
         resetForm()
       },
@@ -117,58 +117,54 @@ export default function TransactionForm() {
   }
 
   return (
-    <>
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12"
-      >
-        <Sender
-          sender={sender}
-          setSender={setSender}
-          recipient={recipientAccount}
-          error={errors.sender}
-        />
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12"
+    >
+      <Sender
+        sender={sender}
+        setSender={setSender}
+        recipient={recipientAccount}
+        error={errors.sender}
+      />
 
-        <Recipient
-          sender={sender}
-          error={errors.recipientError}
-          recipientAccount={recipientAccount}
-          setRecipientAccount={setRecipientAccount}
-          recipientClient={recipientClient}
-          setRecipientClient={setRecipientClient}
-          setAccNoType={setAccNoType}
-        />
+      <Recipient
+        sender={sender}
+        error={errors.recipientError}
+        recipientAccount={recipientAccount}
+        setRecipientAccount={setRecipientAccount}
+        recipientClient={recipientClient}
+        setRecipientClient={setRecipientClient}
+        setAccNoType={setAccNoType}
+      />
 
-        <Amount amount={amount} setAmount={setAmount} error={errors.amount} />
+      <Amount amount={amount} setAmount={setAmount} error={errors.amount} />
 
-        <TransactionDate
-          transactionDate={transactionDate}
-          setTransactionDate={setTransactionDate}
-          error={errors.transactionDate}
-        />
+      <TransactionDate
+        transactionDate={transactionDate}
+        setTransactionDate={setTransactionDate}
+        error={errors.transactionDate}
+      />
 
-        <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr} />
+      <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr} />
 
-        <Notes notes={notes} setNotes={setNotes} />
+      <Notes notes={notes} setNotes={setNotes} />
 
-        {/* Submit button */}
-        <div className="relative w-full">
-          <button
-            type="submit"
-            disabled={createTransaction.isPending}
-            className={`bg-[#FFB20F] mt-5 text-black shadow-md px-5 py-4 rounded-lg w-full transition-colors
-                        ${
-                          createTransaction.isPending
-                            ? 'opacity-50 cursor-not-allowed'
-                            : 'hover:bg-[#F5A700] hover:cursor-pointer'
-                        }`}
-          >
-            {createTransaction.isPending
-              ? `${t('processing')}...`
-              : t('submit')}
-          </button>
-        </div>
-      </form>
-    </>
+      {/* Submit button */}
+      <div className="relative w-full">
+        <button
+          type="submit"
+          disabled={createTransaction.isPending}
+          className={`bg-[#FFB20F] mt-5 text-black shadow-md px-5 py-4 rounded-lg w-full transition-colors
+            ${
+              createTransaction.isPending
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-[#F5A700] hover:cursor-pointer'
+            }`}
+        >
+          {createTransaction.isPending ? `${t('processing')}...` : t('submit')}
+        </button>
+      </div>
+    </form>
   )
 }

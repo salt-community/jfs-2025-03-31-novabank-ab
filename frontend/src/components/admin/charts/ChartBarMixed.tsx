@@ -55,7 +55,7 @@ export function ChartBarMixed() {
   ]
 
   return (
-    <Card>
+    <Card className="w-2xl">
       <CardHeader>
         <CardTitle>Account types</CardTitle>
         <CardDescription>Account type distribution</CardDescription>
