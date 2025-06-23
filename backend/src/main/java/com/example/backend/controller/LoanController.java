@@ -1,6 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.accountDto.response.AccountResponseDto;
 import com.example.backend.dto.loanDto.request.LoanApplicationRequestDto;
 import com.example.backend.dto.loanDto.response.ListLoanResponseDto;
 import com.example.backend.dto.loanDto.response.LoanResponseDto;
@@ -85,7 +84,7 @@ public class LoanController {
             @RequestBody LoanApplicationRequestDto dto
     ) {
         User user = userService.getUser(jwt.getSubject());
-        Account account = accountService.getAccountByAccountNo(dto.accountId(), user.getId());
+        Account account = accountService.getAccountByAccountNo(dto.accountNo(), user.getId());
         LoanApplication created = loanService.createLoanApplication(LoanApplicationRequestDto.toApplication(dto, user, account));
         URI location = URI.create("/api/loan/application/" + created.getId());
         return ResponseEntity.created(location).build();

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record LoanApplicationRequestDto(
-        UUID accountId,
+        String accountNo,
         double amount,
         String note,
         int requestedMonths
