@@ -161,7 +161,7 @@ export default function TransactionsPage() {
       <div className="px-5 shadow-sm">
         {transactionsFromIdsGivenByAi.length > 0 && (
           <div
-            className={`${heightAiDiv} overflow-hidden transition-[max-height] duration-1500 ease-in-out`}
+            className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
           >
             <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
             {transactionsFromIdsGivenByAi.map((tx) => (
