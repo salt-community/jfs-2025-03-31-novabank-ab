@@ -52,6 +52,7 @@ public class LoanService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", "application/json");
+        headers.set("Ocp-Apim-Subscription-Key", API_KEY);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
