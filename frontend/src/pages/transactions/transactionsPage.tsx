@@ -178,12 +178,20 @@ export default function TransactionsPage() {
       </div>
 
       <div className="px-5 shadow-sm">
+        {(sendQueryToAi.isPending || sendIdsAndGetTransactions.isPending) && (
+          <div className="w-full flex items-center justify-center relative">
+            <div className="loader opacity-35 absolute"></div>
+          </div>
+        )}
         {transactionsFromIdsGivenByAi.length > 0 && (
           <div
             className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
           >
             <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
-            {transactionsFromIdsGivenByAi[0].description === 'ERROR' ? (
+            {sendQueryToAi.isError ||
+            sendIdsAndGetTransactions.isError ||
+            (transactionsFromIdsGivenByAi.length > 0 &&
+              transactionsFromIdsGivenByAi[0].description === 'ERROR') ? (
               <NoTransactionItem />
             ) : (
               transactionsFromIdsGivenByAi.map((tx) => (
