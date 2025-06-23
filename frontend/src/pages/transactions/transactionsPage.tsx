@@ -10,6 +10,7 @@ import Spinner from '@/components/generic/Spinner'
 import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
 import type { TransactionFromId } from '@/types'
+import  searchicon from '@/assets/searchicon.svg'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -112,11 +113,11 @@ export default function TransactionsPage() {
   return (
     <div>
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
-      <div className="flex justify-end mb-5">
+      <div className="flex justify-beginning mb-5">
         <div
           className={`${
             searchBarOpen ? 'w-full' : 'w-36'
-          } transition-[width] duration-300 ease-in-out bg-gray-200 rounded-sm flex items-center px-2`}
+          } transition-[width] duration-300 ease-in-out bg-white border-1 border-black/70 rounded-4xl flex items-center px-2`}
         >
           <input
             onKeyDown={(e) => {
@@ -154,8 +155,12 @@ export default function TransactionsPage() {
             }
             value={aiSearchBarInputContent}
           />
-          <p className="ml-2">🔍</p>
-        </div>
+            <img
+            src={ searchicon }
+            alt="Search"
+            className=" "
+          />
+          </div>
       </div>
 
       <div className="px-5 shadow-sm">
