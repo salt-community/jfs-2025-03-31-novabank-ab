@@ -12,8 +12,7 @@ export interface Transaction {
   type: TransactionType
   category: string
 
-  status: string | null
-  category: string
+  status: string
 }
 
 export interface Sort {
