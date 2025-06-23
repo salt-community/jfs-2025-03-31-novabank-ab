@@ -1,4 +1,4 @@
-type Applicant = {
+export type Applicant = {
   id: string
   createdAt: string // ISO timestamp
   updatedAt: Date
@@ -7,6 +7,14 @@ type Applicant = {
   lastName: string
   personalNumber: string
   email: string
+  phoneNumber: string
+}
+
+export type ApplicationRequestDto = {
+  firstName: string
+  lastName: string
+  email: string
+  personalNumber: string
   phoneNumber: string
 }
 

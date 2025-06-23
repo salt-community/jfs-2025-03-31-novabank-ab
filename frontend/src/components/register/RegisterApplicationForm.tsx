@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useRegisterApplication } from '@/hooks/useApplications'
-import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 import { Feedback } from './Feedback'
 import { PhoneInput } from './PhoneInput'
 import { LabeledInput } from './LabeledInput'
+import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 
 export function RegisterApplicationForm() {
   const { mutate, isPending, isError, isSuccess, error } =
