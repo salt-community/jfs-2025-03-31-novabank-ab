@@ -48,22 +48,6 @@ export default function TransactionsPage() {
     accountNoType: 'checking',
   }
 
-  type TransactionModalData = {
-    transactionId?: string
-    fromAccountId?: string
-    toAccountId?: string
-    date?: string // used in TransactionFromId
-    scheduledDate?: string // used in ScheduledTransactionItemProps
-    amount: number
-    description: string
-    userNote?: string
-    ocrNumber?: string
-    type?: string // for TransactionFromId and Scheduled
-    accountNoType?: string // AllTransactionsItem and Scheduled
-    theAccount?: string
-    time?: string
-    direction?: 'in' | 'out'
-  }
   ////////////////
   const { t } = useTranslation('accounts')
   const [page, setPage] = useState(0)
@@ -167,13 +151,16 @@ export default function TransactionsPage() {
 
   return (
     <div>
+      {'////////////////'}
       {modalTransactionDetailShowing && (
         <TransactionDetailsModal
           {...hardcodedScheduledTransaction}
           onClose={() => setModalTransactionDetalShowing(false)}
         />
       )}
+      {'////////////////'}
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
+      {'////////////////'}
       <button
         onClick={() => {
           setModalTransactionDetalShowing((prev) => !prev)
@@ -182,6 +169,7 @@ export default function TransactionsPage() {
       >
         Test Transaction From Id
       </button>
+      {'////////////////'}
       <div className="flex justify-beginning mb-5">
         <div
           className={`${
