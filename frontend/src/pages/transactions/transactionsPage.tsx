@@ -9,7 +9,7 @@ import Spinner from '@/components/generic/Spinner'
 import { TransactionItem } from '@/components/generic/transaction-items/TransactionItem'
 import type { Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
-import searchicon from '@/assets/searchicon.svg'
+import { searchicon } from '@/assets/icons'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -55,7 +55,7 @@ export default function TransactionsPage() {
   const isLastPage = data?.last ?? true
 
   return (
-    <div>
+    <div className="px-4 sm:px-8 py-6 space-y-12">
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
       <div className="flex justify-beginning mb-5">
         <div

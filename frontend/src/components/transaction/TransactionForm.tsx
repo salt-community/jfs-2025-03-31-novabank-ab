@@ -119,7 +119,7 @@ export default function TransactionForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-5 max-w-3xl shadow-sm p-10"
+      className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12"
     >
       <Sender
         sender={sender}
@@ -162,9 +162,7 @@ export default function TransactionForm() {
                 : 'hover:bg-[#F5A700] hover:cursor-pointer'
             }`}
         >
-          {createTransaction.isPending
-            ? `${t('processing')}...`
-            : t('submit')}
+          {createTransaction.isPending ? `${t('processing')}...` : t('submit')}
         </button>
       </div>
     </form>

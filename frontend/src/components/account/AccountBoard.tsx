@@ -1,9 +1,10 @@
-import { ScheduledTransactionItem } from '../generic'
+import { ScheduledTransactionItem } from '../generic/transaction-items/ScheduledTransactionItem'
 import type { Account } from '@/types'
 import { useNavigate } from '@tanstack/react-router'
 import { useAccountTransactions } from '@/hooks'
 import Spinner from '../generic/Spinner'
 import { useTranslation } from 'react-i18next'
+import { yellowgoback } from '@/assets/icons'
 import { TransactionItem } from '../generic/transaction-items/TransactionItem'
 import useFetchEntries from '@/hooks/useFetchEntries'
 
@@ -34,8 +35,16 @@ export default function AccountBoard({ account }: AccountBoardProps) {
   )
 
   return (
-    <div data-testid="account-board">
+    <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
+      <a
+        onClick={() => navigate({ to: '/accounts' })}
+        className="flex items-center text-md text-black hover:opacity-70 underline-offset-5 hover:cursor-pointer"
+      >
+        {t('goBack')}
+        <img src={yellowgoback} className="ml-2 w-6 h-6" />
+      </a>
       <h1 className="text-4xl mb-20">{account.type}</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>
           <p className="mt-4 text-gray-600 text2xl">{t('totalBalance')}</p>
