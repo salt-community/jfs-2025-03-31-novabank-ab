@@ -85,7 +85,7 @@ export const Route = createRootRoute({
              pt-[60px] pb-[60px] md:pt-0 md:pb-0 ${
                isAdmin
                  ? 'ml-[70px] lg:ml-70'
-                 : 'mt-[60px] mb-[60px] md:mt-0 md:mb-0 md:ml-[70px] lg:ml-70'
+                 : 'mt-[30px] mb-[60px] md:mt-0 md:mb-0 md:ml-[70px] lg:ml-70'
              }`}
           >
             <Outlet />
