@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 type TransactionModalData = {
   transactionId?: string
   fromAccountId?: string
@@ -53,6 +55,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
   status,
   onClose,
 }) => {
+  const { t } = useTranslation('transactionDetails')
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 backdrop-blur-sm">
       <div
@@ -79,7 +82,9 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
 
         <div className="mb-4 space-y-1 text-lg">
           <div className="flex items-center justify-center mb-4 mt-4">
-            <h2 className="text-2xl font-semibold">Transaction Details</h2>
+            <h2 className="text-2xl font-semibold">
+              {t('transactionDetails')}
+            </h2>
           </div>
           <div className="flex flex-row justify-between">
             {date && (
@@ -103,7 +108,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           <hr className="mt-3 mb-3" />
           {transactionId && (
             <p>
-              <span className="text-lg mr-2">ID:</span>
+              <span className="text-lg mr-2">{t('id')}</span>
               <span className="font-bold">{transactionId}</span>
             </p>
           )}
@@ -111,7 +116,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
             {amount !== undefined && (
               <div>
                 <p>
-                  <span className="text-md">Amount</span>
+                  <span className="text-md">{t('amount')}</span>
                 </p>
                 <p className="font-extrabold"> {amount} kr</p>
               </div>
@@ -119,7 +124,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
             {type && (
               <div>
                 <p>
-                  <span className="text-md">Type</span>
+                  <span className="text-md">{t('type')}</span>
                 </p>
                 <p className="font-semibold opacity-50">{type}</p>
               </div>
@@ -127,7 +132,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
             {accountNoType && (
               <div>
                 <p>
-                  <span className="text-md">Type</span>
+                  <span className="text-md">{t('type')}</span>
                 </p>
                 <p className="font-semibold opacity-50">{accountNoType}</p>
               </div>
@@ -137,7 +142,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {description && (
             <div>
               <p>
-                <span className="text-md">Description</span>
+                <span className="text-md">{t('description')}</span>
               </p>
               <p className="font-semibold">{description}</p>
             </div>
@@ -145,7 +150,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {category && (
             <div>
               <p>
-                <span className="text-md">Category</span>
+                <span className="text-md">{t('category')}</span>
               </p>
               <p className="font-semibold">{category}</p>
             </div>
@@ -153,7 +158,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {userNote && (
             <div>
               <p>
-                <span className="text-md">Note</span>
+                <span className="text-md">{t('note')}</span>
               </p>
               <p className="font-semibold">{userNote}</p>
             </div>
@@ -162,7 +167,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {fromAccountId && (
             <div>
               <p>
-                <span className="text-md">From Account</span>
+                <span className="text-md">{t('fromAccount')}</span>
                 <p className="font-semibold">{fromAccountId}</p>
               </p>
             </div>
@@ -170,7 +175,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {toAccountId && (
             <div>
               <p>
-                <span className="text-md">To Account</span>
+                <span className="text-md">{t('toAccount')}</span>
               </p>
               <p className="font-semibold">{toAccountId}</p>
             </div>
@@ -178,7 +183,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {theAccount && (
             <div>
               <p>
-                <span className="text-md">Account</span>
+                <span className="text-md">{t('account')}</span>
               </p>
               <p className="font-semibold">{theAccount}</p>
             </div>
@@ -187,7 +192,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {scheduledDate && (
             <div>
               <p>
-                <span className="font-medium">Scheduled Date</span>
+                <span className="font-medium">{t('scheduledDate')}</span>
               </p>
               <p className="font-semibold">{scheduledDate}</p>
             </div>
@@ -195,7 +200,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {ocrNumber && (
             <div>
               <p>
-                <span className="text-md">OCR Number</span>
+                <span className="text-md">{t('ocrNumber')}</span>
               </p>
               <p className="font-semibold">{ocrNumber}</p>
             </div>
@@ -204,9 +209,9 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {direction && (
             <div>
               <p>
-                <span className="text-md">Direction</span>
+                <span className="text-md">{t('direction')}</span>
                 <p className="font-semibold">
-                  {direction === 'in' ? 'Incoming' : 'Outgoing'}
+                  {direction === 'in' ? t('incoming') : t('outgoing')}
                 </p>
               </p>
             </div>
@@ -219,7 +224,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
             onClick={onClose}
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:opacity-70 transition hover:cursor-pointer"
           >
-            Close
+            {t('close')}
           </button>
         </div>
       </div>
