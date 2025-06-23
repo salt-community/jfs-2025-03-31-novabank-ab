@@ -34,7 +34,7 @@ function LandingPage() {
                 Register for free today
               </h2>
               <button
-                className=" px-8 py-3 bg-[#FFB20F] border-2 border-yellow-500/80 cursor-pointer text-black rounded-4xl hover:opacity-70 "
+                className=" px-8 py-3 bg-[#FFB20F] border-2 border-yellow-500/80 cursor-pointer text-black rounded-4xl hover:bg-[#F5A700]"
                 style={{ fontFamily: "'Lato', sans-serif" }}
                 onClick={() => navigate({ to: '/register' })}
               >
