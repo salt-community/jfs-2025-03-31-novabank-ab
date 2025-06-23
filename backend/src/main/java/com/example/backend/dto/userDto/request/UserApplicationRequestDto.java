@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record ApplicationRequestDto(
+public record UserApplicationRequestDto(
     @NotNull
     String firstName,
     @NotNull
