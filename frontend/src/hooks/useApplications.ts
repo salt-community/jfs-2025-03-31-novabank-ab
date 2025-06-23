@@ -6,7 +6,7 @@ import {
 } from '@/api/application'
 import { sendRegisterApplication } from '@/api/application'
 import { useAuth } from '@clerk/clerk-react'
-import type { ApplicantsResponse } from '@/types/ApplicationRequestDto'
+import type { ApplicantsResponse, ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 
 export function useApplications() {
   const { getToken } = useAuth()
@@ -60,7 +60,7 @@ export function useRejectApplication() {
 }
 
 export function useRegisterApplication() {
-  return useMutation<void, Error, ApplicantsResponse, unknown>({
+  return useMutation<void, Error, ApplicationRequestDto, unknown>({
     mutationFn: async (dto) => {
       return sendRegisterApplication(dto)
     },

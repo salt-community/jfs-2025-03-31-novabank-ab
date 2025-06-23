@@ -1,4 +1,7 @@
-import type { ApplicantsResponse } from '@/types/ApplicationRequestDto'
+import type {
+  ApplicantsResponse,
+  ApplicationRequestDto,
+} from '@/types/ApplicationRequestDto'
 
 const API = import.meta.env.VITE_BASE_URL
 
@@ -48,7 +51,7 @@ export async function rejectApplication(token: string, id: string) {
 }
 
 export async function sendRegisterApplication(
-  dto: ApplicantsResponse,
+  dto: ApplicationRequestDto,
 ): Promise<void> {
   const res = await fetch(`${API}user/application`, {
     method: 'POST',
