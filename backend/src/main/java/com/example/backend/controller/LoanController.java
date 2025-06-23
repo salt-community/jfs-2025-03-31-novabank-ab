@@ -1,8 +1,8 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.accountDto.response.AccountResponseDto;
 import com.example.backend.dto.loanDto.request.LoanApplicationRequestDto;
 import com.example.backend.dto.loanDto.response.ListLoanResponseDto;
+import com.example.backend.dto.loanDto.response.LoanApplicationResponseDto;
 import com.example.backend.dto.loanDto.response.LoanResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.Loan;
@@ -97,7 +97,7 @@ public class LoanController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     @GetMapping("/application/{id}")
-    public ResponseEntity<LoanApplication> getApplication(@PathVariable UUID id) {
-        return ResponseEntity.ok(loanService.getLoanApplicationById(id));
+    public ResponseEntity<LoanApplicationResponseDto> getApplication(@PathVariable UUID id) {
+        return ResponseEntity.ok(LoanApplicationResponseDto.fromApplication(loanService.getLoanApplicationById(id)));
     }
 }
