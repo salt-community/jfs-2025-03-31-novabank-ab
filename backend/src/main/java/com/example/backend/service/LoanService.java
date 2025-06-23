@@ -42,6 +42,7 @@ public class LoanService {
                        @Value("${RIKSBANK_API_KEY}") String apiKey) {
         this.loanRepository = loanRepository;
         this.applicationRepository = applicationRepository;
+        this.restTemplate = new RestTemplate();
         this.API_URL = apiUrl;
         this.API_KEY = apiKey;
     }
@@ -64,7 +65,7 @@ public class LoanService {
         RiksbankRateResponseDto responseDto = response.getBody();
 
         if (responseDto == null || responseDto.value() == 0) {
-            throw new ApplicationNotFoundException("Could not find Riksbank Rate");
+            throw new ApplicationNotFoundException("Could not find Riksbanken policy Rate.");
         }
 
         return responseDto;
@@ -79,9 +80,12 @@ public class LoanService {
             throw new IllegalStateException("Application must be approved to create a loan.");
         }
 
+        RiksbankRateRequestDto requestDto = new RiksbankRateRequestDto("SECBREPOEFF");
+        RiksbankRateResponseDto responseDto = fetchPolicyRate(requestDto);
+
         Loan loan = new Loan();
         loan.setAccount(application.getUser().getAccounts().getFirst());
-        loan.setInterestRate(application.getInterestRate());
+        loan.setInterestRate(responseDto.value());
         loan.setOriginalAmount(application.getRequestedAmount());
         loan.setRemainingAmount(application.getRequestedAmount());
         loan.setStartDate(LocalDate.now());
