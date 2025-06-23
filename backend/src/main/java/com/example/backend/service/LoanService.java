@@ -9,12 +9,13 @@ import com.example.backend.model.enums.LoanStatus;
 import com.example.backend.repository.LoanApplicationRepository;
 import com.example.backend.repository.LoanRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,9 +24,20 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final LoanApplicationRepository applicationRepository;
 
-    public LoanService(LoanRepository loanRepository, LoanApplicationRepository applicationRepository) {
+    private final RestTemplate restTemplate;
+
+    private final String API_URL;
+    private final String API_KEY;
+
+
+    public LoanService(LoanRepository loanRepository,
+                       LoanApplicationRepository applicationRepository,
+                       @Value("${RIKSBANK_API_URL}") String apiUrl,
+                       @Value("${RIKSBANK_API_KEY}") String apiKey) {
         this.loanRepository = loanRepository;
         this.applicationRepository = applicationRepository;
+        this.API_URL = apiUrl;
+        this.API_KEY = apiKey;
     }
 
     @Transactional
