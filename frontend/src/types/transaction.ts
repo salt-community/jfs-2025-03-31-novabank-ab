@@ -13,6 +13,7 @@ export interface Transaction {
   category: string
 
   status: string | null
+  category: string
 }
 
 export interface Sort {
