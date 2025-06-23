@@ -9,6 +9,8 @@ import com.example.backend.model.enums.LoanStatus;
 import com.example.backend.repository.LoanApplicationRepository;
 import com.example.backend.repository.LoanRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -51,8 +53,8 @@ public class LoanService {
         return loanRepository.findById(id).orElseThrow(LoanNotFoundException::new);
     }
 
-    public List<Loan> getAllLoans() {
-        return loanRepository.findAll();
+    public Page<Loan> getAllLoans(Pageable pageable) {
+        return loanRepository.findAll(pageable);
     }
 
     public Loan updateLoanStatus(UUID id, LoanStatus status) {
