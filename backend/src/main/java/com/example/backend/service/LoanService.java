@@ -1,5 +1,7 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.loanDto.request.RiksbankRateRequestDto;
+import com.example.backend.dto.loanDto.response.RiksbankRateResponseDto;
 import com.example.backend.exception.custom.ApplicationNotFoundException;
 import com.example.backend.exception.custom.LoanNotFoundException;
 import com.example.backend.model.Loan;
@@ -12,6 +14,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -38,6 +44,30 @@ public class LoanService {
         this.applicationRepository = applicationRepository;
         this.API_URL = apiUrl;
         this.API_KEY = apiKey;
+    }
+
+    private RiksbankRateResponseDto fetchPolicyRate(RiksbankRateRequestDto requestDto) {
+        String url = API_URL + "/swea/v1/Observations/Latest/" + requestDto.seriesCode();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        ResponseEntity<RiksbankRateResponseDto> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                RiksbankRateResponseDto.class
+        );
+
+        RiksbankRateResponseDto responseDto = response.getBody();
+
+        if (responseDto == null || responseDto.value() == 0) {
+            throw new ApplicationNotFoundException("Could not find Riksbank Rate");
+        }
+
+        return responseDto;
     }
 
     @Transactional
