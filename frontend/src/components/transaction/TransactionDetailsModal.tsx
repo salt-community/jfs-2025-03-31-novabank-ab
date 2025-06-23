@@ -18,6 +18,22 @@ type TransactionModalData = {
   onClose?: () => void
 }
 
+/// USAGE EXAMPLE:
+
+/*
+We render it by passing the props of a transaction, and also we need to give it a callback allowing the modal to close.
+
+The Modal should be conditionally rendereed by a state (like {modalTransactionDetailShowing && (<Transaction....... )
+
+So then we can toggle that state from the callback we are passing to it
+
+        <TransactionDetailsModal
+          {...hardcodedTransactionFromId}
+          onClose={() => setModalTransactionDetalShowing(false)}
+
+*/
+///
+
 export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
   amount,
   description,
@@ -188,7 +204,7 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
           {direction && (
             <div>
               <p>
-                <span className="text-md">Direction:</span>
+                <span className="text-md">Direction</span>
                 <p className="font-semibold">
                   {direction === 'in' ? 'Incoming' : 'Outgoing'}
                 </p>

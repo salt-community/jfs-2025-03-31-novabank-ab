@@ -12,49 +12,11 @@ import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
 import type { TransactionFromId } from '@/types'
 import { NoTransactionItem } from '@/components/generic'
 import searchicon from '@/assets/searchicon.svg'
-import { TransactionDetailsModal } from '@/components/transaction/TransactionDetailsModal'
 
 export default function TransactionsPage() {
-  ////////////////
-  const hardcodedTransactionFromId = {
-    transactionId: 'tx123',
-    fromAccountId: 'acc001',
-    toAccountId: 'acc002',
-    date: '2025-06-23',
-    amount: 150.75,
-    description: 'Grocery shopping',
-    userNote: 'Bought fruits and snacks',
-    ocrNumber: 'OCR123456',
-    type: 'debit',
-    category: 'Groceries',
-    status: 'CONFIRMED',
-  }
-  const hardcodedTransactionsFromAllTransactionsItemProps = {
-    description: 'Monthly salary',
-    theAccount: 'Salary Account',
-    accountNoType: 'credit',
-    amount: 3000.0,
-    time: '2025-06-01T08:00:00',
-    direction: 'in',
-  }
-  const hardcodedScheduledTransaction = {
-    transactionId: 'txn_123456',
-    fromAccountId: 'acc_001',
-    toAccountId: 'acc_002',
-    amount: 1250.5,
-    scheduledDate: '2025-07-01',
-    description: 'Monthly Rent Payment',
-    ocrNumber: '9876543210',
-    accountNoType: 'checking',
-  }
-
-  ////////////////
   const { t } = useTranslation('accounts')
   const [page, setPage] = useState(0)
   const pageSize = 10
-
-  const [modalTransactionDetailShowing, setModalTransactionDetalShowing] =
-    useState<boolean>(false)
 
   const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
     useState<Array<TransactionFromId>>([])
@@ -151,25 +113,7 @@ export default function TransactionsPage() {
 
   return (
     <div>
-      {'////////////////'}
-      {modalTransactionDetailShowing && (
-        <TransactionDetailsModal
-          {...hardcodedScheduledTransaction}
-          onClose={() => setModalTransactionDetalShowing(false)}
-        />
-      )}
-      {'////////////////'}
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
-      {'////////////////'}
-      <button
-        onClick={() => {
-          setModalTransactionDetalShowing((prev) => !prev)
-        }}
-        className="bg-amber-300"
-      >
-        Test Transaction From Id
-      </button>
-      {'////////////////'}
       <div className="flex justify-beginning mb-5">
         <div
           className={`${
