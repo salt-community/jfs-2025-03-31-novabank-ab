@@ -1,9 +1,10 @@
-import type { Application } from '@/types/Application'
-import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
+import type { ApplicantsResponse } from '@/types/ApplicationRequestDto'
 
 const API = import.meta.env.VITE_BASE_URL
 
-export async function getApplications(token: string): Promise<Application[]> {
+export async function getApplications(
+  token: string,
+): Promise<ApplicantsResponse> {
   const res = await fetch(`${API}admin/application`, {
     method: 'GET',
     headers: {
@@ -47,7 +48,7 @@ export async function rejectApplication(token: string, id: string) {
 }
 
 export async function sendRegisterApplication(
-  dto: ApplicationRequestDto,
+  dto: ApplicantsResponse,
 ): Promise<void> {
   const res = await fetch(`${API}user/application`, {
     method: 'POST',

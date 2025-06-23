@@ -9,3 +9,7 @@ export interface AccountDTO {
   status: AccountStatus
   accountNumber: string
 }
+
+export type AccountsResponse = {
+  accounts: AccountDTO[]
+}

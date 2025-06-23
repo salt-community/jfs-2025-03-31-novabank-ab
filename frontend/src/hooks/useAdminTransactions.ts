@@ -20,14 +20,17 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 export async function getAdminTransactions(
   token: string,
 ): Promise<TransactionResponse> {
-  const res = await fetch(BASE_URL.concat('admin/transaction-history'), {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+  const res = await fetch(
+    BASE_URL.concat('admin/transaction-history?page=0&size=1000'),
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-  })
+  )
 
   if (!res.ok) throw new Error('Failed to fetch transactions')
   const data = await res.json()
