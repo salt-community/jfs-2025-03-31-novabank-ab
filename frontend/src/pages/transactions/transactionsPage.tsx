@@ -7,7 +7,11 @@ import {
   useGetTransactionsFromIdsGivenByAi,
 } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
-import { AllTransactionsItem, TransactionFromAi } from '@/components/generic'
+import {
+  AllTransactionsItem,
+  NoTransactionItem,
+  TransactionFromAi,
+} from '@/components/generic'
 import type { TransactionFromId } from '@/types'
 import { searchicon } from '@/assets/icons'
 
@@ -127,7 +131,25 @@ export default function TransactionsPage() {
                     onSuccess(data) {
                       sendIdsAndGetTransactions.mutate(data, {
                         onSuccess(data) {
-                          setTransactionsFromIdsGivenByAi(data)
+                          if (data.length > 0) {
+                            setTransactionsFromIdsGivenByAi(data)
+                          } else {
+                            setTransactionsFromIdsGivenByAi([
+                              {
+                                amount: 0,
+                                category: '',
+                                date: 'null',
+                                description: 'ERROR',
+                                fromAccountId: 'null',
+                                ocrNumber: 'null',
+                                status: 'null',
+                                toAccountId: 'null',
+                                transactionId: 'null',
+                                type: 'null',
+                                userNote: 'null',
+                              },
+                            ])
+                          }
                           setTimeout(() => {
                             setHeightAiDiv('max-h-[2000px]')
                           }, 200)
@@ -159,27 +181,40 @@ export default function TransactionsPage() {
       </div>
 
       <div className="px-5 shadow-sm">
+        {(sendQueryToAi.isPending || sendIdsAndGetTransactions.isPending) && (
+          <div className="w-full flex items-center justify-center relative">
+            <div className="loader opacity-35 absolute"></div>
+          </div>
+        )}
         {transactionsFromIdsGivenByAi.length > 0 && (
           <div
             className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
           >
             <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
-            {transactionsFromIdsGivenByAi.map((tx) => (
-              <TransactionFromAi
-                key={tx.transactionId}
-                amount={tx.amount}
-                date={tx.date}
-                description={tx.description}
-                userNote={tx.userNote}
-                category={tx.category}
-                fromAccountId={tx.fromAccountId}
-                ocrNumber={tx.ocrNumber}
-                status={tx.status}
-                toAccountId={tx.toAccountId}
-                transactionId={tx.transactionId}
-                type={tx.type}
-              />
-            ))}
+            {sendQueryToAi.isError ||
+            sendIdsAndGetTransactions.isError ||
+            (transactionsFromIdsGivenByAi.length > 0 &&
+              transactionsFromIdsGivenByAi[0].description === 'ERROR') ? (
+              <NoTransactionItem />
+            ) : (
+              transactionsFromIdsGivenByAi.map((tx) => (
+                <TransactionFromAi
+                  key={tx.transactionId}
+                  amount={tx.amount}
+                  date={tx.date}
+                  description={tx.description}
+                  userNote={tx.userNote}
+                  category={tx.category}
+                  fromAccountId={tx.fromAccountId}
+                  ocrNumber={tx.ocrNumber}
+                  status={tx.status}
+                  toAccountId={tx.toAccountId}
+                  transactionId={tx.transactionId}
+                  type={tx.type}
+                />
+              ))
+            )}
+
             <div className="flex justify-center">
               <button
                 className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
