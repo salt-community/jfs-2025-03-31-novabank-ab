@@ -1,18 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { Application } from '@/types/Application'
 import {
   getApplications,
   approveApplication,
   rejectApplication,
 } from '@/api/application'
 import { sendRegisterApplication } from '@/api/application'
-import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 import { useAuth } from '@clerk/clerk-react'
+import type { ApplicantsResponse, ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 
 export function useApplications() {
   const { getToken } = useAuth()
 
-  return useQuery<Application[], Error>({
+  return useQuery<ApplicantsResponse, Error>({
     queryKey: ['applications'],
     queryFn: async () => {
       const token = await getToken()

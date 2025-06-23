@@ -1,7 +1,8 @@
 import type {
   aiSearchBarQuery,
   aiTransactionIds,
-  TransactionFromId,
+  Transaction,
+
 } from '@/types'
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -30,7 +31,7 @@ export async function sendTransacionSearchQuery(
 export async function sendListOfTransactionIds(
   ids: aiTransactionIds,
   token: string,
-): Promise<Array<TransactionFromId>> {
+): Promise<Array<Transaction>> {
   const response = await fetch(
     BASE_URL.concat('account/transaction/all-transactions-by-ids'),
     {

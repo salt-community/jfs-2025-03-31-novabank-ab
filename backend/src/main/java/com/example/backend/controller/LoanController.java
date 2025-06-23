@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,8 @@ public class LoanController {
             @ApiResponse(responseCode = "404", description = "Application not found"),
             @ApiResponse(responseCode = "500", description = "Unexpected error")
     })
-    @PostMapping("/from-application/{applicationId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{applicationId}")
     public ResponseEntity<Void> createLoanFromApplication(@PathVariable UUID applicationId) {
         Loan loan = loanService.createLoanFromApplication(applicationId);
         URI location = URI.create("/api/loan/" + loan.getId());
