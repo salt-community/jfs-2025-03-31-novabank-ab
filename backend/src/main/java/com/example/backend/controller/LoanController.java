@@ -85,7 +85,7 @@ public class LoanController {
             @RequestBody LoanApplicationRequestDto dto
     ) {
         User user = userService.getUser(jwt.getSubject());
-        Account account = accountService.getAccount(dto.accountId(), user.getId());
+        Account account = accountService.getAccountByAccountNo(dto.accountId(), user.getId());
         LoanApplication created = loanService.createLoanApplication(LoanApplicationRequestDto.toApplication(dto, user, account));
         URI location = URI.create("/api/loan/application/" + created.getId());
         return ResponseEntity.created(location).build();
