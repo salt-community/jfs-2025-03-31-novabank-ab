@@ -11,12 +11,57 @@ import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
 import type { TransactionFromId } from '@/types'
 import { NoTransactionItem } from '@/components/generic'
-import  searchicon from '@/assets/searchicon.svg'
+import searchicon from '@/assets/searchicon.svg'
+import { TransactionDetailsModal } from '@/components/transaction/TransactionDetailsModal'
 
 export default function TransactionsPage() {
+  ////////////////
+  const hardcodedTransactionFromId = {
+    transactionId: 'tx123',
+    fromAccountId: 'acc001',
+    toAccountId: 'acc002',
+    date: '2025-06-23',
+    amount: 150.75,
+    description: 'Grocery shopping',
+    userNote: 'Bought fruits and snacks',
+    ocrNumber: 'OCR123456',
+    type: 'debit',
+    category: 'Groceries',
+    status: 'CONFIRMED',
+  }
+  const hardcodedTransactionsFromAllTransactionsItemProps = {
+    description: 'Monthly salary',
+    theAccount: 'Salary Account',
+    accountNoType: 'credit',
+    amount: 3000.0,
+    time: '2025-06-01T08:00:00',
+    direction: 'in',
+  }
+  const hardcodedScheduledTransaction = {}
+
+  type TransactionModalData = {
+    transactionId?: string
+    fromAccountId?: string
+    toAccountId?: string
+    date?: string // used in TransactionFromId
+    scheduledDate?: string // used in ScheduledTransactionItemProps
+    amount: number
+    description: string
+    userNote?: string
+    ocrNumber?: string
+    type?: string // for TransactionFromId and Scheduled
+    accountNoType?: string // AllTransactionsItem and Scheduled
+    theAccount?: string
+    time?: string
+    direction?: 'in' | 'out'
+  }
+  ////////////////
   const { t } = useTranslation('accounts')
   const [page, setPage] = useState(0)
   const pageSize = 10
+
+  const [modalTransactionDetailShowing, setModalTransactionDetalShowing] =
+    useState<boolean>(false)
 
   const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
     useState<Array<TransactionFromId>>([])
@@ -113,7 +158,25 @@ export default function TransactionsPage() {
 
   return (
     <div>
+      {modalTransactionDetailShowing && (
+        <TransactionDetailsModal
+          {...hardcodedTransactionFromId}
+          onClose={() => setModalTransactionDetalShowing(false)}
+        />
+      )}
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
+      <button
+        onClick={() => {
+          setModalTransactionDetalShowing((prev) => !prev)
+        }}
+        className="bg-amber-300"
+      >
+        Test Transaction From Id
+      </button>
+      <button>Test Transaction AllTransactionsItemProps</button>
+      <button className="bg-red-400">
+        Test Transaction Scheduled Transaction
+      </button>
       <div className="flex justify-beginning mb-5">
         <div
           className={`${
@@ -174,12 +237,8 @@ export default function TransactionsPage() {
             }
             value={aiSearchBarInputContent}
           />
-            <img
-            src={ searchicon }
-            alt="Search"
-            className=" "
-          />
-          </div>
+          <img src={searchicon} alt="Search" className=" " />
+        </div>
       </div>
 
       <div className="px-5 shadow-sm">
