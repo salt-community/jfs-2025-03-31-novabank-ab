@@ -1,7 +1,7 @@
 import { SignInButton, SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
-import signinicon from '../../assets/signinicon.svg'
+import loginiconblack from '../../assets/loginiconblack.svg'
 import novabankicon from '../../assets/NovaBankTransparentLogo.png'
 import { useTranslation } from 'react-i18next'
 
@@ -18,7 +18,7 @@ function RedirectOnSignIn() {
   return null
 }
 
-export default function Header() {
+export function Header() {
   const { t } = useTranslation('sidebar')
   const navigate = useNavigate()
   return (
@@ -32,9 +32,9 @@ export default function Header() {
         />
         <SignedOut>
           <SignInButton mode="modal">
-            <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#FFB20F] text-white hover:cursor-pointer underline-offset-5 hover:bg-[#F5A700] hover:opacity-100">
+            <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#FFB20F] text-black hover:cursor-pointer underline-offset-5 hover:bg-[#F5A700] hover:opacity-100">
               {t('signIn')}
-              <img src={signinicon} />
+              <img src={loginiconblack} />
             </button>
           </SignInButton>
         </SignedOut>

@@ -15,14 +15,12 @@ import {
   yellowtransfericon,
   yellowsettingsicon,
 } from '@/assets/icons'
-import UserBottomNav from './UserBottomNav'
-import UserTopNav from './UserTopNav'
 
 type Props = {
   admin: boolean
 }
 
-export default function SideBar({ admin }: Props) {
+export function SideBar({ admin }: Props) {
   const { t } = useTranslation('sidebar')
 
   const navigate = useNavigate()
@@ -208,13 +206,5 @@ export default function SideBar({ admin }: Props) {
     </aside>
   )
 
-  return admin ? (
-    adminSideBar
-  ) : (
-    <>
-      <UserTopNav />
-      {userSideBar}
-      <UserBottomNav />
-    </>
-  )
+  return admin ? adminSideBar : userSideBar
 }

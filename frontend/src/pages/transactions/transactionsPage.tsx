@@ -9,7 +9,7 @@ import Spinner from '@/components/generic/Spinner'
 import { TransactionItem } from '@/components/generic/transaction-items/TransactionItem'
 import type { Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
-import searchicon from '@/assets/searchicon.svg'
+import { searchicon } from '@/assets/icons'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -30,24 +30,32 @@ export default function TransactionsPage() {
 
   const { data, isLoading, isError } = useGetAllTransactions(page, pageSize)
 
-  if (isError || !data) {
+  // Provide fallback array to always call hook safely
+  const transactionsData = data?.content ?? []
+
+  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
+    transactionsFromIdsGivenByAi,
+  )
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
+    transactionsData,
+  )
+
+  if (isError) {
     return (
       <div className="p-8 text-red-500">{t('failedToLoadTransactions')}</div>
     )
   }
 
-  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
-    transactionsFromIdsGivenByAi,
-  )
-
-  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
-    data.content,
-  )
-
   if (isLoading || aiLoading || allLoading) return <Spinner />
 
+  // Safe pagination fallbacks
+  const currentPage = data?.number ?? 0
+  const totalPages = data?.totalPages ?? 1
+  const isFirstPage = data?.first ?? true
+  const isLastPage = data?.last ?? true
+
   return (
-    <div>
+    <div className="px-4 sm:px-8 py-6 space-y-12">
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
       <div className="flex justify-beginning mb-5">
         <div
@@ -121,7 +129,9 @@ export default function TransactionsPage() {
             <div
               className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
             >
-              <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
+              <h1 className="text-2xl mt-5 mb-3">
+                {t('resultsFromYourSearch')}
+              </h1>
               {sendQueryToAi.isError ||
               sendIdsAndGetTransactions.isError ||
               (transactionsFromIdsGivenByAi.length > 0 &&
@@ -148,7 +158,7 @@ export default function TransactionsPage() {
 
               <div className="flex justify-center">
                 <button
-                  className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
+                  className="bg-[#FFB20F] mt-5 mb-5 hover:bg-[#F5A700] text-black shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
                   onClick={() => {
                     setHeightAiDiv('max-h-0')
                     setTimeout(() => {
@@ -163,38 +173,40 @@ export default function TransactionsPage() {
           )
         )}
       </div>
-      <h1 className="text-2xl mt-3 mb-3">{t('allTransactions')}</h1>
-      {allEntries.length === 0 ? (
-        <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
-      ) : (
-        allEntries.map((tx) => (
-          <TransactionItem
-            key={tx.key}
-            description={tx.description}
-            theAccount={tx.theAccount}
-            accountNoType={tx.accountNoType}
-            amount={tx.amount}
-            time={tx.time}
-            direction={tx.direction}
-            category={tx.category}
-          />
-        ))
-      )}
+      <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
+      <div className="px-5 border-1 border-gray-100 shadow-sm p-1">
+        {allEntries.length === 0 ? (
+          <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
+        ) : (
+          allEntries.map((tx) => (
+            <TransactionItem
+              key={tx.key}
+              description={tx.description}
+              theAccount={tx.theAccount}
+              accountNoType={tx.accountNoType}
+              amount={tx.amount}
+              time={tx.time}
+              direction={tx.direction}
+              category={tx.category}
+            />
+          ))
+        )}
+      </div>
 
-      <div className="flex justify-between items-center px-5 py-4">
+      <div className="flex justify-between items-center mt-5">
         <button
-          className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50"
-          disabled={data.first}
+          className="w-20 disabled:cursor-not-allowed cursor-pointer py-2 rounded bg-[#FFB20F] hover:bg-[#F5A700] disabled:opacity-50"
+          disabled={isFirstPage}
           onClick={() => setPage((p) => Math.max(p - 1, 0))}
         >
           {t('previous')}
         </button>
-        <span className="text-sm text-gray-600">
-          {t('page')} {data.number + 1} / {data.totalPages}
+        <span className="text-sm text-black">
+          {t('page')} {currentPage + 1} / {totalPages}
         </span>
         <button
-          className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50"
-          disabled={data.last}
+          className="w-20 disabled:cursor-not-allowed cursor-pointer py-2 rounded bg-[#FFB20F] hover:bg-[#F5A700] w-20 disabled:opacity-50"
+          disabled={isLastPage}
           onClick={() => setPage((p) => p + 1)}
         >
           {t('next')}

@@ -28,9 +28,11 @@ export default function DashboardPage() {
 
   return (
     <>
-      <h1 className="text-3xl mb-20">{t('admin.dashboard')}</h1>
-      <AccountGallery bankAccounts={accounts} />
-      <TransactionList transactions={transactions?.content ?? []} />
+      <div className="px-4 sm:px-8 py-6 space-y-12">
+        <h1 className="text-3xl mb-20">{t('admin.dashboard')}</h1>
+        <AccountGallery bankAccounts={accounts} />
+        <TransactionList transactions={transactions?.content ?? []} />
+      </div>
     </>
   )
 }
