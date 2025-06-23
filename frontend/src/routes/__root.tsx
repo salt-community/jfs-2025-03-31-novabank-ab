@@ -1,11 +1,15 @@
 import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router'
 import { SignedIn, SignedOut, useAuth, useUser } from '@clerk/clerk-react'
-import Header from '@/components/generic/Header'
-import SideBar from '@/components/generic/SideBar'
 import { useGetUserSettings } from '@/hooks'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { login } from '@/api'
+import {
+  Header,
+  SideBar,
+  UserBottomNav,
+  UserTopNav,
+} from '@/components/generic'
 
 export const Route = createRootRoute({
   component: () => {
@@ -60,10 +64,31 @@ export const Route = createRootRoute({
     return (
       <div className="flex min-h-screen font-lato">
         <SignedIn>
-          <aside className="w-1/5 h-screen">
-            <SideBar admin={isAdmin} />
-          </aside>
-          <main className="flex-1 my-20 mx-30 h-full bg-white text-black">
+          {!isAdmin && (
+            <>
+              <div className="md:hidden fixed top-0 left-0 right-0 h-[60px] z-50">
+                <UserTopNav />
+              </div>
+              <div className="md:hidden fixed bottom-0 left-0 right-0 h-[60px] z-50">
+                <UserBottomNav />
+              </div>
+            </>
+          )}
+
+          <div className="hidden md:flex">
+            <aside className="w-[70px] lg:w-70 h-screen">
+              <SideBar admin={isAdmin} />
+            </aside>
+          </div>
+          {/* <main className="flex-1 my-20 mx-30 h-full bg-white text-black"> */}
+          <main
+            className={`flex-1 overflow-y-auto text-black px-4 lg:px-10
+             pt-[60px] pb-[60px] md:pt-0 md:pb-0 ${
+               isAdmin
+                 ? 'ml-[70px] lg:ml-70'
+                 : 'mt-[30px] mb-[60px] md:mt-0 md:mb-0 md:ml-[70px] lg:ml-70'
+             }`}
+          >
             <Outlet />
           </main>
         </SignedIn>
