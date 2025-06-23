@@ -1,1 +1,13 @@
-{ "loanTitle": "Bolån – allt om bostadslån och boräntor." }
+{
+  "loanTitle": "Bolån – allt om bostadslån och boräntor",
+  "individualInterest": "Individuell ränta som du själv kan påverka",
+  "personalAdvice": "Personlig rådgivning och service",
+  "increasedSecurity": "Ökad trygghet med bolåneskydd, försäkringar och juridiska tjänster",
+  "justNow": "Just nu! 0 % i ränta och 0 kr i uppläggningsavgift på överbryggningslån.",
+  "applyForLoanPromise": "Ansök om lånelöfte",
+  "loanContextInfo": "Här hittar du allt du behöver veta när du vill ansöka om bolån, ändra ditt bolån eller flytta ditt bolån till oss.",
+  "loanContextInfo2": "Du hittar också information om våra boräntor, hur bolån fungerar och vårt gröna bolån.",
+  "loanContextInfo3": "Behöver du råd eller få svar på dina frågor om bolån så finns vår kundservice på telefon och kan hjälpa dig alla vardagar mellan klockan 8 och 18.",
+  "threeMonthsAgoInfo": "Bolån 3 månader snittränta (maj)",
+  "threeMonthsListedRate": "Bolån 3 månader listränta"
+}
