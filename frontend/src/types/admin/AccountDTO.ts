@@ -1,4 +1,4 @@
-export type BankAccountType = 'PERSONAL' | 'BUSINESS'
+export type BankAccountType = 'PERSONAL' | 'SAVINGS'
 export type AccountStatus = 'ACTIVE' | 'SUSPENDED'
 
 export interface AccountDTO {
@@ -8,4 +8,8 @@ export interface AccountDTO {
   createdAt: string // ISO date
   status: AccountStatus
   accountNumber: string
+}
+
+export type AccountsResponse = {
+  accounts: AccountDTO[]
 }

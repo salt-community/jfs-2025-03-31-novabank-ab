@@ -17,6 +17,7 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.UserSettingsRepository;
 import com.example.backend.security.ClerkService;
 import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -146,7 +148,6 @@ public class UserService {
         if(userApplicationRepository.existsByPhoneNumber(userApplication.getPhoneNumber())){
             throw new UserAlreadyExistsException("User with this phone number already exists");
         }
-
         return userApplicationRepository.save(userApplication);
     }
 

@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record LoanApplicationRequestDto(
-        UUID accountId,
+        String accountId,
         double amount,
         String note,
         int requestedMonths
 ) {
-    private static final double MIN_RATE = 1.7;
+    private static final double MIN_RATE = 2.4;
     private static final double MAX_RATE = 5.0;
 
     public static LoanApplication toApplication(LoanApplicationRequestDto dto, User user, Account account) {
