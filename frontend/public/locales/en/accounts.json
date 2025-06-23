@@ -25,9 +25,9 @@
   "pleaseSelectAValidAmount": "Please select a valid amount",
   "transactionDateIsRequired": "Transaction date is required",
   "otherAccount": "Other account",
-  "amountExceedsBalance" : "Insufficient balance for this transaction",
-  "ocrIsRequired" : "OCR is required for Bankgiro and Plusgiro",
-  "ocrOnlyDigits" : "OCR must contain digits only (0–9)",
+  "amountExceedsBalance": "Insufficient balance for this transaction",
+  "ocrIsRequired": "OCR is required for Bankgiro and Plusgiro",
+  "ocrOnlyDigits": "OCR must contain digits only (0–9)",
   "processing": "Processing",
   "submit": "Submit",
   "notes": "Notes",
@@ -62,5 +62,8 @@
   "cancelTransaction": "Cancel transaction",
   "totalBalanceLowerCase": "total balance",
   "recentTransactions": "Recent transactions",
-  "seeAll": "See all"
+  "seeAll": "See all",
+  "aiAssistant": "AI Assistant",
+  "whatDoYouWantToFindToday": "What transaction are you looking for?",
+  "resultsFromYourSearch": "Results from your search"
 }

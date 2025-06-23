@@ -1,0 +1,77 @@
+'use client'
+
+import { Bar, BarChart, XAxis, YAxis } from 'recharts'
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
+
+export const description = 'A mixed bar chart'
+
+const chartData = [
+  { browser: 'personal', accounts: 275, fill: 'var(--color-personal)' },
+  { browser: 'savings', accounts: 200, fill: 'var(--color-savings)' },
+]
+const chartConfig = {
+  accounts: {
+    label: 'Accounts',
+  },
+  personal: {
+    label: 'Personal',
+    color: 'var(--chart-1)',
+  },
+  savings: {
+    label: 'Savings',
+    color: 'var(--chart-2)',
+  },
+} satisfies ChartConfig
+
+export function ChartBarMixed() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Account types</CardTitle>
+        <CardDescription>Account type distribution</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig}>
+          <BarChart
+            accessibilityLayer
+            data={chartData}
+            layout="vertical"
+            margin={{
+              left: 0,
+            }}
+          >
+            <YAxis
+              dataKey="browser"
+              type="category"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) =>
+                chartConfig[value as keyof typeof chartConfig]?.label
+              }
+            />
+            <XAxis dataKey="accounts" type="number" hide />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="accounts" layout="vertical" radius={5} />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  )
+}
