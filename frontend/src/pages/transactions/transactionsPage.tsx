@@ -129,7 +129,9 @@ export default function TransactionsPage() {
             <div
               className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
             >
-              <h1 className="text-2xl">{t('resultsFromYourSearch')}</h1>
+              <h1 className="text-2xl mt-5 mb-3">
+                {t('resultsFromYourSearch')}
+              </h1>
               {sendQueryToAi.isError ||
               sendIdsAndGetTransactions.isError ||
               (transactionsFromIdsGivenByAi.length > 0 &&
@@ -156,7 +158,7 @@ export default function TransactionsPage() {
 
               <div className="flex justify-center">
                 <button
-                  className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
+                  className="bg-[#FFB20F] mt-5 mb-5 hover:bg-[#F5A700] text-black shadow-sm px-5 py-2 rounded hover:cursor-pointer transition-colors w-[10vw]"
                   onClick={() => {
                     setHeightAiDiv('max-h-0')
                     setTimeout(() => {
@@ -171,37 +173,39 @@ export default function TransactionsPage() {
           )
         )}
       </div>
-      <h1 className="text-2xl mt-3 mb-3">{t('allTransactions')}</h1>
-      {allEntries.length === 0 ? (
-        <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
-      ) : (
-        allEntries.map((tx) => (
-          <TransactionItem
-            key={tx.key}
-            description={tx.description}
-            theAccount={tx.theAccount}
-            accountNoType={tx.accountNoType}
-            amount={tx.amount}
-            time={tx.time}
-            direction={tx.direction}
-            category={tx.category}
-          />
-        ))
-      )}
+      <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
+      <div className="px-5 border-1 border-gray-100 shadow-sm p-1">
+        {allEntries.length === 0 ? (
+          <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
+        ) : (
+          allEntries.map((tx) => (
+            <TransactionItem
+              key={tx.key}
+              description={tx.description}
+              theAccount={tx.theAccount}
+              accountNoType={tx.accountNoType}
+              amount={tx.amount}
+              time={tx.time}
+              direction={tx.direction}
+              category={tx.category}
+            />
+          ))
+        )}
+      </div>
 
-      <div className="flex justify-between items-center px-5 py-4">
+      <div className="flex justify-between items-center mt-5">
         <button
-          className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50"
+          className="w-20 disabled:cursor-not-allowed cursor-pointer py-2 rounded bg-[#FFB20F] hover:bg-[#F5A700] disabled:opacity-50"
           disabled={isFirstPage}
           onClick={() => setPage((p) => Math.max(p - 1, 0))}
         >
           {t('previous')}
         </button>
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-black">
           {t('page')} {currentPage + 1} / {totalPages}
         </span>
         <button
-          className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50"
+          className="w-20 disabled:cursor-not-allowed cursor-pointer py-2 rounded bg-[#FFB20F] hover:bg-[#F5A700] w-20 disabled:opacity-50"
           disabled={isLastPage}
           onClick={() => setPage((p) => p + 1)}
         >

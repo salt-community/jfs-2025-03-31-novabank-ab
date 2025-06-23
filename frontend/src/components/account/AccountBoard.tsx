@@ -51,7 +51,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           <p className="text-4xl font-bold">{account.balance}</p>
           <button
             onClick={() => navigate({ to: '/transfer' })}
-            className="mt-4 cursor-pointer px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-md shadow"
+            className="mt-4 cursor-pointer px-4 py-2 bg-[#FFB20F] hover:bg-[#F5A700] rounded-md text-md shadow"
           >
             + {t('newTransfer')}
           </button>
