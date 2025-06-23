@@ -31,16 +31,18 @@ export function AdminTransactionsTable({
     <>
       <Table>
         <TableCaption>A list of all transactions.</TableCaption>
-        <TableHeader>
+        <TableHeader className="bg-amber-300 ">
           <TableRow>
-            <TableHead className="w-[100px]">Transaction id</TableHead>
-            <TableHead>From</TableHead>
-            <TableHead>To</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>DateTime</TableHead>
+            <TableHead className="w-[100px] font-black">
+              Transaction id
+            </TableHead>
+            <TableHead className="font-black">From</TableHead>
+            <TableHead className="font-black">To</TableHead>
+            <TableHead className="text-right font-black">Amount</TableHead>
+            <TableHead className="font-black">Type</TableHead>
+            <TableHead className="font-black">Category</TableHead>
+            <TableHead className="font-black">Status</TableHead>
+            <TableHead className="font-black">DateTime</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
