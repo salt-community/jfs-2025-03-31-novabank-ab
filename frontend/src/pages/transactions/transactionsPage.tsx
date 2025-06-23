@@ -30,21 +30,29 @@ export default function TransactionsPage() {
 
   const { data, isLoading, isError } = useGetAllTransactions(page, pageSize)
 
-  if (isError || !data) {
+  // Provide fallback array to always call hook safely
+  const transactionsData = data?.content ?? []
+
+  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
+    transactionsFromIdsGivenByAi,
+  )
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
+    transactionsData,
+  )
+
+  if (isError) {
     return (
       <div className="p-8 text-red-500">{t('failedToLoadTransactions')}</div>
     )
   }
 
-  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
-    transactionsFromIdsGivenByAi,
-  )
-
-  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
-    data.content,
-  )
-
   if (isLoading || aiLoading || allLoading) return <Spinner />
+
+  // Safe pagination fallbacks
+  const currentPage = data?.number ?? 0
+  const totalPages = data?.totalPages ?? 1
+  const isFirstPage = data?.first ?? true
+  const isLastPage = data?.last ?? true
 
   return (
     <div>
@@ -184,17 +192,17 @@ export default function TransactionsPage() {
       <div className="flex justify-between items-center px-5 py-4">
         <button
           className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50"
-          disabled={data.first}
+          disabled={isFirstPage}
           onClick={() => setPage((p) => Math.max(p - 1, 0))}
         >
           {t('previous')}
         </button>
         <span className="text-sm text-gray-600">
-          {t('page')} {data.number + 1} / {data.totalPages}
+          {t('page')} {currentPage + 1} / {totalPages}
         </span>
         <button
           className="px-4 py-2 rounded bg-gray-200 disabled:opacity-50"
-          disabled={data.last}
+          disabled={isLastPage}
           onClick={() => setPage((p) => p + 1)}
         >
           {t('next')}
