@@ -112,9 +112,10 @@ export default function SideBar({ admin }: Props) {
           <span className="hidden lg:inline">{t('user.settings')}</span>
         </a>
       </div>
-      <div className=" mb-10 mx-auto">
+
+      <div className="flex flex-row gap-8 mb-10 mx-auto">
         <SignOutButton>
-          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
+          <a className="flex flex-row gap-8 hover:cursor-pointer opacity-100 hover:opacity-70 mx-auto">
             <img src={signouticon} />
             {t('signOut')}
           </a>

@@ -21,7 +21,7 @@ export const LabeledInput: React.FC<Props> = ({
   placeholder,
 }) => (
   <div>
-    <label htmlFor={id} className="block text-sm font-medium mb-1">
+    <label htmlFor={id} className="block text-sm mb-1">
       {label}
     </label>
     <input
@@ -32,7 +32,7 @@ export const LabeledInput: React.FC<Props> = ({
       onChange={onChange}
       required={required}
       placeholder={placeholder}
-      className={`w-full px-3 py-2 border rounded focus:outline-none focus:ring ${
+      className={`w-full px-2 placeholder-opacity-50 placeholder-gray-400 py-2 border rounded focus:outline-none focus:ring ${
         error ? 'border-red-500' : ''
       }`}
     />
