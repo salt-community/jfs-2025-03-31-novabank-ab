@@ -37,7 +37,16 @@ export default function TransactionsPage() {
     time: '2025-06-01T08:00:00',
     direction: 'in',
   }
-  const hardcodedScheduledTransaction = {}
+  const hardcodedScheduledTransaction = {
+    transactionId: 'txn_123456',
+    fromAccountId: 'acc_001',
+    toAccountId: 'acc_002',
+    amount: 1250.5,
+    scheduledDate: '2025-07-01',
+    description: 'Monthly Rent Payment',
+    ocrNumber: '9876543210',
+    accountNoType: 'checking',
+  }
 
   type TransactionModalData = {
     transactionId?: string
@@ -160,7 +169,7 @@ export default function TransactionsPage() {
     <div>
       {modalTransactionDetailShowing && (
         <TransactionDetailsModal
-          {...hardcodedTransactionFromId}
+          {...hardcodedScheduledTransaction}
           onClose={() => setModalTransactionDetalShowing(false)}
         />
       )}
@@ -172,10 +181,6 @@ export default function TransactionsPage() {
         className="bg-amber-300"
       >
         Test Transaction From Id
-      </button>
-      <button>Test Transaction AllTransactionsItemProps</button>
-      <button className="bg-red-400">
-        Test Transaction Scheduled Transaction
       </button>
       <div className="flex justify-beginning mb-5">
         <div

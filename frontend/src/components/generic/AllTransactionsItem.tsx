@@ -1,4 +1,4 @@
-type AllTransactionsItemProps = {
+export type AllTransactionsItemProps = {
   description: string
   theAccount: string | undefined
   accountNoType: string

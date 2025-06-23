@@ -12,7 +12,7 @@ type TransactionModalData = {
   accountNoType?: string // AllTransactionsItem and Scheduled
   theAccount?: string
   time?: string
-  direction?: 'in' | 'out'
+  direction?: string
   category?: string
   status?: string
   onClose?: () => void
@@ -108,6 +108,14 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
                 <p className="font-semibold opacity-50">{type}</p>
               </div>
             )}
+            {accountNoType && (
+              <div>
+                <p>
+                  <span className="text-md">Type</span>
+                </p>
+                <p className="font-semibold opacity-50">{accountNoType}</p>
+              </div>
+            )}
           </div>
           <hr className="mt-3 mb-3" />
           {description && (
@@ -151,12 +159,22 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
               <p className="font-semibold">{toAccountId}</p>
             </div>
           )}
+          {theAccount && (
+            <div>
+              <p>
+                <span className="text-md">Account</span>
+              </p>
+              <p className="font-semibold">{theAccount}</p>
+            </div>
+          )}
           <hr className="mt-3 mb-3" />
           {scheduledDate && (
-            <p>
-              <span className="font-medium">Scheduled Date:</span>{' '}
-              {scheduledDate}
-            </p>
+            <div>
+              <p>
+                <span className="font-medium">Scheduled Date</span>
+              </p>
+              <p className="font-semibold">{scheduledDate}</p>
+            </div>
           )}
           {ocrNumber && (
             <div>
@@ -166,22 +184,16 @@ export const TransactionDetailsModal: React.FC<TransactionModalData> = ({
               <p className="font-semibold">{ocrNumber}</p>
             </div>
           )}
-          {accountNoType && (
-            <p>
-              <span className="font-medium">Account No Type:</span>{' '}
-              {accountNoType}
-            </p>
-          )}
-          {theAccount && (
-            <p>
-              <span className="font-medium">Account:</span> {theAccount}
-            </p>
-          )}
 
           {direction && (
-            <p>
-              <span className="font-medium">Direction:</span> {direction}
-            </p>
+            <div>
+              <p>
+                <span className="text-md">Direction:</span>
+                <p className="font-semibold">
+                  {direction === 'in' ? 'Incoming' : 'Outgoing'}
+                </p>
+              </p>
+            </div>
           )}
         </div>
 
