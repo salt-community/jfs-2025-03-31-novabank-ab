@@ -9,10 +9,12 @@ import {
 import Spinner from '@/components/generic/Spinner'
 import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
-import type { TransactionFromId } from '@/types'
+import type { Account, TransactionFromId } from '@/types'
+import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
   const [page, setPage] = useState(0)
   const pageSize = 10
 
@@ -60,10 +62,14 @@ export default function TransactionsPage() {
     const fromAccount = accounts.find((a) => a.id === tx.fromAccountId)
     const toAccount = accounts.find((a) => a.id === tx.toAccountId)
 
-    if (fromIsMine && toIsMine) {
-      // Internal transfer, show both sides
+    const isRelevant =
+      !selectedAccount ||
+      tx.fromAccountId === selectedAccount.id ||
+      tx.toAccountId === selectedAccount.id
 
-      // Outgoing from "from" account
+    if (!isRelevant) return // skip this transaction
+
+    if (fromIsMine && toIsMine) {
       transactionEntries.push({
         key: tx.transactionId + '-out',
         description: tx.description,
@@ -74,7 +80,6 @@ export default function TransactionsPage() {
         theAccount: fromAccount?.type,
       })
 
-      // Incoming to "to" account
       transactionEntries.push({
         key: tx.transactionId + '-in',
         description: tx.description,
@@ -85,7 +90,6 @@ export default function TransactionsPage() {
         theAccount: toAccount?.type,
       })
     } else if (fromIsMine) {
-      // Outgoing from user's account to external
       transactionEntries.push({
         key: tx.transactionId + '-out',
         description: tx.description,
@@ -96,7 +100,6 @@ export default function TransactionsPage() {
         theAccount: fromAccount?.type,
       })
     } else if (toIsMine) {
-      // Incoming to user's account from external
       transactionEntries.push({
         key: tx.transactionId + '-in',
         description: tx.description,
@@ -196,6 +199,10 @@ export default function TransactionsPage() {
             <h1 className="text-2xl mt-3 mb-3">{t('allTransactions')}</h1>
           </div>
         )}
+        <AccountFilterDropdown
+          selectedAccount={selectedAccount}
+          setSelectedAccount={setSelectedAccount}
+        />
         {transactionEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
