@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.loanDto.request.LoanApplicationRequestDto;
 import com.example.backend.dto.loanDto.response.ListLoanResponseDto;
+import com.example.backend.dto.loanDto.response.LoanApplicationResponseDto;
 import com.example.backend.dto.loanDto.response.LoanResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.Loan;
@@ -84,7 +85,7 @@ public class LoanController {
             @RequestBody LoanApplicationRequestDto dto
     ) {
         User user = userService.getUser(jwt.getSubject());
-        Account account = accountService.getAccountByAccountNo(dto.accountNo(), user.getId());
+        Account account = accountService.getAccountByAccountNo(dto.accountId(), user.getId());
         LoanApplication created = loanService.createLoanApplication(LoanApplicationRequestDto.toApplication(dto, user, account));
         URI location = URI.create("/api/loan/application/" + created.getId());
         return ResponseEntity.created(location).build();
@@ -96,7 +97,7 @@ public class LoanController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     @GetMapping("/application/{id}")
-    public ResponseEntity<LoanApplication> getApplication(@PathVariable UUID id) {
-        return ResponseEntity.ok(loanService.getLoanApplicationById(id));
+    public ResponseEntity<LoanApplicationResponseDto> getApplication(@PathVariable UUID id) {
+        return ResponseEntity.ok(LoanApplicationResponseDto.fromApplication(loanService.getLoanApplicationById(id)));
     }
 }
