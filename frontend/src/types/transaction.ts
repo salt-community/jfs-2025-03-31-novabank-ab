@@ -10,7 +10,9 @@ export interface Transaction {
   userNote: string
   ocrNumber: string
   type: TransactionType
-  status: string | null
+  category: string
+
+  status: string
 }
 
 export interface Sort {
