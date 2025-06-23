@@ -24,16 +24,17 @@ export default function ApplicantStatusCards() {
   const lastMonthYear = thisMonthNum === 0 ? thisMonthYear - 1 : thisMonthYear
 
   const thisMonth = data.filter((d) => {
-    const date =
-      d.updatedAt instanceof Date ? d.updatedAt : new Date(d.updatedAt)
+    const date = new Date(d.updatedAt)
     return (
       date.getMonth() === thisMonthNum && date.getFullYear() === thisMonthYear
     )
   })
 
+  console.log('this month', thisMonth)
+
   const lastMonth = data.filter((d) => {
-    const date =
-      d.updatedAt instanceof Date ? d.updatedAt : new Date(d.updatedAt)
+    const date = new Date(d.updatedAt)
+
     return (
       date.getMonth() === lastMonthNum && date.getFullYear() === lastMonthYear
     )
