@@ -15,13 +15,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useAdminAccounts } from '@/hooks/useAdminAllAccounts'
 
 export const description = 'A mixed bar chart'
 
-const chartData = [
-  { browser: 'personal', accounts: 275, fill: 'var(--color-personal)' },
-  { browser: 'savings', accounts: 200, fill: 'var(--color-savings)' },
-]
 const chartConfig = {
   accounts: {
     label: 'Accounts',
@@ -37,8 +34,28 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function ChartBarMixed() {
+  const { data, error, isLoading } = useAdminAccounts()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div className="text-red-500">Error: {error.message}</div>
+  }
+  if (!data) {
+    return <div>No data found.</div>
+  }
+
+  const savings = data.accounts.filter((a) => (a.type = 'SAVINGS')).length
+  const personal = data.accounts.filter((a) => (a.type = 'PERSONAL')).length
+
+  const chartData = [
+    { browser: 'personal', accounts: personal, fill: 'var(--color-personal)' },
+    { browser: 'savings', accounts: savings, fill: 'var(--color-savings)' },
+  ]
+
   return (
-    <Card>
+    <Card className="w-2xl">
       <CardHeader>
         <CardTitle>Account types</CardTitle>
         <CardDescription>Account type distribution</CardDescription>

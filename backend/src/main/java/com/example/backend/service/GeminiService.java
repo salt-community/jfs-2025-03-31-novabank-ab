@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.geminiDto.request.TransactionSearchInputDto;
 import com.example.backend.dto.geminiDto.response.GeminiResponseDto;
 import com.example.backend.model.Transaction;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +56,8 @@ public class GeminiService {
                 Consider the user's intent and infer context from descriptions or notes.
                 
                 Return the IDs as a plain list, comma-separated. No explanation.
+                
+                If the query does not make sense, return an empty list. No explanation
                 
                 Query: %s
                 

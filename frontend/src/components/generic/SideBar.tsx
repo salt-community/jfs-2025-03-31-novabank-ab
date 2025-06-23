@@ -15,14 +15,12 @@ import {
   yellowtransfericon,
   yellowsettingsicon,
 } from '@/assets/icons'
-import UserBottomNav from './UserBottomNav'
-import UserTopNav from './UserTopNav'
 
 type Props = {
   admin: boolean
 }
 
-export default function SideBar({ admin }: Props) {
+export function SideBar({ admin }: Props) {
   const { t } = useTranslation('sidebar')
 
   const navigate = useNavigate()
@@ -30,15 +28,15 @@ export default function SideBar({ admin }: Props) {
   const isActive = (path: string) => location.pathname.startsWith(path)
 
   const userSideBar = (
-    <aside className="hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
+    <aside className=" w-full items-center hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
-          className="w-10 h-10 xl:h-20 xl:w-20 mb-15 mx-auto hover:cursor-pointer"
+          className="w-10 h-10 xl:h-20 xl:w-20 mb-15  hover:cursor-pointer"
         />
       </a>
 
-      <div className="flex gap-8 flex-col list-none mx-auto ">
+      <div className="flex gap-8 flex-col list-none  ">
         <a
           onClick={() => navigate({ to: '/dashboard' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
@@ -112,9 +110,9 @@ export default function SideBar({ admin }: Props) {
           <span className="hidden lg:inline">{t('user.settings')}</span>
         </a>
       </div>
-      <div className=" mb-10 mx-auto">
+      <div className=" mb-10 w-[122px]  ">
         <SignOutButton>
-          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
+          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70">
             <img src={signouticon} />
             {t('signOut')}
           </a>
@@ -127,11 +125,11 @@ export default function SideBar({ admin }: Props) {
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
-          className="w-10 h-10 xl:h-20 xl:w-20 mb-15 mx-auto hover:cursor-pointer"
+          className="w-10 h-10 xl:h-20 xl:w-20 mb-15  hover:cursor-pointer"
         />
       </a>
 
-      <div className="flex gap-8 flex-col list-none mx-auto">
+      <div className="flex gap-8 flex-col list-none ">
         <a
           onClick={() => navigate({ to: '/admin/dashboard' })}
           className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
@@ -197,9 +195,9 @@ export default function SideBar({ admin }: Props) {
           {t('admin.applications')}
         </a>
       </div>
-      <div className="mt-30">
+      <div className="mb-10 w-[122px]">
         <SignOutButton>
-          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 mx-auto">
+          <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ">
             <img src={signouticon} />
             {t('signOut')}
           </a>
@@ -208,13 +206,5 @@ export default function SideBar({ admin }: Props) {
     </aside>
   )
 
-  return admin ? (
-    adminSideBar
-  ) : (
-    <>
-      <UserTopNav />
-      {userSideBar}
-      <UserBottomNav />
-    </>
-  )
+  return admin ? adminSideBar : userSideBar
 }

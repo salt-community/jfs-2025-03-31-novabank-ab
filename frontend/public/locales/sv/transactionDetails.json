@@ -1,0 +1,18 @@
+{
+  "transactionDetails": "Transaktionsdetaljer",
+  "id": "ID",
+  "amount": "Belopp",
+  "type": "Typ",
+  "description": "Beskrivning",
+  "category": "Kategori",
+  "note": "Anteckning",
+  "fromAccount": "Från konto",
+  "toAccount": "Till konto",
+  "account": "Konto",
+  "scheduledDate": "Planerat datum",
+  "ocrNumber": "OCR-nummer",
+  "direction": "Riktning",
+  "incoming": "Ingående",
+  "outgoing": "Utgående",
+  "close": "Stäng"
+}
