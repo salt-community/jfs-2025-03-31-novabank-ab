@@ -42,6 +42,17 @@ public class AccountService {
         return account;
     }
 
+    public Account getAccountByAccountNo(String accountNo, String userId) {
+        Account account = accountRepository.findByAccountNumber(accountNo)
+                .orElseThrow(AccountNotFoundException::new);
+
+        if (!Objects.equals(account.getUser().getId(), userId)) {
+            throw new UserUnauthorizedException("User not connected to account");
+        }
+
+        return account;
+    }
+
     public List<Account> getAllUserAccounts(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
