@@ -158,7 +158,10 @@ public class TransactionService {
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
-    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable) {
+    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId) {
+        if (accountId != null) {
+          return (Page<UnifiedTransactionResponseDto>) getAllTransactionsByAccount(accountId,userId);
+        }
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
         Page<Transaction> transactions = transactionRepository

@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.geminiDto.request.TransactionSearchInputDto;
 import com.example.backend.dto.geminiDto.response.GeminiResponseDto;
 import com.example.backend.model.Transaction;
 import lombok.RequiredArgsConstructor;

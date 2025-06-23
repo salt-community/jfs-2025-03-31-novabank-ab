@@ -12,16 +12,20 @@ type TransactionListProps = {
 export function TransactionList({ transactions }: TransactionListProps) {
   const { t } = useTranslation('accounts')
   const navigate = useNavigate()
-  const { entries, isLoading } = useFetchEntries(transactions)
+
+  // Always call with a fallback array
+  const { entries = [], isLoading } = useFetchEntries(transactions)
 
   if (isLoading) return <Spinner />
 
-  // Sort by date descending and take latest 3
-  entries.sort(
-    (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime(),
-  )
+  // Defensive sort: use timestamps, handle invalid/missing dates
+  const sortedEntries = [...entries].sort((a, b) => {
+    const timeA = new Date(a?.time ?? 0).getTime()
+    const timeB = new Date(b?.time ?? 0).getTime()
+    return timeB - timeA
+  })
 
-  const latestThree = entries.slice(0, 3)
+  const latestThree = sortedEntries.slice(0, 3)
 
   return (
     <div className="mt-10" data-testid="transaction-list">
