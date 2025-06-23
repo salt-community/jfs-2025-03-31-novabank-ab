@@ -37,3 +37,5 @@ logging:
   level:
     org.springdoc: ${SPRING_LOGGING_LEVEL:DEBUG}
     org.springframework.web: ${SPRING_LOGGING_LEVEL:DEBUG}
+
+GEMINI_API_KEY: ${GEMINI_API_KEY:}

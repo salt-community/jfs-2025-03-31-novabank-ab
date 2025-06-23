@@ -1,7 +1,9 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.geminiDto.request.TransactionsIdsRequestDto;
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
+import com.example.backend.model.Transaction;
 import com.example.backend.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -47,7 +49,7 @@ public class TransactionController {
     )
     @GetMapping("/{accountId}/transaction")
     public ResponseEntity<List<UnifiedTransactionResponseDto>> getAllTransactionsForOneAccount(@PathVariable UUID accountId,
-                                                                             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+                                                                                               @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
         return ResponseEntity.ok().body(transactionService.getAllTransactionsByAccount(accountId, userId));
     }
@@ -69,6 +71,23 @@ public class TransactionController {
     }
 
     @Operation(
+            summary = "Retrieve all transactions for a list of transaction ids",
+            description = "Returns all transactions for a given list of transaction ids."
+    )
+    @PostMapping("/transaction/all-transactions-by-ids")
+    public ResponseEntity<List<UnifiedTransactionResponseDto>> getAllTransactionsByTransactionIds(
+            @RequestBody TransactionsIdsRequestDto dto
+    ) {
+        List<Transaction> transactions = transactionService.getAllTransactionsByIds(dto.matchingTransactionIds());
+
+        List<UnifiedTransactionResponseDto> responseDtos = transactions.stream()
+                .map(UnifiedTransactionResponseDto::fromTransaction)
+                .toList();
+
+        return ResponseEntity.ok().body(responseDtos);
+    }
+
+    @Operation(
             summary = "Create a new transaction",
             description = "Adds a transaction to the database based on the provided request data.",
             responses = {
@@ -81,7 +100,7 @@ public class TransactionController {
     @PostMapping("/add-transaction")
     public ResponseEntity<Void> addTransaction(@RequestBody TransactionRequestDto dto, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        transactionService.addTransaction(dto,userId);
+        transactionService.addTransaction(dto, userId);
         return ResponseEntity.ok().build();
     }
 
@@ -94,9 +113,9 @@ public class TransactionController {
                     @ApiResponse(responseCode = "404", description = "Account or scheduled transaction not found")}
     )
     @DeleteMapping("/cancel-scheduled/{transactionId}")
-    public ResponseEntity<Void> deleteScheduledTransaction( @PathVariable UUID transactionId,@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<Void> deleteScheduledTransaction(@PathVariable UUID transactionId, @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        transactionService.deleteScheduledTransaction(transactionId,userId);
+        transactionService.deleteScheduledTransaction(transactionId, userId);
         return ResponseEntity.noContent().build();
     }
 }

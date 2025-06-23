@@ -59,5 +59,8 @@
   "cancelTransaction": "Avbryt transaktion",
   "totalBalanceLowerCase": "total saldo",
   "recentTransactions": "Senaste transaktioner",
-  "seeAll": "Visa alla"
+  "seeAll": "Visa alla",
+  "aiAssistant": "AI-assistent",
+  "whatDoYouWantToFindToday": "Vilken transaktion letar du efter?",
+  "resultsFromYourSearch": "Resultat från din sökning"
 }

@@ -6,7 +6,7 @@ import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserSettingsRequestDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.dto.userDto.response.UserSettingsResponseDTO;
-import com.example.backend.model.Application;
+import com.example.backend.model.UserApplication;
 import com.example.backend.model.User;
 import com.example.backend.model.UserSettingsConfig;
 import com.example.backend.service.UserService;
@@ -98,8 +98,8 @@ public class UserController {
     })
     @PostMapping("/application")
     public ResponseEntity<Void> sendRegisterApplication(@RequestBody ApplicationRequestDto dto) {
-        Application application = userService.sendRegisterApplication(dto.toApplication());
-        URI location = URI.create("/api/user/application/" + application.getId());
+        UserApplication userApplication = userService.sendRegisterApplication(dto.toApplication());
+        URI location = URI.create("/api/user/application/" + userApplication.getId());
         return ResponseEntity.created(location).build();
     }
 

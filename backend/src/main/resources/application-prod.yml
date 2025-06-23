@@ -29,3 +29,5 @@ logging:
   level:
     org.springdoc: ${SPRING_LOGGING_LEVEL:INFO}
     org.springframework.web: ${SPRING_LOGGING_LEVEL:INFO}
+
+GEMINI_API_KEY: ${GEMINI_API_KEY:}
