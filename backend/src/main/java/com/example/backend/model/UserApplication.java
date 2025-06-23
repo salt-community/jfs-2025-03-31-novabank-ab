@@ -31,13 +31,13 @@ public class UserApplication {
     @Column(nullable = false)
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 13)
     private String personalNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String phoneNumber;
 
 }

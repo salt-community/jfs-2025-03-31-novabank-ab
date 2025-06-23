@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { useRegisterApplication } from '@/hooks/useApplications'
 import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
-import { Feedback } from './Feedback'
 import { PhoneInput } from './PhoneInput'
 import { LabeledInput } from './LabeledInput'
 
 export function RegisterApplicationForm() {
-  const { mutate, isPending, isError, isSuccess, error } =
+  const { mutate, isPending } =
     useRegisterApplication()
   const [form, setForm] = useState<ApplicationRequestDto>({
     firstName: '',
@@ -27,7 +26,7 @@ export function RegisterApplicationForm() {
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-sm">
       <h2 className="text-3xl mb-10">Apply for Nova Bank</h2>
       <form onSubmit={onSubmit} className="space-y-4">
         <LabeledInput
@@ -67,18 +66,11 @@ export function RegisterApplicationForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full py-2 px-3 bg-[#FFB20F] text-black rounded hover:opacity-70 transition hover:cursor-pointer disabled:opacity-50"
+          className="w-full py-2 px-3 bg-[#FFB20F] text-black rounded hover:opacity-70 transition hover:cursor-pointer"
         >
           {isPending ? 'Submitting…' : 'Submit'}
         </button>
       </form>
-
-      <Feedback
-        isError={isError}
-        errorMsg={error?.message}
-        isSuccess={isSuccess}
-        successMsg="Application submitted!"
-      />
     </div>
   )
 }

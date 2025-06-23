@@ -62,11 +62,12 @@ public class TransactionController {
     public ResponseEntity<Page<UnifiedTransactionResponseDto>> getAllTransactionsByUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) UUID accountId
     ) {
         String userId = jwt.getSubject();
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable);
+        Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable, accountId);
         return ResponseEntity.ok().body(transactions);
     }
 

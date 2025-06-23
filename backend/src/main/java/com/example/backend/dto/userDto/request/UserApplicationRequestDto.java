@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record ApplicationRequestDto(
+public record UserApplicationRequestDto(
     @NotNull
     String firstName,
     @NotNull
@@ -27,7 +27,7 @@ public record ApplicationRequestDto(
         userApplication.setPersonalNumber(this.personalNumber);
         userApplication.setPhoneNumber(this.phoneNumber);
         userApplication.setStatus(ApplicationStatus.PENDING);
-        userApplication.setCreatedAt(LocalDateTime.now());
+        userApplication.setUpdatedAt(LocalDateTime.now());
         return userApplication;
     }
 }

@@ -1,7 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.adminDto.request.AddNewUserRequestDto;
-import com.example.backend.dto.userDto.request.ApplicationRequestDto;
+import com.example.backend.dto.userDto.request.UserApplicationRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserRequestDto;
 import com.example.backend.dto.userDto.request.UpdateUserSettingsRequestDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
@@ -97,7 +97,7 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @PostMapping("/application")
-    public ResponseEntity<Void> sendRegisterApplication(@RequestBody ApplicationRequestDto dto) {
+    public ResponseEntity<Void> sendRegisterApplication(@RequestBody UserApplicationRequestDto dto) {
         UserApplication userApplication = userService.sendRegisterApplication(dto.toApplication());
         URI location = URI.create("/api/user/application/" + userApplication.getId());
         return ResponseEntity.created(location).build();

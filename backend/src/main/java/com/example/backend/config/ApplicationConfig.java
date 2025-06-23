@@ -39,4 +39,12 @@ public class ApplicationConfig {
                 .build();
     }
 
+    @Bean
+    public GroupedOpenApi loanApi() {
+        return GroupedOpenApi.builder()
+                .group("loans")
+                .pathsToMatch("/api/loan/**")
+                .build();
+    }
+
 }

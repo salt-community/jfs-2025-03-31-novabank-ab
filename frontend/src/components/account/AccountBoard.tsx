@@ -15,18 +15,24 @@ type AccountBoardProps = {
 export default function AccountBoard({ account }: AccountBoardProps) {
   const { t } = useTranslation('accounts')
   const navigate = useNavigate()
+
   const {
     data: transactions = [],
     isLoading,
     isError,
   } = useAccountTransactions(account.id)
 
-  if (isLoading) return <Spinner />
+  // Safe fallback for useFetchEntries
+  const { entries: allEntries, isLoading: allLoading } =
+    useFetchEntries(transactions ?? [])
+
+  if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
 
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(transactions)
-  if (allLoading) return <Spinner />
+  // Get only pending scheduled transactions
+  const scheduledTransactions = transactions.filter(
+    (t) => t.status === 'PENDING',
+  )
 
   return (
     <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
@@ -62,26 +68,21 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div className="mb-8">
         <h2 className="text-2xl mb-4">{t('scheduledTransasctions')}</h2>
         <div className="space-y-2">
-          {transactions &&
-          transactions.filter((t) => t.status === 'PENDING').length > 0 ? (
-            transactions
-              .filter((t) => t.status === 'PENDING')
-              .map((t) => {
-                return (
-                  <ScheduledTransactionItem
-                    transactionId={t.transactionId}
-                    key={t.transactionId}
-                    amount={t.amount}
-                    description={t.description}
-                    fromAccountId={t.fromAccountId}
-                    ocrNumber={t.ocrNumber}
-                    scheduledDate={t.date}
-                    toAccountId={t.toAccountId}
-                    accountNoType={t.type}
-                    category={t.category}
-                  />
-                )
-              })
+          {scheduledTransactions.length > 0 ? (
+            scheduledTransactions.map((t) => (
+              <ScheduledTransactionItem
+                transactionId={t.transactionId}
+                key={t.transactionId}
+                amount={t.amount}
+                description={t.description}
+                fromAccountId={t.fromAccountId}
+                ocrNumber={t.ocrNumber}
+                scheduledDate={t.date}
+                toAccountId={t.toAccountId}
+                accountNoType={t.type}
+                category={t.category}
+              />
+            ))
           ) : (
             <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           )}
