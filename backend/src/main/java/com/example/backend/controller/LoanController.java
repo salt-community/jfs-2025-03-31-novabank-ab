@@ -1,8 +1,8 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.accountDto.response.AccountResponseDto;
 import com.example.backend.dto.loanDto.request.LoanApplicationRequestDto;
 import com.example.backend.dto.loanDto.response.ListLoanResponseDto;
+import com.example.backend.dto.loanDto.response.LoanApplicationResponseDto;
 import com.example.backend.dto.loanDto.response.LoanResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.Loan;
@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,8 @@ public class LoanController {
             @ApiResponse(responseCode = "404", description = "Application not found"),
             @ApiResponse(responseCode = "500", description = "Unexpected error")
     })
-    @PostMapping("/from-application/{applicationId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{applicationId}")
     public ResponseEntity<Void> createLoanFromApplication(@PathVariable UUID applicationId) {
         Loan loan = loanService.createLoanFromApplication(applicationId);
         URI location = URI.create("/api/loan/" + loan.getId());
@@ -97,7 +99,7 @@ public class LoanController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     @GetMapping("/application/{id}")
-    public ResponseEntity<LoanApplication> getApplication(@PathVariable UUID id) {
-        return ResponseEntity.ok(loanService.getLoanApplicationById(id));
+    public ResponseEntity<LoanApplicationResponseDto> getApplication(@PathVariable UUID id) {
+        return ResponseEntity.ok(LoanApplicationResponseDto.fromApplication(loanService.getLoanApplicationById(id)));
     }
 }
