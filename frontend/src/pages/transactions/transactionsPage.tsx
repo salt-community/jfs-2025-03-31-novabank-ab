@@ -11,7 +11,7 @@ import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
 import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
 import type { TransactionFromId } from '@/types'
 import { NoTransactionItem } from '@/components/generic'
-import  searchicon from '@/assets/searchicon.svg'
+import searchicon from '@/assets/searchicon.svg'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -174,12 +174,8 @@ export default function TransactionsPage() {
             }
             value={aiSearchBarInputContent}
           />
-            <img
-            src={ searchicon }
-            alt="Search"
-            className=" "
-          />
-          </div>
+          <img src={searchicon} alt="Search" className=" " />
+        </div>
       </div>
 
       <div className="px-5 shadow-sm">
