@@ -23,9 +23,7 @@ function LandingPage() {
               >
                 Welcome to the future of finance
                 <br />
-                <p className="text-yellow-400 mt-4 drop-shadow-lg">
-                  Nova Bank
-                </p>
+                <p className="text-[#FFB20F] mt-4 drop-shadow-lg">Nova Bank</p>
               </h1>
               <h2
                 className="text-2xl text-white mb-8 drop-shadow-lg animate-fade-in"
@@ -36,9 +34,9 @@ function LandingPage() {
                 Register for free today
               </h2>
               <button
-                className=" px-8 py-3 bg-yellow-400 border-2 border-yellow-300/80 cursor-pointer text-black rounded-4xl hover:opacity-70 "
+                className=" px-8 py-3 bg-[#FFB20F] border-2 border-yellow-500/80 cursor-pointer text-black rounded-4xl hover:opacity-70 "
                 style={{ fontFamily: "'Lato', sans-serif" }}
-                onClick={() => navigate({ to: '/register' })} 
+                onClick={() => navigate({ to: '/register' })}
               >
                 Register Here
               </button>
