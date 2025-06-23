@@ -10,6 +10,8 @@ export interface Transaction {
   userNote: string
   ocrNumber: string
   type: TransactionType
+  category: string
+
   status: string | null
 }
 
