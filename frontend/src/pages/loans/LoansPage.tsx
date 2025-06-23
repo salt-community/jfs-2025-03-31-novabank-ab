@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import Tick from './Tick'
-import { useNavigate } from '@tanstack/react-router'
+// import { useNavigate } from '@tanstack/react-router'
 const LoansPage = () => {
   const { t } = useTranslation('loans')
-  const navigate = useNavigate()
+  //   const navigate = useNavigate()
   return (
     <div>
       <div className="flex flex-row items-center justify-center mt-20">
@@ -28,7 +28,7 @@ const LoansPage = () => {
           <div className="flex justify-center">
             <button
               onClick={() => {
-                navigate({ to: '/loans/register' })
+                // navigate({ to: '/loans/register' })
               }}
               type="submit"
               className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded-2xl hover:cursor-pointer transition-colors w-60"
