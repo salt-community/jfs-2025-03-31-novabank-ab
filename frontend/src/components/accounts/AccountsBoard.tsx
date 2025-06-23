@@ -17,7 +17,6 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
   const createAccount = useCreateAccount()
 
   const handleModalSubmit = (type: string, abbrevation: string) => {
-
     createAccount.mutate(
       {
         type,
@@ -35,7 +34,7 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
     )
   }
   return (
-    <div data-testid="accounts-board">
+    <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="accounts-board">
       <h1 className="text-3xl mb-20">{t('myBankAccounts')}</h1>
       <div className="space-y-3">
         {bankAccounts.map((account) => (
