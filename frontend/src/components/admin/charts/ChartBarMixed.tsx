@@ -15,6 +15,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { useGetAllTransactions } from '@/hooks'
 
 export const description = 'A mixed bar chart'
 
@@ -37,6 +38,17 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function ChartBarMixed() {
+  const { data, error, isLoading } = useGetAllTransactions()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div className="text-red-500">Error: {error.message}</div>
+  }
+  if (!data) {
+    return <div>No data found.</div>
+  }
   return (
     <Card>
       <CardHeader>
