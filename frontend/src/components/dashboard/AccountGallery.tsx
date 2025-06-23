@@ -23,7 +23,7 @@ export function AccountGallery({ bankAccounts }: AccountGalleryProps) {
           </a>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6 justify-center sm:justify-start">
           {bankAccounts.slice(0, 3).map((account) => (
             <div key={account.id}>
               <Link to="/accounts/$id" params={{ id: account.id }}>

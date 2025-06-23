@@ -7,10 +7,9 @@ import {
   useGetTransactionsFromIdsGivenByAi,
 } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
-import { AllTransactionsItem } from '@/components/generic/AllTransactionsItem'
-import { TransactionFromAi } from '@/components/generic/TransactionFromAi'
+import { AllTransactionsItem, TransactionFromAi } from '@/components/generic'
 import type { TransactionFromId } from '@/types'
-import  searchicon from '@/assets/searchicon.svg'
+import { searchicon } from '@/assets/icons'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -111,7 +110,7 @@ export default function TransactionsPage() {
   })
 
   return (
-    <div>
+    <div className="px-4 sm:px-8 py-6 space-y-12">
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
       <div className="flex justify-beginning mb-5">
         <div
@@ -155,12 +154,8 @@ export default function TransactionsPage() {
             }
             value={aiSearchBarInputContent}
           />
-            <img
-            src={ searchicon }
-            alt="Search"
-            className=" "
-          />
-          </div>
+          <img src={searchicon} alt="Search" className=" " />
+        </div>
       </div>
 
       <div className="px-5 shadow-sm">

@@ -65,10 +65,10 @@ export const Route = createRootRoute({
         <SignedIn>
           {!isAdmin && (
             <>
-              <div className="md:hidden fixed top-0 left-0 right-0 z-50">
+              <div className="md:hidden fixed top-0 left-0 right-0 h-[60px] z-50">
                 <UserTopNav />
               </div>
-              <div className="md:hidden fixed bottom-0 left-0 right-0 z-50">
+              <div className="md:hidden fixed bottom-0 left-0 right-0 h-[60px] z-50">
                 <UserBottomNav />
               </div>
             </>
@@ -81,11 +81,12 @@ export const Route = createRootRoute({
           </div>
           {/* <main className="flex-1 my-20 mx-30 h-full bg-white text-black"> */}
           <main
-            className={`flex-1 bg-white text-black pt-4 px-4 lg:px-10${
-              isAdmin
-                ? 'ml-[70px] lg:ml-70'
-                : 'mt-[60px] mb-[60px] md:mt-0 md:mb-0 md:ml-[70px] lg:ml-70'
-            }`}
+            className={`flex-1 overflow-y-auto text-black px-4 lg:px-10
+             pt-[60px] pb-[60px] md:pt-0 md:pb-0 ${
+               isAdmin
+                 ? 'ml-[70px] lg:ml-70'
+                 : 'mt-[60px] mb-[60px] md:mt-0 md:mb-0 md:ml-[70px] lg:ml-70'
+             }`}
           >
             <Outlet />
           </main>

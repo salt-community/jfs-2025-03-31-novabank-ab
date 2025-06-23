@@ -20,7 +20,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
   console.log('Account transactions:', data)
   return (
-    <div data-testid="account-board">
+    <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
       <h1 className="text-4xl mb-20">{account.type}</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>

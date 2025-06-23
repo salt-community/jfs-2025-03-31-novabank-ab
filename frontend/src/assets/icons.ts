@@ -5,6 +5,7 @@ export { default as transfericon } from './transfericon.svg'
 export { default as settingsicon } from './settingsicon.svg'
 export { default as signouticon } from './signouticon.svg'
 export { default as novabankicon } from './NovaBankTransparentLogo.png'
+export { default as searchicon } from './searchicon.svg'
 
 export { default as yellowhomeicon } from './yellowhomeicon.svg'
 export { default as yellowaccounticon } from './yellowaccounticon.svg'

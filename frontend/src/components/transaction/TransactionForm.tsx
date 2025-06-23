@@ -120,7 +120,7 @@ export default function TransactionForm() {
     <>
       <form
         onSubmit={handleSubmit}
-        className="space-y-5 max-w-3xl shadow-sm p-10"
+        className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12"
       >
         <Sender
           sender={sender}
