@@ -1,11 +1,12 @@
-import { TransactionItem } from '../generic/'
-import { ScheduledTransactionItem } from '../generic'
-import { NoTransactionItem } from '../generic/'
+import { ScheduledTransactionItem } from '../generic/transaction-items/ScheduledTransactionItem'
 import type { Account } from '@/types'
 import { useNavigate } from '@tanstack/react-router'
 import { useAccountTransactions } from '@/hooks'
 import Spinner from '../generic/Spinner'
 import { useTranslation } from 'react-i18next'
+import { yellowgoback } from '@/assets/icons'
+import { TransactionItem } from '../generic/transaction-items/TransactionItem'
+import useFetchEntries from '@/hooks/useFetchEntries'
 
 type AccountBoardProps = {
   account: Account
@@ -14,21 +15,46 @@ type AccountBoardProps = {
 export default function AccountBoard({ account }: AccountBoardProps) {
   const { t } = useTranslation('accounts')
   const navigate = useNavigate()
-  const { data, isLoading, isError } = useAccountTransactions(account.id)
 
-  if (isLoading) return <Spinner />
+  const {
+    data: transactions = [],
+    isLoading,
+    isError,
+  } = useAccountTransactions(account.id)
+
+  // Safe fallback for useFetchEntries
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
+    transactions ?? [],
+  )
+
+  if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
-  console.log('Account transactions:', data)
+
+  // Get only pending scheduled transactions
+  const scheduledTransactions = transactions.filter(
+    (t) => t.status === 'PENDING',
+  )
+
   return (
-    <div data-testid="account-board">
+    <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
+      <a
+        onClick={() => navigate({ to: '/accounts' })}
+        className="flex items-center text-md text-black hover:opacity-70 underline-offset-5 hover:cursor-pointer"
+      >
+        {t('goBack')}
+        <img src={yellowgoback} className="ml-2 w-6 h-6" />
+      </a>
       <h1 className="text-4xl mb-20">{account.type}</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>
           <p className="mt-4 text-gray-600 text2xl">{t('totalBalance')}</p>
-          <p className="text-4xl font-bold">{account.balance}</p>
+          <p className="text-4xl font-bold">
+            {account.balance}&nbsp;{account.currency}
+          </p>
           <button
             onClick={() => navigate({ to: '/transfer' })}
-            className="mt-4 cursor-pointer px-4 py-2 bg-amber-400 hover:bg-amber-500 rounded-md text-md shadow"
+            className="mt-4 cursor-pointer px-4 py-2 bg-[#FFB20F] hover:bg-[#F5A700] rounded-md text-md shadow"
           >
             + {t('newTransfer')}
           </button>
@@ -45,26 +71,23 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div className="mb-8">
         <h2 className="text-2xl mb-4">{t('scheduledTransasctions')}</h2>
         <div className="space-y-2">
-          {data && data.filter((t) => t.status === 'PENDING').length > 0 ? (
-            data
-              .filter((t) => t.status === 'PENDING')
-              .map((t) => {
-                return (
-                  <ScheduledTransactionItem
-                    transactionId={t.transactionId}
-                    key={t.transactionId}
-                    amount={t.amount}
-                    description={t.description}
-                    fromAccountId={t.fromAccountId}
-                    ocrNumber={t.ocrNumber}
-                    scheduledDate={t.date}
-                    toAccountId={t.toAccountId}
-                    accountNoType={t.type}
-                  />
-                )
-              })
+          {scheduledTransactions.length > 0 ? (
+            scheduledTransactions.map((t) => (
+              <ScheduledTransactionItem
+                transactionId={t.transactionId}
+                key={t.transactionId}
+                amount={t.amount}
+                description={t.description}
+                fromAccountId={t.fromAccountId}
+                ocrNumber={t.ocrNumber}
+                scheduledDate={t.date}
+                toAccountId={t.toAccountId}
+                accountNoType={t.type}
+                category={t.category}
+              />
+            ))
           ) : (
-            <NoTransactionItem />
+            <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           )}
         </div>
       </div>
@@ -72,27 +95,21 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div>
         <h2 className="text-2xl mb-4">{t('transactions')}</h2>
         <div className="space-y-2">
-          {data && data.filter((t) => t.status === null).length > 0 ? (
-            data
-              .filter((t) => t.status === null)
-              .map((t) => {
-                const direction =
-                  t.toAccountId?.toString() === account.id.toString()
-                    ? 'in'
-                    : 'out'
-                return (
-                  <TransactionItem
-                    key={t.transactionId}
-                    accType={t.description}
-                    accNoType={t.type}
-                    amount={t.amount}
-                    date={t.date}
-                    direction={direction}
-                  />
-                )
-              })
+          {allEntries.length === 0 ? (
+            <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           ) : (
-            <NoTransactionItem />
+            allEntries.map((tx) => (
+              <TransactionItem
+                key={tx.key}
+                description={tx.description}
+                theAccount={tx.theAccount}
+                accountNoType={tx.accountNoType}
+                amount={tx.amount}
+                time={tx.time}
+                direction={tx.direction}
+                category={tx.category}
+              />
+            ))
           )}
         </div>
       </div>

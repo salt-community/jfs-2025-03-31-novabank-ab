@@ -8,8 +8,10 @@
   "personal": "Personkonto",
   "accountType": "Kontotyp",
   "selectCurrencyOnly": "Välj valuta",
+  "allAccounts": "Alla konton",
   "currency": "Valuta",
   "done": "Klar",
+  "filter": "Filtrera per konto",
   "errorLoadingTransactions": "Fel vid inläsning av transaktioner",
   "totalBalance": "Totalt saldo",
   "newTransfer": "Ny överföring",
@@ -62,5 +64,5 @@
   "seeAll": "Visa alla",
   "aiAssistant": "AI-assistent",
   "whatDoYouWantToFindToday": "Vilken transaktion letar du efter?",
-  "resultsFromYourSearch": "Resultat från din sökning"
+  "goBack": "Gå Tillbaka"
 }

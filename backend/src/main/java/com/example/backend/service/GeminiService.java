@@ -1,6 +1,5 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.geminiDto.request.TransactionSearchInputDto;
 import com.example.backend.dto.geminiDto.response.GeminiResponseDto;
 import com.example.backend.model.Transaction;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +57,8 @@ public class GeminiService {
                 
                 Return the IDs as a plain list, comma-separated. No explanation.
                 
+                If the query does not make sense, return an empty list. No explanation
+                
                 Query: %s
                 
                 Transactions:
@@ -95,6 +96,7 @@ public class GeminiService {
 
             return Arrays.stream(resultText.split(","))
                     .map(String::trim)
+                    .filter(s -> s != null && !s.isBlank())
                     .map(UUID::fromString)
                     .toList();
 

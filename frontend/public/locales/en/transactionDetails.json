@@ -1,0 +1,18 @@
+{
+  "transactionDetails": "Transaction Details",
+  "id": "ID",
+  "amount": "Amount",
+  "type": "Type",
+  "description": "Description",
+  "category": "Category",
+  "note": "Note",
+  "fromAccount": "From Account",
+  "toAccount": "To Account",
+  "account": "Account",
+  "scheduledDate": "Scheduled Date",
+  "ocrNumber": "OCR Number",
+  "direction": "Direction",
+  "incoming": "Incoming",
+  "outgoing": "Outgoing",
+  "close": "Close"
+}

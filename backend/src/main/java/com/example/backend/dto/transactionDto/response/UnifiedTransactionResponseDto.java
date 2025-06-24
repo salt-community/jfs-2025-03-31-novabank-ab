@@ -41,7 +41,7 @@ public record UnifiedTransactionResponseDto(
                 scheduledTransaction.getId(),
                 scheduledTransaction.getFromAccount().getId(),
                 scheduledTransaction.getToAccount() != null ? scheduledTransaction.getToAccount().getId() : null,
-                scheduledTransaction.getCreatedAt(),
+                scheduledTransaction.getScheduledDate(),
                 scheduledTransaction.getAmount(),
                 scheduledTransaction.getDescription(),
                 scheduledTransaction.getUserNote(),
