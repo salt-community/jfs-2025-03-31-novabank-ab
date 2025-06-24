@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
+import com.example.backend.dto.loanDto.response.LoanApplicationResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
@@ -174,6 +175,17 @@ public class AdminController {
         UserApplication userApplication = userService.getApplicationById(applicationId);
         userService.updateApplication(userApplication, status);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Get all applications", description = "Returns a list of applications")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
+    })
+    @GetMapping("/loan-application")
+    public ResponseEntity<List<LoanApplicationResponseDto>> getAllLoanApplications() {
+        List<LoanApplicationResponseDto> applications = loanService.getAllLoanApplications();
+        return ResponseEntity.ok(applications);
     }
 
     @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
