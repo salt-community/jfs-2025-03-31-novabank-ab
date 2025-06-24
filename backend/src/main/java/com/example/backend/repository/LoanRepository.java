@@ -9,5 +9,4 @@ import java.util.UUID;
 
 @Repository
 public interface LoanRepository extends JpaRepository<Loan, UUID> {
-    List<Loan> findByAccountUserId(UUID userId);
 }

@@ -6,6 +6,7 @@ import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
 import type { UserSettings } from '@/types'
 import Spinner from '../generic/Spinner'
+import { toast } from 'react-toastify'
 
 const Settings = () => {
   const { t } = useTranslation('settings')
@@ -65,7 +66,14 @@ const Settings = () => {
   }
 
   const updateUserSettings = () => {
-    updateUserNotifications.mutate(userNotificationSettings)
+    updateUserNotifications.mutate(userNotificationSettings, {
+          onSuccess: () => {
+            toast.success(t('saved'))
+          },
+          onError: () => {
+            toast.error(t('failed'))
+          },
+        })
   }
 
   return (

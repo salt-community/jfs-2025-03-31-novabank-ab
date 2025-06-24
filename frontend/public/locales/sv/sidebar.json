@@ -4,7 +4,9 @@
     "settings": "Inställningar",
     "accounts": "Konton",
     "transactions": "Transaktioner",
-    "transfer": "Överföring"
+    "transfer": "Överföring",
+    "stocks": "Aktier",
+    "pension": "Pension"
   },
   "admin": {
     "dashboard": "Översikt",
@@ -13,5 +15,7 @@
     "applications": "Ansökningar"
   },
   "signOut": "Logga ut",
-  "signIn": "Logga in"
+  "signIn": "Logga in",
+  "register": "Registrera dig",
+  "loans": "Lån"
 }

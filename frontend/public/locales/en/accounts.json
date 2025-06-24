@@ -54,6 +54,8 @@
   "invalid": "Invalid",
   "number": "number",
   "close": "Close",
+  "allAccounts": "All accounts",
+  "filter": "Filter by account",
   "selectAnAccountNumberType": "Select an account number type",
   "accountNumberType": "Account number type",
   "page": "Page",
@@ -66,5 +68,9 @@
   "aiAssistant": "AI Search",
   "whatDoYouWantToFindToday": "What transaction are you looking for?",
   "resultsFromYourSearch": "Results from your search",
-  "goBack": "Go Back"
+  "goBack": "Go Back",
+  "failedToCreateTransaction": "Failed to create transaction",
+  "createdTransaction": "Transaction created",
+  "accountCreated": "account created",
+  "failedToCreateAccount": "NO ACCOUNT CREATED"
 }

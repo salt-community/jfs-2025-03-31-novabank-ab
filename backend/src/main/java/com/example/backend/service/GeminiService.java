@@ -96,6 +96,7 @@ public class GeminiService {
 
             return Arrays.stream(resultText.split(","))
                     .map(String::trim)
+                    .filter(s -> s != null && !s.isBlank())
                     .map(UUID::fromString)
                     .toList();
 

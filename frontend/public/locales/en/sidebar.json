@@ -4,7 +4,9 @@
     "settings": "Settings",
     "accounts": "Accounts",
     "transactions": "Transactions",
-    "transfer": "Transfer"
+    "transfer": "Transfer",
+    "stocks": "Stocks",
+    "pension": "Pension"
   },
   "admin": {
     "dashboard": "Dashboard",
@@ -13,5 +15,7 @@
     "applications": "Applicants"
   },
   "signOut": "Sign out",
-  "signIn": "Sign in"
+  "signIn": "Sign in",
+  "register": "Register",
+  "loans": "Loans"
 }
