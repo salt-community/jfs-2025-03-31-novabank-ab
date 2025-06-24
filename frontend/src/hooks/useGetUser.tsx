@@ -3,7 +3,7 @@ import type { UserType } from '@/types'
 import { useAuth } from '@clerk/clerk-react'
 import { getUser } from '@/api'
 
-export function useGetUser(id?: string) {
+export function useGetUser() {
   const { getToken } = useAuth()
 
   return useQuery<UserType>({
