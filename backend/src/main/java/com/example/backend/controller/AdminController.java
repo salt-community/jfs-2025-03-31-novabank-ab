@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.accountDto.response.ListAccountResponseDto;
 import com.example.backend.dto.adminDto.response.ListUserResponseDto;
+import com.example.backend.dto.loanDto.response.ListLoanApplicationResponseDto;
 import com.example.backend.dto.loanDto.response.LoanApplicationResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
@@ -183,9 +184,9 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected Error")
     })
     @GetMapping("/loan-application")
-    public ResponseEntity<List<LoanApplicationResponseDto>> getAllLoanApplications() {
-        List<LoanApplicationResponseDto> applications = loanService.getAllLoanApplications();
-        return ResponseEntity.ok(applications);
+    public ResponseEntity<ListLoanApplicationResponseDto> getAllLoanApplications(Pageable pageable) {
+        Page<LoanApplication> page = loanService.getAllLoanApplications(pageable);
+        return ResponseEntity.ok(ListLoanApplicationResponseDto.fromLoanApplicationPage(page));
     }
 
     @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")

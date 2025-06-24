@@ -134,8 +134,8 @@ public class LoanService {
         loanApplicationRepository.save(application);
     }
 
-    public List<LoanApplication> getAllLoanApplications() {
-        return loanApplicationRepository.findAll();
+    public Page<LoanApplication> getAllLoanApplications(Pageable pageable) {
+        return loanApplicationRepository.findAll(pageable);
     }
 
 }
