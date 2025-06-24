@@ -20,6 +20,7 @@ import { Route as AccountsIndexRouteImport } from './routes/accounts/index'
 import { Route as LoansRegisterRouteImport } from './routes/loans/register'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin/transactions'
+import { Route as AdminLoansRouteImport } from './routes/admin/loans'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
 import { Route as AdminApplicationsRouteImport } from './routes/admin/applications'
 import { Route as AccountsIdRouteImport } from './routes/accounts/$id'
@@ -79,6 +80,11 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   path: '/admin/transactions',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoansRoute = AdminLoansRouteImport.update({
+  id: '/admin/loans',
+  path: '/admin/loans',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/accounts/$id': typeof AccountsIdRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/loans': typeof AdminLoansRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/loans/register': typeof LoansRegisterRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/accounts/$id': typeof AccountsIdRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/loans': typeof AdminLoansRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/loans/register': typeof LoansRegisterRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/accounts/$id': typeof AccountsIdRoute
   '/admin/applications': typeof AdminApplicationsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/loans': typeof AdminLoansRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
   '/loans/register': typeof LoansRegisterRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/accounts/$id'
     | '/admin/applications'
     | '/admin/dashboard'
+    | '/admin/loans'
     | '/admin/transactions'
     | '/admin/users'
     | '/loans/register'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/accounts/$id'
     | '/admin/applications'
     | '/admin/dashboard'
+    | '/admin/loans'
     | '/admin/transactions'
     | '/admin/users'
     | '/loans/register'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/accounts/$id'
     | '/admin/applications'
     | '/admin/dashboard'
+    | '/admin/loans'
     | '/admin/transactions'
     | '/admin/users'
     | '/loans/register'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   AccountsIdRoute: typeof AccountsIdRoute
   AdminApplicationsRoute: typeof AdminApplicationsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminLoansRoute: typeof AdminLoansRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   LoansRegisterRoute: typeof LoansRegisterRoute
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/loans': {
+      id: '/admin/loans'
+      path: '/admin/loans'
+      fullPath: '/admin/loans'
+      preLoaderRoute: typeof AdminLoansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsIdRoute: AccountsIdRoute,
   AdminApplicationsRoute: AdminApplicationsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminLoansRoute: AdminLoansRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
   LoansRegisterRoute: LoansRegisterRoute,
