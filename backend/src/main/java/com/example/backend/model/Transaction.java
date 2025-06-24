@@ -53,7 +53,7 @@ public class Transaction {
 
     @Column(nullable = true)
     private String category;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private TransactionStatus status;
 
     @PrePersist
