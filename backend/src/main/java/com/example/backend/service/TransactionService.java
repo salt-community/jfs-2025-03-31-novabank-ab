@@ -265,42 +265,97 @@ public class TransactionService {
                                     boolean isScheduled,
                                     String category) {
         if (isScheduled) {
-            ScheduledTransaction scheduled = new ScheduledTransaction(
-                    null,
-                    data.from(),
-                    dto.type() == PaymentType.INTERNAL_TRANSFER ? data.to() : null,
-                    dto.type() == PaymentType.INTERNAL_TRANSFER ? null : data.recipientNumber(),
-                    dto.type(),
-                    dto.amount(),
-                    dto.transactionDate().atStartOfDay(),
-                    TransactionStatus.PENDING,
-                    LocalDateTime.now(),
-                    dto.ocrNumber(),
-                    dto.userNote(),
-                    dto.description(),
-                    category
-            );
+
+            Currency fromCurr = data.from().getCurrency();
+            Currency toCurr = (data.to() != null ? data.to().getCurrency() : fromCurr);
+            double amt = dto.amount();
+            double convAmt = amt;
+            double rate = 1.0;
+            LocalDate rDate = LocalDate.now();
+
+            if (!fromCurr.equals(toCurr)) {
+                CurrencyConversionRequestDto req = new CurrencyConversionRequestDto(
+                        fromCurr.getAbbrevation().name(),
+                        toCurr.getAbbrevation().name(),
+                        amt);
+                CurrencyConversionResultDto conv = currencyService.convertCurrency(req);
+                convAmt = conv.convertedAmount();
+                rate    = conv.rateUsed();
+                rDate   = LocalDate.parse(conv.rateDate());
+            }
+
+
+            ScheduledTransaction scheduled = ScheduledTransaction.builder()
+                    .fromAccount(data.from())
+                    .toAccount(dto.type() == PaymentType.INTERNAL_TRANSFER ? data.to() : null)
+                    .recipientNumber(dto.type() == PaymentType.INTERNAL_TRANSFER ? null : data.recipientNumber())
+                    .type(dto.type())
+                    .amount(amt)
+                    .scheduledDate(dto.transactionDate().atStartOfDay())
+                    .status(TransactionStatus.PENDING)
+                    .createdAt(LocalDateTime.now())
+                    .ocrNumber(dto.ocrNumber())
+                    .userNote(dto.userNote())
+                    .description(dto.description())
+                    .category(category)
+                    .currencyFrom(fromCurr)
+                    .currencyTo(toCurr)
+                    .convertedAmount(convAmt)
+                    .rateUsed(rate)
+                    .rateDate(rDate)
+                    .build();
+
             scheduledTransactionRepository.save(scheduled);
         } else {
             if (data.from().getBalance() < dto.amount()) {
                 throw new InsufficientFundsException("Not enough balance");
             }
-            updateBalances(data.from(), data.to(), dto.amount());
 
-            Transaction transaction = new Transaction(
-                    null,
-                    data.from(),
-                    data.to(),
-                    data.recipientNumber(),
-                    dto.type(),
-                    LocalDateTime.now(),
-                    dto.amount(),
-                    dto.description(),
-                    dto.userNote(),
-                    dto.ocrNumber(),
-                    category,
-                    TransactionStatus.EXECUTED
-            );
+            Currency fromCurr = data.from().getCurrency();
+            Currency toCurr   = (data.to() != null ? data.to().getCurrency() : fromCurr);
+            double amt      = dto.amount();
+            double convAmt  = amt;
+            double rate     = 1.0;
+            LocalDate rDate = LocalDate.now();
+
+            if (!fromCurr.equals(toCurr)) {
+                CurrencyConversionRequestDto req = new CurrencyConversionRequestDto(
+                        fromCurr.getAbbrevation().name(),
+                        toCurr.getAbbrevation().name(),
+                        amt);
+                CurrencyConversionResultDto conv = currencyService.convertCurrency(req);
+                convAmt = conv.convertedAmount();
+                rate    = conv.rateUsed();
+                rDate   = LocalDate.parse(conv.rateDate());
+            }
+
+            data.from().setBalance(data.from().getBalance() - amt);
+            if (data.to() != null) {
+                data.to().setBalance(data.to().getBalance() + convAmt);
+                accountRepository.save(data.to());
+            }
+            accountRepository.save(data.from());
+
+            Transaction transaction = Transaction.builder()
+                    .fromAccount(data.from())
+                    .toAccount(data.to())
+                    .recipientNumber(data.recipientNumber())
+                    .type(dto.type())
+                    .createdAt(LocalDateTime.now())
+                    .amount(amt)
+                    .convertedAmount(convAmt)
+                    .currencyFrom(fromCurr)
+                    .currencyTo(toCurr)
+                    .rateUsed(rate)
+                    .rateDate(rDate)
+                    .description(dto.description())
+                    .userNote(dto.userNote())
+                    .ocrNumber(dto.ocrNumber())
+                    .category(category)
+                    .status(TransactionStatus.EXECUTED)
+                    .build();
+
+
             transactionRepository.save(transaction);
         }
     }
