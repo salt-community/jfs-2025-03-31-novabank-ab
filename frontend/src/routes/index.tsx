@@ -1,12 +1,23 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
 })
 
 function LandingPage() {
+  const { i18n } = useTranslation()
+  useEffect(() => {
+    if (navigator.language) {
+      if (navigator.language.toLowerCase().startsWith('en')) {
+        i18n.changeLanguage('en')
+      } else {
+        i18n.changeLanguage('sv')
+      }
+    }
+  }, [navigator.language])
   const navigate = useNavigate()
   return (
     <div className="h-2000 flex justify-center bg-gradient-to-tr from-sky-700 to-[#FFB20F] relative">
