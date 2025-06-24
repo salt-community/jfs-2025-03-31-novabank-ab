@@ -91,6 +91,13 @@ export default function TransactionsPage() {
                             setTransactionsFromIdsGivenByAi([
                               {
                                 amount: 0,
+
+                                convertedAmount: 0, // these 5 are new to support different currencies
+                                currencyFrom: '',
+                                currencyTo: '',
+                                rateUsed: 1,
+                                rateDate: '',
+
                                 category: '',
                                 date: 'null',
                                 description: 'ERROR',
