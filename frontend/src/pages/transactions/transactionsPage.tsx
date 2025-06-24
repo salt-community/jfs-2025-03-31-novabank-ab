@@ -144,7 +144,7 @@ export default function TransactionsPage() {
             <div className="loader opacity-35 absolute"></div>
           </div>
         ) : (
-          AIEntries.length > 0 && (
+          transactionsFromIdsGivenByAi.length > 0 && (
             <div
               className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
             >
