@@ -105,7 +105,7 @@ public class CurrencyService {
                 dto = getRateFromApi(inverseCode);
                 inverted = true;
             } catch (Exception ex) {
-                throw new CurrencyConversionException("Unsupported currency par: " + from + " to " + to);
+                throw new CurrencyConversionException("Unsupported currency pair: " + from + " to " + to);
             }
         }
 
