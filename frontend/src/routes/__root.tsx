@@ -76,19 +76,11 @@ export const Route = createRootRoute({
           )}
 
           <div className="hidden md:flex">
-            <aside className="w-[70px] lg:w-70 h-screen">
+            <aside className="z-10 w-[70px] lg:w-70 h-screen">
               <SideBar admin={isAdmin} />
             </aside>
           </div>
-          {/* <main className="flex-1 my-20 mx-30 h-full bg-white text-black"> */}
-          <main
-            className={`flex-1 overflow-y-auto text-black px-4 lg:px-10
-             pt-[60px] pb-[60px] md:pt-0 md:pb-0 ${
-               isAdmin
-                 ? 'ml-[70px] lg:ml-70'
-                 : 'mt-[30px] mb-[60px] md:mt-0 md:mb-0 md:ml-[70px] lg:ml-70'
-             }`}
-          >
+          <main className="flex-1 mx-[20px] md:mx-[30px] lg:mx-[100px] xl:mx-[150px] 2xl:mx-[200px] text-black">
             <Outlet />
           </main>
         </SignedIn>

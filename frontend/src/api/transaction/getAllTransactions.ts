@@ -6,13 +6,14 @@ export async function getAllTransactions(
   token: string,
   page: number = 0,
   size: number = 10,
+  id?: string,
 ): Promise<TransactionResponse> {
-  const url = BASE_URL.concat(
-    'account/all-transactions?page=',
-    page,
-    '&size=',
-    size,
-  )
+  const url = new URL(BASE_URL + 'account/all-transactions')
+  url.searchParams.append('page', page.toString())
+  url.searchParams.append('size', size.toString())
+  if (id) {
+    url.searchParams.append('id', id)
+  }
 
   const res = await fetch(url, {
     method: 'GET',

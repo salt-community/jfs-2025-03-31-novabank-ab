@@ -55,7 +55,11 @@ export default function AdminTransactions() {
                     <strong>Date:</strong> {modalData.date}
                   </div>
                   <div>
-                    <strong>Amount:</strong> {modalData.amount}
+                    <strong>Amount:</strong>{' '}
+                    {modalData.amount.toLocaleString('sv-SE', {
+                      style: 'currency',
+                      currency: 'SEK',
+                    })}
                   </div>
                   <div>
                     <strong>Description:</strong> {modalData.description}

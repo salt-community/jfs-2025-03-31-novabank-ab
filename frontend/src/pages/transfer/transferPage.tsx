@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import TransactionForm from '@/components/transaction/TransactionForm'
+import TransactionForm from '@/components/transfer/TransactionForm'
 
 export default function TransferPage() {
   const { t } = useTranslation('accounts')

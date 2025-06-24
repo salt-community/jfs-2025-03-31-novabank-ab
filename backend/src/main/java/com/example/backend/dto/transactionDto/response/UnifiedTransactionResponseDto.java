@@ -31,7 +31,7 @@ public record UnifiedTransactionResponseDto(
                 transaction.getUserNote(),
                 transaction.getOcrNumber(),
                 transaction.getType().name(),
-                null,
+                transaction.getStatus(),
                 transaction.getCategory()
         );
     }
