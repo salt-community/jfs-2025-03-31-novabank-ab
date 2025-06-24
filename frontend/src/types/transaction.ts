@@ -11,7 +11,6 @@ export interface Transaction {
   ocrNumber: string
   type: TransactionType
   category: string
-
   status: string
 }
 
