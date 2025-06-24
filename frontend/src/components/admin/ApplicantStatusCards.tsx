@@ -49,10 +49,7 @@ export default function ApplicantStatusCards() {
   const rejectedLastMonth = lastMonth.filter((a) => a.status === 'DISAPPROVED')
 
   function getPercentChange(current: number, previous: number): string {
-    if (previous === 0) {
-      if (current === 0) return '0%'
-      return '+100%'
-    }
+    console.log('Percentages', { current: current, previous: previous })
     const change = ((current - previous) / previous) * 100
     const sign = change > 0 ? '+' : ''
     return `${sign}${Math.round(change)}%`
