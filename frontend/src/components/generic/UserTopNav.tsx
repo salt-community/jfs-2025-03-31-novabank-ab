@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { SignOutButton } from '@clerk/clerk-react'
 import { novabankicon, signouticon } from '@/assets/icons'
 
-export default function UserTopNav() {
+export function UserTopNav() {
   const navigate = useNavigate()
 
   return (

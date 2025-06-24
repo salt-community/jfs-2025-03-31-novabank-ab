@@ -42,7 +42,7 @@ export default function AdminTransactions() {
         >
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{modalData.transactionId}</DialogTitle>
+              <DialogTitle>Id: {modalData.transactionId}</DialogTitle>
               <DialogDescription>
                 <div>
                   <div>
