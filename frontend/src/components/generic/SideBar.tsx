@@ -14,6 +14,8 @@ import {
   yellowtransactionicon,
   yellowtransfericon,
   yellowsettingsicon,
+  stocksicon,
+  pensionicon,
 } from '@/assets/icons'
 
 type Props = {
@@ -28,7 +30,7 @@ export function SideBar({ admin }: Props) {
   const isActive = (path: string) => location.pathname.startsWith(path)
 
   const userSideBar = (
-    <aside className=" w-full items-center hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
+    <aside className="items-center hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
@@ -94,6 +96,20 @@ export function SideBar({ admin }: Props) {
             src={isActive('/transfer') ? yellowtransfericon : transfericon}
           />
           <span className="hidden lg:inline">{t('user.transfer')}</span>
+        </a>
+
+        <a
+          className={`flex flex-row gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
+        >
+          <img src={stocksicon} />
+          <span className="hidden lg:inline">{t('user.stocks')}</span>
+        </a>
+
+        <a
+          className={`flex flex-row gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
+        >
+          <img src={pensionicon} />
+          <span className="hidden lg:inline">{t('user.pension')}</span>
         </a>
 
         <a

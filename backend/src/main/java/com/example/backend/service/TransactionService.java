@@ -149,7 +149,8 @@ public class TransactionService {
                     scheduledTransaction.getDescription(),
                     scheduledTransaction.getUserNote(),
                     scheduledTransaction.getOcrNumber(),
-                    scheduledTransaction.getCategory()
+                    scheduledTransaction.getCategory(),
+                    scheduledTransaction.getStatus() == TransactionStatus.PENDING ? TransactionStatus.EXECUTED : TransactionStatus.FAILED
             );
             transactionRepository.save(transaction);
             scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
@@ -160,8 +161,8 @@ public class TransactionService {
 
     public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId) {
         if (accountId != null) {
-           Page<Transaction>  transaction = transactionRepository.findByFromAccount_IdOrToAccount_Id(accountId, accountId, pageable);
-          return transaction.map(UnifiedTransactionResponseDto::fromTransaction);
+           Page<Transaction>  transactions = transactionRepository.findByFromAccount_IdOrToAccount_Id(accountId, accountId, pageable);
+          return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
         }
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
@@ -246,7 +247,8 @@ public class TransactionService {
                     dto.description(),
                     dto.userNote(),
                     dto.ocrNumber(),
-                    category
+                    category,
+                    TransactionStatus.EXECUTED
             );
             transactionRepository.save(transaction);
         }

@@ -11,6 +11,7 @@ import Ocr from './Ocr'
 import { useRandomDesc } from '@/hooks'
 import { useCreateTransaction } from '@/hooks'
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 export default function TransactionForm() {
   const { t } = useTranslation('accounts')
@@ -107,11 +108,11 @@ export default function TransactionForm() {
     createTransaction.mutate(transactionPayload, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['accounts'] })
-        alert('Transaction created')
+        toast.success(t('createdTransaction'))
         resetForm()
       },
       onError: () => {
-        alert('Failed to create transaction')
+        toast.error(t('failedToCreateTransaction'))
       },
     })
   }
