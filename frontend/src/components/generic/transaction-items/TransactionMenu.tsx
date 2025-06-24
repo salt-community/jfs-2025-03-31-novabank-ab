@@ -146,7 +146,7 @@ export default function TransactionMenu({
                 />
               </svg>
               <p className="text-lg font-semibold">
-                Are you sure you want to cancel the transaction?
+                Are you sure you want to cancel this transaction?
               </p>
             </div>
             <div className="flex justify-center space-x-4 mt-4">
