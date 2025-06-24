@@ -22,22 +22,32 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "currency_from_id")
+    // exchange rate stuff start
+
+    @NonNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency_from_id", nullable = false)
     private Currency currencyFrom;
 
-    @ManyToOne
-    @JoinColumn(name = "currency_to_id")
+    @NonNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "currency_to_id", nullable = false)
     private Currency currencyTo;
 
-    @Column
+    @NonNull
+    @Column(nullable = false)
     private double convertedAmount;
 
-    @Column
+    @NonNull
+    @Column(nullable = false)
     private double rateUsed;
 
-    @Column
+    @NonNull
+    @Column(nullable = false)
     private LocalDate rateDate;
+
+    // exchange rate stuff end
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_account_id", nullable = false)
