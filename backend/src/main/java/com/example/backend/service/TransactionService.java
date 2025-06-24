@@ -1,9 +1,13 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.currencyDto.request.CurrencyConversionRequestDto;
+import com.example.backend.dto.currencyDto.response.CurrencyConversionResultDto;
+
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.exception.custom.*;
 import com.example.backend.model.Account;
+import com.example.backend.model.Currency;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
 import com.example.backend.model.enums.AccountStatus;
@@ -37,7 +41,9 @@ public class TransactionService {
     public TransactionService(TransactionRepository transactionRepository,
                               ScheduledTransactionRepository scheduledTransactionRepository,
                               AccountRepository accountRepository,
-                              AccountService accountService, GeminiService geminiService, CurrencyService currencyService) {
+                              AccountService accountService,
+                              GeminiService geminiService,
+                              CurrencyService currencyService) {
         this.transactionRepository = transactionRepository;
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.accountRepository = accountRepository;
@@ -135,27 +141,66 @@ public class TransactionService {
                 continue;
             }
 
+            double originalAmount = scheduledTransaction.getAmount();
+            Currency fromCurr = from.getCurrency();
+            Currency toCurr = (to != null ? to.getCurrency() : fromCurr);
+            double convertedAmount = originalAmount; //init och om det är samma valuta behövs ju ingen konvertering
+            double rateUsed = 1.0; //samma logik som raden innan
+            LocalDate rateDate = LocalDate.now();
+
+
+            // konverterar
+            if (!fromCurr.equals(toCurr)) {
+                CurrencyConversionRequestDto req = new CurrencyConversionRequestDto(
+                        fromCurr.getAbbrevation().name(),
+                        toCurr.getAbbrevation().name(),
+                        originalAmount);
+                CurrencyConversionResultDto conv = currencyService.convertCurrency(req);
+                convertedAmount = conv.convertedAmount();
+                rateUsed = conv.rateUsed();
+                rateDate = LocalDate.parse(conv.rateDate());
+            }
+
+
             if (from.getBalance() < scheduledTransaction.getAmount()) {
                 scheduledTransaction.setStatus(TransactionStatus.FAILED);
                 continue;
             }
 
-            updateBalances(from, to, scheduledTransaction.getAmount());
-            Transaction transaction = new Transaction(
-                    null,
-                    from,
-                    to,
-                    scheduledTransaction.getRecipientNumber(),
-                    scheduledTransaction.getType(),
-                    now,
-                    scheduledTransaction.getAmount(),
-                    scheduledTransaction.getDescription(),
-                    scheduledTransaction.getUserNote(),
-                    scheduledTransaction.getOcrNumber(),
-                    scheduledTransaction.getCategory(),
-                    scheduledTransaction.getStatus() == TransactionStatus.PENDING ? TransactionStatus.EXECUTED : TransactionStatus.FAILED
-            );
-            transactionRepository.save(transaction);
+
+            //ersätter gamla updateBalances
+            from.setBalance(from.getBalance() - originalAmount);
+            if (to != null) {
+                to.setBalance(to.getBalance() + convertedAmount);
+                accountRepository.save(to);
+            }
+            accountRepository.save(from);
+
+            // för att ha kvar pending/executed/failed i builder nedan men skulle kunna köra bara "executed"
+            TransactionStatus transStatus = scheduledTransaction.getStatus() == TransactionStatus.PENDING
+                    ? TransactionStatus.EXECUTED
+                    : TransactionStatus.FAILED;
+
+            Transaction trans = Transaction.builder()
+                    .fromAccount(from)
+                    .toAccount(to)
+                    .recipientNumber((scheduledTransaction.getRecipientNumber()))
+                    .type(scheduledTransaction.getType())
+                    .createdAt(now)
+                    .amount(originalAmount)
+                    .convertedAmount(convertedAmount)
+                    .currencyFrom(fromCurr)
+                    .currencyTo(toCurr)
+                    .rateUsed(rateUsed)
+                    .rateDate(rateDate)
+                    .description(scheduledTransaction.getDescription())
+                    .userNote(scheduledTransaction.getUserNote())
+                    .ocrNumber(scheduledTransaction.getOcrNumber())
+                    .category(scheduledTransaction.getCategory())
+                    .status(transStatus)
+                    .build();
+            
+            transactionRepository.save(trans);
             scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
         }
 
