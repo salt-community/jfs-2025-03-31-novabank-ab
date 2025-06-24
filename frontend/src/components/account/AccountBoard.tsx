@@ -1,12 +1,13 @@
-import { ScheduledTransactionItem } from '../generic/transaction-items/ScheduledTransactionItem'
 import type { Account } from '@/types'
 import { useNavigate } from '@tanstack/react-router'
 import { useAccountTransactions } from '@/hooks'
 import Spinner from '../generic/Spinner'
 import { useTranslation } from 'react-i18next'
 import { yellowgoback } from '@/assets/icons'
-import { TransactionItem } from '../generic/transaction-items/TransactionItem'
 import useFetchEntries from '@/hooks/useFetchEntries'
+import { TransactionItem } from '../generic/transaction-items/Transactiontem'
+import { transformToTransactionEntries } from '@/lib/utils'
+import { TransactionAccItem } from '../generic/transaction-items/TransactionAccItem'
 
 type AccountBoardProps = {
   account: Account
@@ -22,15 +23,16 @@ export default function AccountBoard({ account }: AccountBoardProps) {
     isError,
   } = useAccountTransactions(account.id)
 
+  const transactionEntries = transformToTransactionEntries(transactions, account.id)
+
   // Safe fallback for useFetchEntries
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(transactions ?? [])
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(transactionEntries)
 
   if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
 
   // Get only pending scheduled transactions
-  const scheduledTransactions = transactions.filter(
+  const scheduledTransactions = transactionEntries.filter(
     (t) => t.status === 'PENDING',
   )
 
@@ -70,17 +72,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
         <div className="space-y-2">
           {scheduledTransactions.length > 0 ? (
             scheduledTransactions.map((t) => (
-              <ScheduledTransactionItem
-                transactionId={t.transactionId}
+              <TransactionItem
                 key={t.transactionId}
-                amount={t.amount}
-                description={t.description}
-                fromAccountId={t.fromAccountId}
-                ocrNumber={t.ocrNumber}
-                scheduledDate={t.date}
-                toAccountId={t.toAccountId}
-                accountNoType={t.type}
-                category={t.category}
+                transaction={t}
+                variant="scheduled"
               />
             ))
           ) : (
@@ -96,15 +91,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
             <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           ) : (
             allEntries.map((tx) => (
-              <TransactionItem
-                key={tx.key}
-                description={tx.description}
-                theAccount={tx.theAccount}
-                accountNoType={tx.accountNoType}
-                amount={tx.amount}
-                time={tx.time}
-                direction={tx.direction}
-                category={tx.category}
+              <TransactionAccItem
+                key={tx.transactionId}
+                transaction={tx}
+                variant="regular"
               />
             ))
           )}
