@@ -4,6 +4,8 @@ import com.example.backend.model.enums.PaymentType;
 import com.example.backend.model.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -19,6 +21,23 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_from_id")
+    private Currency currencyFrom;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_to_id")
+    private Currency currencyTo;
+
+    @Column
+    private double convertedAmount;
+
+    @Column
+    private double rateUsed;
+
+    @Column
+    private LocalDate rateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_account_id", nullable = false)
