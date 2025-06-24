@@ -14,6 +14,8 @@ import {
   yellowtransactionicon,
   yellowtransfericon,
   yellowsettingsicon,
+  stocksicon,
+  pensionicon,
 } from '@/assets/icons'
 
 type Props = {
@@ -94,6 +96,20 @@ export function SideBar({ admin }: Props) {
             src={isActive('/transfer') ? yellowtransfericon : transfericon}
           />
           <span className="hidden lg:inline">{t('user.transfer')}</span>
+        </a>
+
+        <a
+          className={`flex flex-row gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
+        >
+          <img src={stocksicon} />
+          <span className="hidden lg:inline">{t('user.stocks')}</span>
+        </a>
+
+        <a
+          className={`flex flex-row gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
+        >
+          <img src={pensionicon} />
+          <span className="hidden lg:inline">{t('user.pension')}</span>
         </a>
 
         <a

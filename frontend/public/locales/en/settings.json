@@ -14,5 +14,7 @@
   "language": "Language",
   "english": "English",
   "swedish": "Swedish",
-  "savePreferences": "Save Preferences"
+  "savePreferences": "Save Preferences",
+  "saved": "Changes Saved",
+  "failed": "Failed to save"
 }

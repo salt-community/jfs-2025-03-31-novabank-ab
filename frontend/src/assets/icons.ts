@@ -13,3 +13,6 @@ export { default as yellowtransactionicon } from './yellowtransactionicon.svg'
 export { default as yellowtransfericon } from './yellowtransfericon.svg'
 export { default as yellowsettingsicon } from './yellowsettingsicon.svg'
 export { default as yellowgoback } from './yellowgoback.svg'
+export { default as stocksicon } from './stocksicon.svg'
+export { default as pensionicon } from './pensionicon.svg'
+
