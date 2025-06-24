@@ -31,18 +31,30 @@ public class ScheduledTransaction {
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
 
+    //exchange rate stuff start
+    @NonNull
     @ManyToOne
-    @JoinColumn(name = "currency_from_id")
+    @JoinColumn(name = "currency_from_id", nullable = false)
     private Currency currencyFrom;
 
+    @NonNull
     @ManyToOne
-    @JoinColumn(name = "currency_to_id")
+    @JoinColumn(name = "currency_to_id", nullable = false)
     private Currency currencyTo;
 
-    private double convertedAmount;
-    private double rateUsed;
+    @NonNull
+    @Column(nullable = false)
+    private Double convertedAmount;
+
+    @NonNull
+    @Column(nullable = false)
+    private Double rateUsed;
+
+    @NonNull
+    @Column(nullable = false)
     private LocalDate rateDate;
 
+    //end of exchange rate stuff
 
     @Column(nullable = true)
     private String recipientNumber;
