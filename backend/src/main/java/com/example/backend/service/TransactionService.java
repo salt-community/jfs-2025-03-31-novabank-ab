@@ -160,7 +160,8 @@ public class TransactionService {
 
     public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId) {
         if (accountId != null) {
-          return (Page<UnifiedTransactionResponseDto>) getAllTransactionsByAccount(accountId,userId);
+           Page<Transaction>  transaction = transactionRepository.findByFromAccount_IdOrToAccount_Id(accountId, accountId, pageable);
+          return transaction.map(UnifiedTransactionResponseDto::fromTransaction);
         }
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
