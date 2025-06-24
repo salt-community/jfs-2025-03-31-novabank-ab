@@ -48,7 +48,7 @@ export default function TransactionDetailsModal({
   return (
     <dialog
       ref={dialogRef}
-      className="modal"
+      className="modal cursor-default"
       onClick={(e) => {
         if (e.target === dialogRef.current) {
           handleCancel()
@@ -59,7 +59,7 @@ export default function TransactionDetailsModal({
         <button
           type="button"
           onClick={handleCancel}
-          className="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl"
+          className="absolute top-4 right-4 text-gray-400 hover:text-black hover:cursor-pointer text-2xl"
           aria-label={t('close')}
         >
           &times;
