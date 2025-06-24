@@ -107,7 +107,7 @@ export async function approveLoan(token: string, id: string) {
 
 export async function rejectLoan(token: string, id: string) {
   const res = await fetch(
-    `${BASE2}admin/loan-application/${id}?status==DISAPPROVED`,
+    `${BASE2}admin/loan-application/${id}?status=DISAPPROVED`,
     {
       method: 'PATCH',
       headers: {
