@@ -199,7 +199,7 @@ public class TransactionService {
                     .category(scheduledTransaction.getCategory())
                     .status(transStatus)
                     .build();
-            
+
             transactionRepository.save(trans);
             scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
         }
@@ -260,7 +260,10 @@ public class TransactionService {
                 || (tx.getToAccount() != null && Objects.equals(tx.getToAccount().getUser().getId(), userId));
     }
 
-    private void processTransaction(TransactionRequestDto dto, TransactionData data, boolean isScheduled, String category) {
+    private void processTransaction(TransactionRequestDto dto,
+                                    TransactionData data,
+                                    boolean isScheduled,
+                                    String category) {
         if (isScheduled) {
             ScheduledTransaction scheduled = new ScheduledTransaction(
                     null,
