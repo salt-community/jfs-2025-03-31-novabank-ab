@@ -4,7 +4,9 @@
     "settings": "Inställningar",
     "accounts": "Konton",
     "transactions": "Transaktioner",
-    "transfer": "Överföring"
+    "transfer": "Överföring",
+    "stocks": "Aktier",
+    "pension": "Pension"
   },
   "admin": {
     "dashboard": "Översikt",
