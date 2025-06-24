@@ -51,7 +51,7 @@ export function RequestLoanForm() {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-3xl mb-8">Request a Loan</h2>
+      <h2 className="text-3xl mb-8">Apply for a Loan</h2>
       <form onSubmit={onSubmit} className="space-y-4">
         {/* Account */}
         <div>
