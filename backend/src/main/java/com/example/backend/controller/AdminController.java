@@ -5,11 +5,13 @@ import com.example.backend.dto.adminDto.response.ListUserResponseDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
 import com.example.backend.dto.userDto.response.UserResponseDTO;
 import com.example.backend.model.Account;
+import com.example.backend.model.LoanApplication;
 import com.example.backend.model.UserApplication;
 import com.example.backend.model.User;
 import com.example.backend.model.enums.AccountStatus;
 import com.example.backend.model.enums.ApplicationStatus;
 import com.example.backend.service.AccountService;
+import com.example.backend.service.LoanService;
 import com.example.backend.service.TransactionService;
 import com.example.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,11 +43,13 @@ public class AdminController {
     private final UserService userService;
     private final AccountService accountService;
     private final TransactionService transactionService;
+    private final LoanService loanService;
 
-    public AdminController(UserService userService, AccountService accountService, TransactionService transactionService) {
+    public AdminController(UserService userService, AccountService accountService, TransactionService transactionService, LoanService loanService) {
         this.userService = userService;
         this.accountService = accountService;
         this.transactionService = transactionService;
+        this.loanService = loanService;
     }
 
     @Operation(summary = "Get all users", description = "Returns a list of all users")
@@ -169,6 +173,20 @@ public class AdminController {
     public ResponseEntity<Void> updateApplication(@PathVariable UUID applicationId, @RequestParam(name = "status") ApplicationStatus status){
         UserApplication userApplication = userService.getApplicationById(applicationId);
         userService.updateApplication(userApplication, status);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Updated application status", description = "Updates the application status based on query parameter")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated application status"),
+            @ApiResponse(responseCode = "400", description = "Invalid action"),
+            @ApiResponse(responseCode = "404", description = "Application Not Found"),
+            @ApiResponse(responseCode = "500", description = "Unexpected Error")
+    })
+    @PatchMapping("/loan-application/{applicationId}")
+    public ResponseEntity<Void> updateLoanApplication(@PathVariable UUID applicationId, @RequestParam(name = "status") ApplicationStatus status){
+        LoanApplication userApplication = loanService.getLoanApplicationById(applicationId);
+        loanService.updateLoanApplication(userApplication, status);
         return ResponseEntity.ok().build();
     }
 
