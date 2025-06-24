@@ -91,7 +91,9 @@ public class SecurityConfig {
 
         converter.setPrincipalClaimName("sub"); // Clerk userId
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            System.out.println(">>> JWT claims = " + jwt.getClaims());
             Role role = securityUtil.extractRoleFromJWT(jwt);
+            System.out.println("role = " + role);
             return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
         });
 
