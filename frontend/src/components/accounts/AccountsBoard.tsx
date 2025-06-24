@@ -6,6 +6,7 @@ import type { Account } from '@/types'
 import { useState } from 'react'
 import { useCreateAccount } from '@/hooks'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 
 type AccountsBoardProps = {
   bankAccounts: Array<Account>
@@ -24,11 +25,11 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
       },
       {
         onSuccess: () => {
-          alert('Account created')
+          toast.success(type+ " " + t('accountCreated'))
           setShowModal(false)
         },
         onError: () => {
-          alert('NO ACCOUNT CREATED')
+          toast.error(t('failedToCreateAccount'))
         },
       },
     )
