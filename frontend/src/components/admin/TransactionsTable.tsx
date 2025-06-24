@@ -10,12 +10,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Transaction, TransactionResponse } from '@/types'
-import type { Dispatch, SetStateAction } from 'react'
+import { useState, type Dispatch, type SetStateAction } from 'react'
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  type PaginationState,
 } from '@tanstack/react-table'
 
 type Props = {
@@ -30,6 +34,10 @@ export function AdminTransactionsTable({
   setModalOpen,
 }: Props) {
   const columnHelper = createColumnHelper<Transaction>()
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 50,
+  })
 
   const columns = [
     columnHelper.accessor('transactionId', {
@@ -88,11 +96,26 @@ export function AdminTransactionsTable({
   const table = useReactTable({
     data: data.content,
     columns,
+    debugTable: true,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+
+    globalFilterFn: 'includesString',
+    state: {
+      pagination,
+    },
   })
 
   return (
     <>
+      <input
+        value={table.getState().globalFilter ?? ''}
+        onChange={(e) => table.setGlobalFilter(e.target.value)}
+        placeholder="Global filter Search..."
+      />
       <Table>
         <TableHeader className="bg-amber-300 ">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -153,6 +176,75 @@ export function AdminTransactionsTable({
           ))}
         </TableFooter>
       </Table>
+
+      <div className="h-2" />
+      <div className="flex items-center gap-2">
+        <button
+          className="border rounded p-1"
+          onClick={() => table.firstPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<<'}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          {'<'}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>'}
+        </button>
+        <button
+          className="border rounded p-1"
+          onClick={() => table.lastPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          {'>>'}
+        </button>
+        <span className="flex items-center gap-1">
+          <div>Page</div>
+          <strong>
+            {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount().toLocaleString()}
+          </strong>
+        </span>
+        <span className="flex items-center gap-1">
+          | Go to page:
+          <input
+            type="number"
+            min="1"
+            max={table.getPageCount()}
+            defaultValue={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              table.setPageIndex(page)
+            }}
+            className="border p-1 rounded w-16"
+          />
+        </span>
+        <select
+          value={table.getState().pagination.pageSize}
+          onChange={(e) => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        Showing {table.getRowModel().rows.length.toLocaleString()} of{' '}
+        {table.getRowCount().toLocaleString()} Rows
+      </div>
     </>
   )
 }
