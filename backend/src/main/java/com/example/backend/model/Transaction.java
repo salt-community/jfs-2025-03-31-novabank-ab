@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import com.example.backend.model.enums.PaymentType;
+import com.example.backend.model.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -52,6 +53,8 @@ public class Transaction {
 
     @Column(nullable = true)
     private String category;
+    @Column(nullable = false)
+    private TransactionStatus status;
 
     @PrePersist
     public void prePersist() {

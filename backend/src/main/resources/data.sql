@@ -10,15 +10,9 @@ INSERT INTO users (id, password, first_name, last_name, email, phone_number, rol
                                                                                                                        ('user_2ya9D2bPCC3XYyGsklZRQPPBeb9', '123', 'Elias', 'User', 'elias@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
                                                                                                                        ('user_2yMYqxXhoEDq64tfBlelGADfdlp', '123', 'Amanda', 'User', 'amanda@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
                                                                                                                        ('user_2fMYqxXhoEDq64tfBlelGADfdlp', '123', 'Admin', 'Adminson', 'admin@novabank.se', '0700000002', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
-
-
                                                                                                                        ('user_2yMYqxXhoEDq54tfBlelGADfdlp', '123', 'demo-inactive1', 'User', 'demo@novabank1.se', '0701000402', 'USER', 'CLOSED', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
                                                                                                                        ('user_2yMYqxXhyEDq54tfBlelGADfdlp', '123', 'demo-inactive2', 'User', 'demo@novabank2.se', '0702000402', 'USER', 'CLOSED', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
                                                                                                                        ('user_2yMYqxXhtEDq54tfBlelGADfdlp', '123', 'demo-inactive3', 'User', 'demo@novabank3.se', '0703000402', 'USER', 'CLOSED', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
-
-
-
-
                                                                                                                        ('user_2ySF29vY9WkpDkENO9IiVgjuECS', '123', 'David', 'Aslan', 'david.aslan@appliedtechnology.se', '0700000003', 'ADMIN', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
 
 

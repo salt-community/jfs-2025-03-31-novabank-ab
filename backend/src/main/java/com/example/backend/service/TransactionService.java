@@ -149,7 +149,8 @@ public class TransactionService {
                     scheduledTransaction.getDescription(),
                     scheduledTransaction.getUserNote(),
                     scheduledTransaction.getOcrNumber(),
-                    scheduledTransaction.getCategory()
+                    scheduledTransaction.getCategory(),
+                    scheduledTransaction.getStatus() == TransactionStatus.PENDING ? TransactionStatus.EXECUTED : TransactionStatus.FAILED
             );
             transactionRepository.save(transaction);
             scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
@@ -246,7 +247,8 @@ public class TransactionService {
                     dto.description(),
                     dto.userNote(),
                     dto.ocrNumber(),
-                    category
+                    category,
+                    TransactionStatus.EXECUTED
             );
             transactionRepository.save(transaction);
         }
