@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useGetAllTransactions,
@@ -7,12 +7,14 @@ import {
 } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
 import { TransactionItem } from '@/components/generic/transaction-items/TransactionItem'
-import type { Transaction } from '@/types'
+import type { Account, Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
 import { searchicon } from '@/assets/icons'
+import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
   const [page, setPage] = useState(0)
   const pageSize = 10
 
@@ -28,17 +30,28 @@ export default function TransactionsPage() {
   const [aiSearchBarInputContent, setAiSearchBarInputContent] =
     useState<string>('')
 
-  const { data, isLoading, isError } = useGetAllTransactions(page, pageSize)
+  const { data, isLoading, isError } = useGetAllTransactions(
+    page,
+    pageSize,
+    selectedAccount?.id,
+  )
 
+  // const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
+
+  // const myAccountIds = new Set(accounts?.map((a) => a.id))
+  useEffect(() => {
+    setPage(0)
+  }, [selectedAccount])
+
+  //if (isLoading || accountsLoading) return <Spinner />
   // Provide fallback array to always call hook safely
   const transactionsData = data?.content ?? []
 
   const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
     transactionsFromIdsGivenByAi,
   )
-  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
-    transactionsData,
-  )
+  const { entries: allEntries, isLoading: allLoading } =
+    useFetchEntries(transactionsData)
 
   if (isError) {
     return (
@@ -56,11 +69,11 @@ export default function TransactionsPage() {
 
   return (
     <div className="px-4 sm:px-8 py-6 space-y-12">
-      <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
-      <div className="flex justify-beginning mb-5">
+      <h1 className="text-3xl mb-20">{t('transactions')}</h1>
+      <div className="flex h-8 justify-between">
         <div
           className={`${
-            searchBarOpen ? 'w-full' : 'w-36'
+            searchBarOpen ? 'w-[40%]' : 'w-36'
           } transition-[width] duration-300 ease-in-out bg-white border-1 border-black/70 rounded-4xl flex items-center px-2`}
         >
           <input
@@ -117,6 +130,12 @@ export default function TransactionsPage() {
           />
           <img src={searchicon} alt="Search" className=" " />
         </div>
+        <div>
+          <AccountFilterDropdown
+            selectedAccount={selectedAccount}
+            setSelectedAccount={setSelectedAccount}
+          />
+        </div>
       </div>
 
       <div className="px-5 shadow-sm">
@@ -125,7 +144,7 @@ export default function TransactionsPage() {
             <div className="loader opacity-35 absolute"></div>
           </div>
         ) : (
-          AIEntries.length > 0 && (
+          transactionsFromIdsGivenByAi.length > 0 && (
             <div
               className={`${heightAiDiv} overflow-y-scroll transition-[max-height] duration-1500 ease-in-out`}
             >
@@ -173,8 +192,8 @@ export default function TransactionsPage() {
           )
         )}
       </div>
-      <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
       <div className="px-5 border-1 border-gray-100 shadow-sm p-1">
+        <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
@@ -205,7 +224,7 @@ export default function TransactionsPage() {
           {t('page')} {currentPage + 1} / {totalPages}
         </span>
         <button
-          className="w-20 disabled:cursor-not-allowed cursor-pointer py-2 rounded bg-[#FFB20F] hover:bg-[#F5A700] w-20 disabled:opacity-50"
+          className="w-20 disabled:cursor-not-allowed cursor-pointer py-2 rounded bg-[#FFB20F] hover:bg-[#F5A700] disabled:opacity-50"
           disabled={isLastPage}
           onClick={() => setPage((p) => p + 1)}
         >

@@ -23,8 +23,9 @@ export default function AccountBoard({ account }: AccountBoardProps) {
   } = useAccountTransactions(account.id)
 
   // Safe fallback for useFetchEntries
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(transactions ?? [])
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
+    transactions ?? [],
+  )
 
   if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
@@ -48,7 +49,9 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>
           <p className="mt-4 text-gray-600 text2xl">{t('totalBalance')}</p>
-          <p className="text-4xl font-bold">{account.balance}</p>
+          <p className="text-4xl font-bold">
+            {account.balance}&nbsp;{account.currency}
+          </p>
           <button
             onClick={() => navigate({ to: '/transfer' })}
             className="mt-4 cursor-pointer px-4 py-2 bg-[#FFB20F] hover:bg-[#F5A700] rounded-md text-md shadow"
