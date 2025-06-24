@@ -2,19 +2,16 @@ import { useMemo } from 'react'
 import { useAccounts } from './useAccounts'
 import type { Transaction } from '@/types'
 
-type TransactionEntry = {
-  key: string
-  transactionId: string
-  description: string
-  accountNoType: string
-  amount: number
-  time: string
+export type TransactionEntry = Transaction & {
   direction: 'in' | 'out'
-  theAccount?: string
-  category: string
+  accountType?: string
+  scheduledDate?: string | null
 }
 
-export default function useFetchEntries(transactions: Transaction[]) {
+export default function useFetchEntries(transactions: TransactionEntry[]): {
+  entries: TransactionEntry[]
+  isLoading: boolean
+} {
   const { data: accounts = [], isLoading } = useAccounts()
 
   const entries: TransactionEntry[] = useMemo(() => {
@@ -30,12 +27,8 @@ export default function useFetchEntries(transactions: Transaction[]) {
       const toAccount = accounts.find((a) => a.id === tx.toAccountId)
 
       const base = {
-        transactionId: tx.transactionId,
-        description: tx.description,
-        accountNoType: tx.type,
-        amount: tx.amount,
-        time: tx.date,
-        category: tx.category,
+        ...tx,
+        scheduledDate: tx.scheduledDate ?? null,
       }
 
       if (fromIsMine && toIsMine) {
@@ -43,14 +36,14 @@ export default function useFetchEntries(transactions: Transaction[]) {
           {
             ...base,
             key: tx.transactionId + '-out',
-            direction: 'out' as const,
-            theAccount: fromAccount?.type,
+            direction: 'out',
+            accountType: fromAccount?.type,
           },
           {
             ...base,
             key: tx.transactionId + '-in',
-            direction: 'in' as const,
-            theAccount: toAccount?.type,
+            direction: 'in',
+            accountType: toAccount?.type,
           },
         ]
       } else if (fromIsMine) {
@@ -58,8 +51,8 @@ export default function useFetchEntries(transactions: Transaction[]) {
           {
             ...base,
             key: tx.transactionId + '-out',
-            direction: 'out' as const,
-            theAccount: fromAccount?.type,
+            direction: 'out',
+            accountType: fromAccount?.type,
           },
         ]
       } else if (toIsMine) {
@@ -67,8 +60,8 @@ export default function useFetchEntries(transactions: Transaction[]) {
           {
             ...base,
             key: tx.transactionId + '-in',
-            direction: 'in' as const,
-            theAccount: toAccount?.type,
+            direction: 'in',
+            accountType: toAccount?.type,
           },
         ]
       }

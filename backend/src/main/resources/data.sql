@@ -187,9 +187,6 @@ INSERT INTO user_applications (id, created_at, updated_at, status, first_name, l
                                                                                                                                     ('712961bc-007e-42d6-8a89-5daa54421e33', '2025-06-20 00:42:57', '2025-06-20 21:42:57', 'PENDING', 'Maja', 'Lind', '19560410-8123', 'maja.lind@novabank.se', '0708641442');
 
 
--- Ludwig Hahn
-INSERT INTO users (id, password, first_name, last_name, email, phone_number, role, status, created_at, last_login) VALUES
-    ('user_2yijisgr6eNN2b8wUSiEMG5PiXi','123','Ludwig','Hahn','ludwig.hahn@appliedtechnology.se','0700000004','USER','ACTIVE','2025-06-12 08:42:57','2025-06-12 08:42:57');
 
 INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
     ('d2f9b8f3-1a2e-4c6d-9f7b-8a9b0c1d2e3f','user_2yijisgr6eNN2b8wUSiEMG5PiXi','9bdc18e7-8173-4191-8f61-f3451c5e6759','2025-06-12',0.00,'PERSONAL','ACTIVE','SE5678901234');
@@ -219,7 +216,6 @@ INSERT INTO user_settings_configs (id, user_id, sms_notifications, email_notific
 
 INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
     ('a7e9b3c1-4f9d-4d9b-92da-64a9e5e1c221','user_2yxEp70Yags8QhqTuJunXRvb84p','9bdc18e7-8173-4191-8f61-f3451c5e6759','2025-06-12',99999,'PERSONAL','ACTIVE','SE5675909877');
-
 
 
 
