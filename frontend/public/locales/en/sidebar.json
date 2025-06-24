@@ -13,5 +13,7 @@
     "applications": "Applicants"
   },
   "signOut": "Sign out",
-  "signIn": "Sign in"
+  "signIn": "Sign in",
+  "register": "Register",
+  "loans": "Loans"
 }

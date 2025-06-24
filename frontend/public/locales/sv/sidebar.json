@@ -13,5 +13,7 @@
     "applications": "Ansökningar"
   },
   "signOut": "Logga ut",
-  "signIn": "Logga in"
+  "signIn": "Logga in",
+  "register": "Registrera",
+  "loans": "Lån"
 }
