@@ -1,12 +1,24 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
 })
 
 function LandingPage() {
+  const { i18n } = useTranslation()
+  const { t } = useTranslation('landingPage')
+  useEffect(() => {
+    if (navigator.language) {
+      if (navigator.language.toLowerCase().startsWith('en')) {
+        i18n.changeLanguage('en')
+      } else {
+        i18n.changeLanguage('sv')
+      }
+    }
+  }, [navigator.language])
   const navigate = useNavigate()
   return (
     <div className="h-2000 flex justify-center bg-gradient-to-tr from-sky-700 to-[#FFB20F] relative">
@@ -21,7 +33,7 @@ function LandingPage() {
                 className="text-5xl font-semibold text-white mb-6 drop-shadow-lg animate-slide-in-left"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
-                Welcome to the future of finance
+                {t('welcomeToTheFutureOfFinance')}
                 <br />
                 <p className="text-[#FFB20F] mt-4 drop-shadow-lg">Nova Bank</p>
               </h1>
@@ -29,25 +41,19 @@ function LandingPage() {
                 className="text-2xl text-white mb-8 drop-shadow-lg animate-fade-in"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
-                Let us take your banking to the next level
+                {t('letUsTakeYou')}
                 <br />
-                Register for free today
+                {t('registerForFreeToday')}
               </h2>
-              <div className="flex justify-around">
+              <div className="flex justify-left">
                 <button
                   className=" px-8 py-3 bg-[#FFB20F] border-2 border-yellow-500/80 cursor-pointer text-black rounded-4xl hover:bg-[#F5A700]"
                   style={{ fontFamily: "'Lato', sans-serif" }}
                   onClick={() => navigate({ to: '/register' })}
                 >
-                  Register Here
+                  {t('registerHere')}
                 </button>
-                <button
-                  className=" px-8 py-3 bg-blue-400 border-2 border-blue-300/80 cursor-pointer text-black rounded-4xl hover:opacity-70 "
-                  style={{ fontFamily: "'Lato', sans-serif" }}
-                  onClick={() => navigate({ to: '/loans' })}
-                >
-                  Loans
-                </button>
+
               </div>
             </div>
             <div className="">

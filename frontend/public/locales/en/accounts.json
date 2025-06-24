@@ -54,6 +54,8 @@
   "invalid": "Invalid",
   "number": "number",
   "close": "Close",
+  "allAccounts": "All accounts",
+  "filter": "Filter by account",
   "selectAnAccountNumberType": "Select an account number type",
   "accountNumberType": "Account number type",
   "page": "Page",
