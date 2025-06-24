@@ -4,7 +4,9 @@
     "settings": "Settings",
     "accounts": "Accounts",
     "transactions": "Transactions",
-    "transfer": "Transfer"
+    "transfer": "Transfer",
+    "stocks": "Stocks",
+    "pension": "Pension"
   },
   "admin": {
     "dashboard": "Dashboard",

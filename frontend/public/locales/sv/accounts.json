@@ -64,5 +64,9 @@
   "seeAll": "Visa alla",
   "aiAssistant": "AI-sökning",
   "whatDoYouWantToFindToday": "Vilken transaktion letar du efter?",
-  "goBack": "Gå Tillbaka"
+  "goBack": "Gå Tillbaka",
+  "failedToCreateTransaction": "Misslyckades att skapa transaktion",
+  "createdTransaction": "Transaktion skapad",
+  "accountCreated": "account created",
+  "failedToCreateAccount": "NO ACCOUNT CREATED"
 }
