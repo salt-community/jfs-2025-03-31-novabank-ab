@@ -10,6 +10,9 @@ import {
   UserBottomNav,
   UserTopNav,
 } from '@/components/generic'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { cssTransition } from 'react-toastify'
 
 export const Route = createRootRoute({
   component: () => {
@@ -26,6 +29,10 @@ export const Route = createRootRoute({
       // isLoading: userSettingsLoading,
       // isError: userSettingsError,
     } = useGetUserSettings()
+    const SlideInFromRight = cssTransition({
+      enter: 'slide-in',
+      exit: 'fade-out',
+    })
 
     useEffect(() => {
       if (userSettingsFromApi) {
@@ -112,6 +119,16 @@ export const Route = createRootRoute({
             )}
           </div>
         </SignedOut>
+        <ToastContainer
+          position="top-center"
+          transition={SlideInFromRight}
+          hideProgressBar
+          closeOnClick
+          pauseOnHover={false}
+          pauseOnFocusLoss={false}
+          autoClose={2000}
+          closeButton={false}
+        />
       </div>
     )
   },
