@@ -183,7 +183,7 @@ INSERT INTO scheduled_transactions (id, from_account_id, to_account_id, recipien
 
 -- Ludwig Hahn: user record
 INSERT INTO users (id, password, first_name, last_name, email, phone_number, role, status, created_at, last_login) VALUES
-    ('user_2yijisgr6eNN2b8wUSiEMG5PiXi', '123', 'Ludwig', 'Hahn', 'ludwig.hahn@appliedtechnology.se', '0700000004', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
+    ('user_2yijisgr6eNN2b8wUSiEMG5PiXi', '123', 'Ludwig', 'Hahn', 'ludwig.hahn@appliedtechnology.se', '0700000004', 'ADMIN', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
 
 -- Ludwig Hahn: one PERSONAL SEK account
 INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES

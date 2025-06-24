@@ -14,24 +14,28 @@ public class SecurityUtil {
         this.clerkService = clerkService;
     }
 
+    @SuppressWarnings("unchecked")
     public Role extractRoleFromJWT(Jwt jwt) {
-        @SuppressWarnings("unchecked")
-        Map<String,?> metadata = jwt.getClaim("publicMetadata");
-        if (metadata == null) {
-            metadata = jwt.getClaim("metadata");
+        Map<String,Object> claims = jwt.getClaims();
+
+        Map<String,?> metadata = null;
+        Object rawPub = claims.get("publicMetadata");
+        Object rawPriv = claims.get("metadata");
+
+        if (rawPub instanceof Map<?,?>) {
+            metadata = (Map<String,?>) rawPub;
+        } else if (rawPriv instanceof Map<?,?>) {
+            metadata = (Map<String,?>) rawPriv;
         }
 
-        String userRole = Optional.ofNullable(metadata)
-                .map(m -> (String) m.get("role"))
-                .orElse("user");
-
-        if (!metadataContainsRole(metadata)) {
-            String userId = jwt.getSubject();
-            clerkService.setUserRole(userId, userRole);
+        if (metadata != null && metadata.get("role") instanceof String) {
+            return Role.valueOf(((String)metadata.get("role")).toUpperCase());
         }
 
-        return Role.valueOf(userRole.toUpperCase());
+        String userId = jwt.getSubject();
+        return clerkService.getUserRole(userId);
     }
+
     private boolean metadataContainsRole(Map<String,?> metadata) {
         return metadata != null && metadata.get("role") instanceof String;
     }
