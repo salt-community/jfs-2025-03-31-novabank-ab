@@ -76,7 +76,7 @@ export const Route = createRootRoute({
           )}
 
           <div className="hidden md:flex">
-            <aside className="w-[70px] lg:w-70 h-screen">
+            <aside className="z-10 w-[70px] lg:w-70 h-screen">
               <SideBar admin={isAdmin} />
             </aside>
           </div>

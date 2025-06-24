@@ -21,6 +21,7 @@ import {
   getSortedRowModel,
   type PaginationState,
 } from '@tanstack/react-table'
+import { Input } from '../ui/input'
 
 type Props = {
   data: TransactionResponse
@@ -102,7 +103,6 @@ export function AdminTransactionsTable({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-
     globalFilterFn: 'includesString',
     state: {
       pagination,
@@ -111,12 +111,14 @@ export function AdminTransactionsTable({
 
   return (
     <>
-      <input
+      <Input
+        className="fixed w-1/2   z-10 bg-black text-white opacity-90 "
         value={table.getState().globalFilter ?? ''}
         onChange={(e) => table.setGlobalFilter(e.target.value)}
         placeholder="Global filter Search..."
       />
-      <Table>
+
+      <Table className="mt-10">
         <TableHeader className="bg-amber-300 ">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
