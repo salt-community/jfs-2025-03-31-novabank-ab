@@ -129,9 +129,6 @@ export default function NewAccountModal({
               <option className="text-black" value="SEK">
                 SEK
               </option>
-              <option className="text-black" value="EUR">
-                EUR
-              </option>
             </select>
             <label
               htmlFor="currency"
