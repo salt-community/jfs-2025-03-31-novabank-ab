@@ -5,6 +5,7 @@ import com.example.backend.model.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -29,6 +30,19 @@ public class ScheduledTransaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_account_id")
     private Account toAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_from_id")
+    private Currency currencyFrom;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_to_id")
+    private Currency currencyTo;
+
+    private double convertedAmount;
+    private double rateUsed;
+    private LocalDate rateDate;
+
 
     @Column(nullable = true)
     private String recipientNumber;
