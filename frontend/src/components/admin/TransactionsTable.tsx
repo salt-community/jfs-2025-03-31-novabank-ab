@@ -1,7 +1,8 @@
+'use client'
+
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -10,6 +11,12 @@ import {
 } from '@/components/ui/table'
 import type { Transaction, TransactionResponse } from '@/types'
 import type { Dispatch, SetStateAction } from 'react'
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 
 type Props = {
   data: TransactionResponse
@@ -22,52 +29,128 @@ export function AdminTransactionsTable({
   setModalData,
   setModalOpen,
 }: Props) {
-  function handleOnClick(transaction: Transaction) {
-    setModalData(transaction)
-    setModalOpen((prev) => !prev)
-  }
+  const columnHelper = createColumnHelper<Transaction>()
+
+  const columns = [
+    columnHelper.accessor('transactionId', {
+      header: () => 'Transaction ID',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('date', {
+      header: () => 'Date',
+      cell: (info) => new Date(info.getValue()).toLocaleDateString(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('amount', {
+      header: () => 'Amount',
+      cell: (info) =>
+        info
+          .getValue()
+          .toLocaleString('sv-SE', { style: 'currency', currency: 'SEK' }),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('fromAccountId', {
+      header: () => 'From Account',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('toAccountId', {
+      header: () => 'To Account',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('type', {
+      header: () => 'Type',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('status', {
+      header: () => 'Status',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+    columnHelper.accessor('description', {
+      header: () => 'Description',
+      cell: (info) => info.getValue(),
+      footer: (info) => info.column.id,
+      enableSorting: true,
+    }),
+  ]
+
+  const table = useReactTable({
+    data: data.content,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   return (
     <>
       <Table>
-        <TableCaption>A list of all transactions.</TableCaption>
         <TableHeader className="bg-amber-300 ">
-          <TableRow>
-            <TableHead className="w-[100px] font-black">
-              Transaction id
-            </TableHead>
-            <TableHead className="font-black">From</TableHead>
-            <TableHead className="font-black">To</TableHead>
-            <TableHead className="text-right font-black">Amount</TableHead>
-            <TableHead className="font-black">Type</TableHead>
-            <TableHead className="font-black">Category</TableHead>
-            <TableHead className="font-black">Status</TableHead>
-            <TableHead className="font-black">DateTime</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.content.map((d) => (
-            <TableRow
-              onClick={() => handleOnClick(d)}
-              className="cursor-pointer"
-              key={d.transactionId}
-            >
-              <TableCell className="font-medium">{d.transactionId}</TableCell>
-              <TableCell className="w-4">{d.fromAccountId}</TableCell>
-              <TableCell className="w-4">{d.toAccountId}</TableCell>
-              <TableCell className="text-right">{d.amount}</TableCell>
-              <TableCell>{d.type}</TableCell>
-              <TableCell>{d.category}</TableCell>
-              <TableCell>{d.status}</TableCell>
-              <TableCell>{d.date}</TableCell>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                onClick={() => {
+                  setModalData(row.original)
+                  setModalOpen((prev) => !prev)
+                }}
+                className="cursor-pointer"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={columns.length} className="h-24 text-center">
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
         <TableFooter>
-          <TableRow>
-            <TableCell colSpan={7}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
+          {table.getFooterGroups().map((footerGroup) => (
+            <TableRow key={footerGroup.id}>
+              {footerGroup.headers.map((header) => (
+                <TableCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.footer,
+                        header.getContext(),
+                      )}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableFooter>
       </Table>
     </>
