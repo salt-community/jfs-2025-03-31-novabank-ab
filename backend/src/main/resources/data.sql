@@ -200,13 +200,17 @@ INSERT INTO user_settings_configs (id, user_id, sms_notifications, email_notific
 
 -- David: user record
 INSERT INTO users (id, password, first_name, last_name, email, phone_number, role, status, created_at, last_login) VALUES
-    ('user_2ySF29vY9WkpDkENO9IiVgjuECS', '123', 'David', 'Aslan', 'david.aslan@appliedtechnology.se', '0700000007', 'ADMIN', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
+    ('user_2ySF29vY9WkpDkENO9IiVgjuECS', '123', 'David', 'Aslan', 'david.aslan@appliedtechnology.se', '0700000007', 'ADMIN', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57'),
+    ('user_2yxEp70Yags8QhqTuJunXRvb84p', '123', 'David', 'Aslan', 'david.aslan1999@.gmail.com', '0700000003', 'USER', 'ACTIVE', '2025-06-12 08:42:57', '2025-06-12 08:42:57');
 
 -- David: one PERSONAL SEK account
 INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
-    ('a7e9b3c1-4f9d-4d9b-92fa-64a9e5e1c231', 'user_2ySF29vY9WkpDkENO9IiVgjuECS', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 0.00, 'PERSONAL', 'ACTIVE', 'SE5675909876');
+    ('a7e9b3c1-4f9d-4d9b-92fa-64a9e5e1c231', 'user_2ySF29vY9WkpDkENO9IiVgjuECS', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 0.00, 'PERSONAL', 'ACTIVE', 'SE5675909876'),
+('a7e9b3c1-4f9d-4d9b-92da-64a9e5e1c221', 'user_2yxEp70Yags8QhqTuJunXRvb84p', '9bdc18e7-8173-4191-8f61-f3451c5e6759', '2025-06-12', 0.00, 'PERSONAL', 'ACTIVE', 'SE5675909876');
 
 -- David: default notification settings
 INSERT INTO user_settings_configs (id, user_id, sms_notifications, email_notifications, card_transaction_notifications, atm_withdrawal_notifications, deposit_notifications, language) VALUES
-    ('7b2a67c4-3a1f-463b-a233-e21b77c8e90d', 'user_2ySF29vY9WkpDkENO9IiVgjuECS', true, true, true, true, true, 'en');
+    ('7b2a67c4-3a1f-463b-a233-e21b77c8e90d', 'user_2ySF29vY9WkpDkENO9IiVgjuECS', true, true, true, true, true, 'en'),
+('7b2a66c4-3a1f-463b-a233-e21b77c8e90d', 'user_2yxEp70Yags8QhqTuJunXRvb84p', true, true, true, true, true, 'en');
+
 
