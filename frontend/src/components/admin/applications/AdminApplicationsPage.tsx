@@ -33,7 +33,7 @@ export default function AdminApplicationsPage() {
   // apply filter
   const filtered = data.filter((app) =>
     filter === 'ALL' ? true : app.status === filter,
-  )
+  ) as Application[]
 
   return (
     <>
