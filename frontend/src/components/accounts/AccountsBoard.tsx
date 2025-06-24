@@ -25,11 +25,11 @@ export function AccountsBoard({ bankAccounts }: AccountsBoardProps) {
       },
       {
         onSuccess: () => {
-          toast.success(`${type} account created`)
+          toast.success(type+ " " + t('accountCreated'))
           setShowModal(false)
         },
         onError: () => {
-          toast.error('NO ACCOUNT CREATED')
+          toast.error(t('failedToCreateAccount'))
         },
       },
     )

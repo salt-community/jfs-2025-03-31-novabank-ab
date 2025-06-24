@@ -108,11 +108,11 @@ export default function TransactionForm() {
     createTransaction.mutate(transactionPayload, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['accounts'] })
-        toast.success('Transaction created')
+        toast.success(t('createdTransaction'))
         resetForm()
       },
       onError: () => {
-        toast.error('Failed to create transaction')
+        toast.error(t('failedToCreateTransaction'))
       },
     })
   }

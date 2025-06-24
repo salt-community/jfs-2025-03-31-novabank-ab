@@ -14,5 +14,7 @@
   "language": "Språk",
   "english": "Engelska",
   "swedish": "Svenska",
-  "savePreferences": "Spara inställningar"
+  "savePreferences": "Spara inställningar",
+  "saved": "Ändringar Sparade",
+  "failed": "Misslyckades att spara"
 }
