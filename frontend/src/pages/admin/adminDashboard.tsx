@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 export default function AdminDashboard() {
   return (
     <div className="space-y-20 ">
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="users" className="space-y-4 pt-8 ">
         <TabsList>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="accounts">Accounts</TabsTrigger>
