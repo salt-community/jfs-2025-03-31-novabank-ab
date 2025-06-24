@@ -50,9 +50,8 @@ export default function TransactionsPage() {
   const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
     transactionsFromIdsGivenByAi,
   )
-  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
-    transactionsData,
-  )
+  const { entries: allEntries, isLoading: allLoading } =
+    useFetchEntries(transactionsData)
 
   if (isError) {
     return (
@@ -71,10 +70,10 @@ export default function TransactionsPage() {
   return (
     <div className="px-4 sm:px-8 py-6 space-y-12">
       <h1 className="text-3xl mb-20">{t('allTransactions')}</h1>
-      <div className="flex justify-beginning mb-5">
+      <div className="flex h-8 justify-between">
         <div
           className={`${
-            searchBarOpen ? 'w-full' : 'w-36'
+            searchBarOpen ? 'w-[40%]' : 'w-36'
           } transition-[width] duration-300 ease-in-out bg-white border-1 border-black/70 rounded-4xl flex items-center px-2`}
         >
           <input
@@ -130,6 +129,12 @@ export default function TransactionsPage() {
             value={aiSearchBarInputContent}
           />
           <img src={searchicon} alt="Search" className=" " />
+        </div>
+        <div>
+          <AccountFilterDropdown
+            selectedAccount={selectedAccount}
+            setSelectedAccount={setSelectedAccount}
+          />
         </div>
       </div>
 
@@ -187,12 +192,8 @@ export default function TransactionsPage() {
           )
         )}
       </div>
-      <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
-      <AccountFilterDropdown
-        selectedAccount={selectedAccount}
-        setSelectedAccount={setSelectedAccount}
-      />
       <div className="px-5 border-1 border-gray-100 shadow-sm p-1">
+        <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (

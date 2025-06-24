@@ -20,7 +20,7 @@ export default function AccountFilterDropdown({
     return <div className="p-4 text-red-500">{t('failedToLoadAccounts')}</div>
 
   return (
-    <div className="relative w-full">
+    <div className="w-40">
       <select
         id="accountFilter"
         value={selectedAccount?.accountNumber || ''}
@@ -31,14 +31,12 @@ export default function AccountFilterDropdown({
           setSelectedAccount(selected || null)
         }}
         className={`
-          shadow-md peer cursor-pointer rounded-md p-4 w-full 
-          outline outline-gray-200 focus:outline-2 focus:outline-black 
-          text-left bg-white border-r-15 border-transparent 
-          ${selectedAccount ? 'text-black' : 'text-gray-400'}
+          border-1 border-black cursor-pointer rounded-4xl px-2 w-full  
+          text-left bg-white h-8
         `}
       >
-        <option value="" className="text-gray-400">
-          {t('selectAnAccount')}
+        <option value="" className="text-gray-400 text-sm">
+          {t('allAccounts')}
         </option>
         {bankAccounts.map((account) => (
           <option
@@ -54,9 +52,6 @@ export default function AccountFilterDropdown({
       <label
         htmlFor="accountFilter"
         className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
-          ${selectedAccount
-            ? '-top-2.5 font-semibold text-sm text-black'
-            : 'top-4 text-base text-gray-400 bg-transparent pr-20'}
           peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:text-sm 
           peer-focus:text-black peer-focus:px-1 peer-focus:bg-white
         `}
