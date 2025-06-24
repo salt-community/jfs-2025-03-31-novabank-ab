@@ -6,7 +6,7 @@ type AccountItemProps = {
   account: Account
 }
 
-export default function   AccountItem({ account }: AccountItemProps) {
+export default function AccountItem({ account }: AccountItemProps) {
   const navigate = useNavigate()
 
   return (
@@ -30,7 +30,7 @@ export default function   AccountItem({ account }: AccountItemProps) {
           {account.balance.toLocaleString(undefined, {
             minimumFractionDigits: 2,
           })}
-          &nbsp;SEK
+          &nbsp;{account.currency}
         </span>
 
         <img

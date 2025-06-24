@@ -28,7 +28,7 @@ export function SideBar({ admin }: Props) {
   const isActive = (path: string) => location.pathname.startsWith(path)
 
   const userSideBar = (
-    <aside className=" w-full items-center hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
+    <aside className="items-center hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
       <a onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}

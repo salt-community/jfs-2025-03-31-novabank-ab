@@ -7,6 +7,7 @@ export type Account = {
   createdAt: string
   status: string
   accountNumber: string
+  currency: string
 }
 
 // Explaination: AccountDetails has all props. from Account (inherits) + their own fields/properties
