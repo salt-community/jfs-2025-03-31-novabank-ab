@@ -1,5 +1,9 @@
 package com.example.backend.security;
 
+import com.example.backend.exception.custom.UserNotFoundException;
+import com.example.backend.model.User;
+import com.example.backend.model.enums.Role;
+import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -14,15 +18,17 @@ import java.util.UUID;
 
 @Service
 public class ClerkService {
+    private final UserRepository userRepository;
     @Value("${clerk.api.secret}")
     private String clerkSecretKey;
 
     private final RestTemplate restTemplate;
 
-    public ClerkService() {
+    public ClerkService(UserRepository userRepository) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
         this.restTemplate = new RestTemplate(factory);
+        this.userRepository = userRepository;
     }
 
     public void setUserRole(String userId, String role) {
@@ -67,5 +73,11 @@ public class ClerkService {
         } else {
             throw new RuntimeException("Failed to create user: " + response.getStatusCode());
         }
+    }
+
+    public Role getUserRole(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        return user.getRole();
     }
 }
