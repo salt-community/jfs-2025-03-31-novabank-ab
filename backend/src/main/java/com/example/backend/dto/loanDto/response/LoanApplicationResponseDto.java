@@ -9,8 +9,10 @@ import com.example.backend.model.enums.ApplicationStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record LoanApplicationResponseDto(
+        UUID id,
         LocalDateTime createdAt,
         ApplicationStatus status,
         UserResponseDTO user,
@@ -22,6 +24,7 @@ public record LoanApplicationResponseDto(
 ) {
     public static LoanApplicationResponseDto fromApplication(LoanApplication application) {
         return new LoanApplicationResponseDto(
+                application.getId(),
                 application.getCreatedAt(),
                 application.getStatus(),
                 UserResponseDTO.fromUser(application.getUser()),
