@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next'
 import Tick from './Tick'
 import { useNavigate } from '@tanstack/react-router'
 import { SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
-import loginiconblack from '../../assets/loginiconblack.svg'
 const LoansPage = () => {
   const { t } = useTranslation('loans')
   const navigate = useNavigate()
