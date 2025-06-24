@@ -4,15 +4,21 @@ import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
 import com.example.backend.model.enums.TransactionStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record UnifiedTransactionResponseDto(
-        UUID transactionId,
-        UUID fromAccountId,
-        UUID toAccountId,
+        UUID   transactionId,
+        UUID   fromAccountId,
+        UUID   toAccountId,
         LocalDateTime date,
         double amount,
+        double convertedAmount,
+        String currencyFrom,
+        String currencyTo,
+        double rateUsed,
+        LocalDate rateDate,
         String description,
         String userNote,
         String ocrNumber,
@@ -20,6 +26,7 @@ public record UnifiedTransactionResponseDto(
         TransactionStatus status,
         String category
 ) {
+
     public static UnifiedTransactionResponseDto fromTransaction(Transaction transaction) {
         return new UnifiedTransactionResponseDto(
                 transaction.getId(),
@@ -27,6 +34,11 @@ public record UnifiedTransactionResponseDto(
                 transaction.getToAccount() != null ? transaction.getToAccount().getId() : null,
                 transaction.getCreatedAt(),
                 transaction.getAmount(),
+                transaction.getConvertedAmount(),
+                transaction.getCurrencyFrom().getAbbrevation().name(),
+                transaction.getCurrencyTo().getAbbrevation().name(),
+                transaction.getRateUsed(),
+                transaction.getRateDate(),
                 transaction.getDescription(),
                 transaction.getUserNote(),
                 transaction.getOcrNumber(),
@@ -43,6 +55,11 @@ public record UnifiedTransactionResponseDto(
                 scheduledTransaction.getToAccount() != null ? scheduledTransaction.getToAccount().getId() : null,
                 scheduledTransaction.getScheduledDate(),
                 scheduledTransaction.getAmount(),
+                scheduledTransaction.getConvertedAmount(),
+                scheduledTransaction.getCurrencyFrom().getAbbrevation().name(),
+                scheduledTransaction.getCurrencyTo().getAbbrevation().name(),
+                scheduledTransaction.getRateUsed(),
+                scheduledTransaction.getRateDate(),
                 scheduledTransaction.getDescription(),
                 scheduledTransaction.getUserNote(),
                 scheduledTransaction.getOcrNumber(),
