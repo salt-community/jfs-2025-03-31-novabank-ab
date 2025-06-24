@@ -17,6 +17,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LoansIndexRouteImport } from './routes/loans/index'
 import { Route as AccountsIndexRouteImport } from './routes/accounts/index'
+import { Route as LoansRegisterRouteImport } from './routes/loans/register'
 import { Route as AdminUsersRouteImport } from './routes/admin/users'
 import { Route as AdminTransactionsRouteImport } from './routes/admin/transactions'
 import { Route as AdminDashboardRouteImport } from './routes/admin/dashboard'
@@ -63,6 +64,11 @@ const AccountsIndexRoute = AccountsIndexRouteImport.update({
   path: '/accounts/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoansRegisterRoute = LoansRegisterRouteImport.update({
+  id: '/loans/register',
+  path: '/loans/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminUsersRoute = AdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/loans/register': typeof LoansRegisterRoute
   '/accounts': typeof AccountsIndexRoute
   '/loans': typeof LoansIndexRoute
 }
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/loans/register': typeof LoansRegisterRoute
   '/accounts': typeof AccountsIndexRoute
   '/loans': typeof LoansIndexRoute
 }
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/loans/register': typeof LoansRegisterRoute
   '/accounts/': typeof AccountsIndexRoute
   '/loans/': typeof LoansIndexRoute
 }
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/transactions'
     | '/admin/users'
+    | '/loans/register'
     | '/accounts'
     | '/loans'
   fileRoutesByTo: FileRoutesByTo
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/transactions'
     | '/admin/users'
+    | '/loans/register'
     | '/accounts'
     | '/loans'
   id:
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '/admin/dashboard'
     | '/admin/transactions'
     | '/admin/users'
+    | '/loans/register'
     | '/accounts/'
     | '/loans/'
   fileRoutesById: FileRoutesById
@@ -195,6 +207,7 @@ export interface RootRouteChildren {
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  LoansRegisterRoute: typeof LoansRegisterRoute
   AccountsIndexRoute: typeof AccountsIndexRoute
   LoansIndexRoute: typeof LoansIndexRoute
 }
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/loans/register': {
+      id: '/loans/register'
+      path: '/loans/register'
+      fullPath: '/loans/register'
+      preLoaderRoute: typeof LoansRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/users': {
       id: '/admin/users'
       path: '/admin/users'
@@ -307,6 +327,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminDashboardRoute: AdminDashboardRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminUsersRoute: AdminUsersRoute,
+  LoansRegisterRoute: LoansRegisterRoute,
   AccountsIndexRoute: AccountsIndexRoute,
   LoansIndexRoute: LoansIndexRoute,
 }

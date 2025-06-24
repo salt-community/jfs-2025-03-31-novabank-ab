@@ -1,9 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import Tick from './Tick'
-// import { useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
+import { SignedIn, SignedOut, SignInButton } from '@clerk/clerk-react'
+import loginiconblack from '../../assets/loginiconblack.svg'
 const LoansPage = () => {
   const { t } = useTranslation('loans')
-  //   const navigate = useNavigate()
+  const navigate = useNavigate()
   return (
     <div>
       <div className="flex flex-row items-center justify-center mt-20">
@@ -26,15 +28,24 @@ const LoansPage = () => {
             <h3 className="text-2xl font-bold">{t('justNow')}</h3>
           </div>
           <div className="flex justify-center">
-            <button
-              onClick={() => {
-                // navigate({ to: '/loans/register' })
-              }}
-              type="submit"
-              className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded-2xl hover:cursor-pointer transition-colors w-60"
-            >
-              {t('applyForLoanPromise')}
-            </button>
+            <SignedIn>
+              <button
+                onClick={() => {
+                  navigate({ to: '/loans/register' })
+                }}
+                type="submit"
+                className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded-2xl hover:cursor-pointer transition-colors w-60"
+              >
+                {t('applyForLoanPromise')}
+              </button>
+            </SignedIn>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black font-semibold shadow-sm px-5 py-2 rounded-2xl hover:cursor-pointer transition-colors w-70">
+                  {t('signInToApplyForALoan')}
+                </button>
+              </SignInButton>
+            </SignedOut>
           </div>
         </div>
         <img src="https://media.licdn.com/dms/image/v2/D5612AQGAAOf1Nw56eg/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1685448947293?e=2147483647&v=beta&t=9L2m66BVXDt5TwLOpE8YSftzNVy5KrawxcTk5ryqSDE"></img>
