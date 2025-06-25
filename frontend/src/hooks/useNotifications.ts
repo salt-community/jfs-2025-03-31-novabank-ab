@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useRef } from 'react'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
+import { useEffect, useRef, useCallback } from 'react'
 import SockJS from 'sockjs-client'
 import { Client } from '@stomp/stompjs'
 import type { StompSubscription } from '@stomp/stompjs'
@@ -30,22 +30,67 @@ async function fetchNotifications(token: string): Promise<Notification[]> {
   return res.json()
 }
 
+async function markNotificationsAsRead(
+  ids: string[],
+  token: string,
+): Promise<Notification[]> {
+  const res = await fetch(`${API}notifications/read`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ notificationIds: ids }),
+  })
+
+  if (!res.ok) {
+    const err = await res.json()
+    throw new Error(
+      err.message ?? `markNotificationsAsRead failed: ${res.status}`,
+    )
+  }
+
+  return res.json()
+}
+
 export function useNotifications() {
   const { getToken } = useAuth()
   const queryClient = useQueryClient()
   const clientRef = useRef<Client | null>(null)
   const subRef = useRef<StompSubscription | null>(null)
+  const markAsReadTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const query = useQuery<Notification[], Error>({
     queryKey: ['notifications'],
     queryFn: async () => {
       const token = await getToken()
-      console.log('Fetching notifications with token:', token)
       if (!token) throw new Error('No auth token found')
       return fetchNotifications(token)
     },
     staleTime: 1000 * 60, // 1 minute
   })
+
+  const mutation = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token')
+      return markNotificationsAsRead(ids, token)
+    },
+    onSuccess: (updated) => {
+      queryClient.setQueryData<Notification[]>(['notifications'], (old) => {
+        if (!old) return []
+        const updatedIds = new Set(updated.map((n) => n.id))
+        return old.map((n) => (updatedIds.has(n.id) ? { ...n, read: true } : n))
+      })
+    },
+  })
+
+  const markAllAsRead = useCallback(() => {
+    const unreadIds = query.data?.filter((n) => !n.read).map((n) => n.id) ?? []
+    if (unreadIds.length > 0) {
+      mutation.mutate(unreadIds)
+    }
+  }, [query.data, mutation])
 
   useEffect(() => {
     let isMounted = true
@@ -90,8 +135,24 @@ export function useNotifications() {
       isMounted = false
       subRef.current?.unsubscribe()
       clientRef.current?.deactivate()
+      if (markAsReadTimeout.current) {
+        clearTimeout(markAsReadTimeout.current)
+      }
     }
   }, [getToken, queryClient])
 
-  return query
+  const scheduleMarkAllAsRead = () => {
+    if (markAsReadTimeout.current) {
+      clearTimeout(markAsReadTimeout.current)
+    }
+    markAsReadTimeout.current = setTimeout(() => {
+      markAllAsRead()
+    }, 2000)
+  }
+
+  return {
+    ...query,
+    markAllAsRead,
+    scheduleMarkAllAsRead,
+  }
 }

@@ -13,6 +13,7 @@ import {
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { cssTransition } from 'react-toastify'
+import NotificationBell from '@/components/notifications/NotificationBell'
 
 export const Route = createRootRoute({
   component: () => {
@@ -108,6 +109,9 @@ export const Route = createRootRoute({
               py-[60px] sm:my-5
             "
           >
+            <div className="absolute top-4 right-4">
+              <NotificationBell />
+            </div>
             <Outlet />
           </main>
         </SignedIn>

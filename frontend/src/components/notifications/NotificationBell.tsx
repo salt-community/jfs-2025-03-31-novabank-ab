@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bell } from 'lucide-react'
+import { Bell, Circle } from 'lucide-react'
 import { useNotifications } from '@/hooks/useNotifications'
 
 export default function NotificationBell() {
@@ -9,12 +9,16 @@ export default function NotificationBell() {
     isLoading,
     error,
     refetch,
+    scheduleMarkAllAsRead,
   } = useNotifications()
 
   const unreadCount = notifications.filter((n) => !n.read).length
 
   const toggleDropdown = () => {
-    if (!isOpen) refetch() // Fetch when opening
+    if (!isOpen) {
+      refetch()
+      scheduleMarkAllAsRead()
+    }
     setIsOpen((prev) => !prev)
   }
 
@@ -22,10 +26,10 @@ export default function NotificationBell() {
     <div className="relative inline-block text-left">
       <button
         onClick={toggleDropdown}
-        className="relative p-2 rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="relative p-2 rounded-full hover:bg-gray-100 focus:outline-none hover:cursor-pointer"
         aria-label="Notifications"
       >
-        <Bell size={24} />
+        <Bell size={24} className="hover:opacity-50" />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 block h-2 w-2 rounded-full bg-red-500" />
         )}
@@ -44,9 +48,16 @@ export default function NotificationBell() {
               ? notifications.map((n) => (
                   <div
                     key={n.id}
-                    className={`px-4 py-2 hover:bg-gray-100 ${n.read ? '' : 'font-bold'}`}
+                    className={`px-4 py-2 hover:bg-gray-100 ${
+                      n.read ? '' : 'font-bold'
+                    }`}
                   >
-                    <div>{n.message}</div>
+                    <div className="flex items-center gap-2">
+                      {!n.read && (
+                        <Circle size={8} className="text-red-500" fill="red" />
+                      )}
+                      <div>{n.message}</div>
+                    </div>
                     <div className="text-xs text-gray-500">
                       {new Date(n.createdAt).toLocaleString()}
                     </div>
