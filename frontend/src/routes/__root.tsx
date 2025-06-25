@@ -101,11 +101,11 @@ export const Route = createRootRoute({
             className="
               flex-1
               px-[20px] md:px-[30px] lg:px-[100px] xl:px-[150px] 2xl:px-[200px]
-              pt-[60px] pb-[60px] md:pt-0 md:pb-0
+              pt-[90px] pb-[60px] md:pt-0 md:pb-0
               text-black
               box-border max-w-full
               overflow-y-auto 
-              pt-[60px] pb-[60px] md:pt-0 md:pb-0
+              py-[60px] sm:my-5
             "
           >
             <Outlet />

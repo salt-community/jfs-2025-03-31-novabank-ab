@@ -165,7 +165,7 @@ export default function NewAccountModal({
             <button
               type="button"
               onClick={handleSubmit}
-              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-3 rounded-md transition-colors text-base"
+              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 rounded-md transition-colors text-base"
             >
               {t('done')}
             </button>

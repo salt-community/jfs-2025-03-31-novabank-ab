@@ -319,7 +319,7 @@ const Settings = () => {
               <button
                 onClick={handleUpdateSettings}
                 type="submit"
-                className="bg-[#FFB20F] mt-5 hover:bg-[#F5A700] text-black shadow-sm py-2 rounded-4xl w-full transition-colors"
+                className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 rounded-md transition-colors"
               >
                 {t('savePreferences')}
               </button>

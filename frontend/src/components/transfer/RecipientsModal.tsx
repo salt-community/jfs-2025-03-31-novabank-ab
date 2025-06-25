@@ -292,7 +292,7 @@ export default function RecipientsModal({
                   <button
                     type="button"
                     onClick={() => handleRecipientSubmit(recipientClient)}
-                    className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
+                    className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 rounded-md transition-colors"
                   >
                     {t('done')}
                   </button>
