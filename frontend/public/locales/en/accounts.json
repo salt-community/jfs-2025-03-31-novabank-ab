@@ -72,5 +72,11 @@
   "failedToCreateTransaction": "Failed to create transaction",
   "createdTransaction": "Transaction created",
   "accountCreated": "account created",
-  "failedToCreateAccount": "NO ACCOUNT CREATED"
+  "failedToCreateAccount": "NO ACCOUNT CREATED",
+  "allCategories": "All categories",
+  "minAmount": "Min",
+  "maxAmount": "Max",
+  "search": "Search",
+  "clear": "Clear",
+  "amountFilter": "Filter amount"
 }

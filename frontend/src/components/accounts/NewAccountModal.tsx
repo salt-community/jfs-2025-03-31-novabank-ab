@@ -57,30 +57,42 @@ export default function NewAccountModal({
       }}
     >
       <div
-        className="modal-box max-h-[90vh] bg-white p-10 rounded-lg shadow-lg relative  max-w-3xl 
-                      sm:max-w-xl text-[#141414]"
+        className="
+          modal-box
+          max-h-[90vh] 
+          bg-white 
+          p-6 sm:p-10 
+          rounded-lg 
+          shadow-lg 
+          relative  
+          max-w-full sm:max-w-xl 
+          text-[#141414] 
+          overflow-auto
+          "
       >
         <button
           onClick={handleCancel}
-          className="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl cursor-pointer"
+          className="absolute top-4 right-4 text-gray-400 hover:text-black text-3xl sm:text-2xl cursor-pointer"
           aria-label="Close"
         >
           &times;
         </button>
 
-        <div className="space-y-5 p-8 h-100">
-          <p className="mb-10 text-center text-xl">{t('openNewAccount')}</p>
+        <div className="space-y-5 p-2 sm:p-8 h-full">
+          <p className="mb-6 sm:mb-10 text-center text-lg sm:text-xl ">
+            {t('openNewAccount')}
+          </p>
+
           {/* Account Type */}
           <div className="relative w-full">
             <select
               value={accountType}
               id="accountType"
               onChange={(e) => setAccountType(e.target.value as AccountType)}
-              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
-                              focus:outline-2 focus:outline-black text-left bg-white
-                              ${errors.accountType ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
-                              border-r-15 border-transparent
-                              ${accountType ? ' text-black' : 'text-gray-400'}`}
+              className={`peer hover:cursor-pointer rounded-md border-r-10 border-transparent shadow-md p-3 pb-4 w-full outline outline-gray-200 
+                          focus:outline-2 focus:outline-black text-left bg-white
+                          ${errors.accountType ? 'outline-red-600 focus:outline-red-600 ' : ''}
+                          ${accountType ? 'text-black' : 'text-gray-400'}`}
             >
               <option value="" className="text-gray-400">
                 {t('selectAnAccountType')}
@@ -94,11 +106,11 @@ export default function NewAccountModal({
             </select>
             <label
               htmlFor="accountType"
-              className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+              className={`absolute left-3 px-1 transition-all duration-200 bg-white pointer-events-none
               ${
                 accountType
                   ? '-top-2.5 font-semibold text-sm text-black'
-                  : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+                  : 'top-3.5 text-base text-gray-400 bg-transparent pr-16'
               }
               ${errors.accountType ? 'peer-focus:text-red-600 ' : 'peer-focus:text-black'}
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
@@ -117,11 +129,10 @@ export default function NewAccountModal({
               value={currency}
               id="currency"
               onChange={(e) => setCurrency(e.target.value as Currency)}
-              className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200 
-                              focus:outline-2 focus:outline-black text-left bg-white
-                              ${errors.currency ? 'outline outline-red-600 focus:outline-red-600 ' : ''}
-                              border-r-15 border-transparent
-                              ${currency ? ' text-black' : 'text-gray-400'}`}
+              className={`peer hover:cursor-pointer border-r-10 border-transparent rounded-md shadow-md p-3 pb-4 w-full outline outline-gray-200 
+                          focus:outline-2 focus:outline-black text-left bg-white
+                          ${errors.currency ? 'outline-red-600 focus:outline-red-600 ' : ''}
+                          ${currency ? 'text-black' : 'text-gray-400'}`}
             >
               <option value="" className="text-gray-400">
                 {t('selectCurrencyOnly')}
@@ -132,11 +143,11 @@ export default function NewAccountModal({
             </select>
             <label
               htmlFor="currency"
-              className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none
+              className={`absolute left-3 px-1 transition-all duration-200 bg-white pointer-events-none
               ${
                 currency
                   ? '-top-2.5 font-semibold text-sm text-black'
-                  : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+                  : 'top-3.5 text-base text-gray-400 bg-transparent pr-16'
               }
               ${errors.currency ? 'peer-focus:text-red-600 ' : 'peer-focus:text-black'}
               peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black 
@@ -154,7 +165,7 @@ export default function NewAccountModal({
             <button
               type="button"
               onClick={handleSubmit}
-              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
+              className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 rounded-md transition-colors text-base"
             >
               {t('done')}
             </button>

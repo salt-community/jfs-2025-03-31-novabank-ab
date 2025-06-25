@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.example.backend.model.User;
+import com.example.backend.model.enums.UserStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -292,6 +294,11 @@ public class TransactionService {
             throw new UserUnauthorizedException("User not connected to account");
         }
 
+        User fromUser = from.getUser();
+        if(fromUser.getStatus() != UserStatus.ACTIVE){
+            throw new AccountNotAllowedException("From User is not active.");
+        }
+
         if (!accountIsActive(from)) {
             throw new AccountNotAllowedException("From account is not active.");
         }
@@ -305,6 +312,12 @@ public class TransactionService {
             }
             to = accountRepository.findByAccountNumber(dto.toAccountNo())
                     .orElseThrow(AccountNotFoundException::new);
+
+            User toUser = to.getUser();
+
+            if(toUser.getStatus() != UserStatus.ACTIVE){
+                throw new AccountNotAllowedException("To User is not active.");
+            }
 
             if (!accountIsActive(to)) {
                 throw new AccountNotAllowedException("To account is not active.");
