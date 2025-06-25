@@ -118,54 +118,59 @@ export default function TransactionForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12"
-    >
-      <Sender
-        sender={sender}
-        setSender={setSender}
-        recipient={recipientAccount}
-        error={errors.sender}
-      />
+    <div className="max-w-md sm:max-w-3xl p-6">
+      <h2 className="text-3xl mb-8 sm:mb-15">{t('newTransfer')}</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 shadow-sm px-4 sm:px-8 py-6"
+      >
+        <Sender
+          sender={sender}
+          setSender={setSender}
+          recipient={recipientAccount}
+          error={errors.sender}
+        />
 
-      <Recipient
-        sender={sender}
-        error={errors.recipientError}
-        recipientAccount={recipientAccount}
-        setRecipientAccount={setRecipientAccount}
-        recipientClient={recipientClient}
-        setRecipientClient={setRecipientClient}
-        setAccNoType={setAccNoType}
-      />
+        <Recipient
+          sender={sender}
+          error={errors.recipientError}
+          recipientAccount={recipientAccount}
+          setRecipientAccount={setRecipientAccount}
+          recipientClient={recipientClient}
+          setRecipientClient={setRecipientClient}
+          setAccNoType={setAccNoType}
+        />
 
-      <Amount amount={amount} setAmount={setAmount} error={errors.amount} />
+        <Amount amount={amount} setAmount={setAmount} error={errors.amount} />
 
-      <TransactionDate
-        transactionDate={transactionDate}
-        setTransactionDate={setTransactionDate}
-        error={errors.transactionDate}
-      />
+        <TransactionDate
+          transactionDate={transactionDate}
+          setTransactionDate={setTransactionDate}
+          error={errors.transactionDate}
+        />
 
-      <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr} />
+        <Ocr ocr={ocr} setOcr={setOcr} error={errors.ocr} />
 
-      <Notes notes={notes} setNotes={setNotes} />
+        <Notes notes={notes} setNotes={setNotes} />
 
-      {/* Submit button */}
-      <div className="relative w-full">
-        <button
-          type="submit"
-          disabled={createTransaction.isPending}
-          className={`bg-[#FFB20F] mt-5 text-black shadow-md px-5 py-4 rounded-lg w-full transition-colors
+        {/* Submit button */}
+        <div className="relative w-full">
+          <button
+            type="submit"
+            disabled={createTransaction.isPending}
+            className={`bg-[#FFB20F] mt-5 text-black shadow-md py-2 px-3 rounded-lg w-full transition-colors
             ${
               createTransaction.isPending
                 ? 'opacity-50 cursor-not-allowed'
                 : 'hover:bg-[#F5A700] hover:cursor-pointer'
             }`}
-        >
-          {createTransaction.isPending ? `${t('processing')}...` : t('submit')}
-        </button>
-      </div>
-    </form>
+          >
+            {createTransaction.isPending
+              ? `${t('processing')}...`
+              : t('submit')}
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }

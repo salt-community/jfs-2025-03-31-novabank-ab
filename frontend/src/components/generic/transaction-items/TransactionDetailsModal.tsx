@@ -85,19 +85,17 @@ export default function TransactionDetailsModal({
               </div>
             )}
             {transaction.status && (
-              <p>
-                <p className="font-semibold opacity-50">{transaction.status}</p>
-              </p>
+              <p className="font-semibold opacity-50">{transaction.status}</p>
             )}
           </div>
 
           <hr className="my-4" />
 
           {transaction.transactionId && (
-            <p>
+            <div>
               <p className="text-lg mr-2 font-semibold">Transaction ID</p>
-              <span>{transaction.transactionId}</span>
-            </p>
+              <p>{transaction.transactionId}</p>
+            </div>
           )}
 
           <div className="flex justify-between">
@@ -133,9 +131,7 @@ export default function TransactionDetailsModal({
               <p>{transaction.userNote}</p>
               <hr className="my-4" />
             </div>
-            
           )}
-
 
           <div className="flex justify-between">
             {transaction.ocrNumber && (
