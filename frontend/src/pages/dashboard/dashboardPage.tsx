@@ -26,14 +26,16 @@ export default function DashboardPage() {
   if (isTransactionsLoading) return <Spinner />
 
   if (isAccountsError)
-    return <div className="p-8 text-red-500">Failed to load accounts</div>
+    return <div className="p-8 text-red-500">{t('failedLoadingAccounts')}</div>
   if (isTransactionsError)
-    return <div className="p-8 text-red-500">Failed to load transactions</div>
+    return (
+      <div className="p-8 text-red-500">{t('failedLoadingTransactions')}</div>
+    )
 
   return (
     <>
       <div className="px-4 sm:px-8 py-6 space-y-12">
-        <h1 className="text-3xl mb-20">{t('admin.dashboard')}</h1>
+        <h1 className="text-3xl mb-8 sm:mb-15">{t('admin.dashboard')}</h1>
         <AccountGallery bankAccounts={accounts} />
         <TransactionList transactions={transactionEntries} />
       </div>

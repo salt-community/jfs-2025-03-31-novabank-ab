@@ -219,5 +219,29 @@ INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, statu
 
 
 
+-- Golden Boy (USER)
+INSERT INTO users (id, password, first_name, last_name, email, phone_number, role, status, created_at, last_login) VALUES
+    ('user_3fgEp71Yags8QhqTuJunXRvb99r','123','Golden','Boy','golden.boy@crime.com','0708794628','USER','ACTIVE','2025-05-14 12:10:00','2025-06-24 09:00:00');
+
+INSERT INTO user_settings_configs (id, user_id, sms_notifications, email_notifications, card_transaction_notifications, atm_withdrawal_notifications, deposit_notifications, language) VALUES
+    ('8c3b77d5-4a2e-473c-b344-f31c88c9f91e','user_3fgEp71Yags8QhqTuJunXRvb99r',true,true,true,true,true,'en');
+
+INSERT INTO accounts (id, user_id, currency_id, created_at, balance, type, status, account_number) VALUES
+    ('b8f0c4d2-5d0a-4e8f-93fb-75ba6e2f1d43','user_3fgEp71Yags8QhqTuJunXRvb99r','9bdc18e7-8173-4191-8f61-f3451c5e6759','2025-06-01',400000,'PERSONAL','ACTIVE','SE8899776655');
+
+-- Legitimate-looking loan application
+INSERT INTO user_applications (id, created_at, updated_at, status, first_name, last_name, personal_number, email, phone_number) VALUES
+    ('781aa621-bc41-4a1f-9c7b-92cf505c52fe', '2025-05-15 08:42:57', '2025-06-15 06:42:57', 'APPROVED', 'Golden', 'Boy', '19881021-9385', 'golden.boy@crime.com', '0708794628');
+
+-- Suspicious transactions (emoji and unusual values)
+INSERT INTO transactions (id, from_account_id, to_account_id, recipient_number, type, created_at, amount, description, user_note, ocr_number) VALUES
+                                                                                                                                                  ('7a34e3f1-dfa4-431a-9142-bc7d1001b111', 'b8f0c4d2-5d0a-4e8f-93fb-75ba6e2f1d43', 'a7e9b3c1-4f9d-4d9b-92da-64a9e5e1c221', 'SE5675909877', 'INTERNAL_TRANSFER', '2025-06-22 10:00:00', 666.66, '😈 Payment', 'for silence 🔇', 'OCR66666'),
+                                                                                                                                                  ('3bb59c02-4c0d-42de-a762-631b2d5d2222', 'b8f0c4d2-5d0a-4e8f-93fb-75ba6e2f1d43', 'a7e9b3c1-4f9d-4d9b-92da-64a9e5e1c221', 'SE5675909877', 'INTERNAL_TRANSFER', '2025-06-23 12:00:00', 420.00, '🪙💰💸', '💵💵💵', 'OCR42069'),
+                                                                                                                                                  ('d6ea6a8b-c5ad-43ae-84f7-901eac3e3333', 'b8f0c4d2-5d0a-4e8f-93fb-75ba6e2f1d43', 'a7e9b3c1-4f9d-4d9b-92da-64a9e5e1c221', 'SE5675909877', 'INTERNAL_TRANSFER', '2025-06-24 09:30:00', 1337.00, 'Elite money transfer 💼', '1337 reasons', 'OCR13370');
+
+-- Suspicious scheduled transaction
+INSERT INTO scheduled_transactions (id, from_account_id, to_account_id, recipient_number, type, amount, scheduled_date, status, created_at, ocr_number, user_note, description) VALUES
+    ('f4c2f921-234a-486b-b3b7-9ce8748c4444', 'b8f0c4d2-5d0a-4e8f-93fb-75ba6e2f1d43', 'a7e9b3c1-4f9d-4d9b-92da-64a9e5e1c221', 'SE5675909877', 'INTERNAL_TRANSFER', 999999.99, '2025-06-30 09:00:00', 'PENDING', '2025-06-24 10:00:00', 'OCR99999', '🎁 hush bonus', 'for continued cooperation');
+
 
 

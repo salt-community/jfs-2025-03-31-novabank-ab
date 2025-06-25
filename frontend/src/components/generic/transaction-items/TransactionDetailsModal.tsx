@@ -25,7 +25,7 @@ export default function TransactionDetailsModal({
     onClose()
   }
 
-  const isScheduled = variant === 'scheduled'
+  const isScheduled = variant === t('scheduled')
 
   const dateToUse = isScheduled
     ? transaction.date
@@ -33,17 +33,17 @@ export default function TransactionDetailsModal({
 
   const formattedDate = dateToUse
     ? new Date(dateToUse).toISOString().slice(0, 10)
-    : 'Unknown'
+    : t('unknown')
 
   // Capitalize the category
   const capitalizedCategory = transaction.category
     ? transaction.category.charAt(0).toUpperCase() +
       transaction.category.slice(1).toLowerCase()
-    : 'No category'
+    : t('noCategory')
 
   // Determine if account number type should be shown
   const showAccNoType =
-    transaction.type === 'PLUSGIRO' || transaction.type === 'BANKGIRO'
+    transaction.type === t('plusgiro') || transaction.type === t('bankgiro')
 
   return (
     <dialog
@@ -79,25 +79,23 @@ export default function TransactionDetailsModal({
             {formattedDate && (
               <div>
                 <p className="font-semibold">
-                  {isScheduled ? 'Scheduled for' : 'Transaction date'}
+                  {isScheduled ? t('scheduledFor') : t('transactionDate')}
                 </p>
                 <span className="text-md">{formattedDate}</span>
               </div>
             )}
             {transaction.status && (
-              <p>
-                <p className="font-semibold opacity-50">{transaction.status}</p>
-              </p>
+              <p className="font-semibold opacity-50">{transaction.status}</p>
             )}
           </div>
 
           <hr className="my-4" />
 
           {transaction.transactionId && (
-            <p>
-              <p className="text-lg mr-2 font-semibold">Transaction ID</p>
-              <span>{transaction.transactionId}</span>
-            </p>
+            <div>
+              <p className="text-lg mr-2 font-semibold">{t('transactionId')}</p>
+              <p>{transaction.transactionId}</p>
+            </div>
           )}
 
           <div className="flex justify-between">
@@ -133,9 +131,7 @@ export default function TransactionDetailsModal({
               <p>{transaction.userNote}</p>
               <hr className="my-4" />
             </div>
-            
           )}
-
 
           <div className="flex justify-between">
             {transaction.ocrNumber && (
@@ -147,9 +143,9 @@ export default function TransactionDetailsModal({
 
             {transaction.direction && (
               <div>
-                <p className="text-md font-semibold">Flow</p>
+                <p className="text-md font-semibold">{t('transactionFlow')}</p>
                 <p>
-                  {transaction.direction === 'in'
+                  {transaction.direction === t('in')
                     ? t('incoming')
                     : t('outgoing')}
                 </p>

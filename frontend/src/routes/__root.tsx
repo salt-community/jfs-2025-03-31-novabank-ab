@@ -13,10 +13,12 @@ import {
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { cssTransition } from 'react-toastify'
+import NotificationBell from '@/components/notifications/NotificationBell'
 
 export const Route = createRootRoute({
   component: () => {
     const { i18n } = useTranslation()
+    const { t } = useTranslation('landingPage')
     const { location } = useRouterState()
     const isIndex = location.pathname === '/'
     const isRegister = location.pathname === '/register'
@@ -71,6 +73,16 @@ export const Route = createRootRoute({
     return (
       <div className="flex min-h-screen font-lato">
         <SignedIn>
+          <ToastContainer
+            position="top-center"
+            transition={SlideInFromRight}
+            hideProgressBar
+            closeOnClick
+            pauseOnHover={false}
+            pauseOnFocusLoss={false}
+            autoClose={2000}
+            closeButton={false}
+          />
           {!isAdmin && (
             <>
               <div className="md:hidden fixed top-0 left-0 right-0 h-[60px] z-50">
@@ -87,7 +99,20 @@ export const Route = createRootRoute({
               <SideBar admin={isAdmin} />
             </aside>
           </div>
-          <main className="flex-1 mx-[20px] md:mx-[30px] lg:mx-[100px] xl:mx-[150px] 2xl:mx-[200px] text-black">
+          <main
+            className="
+              flex-1
+              px-[20px] md:px-[30px] lg:px-[100px] xl:px-[150px] 2xl:px-[200px]
+              pt-[90px] pb-[60px] md:pt-0 md:pb-0
+              text-black
+              box-border max-w-full
+              overflow-y-auto 
+              py-[60px] sm:my-5
+            "
+          >
+            <div className="absolute top-4 right-4">
+              <NotificationBell />
+            </div>
             <Outlet />
           </main>
         </SignedIn>
@@ -103,24 +128,12 @@ export const Route = createRootRoute({
               <>
                 <Header />
                 <div className="flex justify-center mx-auto w-full text-center bg-white mt-40 text-4xl">
-                  <h1 className="" style={{ fontFamily: "'Lato', sans-serif" }}>
-                    Please sign in to access this page
-                  </h1>
+                  <h1>{t('signInToAccess')}</h1>
                 </div>
               </>
             )}
           </div>
         </SignedOut>
-        <ToastContainer
-          position="top-center"
-          transition={SlideInFromRight}
-          hideProgressBar
-          closeOnClick
-          pauseOnHover={false}
-          pauseOnFocusLoss={false}
-          autoClose={2000}
-          closeButton={false}
-        />
       </div>
     )
   },

@@ -23,34 +23,35 @@ export function Header() {
   const navigate = useNavigate()
   return (
     <header className="bg-black w-full">
-      <div className="flex items-center justify-between pl-6">
+      <div className="flex items-center justify-between px-2 sm:px-0 sm:pl-6 h-auto sm:h-20">
         <img
           src={novabankicon}
           onClick={() => navigate({ to: '/' })}
           alt="Nova Bank Logo"
-          className="h-20 bg-black rounded-4xl hover:cursor-pointer w-20"
+          className="h-14 w-14 sm:h-20 sm:w-20 bg-black rounded-4xl hover:cursor-pointer"
         />
-        <div className="flex items-center ml-auto">
+        <div className="flex items-center ml-auto gap-2 sm:gap-0">
           <button
             onClick={() => navigate({ to: '/loans' })}
-            className="flex justify-center items-center px-2 gap-2 w-30 h-20 text-white hover:cursor-pointer underline-offset-5 hover:text-black hover:bg-[#fab123] hover:opacity-100"
+            className="flex justify-center items-center px-3 py-2 sm:px-2 gap-2 h-10 sm:h-20 text-sm sm:text-base w-auto sm:w-30 text-white bg-transparent rounded-md sm:rounded-none hover:cursor-pointer hover:text-black hover:bg-[#fab123] hover:opacity-100"
           >
             {t('loans')}
           </button>
           <button
             onClick={() => navigate({ to: '/register' })}
-            className="flex justify-center items-center px-2 gap-2 w-30 h-20 text-white hover:cursor-pointer underline-offset-5 hover:text-black hover:bg-[#fab123] hover:opacity-100"
+            className="flex justify-center items-center px-3 py-2 sm:px-2 gap-2 h-10 sm:h-20 text-sm sm:text-base w-auto sm:w-30 text-white bg-transparent rounded-md sm:rounded-none hover:cursor-pointer hover:text-black hover:bg-[#fab123] hover:opacity-100"
           >
             {t('register')}
           </button>
           <SignedOut>
             <SignInButton mode="modal">
-              <button className="flex justify-center items-center px-2 gap-2 w-30 h-20 bg-[#fab123] text-black hover:cursor-pointer underline-offset-5 hover:bg-[#F5A700] hover:opacity-100">
+              <button className="flex justify-center items-center px-3 py-2 sm:px-2 gap-2 h-10 sm:h-20 text-sm sm:text-base w-auto sm:w-30 bg-[#fab123] text-black rounded-md sm:rounded-none hover:cursor-pointer hover:bg-[#F5A700] hover:opacity-100">
                 {t('signIn')}
-                <img src={loginiconblack} />
+                <img src={loginiconblack} className="h-4 sm:h-5" />
               </button>
             </SignInButton>
           </SignedOut>
+
           <SignedIn>
             <RedirectOnSignIn />
           </SignedIn>

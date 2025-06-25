@@ -20,8 +20,13 @@ import {
   loanicon,
   mypagesicon,
   arrowdownicon,
-  servicesicon
+  servicesicon,
+  yellowadmindashboardicon,
+  admindashboardicon,
+  yellowusersicon,
+  usersicon,
 } from '@/assets/icons'
+import { Badge } from '../ui/badge'
 
 type Props = {
   admin: boolean
@@ -36,7 +41,7 @@ export function SideBar({ admin }: Props) {
 
   const userSideBar = (
     <aside className="items-left hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
-      <a className="flex justify-center"onClick={() => navigate({ to: '/' })}>
+      <a className="flex justify-center" onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
           className="w-10 h-10 xl:h-20 xl:w-20 mb-15  hover:cursor-pointer"
@@ -176,6 +181,8 @@ export function SideBar({ admin }: Props) {
       </div>
     </aside>
   )
+
+  //ADMIN SIDEBAR
   const adminSideBar = (
     <aside className="w-70 fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
@@ -183,6 +190,9 @@ export function SideBar({ admin }: Props) {
           src={novabankicon}
           className="w-10 h-10 xl:h-20 xl:w-20 mb-15  hover:cursor-pointer"
         />
+        <Badge className="bg-[#FFB20F]" variant={'secondary'}>
+          ADMIN
+        </Badge>
       </a>
 
       <div className="flex gap-8 flex-col list-none ">
@@ -195,7 +205,11 @@ export function SideBar({ admin }: Props) {
           }`}
         >
           <img
-            src={isActive('/admin/dashboard') ? yellowhomeicon : homeicon}
+            src={
+              isActive('/admin/dashboard')
+                ? yellowadmindashboardicon
+                : admindashboardicon
+            }
             alt="Home"
           />
           {t('admin.dashboard')}
@@ -209,9 +223,7 @@ export function SideBar({ admin }: Props) {
               : ''
           }`}
         >
-          <img
-            src={isActive('/admin/users') ? yellowaccounticon : accounticon}
-          />
+          <img src={isActive('/admin/users') ? yellowusersicon : usersicon} />
           {t('admin.users')}
         </a>
 
@@ -249,6 +261,18 @@ export function SideBar({ admin }: Props) {
             }
           />
           {t('admin.applications')}
+        </a>
+
+        <a
+          onClick={() => navigate({ to: '/admin/loans' })}
+          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+            isActive('/admin/loans')
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
+              : ''
+          }`}
+        >
+          <img src={isActive('/admin/loans') ? yellowloanicon : loanicon} />
+          {t('admin.loans')}
         </a>
       </div>
       <div className="mb-10 w-[122px]">

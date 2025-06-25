@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
 import { useTranslation } from 'react-i18next'
+import { frontpagephone } from '@/assets/icons'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
@@ -27,10 +28,10 @@ function LandingPage() {
       </SignedIn>
       <SignedOut>
         <div className="mt-10">
-          <div className="flex flex-col md:flex-row justify-between w-full max-w-6xl mx-auto px-6 py-16">
+          <div className="flex flex-col md:flex-row text-center sm:text-left justify-between w-full max-w-6xl mx-auto px-5 sm:px-6 sm:py-16">
             <div className="backdrop-blur-xl bg-black border border-yellow-300/80 rounded-3xl shadow-2xl p-10 md:w-1/2 animate-fade-in-up">
               <h1
-                className="text-5xl font-semibold text-white mb-6 drop-shadow-lg animate-slide-in-left"
+                className="sm:text-5xl text-[30px] font-semibold text-white mb-6 drop-shadow-lg animate-slide-in-left"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 {t('welcomeToTheFutureOfFinance')}
@@ -38,14 +39,14 @@ function LandingPage() {
                 <p className="text-[#FFB20F] mt-4 drop-shadow-lg">Nova Bank</p>
               </h1>
               <h2
-                className="text-2xl text-white mb-8 drop-shadow-lg animate-fade-in"
+                className="sm:text-2xl text-xl text-white mb-8 drop-shadow-lg animate-fade-in"
                 style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 {t('letUsTakeYou')}
                 <br />
                 {t('registerForFreeToday')}
               </h2>
-              <div className="flex justify-left">
+              <div className="flex justify-center sm:justify-between">
                 <button
                   className=" px-8 py-3 bg-[#FFB20F] border-2 border-yellow-500/80 cursor-pointer text-black rounded-4xl hover:bg-[#F5A700]"
                   style={{ fontFamily: "'Lato', sans-serif" }}
@@ -53,12 +54,11 @@ function LandingPage() {
                 >
                   {t('registerHere')}
                 </button>
-
               </div>
             </div>
-            <div className="">
+            <div className="hidden sm:block">
               <img
-                src="/PhonePlaceholder.png"
+                src={frontpagephone}
                 alt="Landing Page Illustration"
                 className="w-full animate-fade-in-up h-120 max-w-md mx-auto"
               />
@@ -99,6 +99,9 @@ function RedirectOnSignIn() {
   useEffect(() => {
     if (user) {
       navigate({ to: '/dashboard' })
+    }
+    if (user?.publicMetadata.role === 'admin') {
+      navigate({ to: '/admin/dashboard' })
     }
   }, [user, navigate])
 

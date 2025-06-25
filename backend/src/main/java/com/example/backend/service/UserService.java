@@ -79,10 +79,11 @@ public class UserService {
         );
 
         UserSettingsConfig settingsConfig = new UserSettingsConfig();
+        userRepository.save(user);
         settingsConfig.setUser(user);
         settingsRepository.save(settingsConfig);
 
-        return userRepository.save(user);
+        return user;
     }
 
     public User getUser(String id) {

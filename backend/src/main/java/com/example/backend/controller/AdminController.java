@@ -116,6 +116,7 @@ public class AdminController {
     ) {
         String userId = jwt.getSubject();
         AccountStatus status;
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA :" + userId);
 
         switch (action.toLowerCase()) {
             case "activate" -> status = AccountStatus.ACTIVE;
