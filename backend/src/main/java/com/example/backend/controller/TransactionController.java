@@ -66,12 +66,13 @@ public class TransactionController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) UUID id,
             @RequestParam(required = false) BigDecimal minAmount,
-            @RequestParam(required = false) BigDecimal maxAmount
+            @RequestParam(required = false) BigDecimal maxAmount,
+            @RequestParam(required = false) String category
     ) {
         String userId = jwt.getSubject();
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(
-                userId, pageable, id, minAmount, maxAmount);
+                userId, pageable, id, minAmount, maxAmount, category);
         return ResponseEntity.ok().body(transactions);
     }
 

@@ -159,21 +159,36 @@ public class TransactionService {
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
-    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId, BigDecimal minAmount, BigDecimal maxAmount) {
+    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(
+            String userId,
+            Pageable pageable,
+            UUID accountId,
+            BigDecimal minAmount,
+            BigDecimal maxAmount,
+            String category
+    ) {
         BigDecimal effectiveMin = minAmount != null ? minAmount : BigDecimal.ZERO;
         BigDecimal effectiveMax = maxAmount != null ? maxAmount : new BigDecimal("999999999");
+
         if (accountId != null) {
-            Page<Transaction> transaction = transactionRepository
-                    .findByAccountAndAmountBetween(accountId, effectiveMin, effectiveMax, pageable);
-            return transaction.map(UnifiedTransactionResponseDto::fromTransaction);
+            Page<Transaction> transactions = transactionRepository
+                    .findByAccountAndAmountBetweenAndOptionalCategory(
+                            accountId, effectiveMin, effectiveMax, category, pageable
+                    );
+            return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
         }
 
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
+
         Page<Transaction> transactions = transactionRepository
-                .findByAccountsAndAmountBetween(accountIds, effectiveMin, effectiveMax, pageable);
+                .findByAccountsAndAmountBetweenAndOptionalCategory(
+                        accountIds, effectiveMin, effectiveMax, category, pageable
+                );
+
         return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
+
 
     public List<Transaction> getAllTransactionsByUserNoPagination(String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);

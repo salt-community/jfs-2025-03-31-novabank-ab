@@ -8,16 +8,17 @@ export function useGetAllTransactions(
   size: number = 10,
   accountId?: string,
   minAmount?: string,
-  maxAmount?: string
+  maxAmount?: string,
+  category?: string,
 ) {
   const { getToken } = useAuth()
 
   return useQuery<TransactionResponse>({
-    queryKey: ['transactions', page, size, accountId, minAmount, maxAmount],
+    queryKey: ['transactions', page, size, accountId, minAmount, maxAmount, category],
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('No auth token found')
-      return getAllTransactions(token, page, size, accountId, minAmount, maxAmount)
+      return getAllTransactions(token, page, size, accountId, minAmount, maxAmount, category)
     },
     staleTime: 1000 * 60,
   })
