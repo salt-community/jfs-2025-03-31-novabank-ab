@@ -5,8 +5,7 @@ import { LabeledInput } from './LabeledInput'
 import type { ApplicationRequestDto } from '@/types/ApplicationRequestDto'
 
 export function RegisterApplicationForm() {
-  const { mutate, isPending } =
-    useRegisterApplication()
+  const { mutate, isPending } = useRegisterApplication()
   const [form, setForm] = useState<ApplicationRequestDto>({
     firstName: '',
     lastName: '',
@@ -23,6 +22,13 @@ export function RegisterApplicationForm() {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     mutate(form)
+    setForm({
+      firstName: '',
+      lastName: '',
+      email: '',
+      personalNumber: '',
+      phoneNumber: '',
+    })
   }
 
   return (
