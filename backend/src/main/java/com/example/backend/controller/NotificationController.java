@@ -38,7 +38,7 @@ public class NotificationController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("api/notifications")
+    @GetMapping("/api/notifications")
     public ResponseEntity<List<NotificationResponseDto>> getAllNotificationsForUser(
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
     ) {
