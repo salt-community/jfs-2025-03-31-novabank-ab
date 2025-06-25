@@ -30,7 +30,7 @@ public class AuthController {
         String userId = jwt.getSubject();
         Role role = securityUtil.extractRoleFromJWT(jwt);
         User user = authService.loginUser(userId, role);
-        log.info("User with ID: {} and Role: {} logging in", userId, role);
+        log.info("User with ID: {} and Role: {} logging in" , userId, role);
         return ResponseEntity.ok(LoginResponseDto.fromUser(user));
     }
 

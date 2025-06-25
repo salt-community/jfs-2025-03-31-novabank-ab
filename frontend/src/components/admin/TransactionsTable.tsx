@@ -112,14 +112,14 @@ export function AdminTransactionsTable({
   return (
     <>
       <Input
-        className="fixed w-1/2   z-10 bg-black text-white opacity-90 "
+        className="fixed w-1/2 h-16  z-10 bg-black text-white opacity-90 "
         value={table.getState().globalFilter ?? ''}
         onChange={(e) => table.setGlobalFilter(e.target.value)}
         placeholder="Global filter Search..."
       />
 
-      <Table className="mt-10">
-        <TableHeader className="bg-amber-300 ">
+      <Table className="mt-20">
+        <TableHeader className="bg-amber-300  ">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
