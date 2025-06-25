@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
+
 @Service
 public class CurrencyService {
 
@@ -90,27 +92,38 @@ public class CurrencyService {
         }
     }
 
-
     public ExchangeRateResponseDto getEffectiveRate(String from, String to) {
-        String directCode = getCurrencyPairCode(from, to);
-        String inverseCode = getCurrencyPairCode(to, from);
 
-        ExchangeRateResponseDto dto;
-        boolean inverted = false;
+        from = from.toUpperCase();
+        to   = to.toUpperCase();
 
-        try {
-            dto = getRateFromApi(directCode);
-        } catch (Exception e) {
-            try {
-                dto = getRateFromApi(inverseCode);
-                inverted = true;
-            } catch (Exception ex) {
-                throw new CurrencyConversionException("Unsupported currency pair: " + from + " to " + to);
-            }
+        // om samma valuta blir kursen =1
+        if (from.equals(to)) {
+            return new ExchangeRateResponseDto(LocalDate.now().toString(), 1);
         }
 
-        double rate = dto.value();
-        return new ExchangeRateResponseDto(dto.date(), inverted ? (1 / rate) : rate);
+        final String SEK = "SEK";
+
+        // SEK till annan valuta
+        if (from.equals(SEK)) {
+            ExchangeRateResponseDto dto = getRateFromApi(getCurrencyPairCode(SEK, to));
+            return new ExchangeRateResponseDto(dto.date(), 1 / dto.value());
+        }
+
+        // annan valuta till SEK
+        if (to.equals(SEK)) {
+            ExchangeRateResponseDto dto = getRateFromApi(getCurrencyPairCode(SEK, from));
+            return new ExchangeRateResponseDto(dto.date(), dto.value());
+        }
+
+        //triangulering om ingen av dem är SEK
+        ExchangeRateResponseDto dtoFrom = getRateFromApi(getCurrencyPairCode(SEK, from));
+        ExchangeRateResponseDto dtoTo   = getRateFromApi(getCurrencyPairCode(SEK, to));
+
+        double rate = dtoFrom.value() / dtoTo.value();
+        String date = dtoFrom.date();
+
+        return new ExchangeRateResponseDto(date, rate);
     }
 
     public String getCurrencyPairCode(String fromCurrency, String toCurrency) {
