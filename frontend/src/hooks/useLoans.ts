@@ -9,7 +9,11 @@ import {
   createLoanFromApplication,
   createLoanApplication,
   getLoanApplication,
+  approveLoan,
+  rejectLoan,
+  getLoanApplications,
 } from '@/api/loan'
+import type { ListLoanApplicationResponseDto } from '@/types/loan/LoanApplicationResponseDto'
 
 export function useLoans() {
   const { getToken } = useAuth()
@@ -96,5 +100,56 @@ export function useLoanApplication(applicationId: string) {
       return getLoanApplication(token, applicationId)
     },
     enabled: Boolean(applicationId),
+  })
+}
+
+export function useApproveLoanApplication() {
+  const queryClient = useQueryClient()
+  const { getToken } = useAuth()
+
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: async (id) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return approveLoan(token, id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['loanApplications'] })
+    },
+    onError: (error) => {
+      alert('Error approving application:' + error)
+    },
+  })
+}
+
+export function useRejectLoanApplication() {
+  const queryClient = useQueryClient()
+  const { getToken } = useAuth()
+
+  return useMutation<void, Error, string, unknown>({
+    mutationFn: async (id) => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return rejectLoan(token, id)
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['loanApplications'] })
+    },
+    onError: (error) => {
+      alert('Error rejecting application:' + error)
+    },
+  })
+}
+
+export function useLoanApplications(page = 0, size = 10) {
+  const { getToken } = useAuth()
+
+  return useQuery<ListLoanApplicationResponseDto, Error>({
+    queryKey: ['loanApplications', page, size],
+    queryFn: async () => {
+      const token = await getToken()
+      if (!token) throw new Error('No auth token found')
+      return getLoanApplications(token, page, size)
+    },
   })
 }
