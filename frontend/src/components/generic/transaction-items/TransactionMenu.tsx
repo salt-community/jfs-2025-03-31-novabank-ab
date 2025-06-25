@@ -147,7 +147,7 @@ export default function TransactionMenu({
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                 />
               </svg>
-              <p className="text-lg font-semibold">{t('confirmationMsg')}</p>
+              <p className="text-lg text-black">{t('confirmationMsg')}</p>
             </div>
             <div className="flex justify-center space-x-4 mt-4">
               <button
@@ -159,7 +159,7 @@ export default function TransactionMenu({
               </button>
               <button
                 type="button"
-                className="btn bg-[#FFB20F] border-none hover:bg-[#F5A700]"
+                className="btn text-white bg-red-400 border-none hover:bg-red-500"
                 onClick={handleCancelConfirmed}
               >
                 {t('yes')}

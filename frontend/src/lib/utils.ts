@@ -9,18 +9,21 @@ export function cn(...inputs: ClassValue[]) {
 
 export function transformToTransactionEntries(
   transactions: Transaction[],
-  currentUserAccountId?: string, // optional, for resolving direction
+  currentUserAccountId?: string,
 ): TransactionEntry[] {
   return transactions.map((tx) => {
-    const isOutgoing = currentUserAccountId
-      ? tx.fromAccountId === currentUserAccountId
-      : tx.amount < 0
+    const isOutgoing =
+      currentUserAccountId != null
+        ? tx.fromAccountId === currentUserAccountId
+        : tx.amount < 0
+
+    const direction = isOutgoing ? 'out' : 'in'
 
     return {
       ...tx,
-      direction: isOutgoing ? 'out' : 'in',
-      theAccount: isOutgoing ? tx.toAccountId : tx.fromAccountId,
-      scheduledDate: null, // You can modify this if needed
+      direction,
+      scheduledDate: tx.status === 'PENDING' ? tx.date : null,
+      key: `${tx.transactionId}-${direction}`,
     }
   })
 }

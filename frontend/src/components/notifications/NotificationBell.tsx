@@ -23,7 +23,7 @@ export default function NotificationBell() {
   }
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left cursor-default">
       <button
         onClick={toggleDropdown}
         className="relative p-2 rounded-full hover:bg-gray-100 focus:outline-none hover:cursor-pointer"
