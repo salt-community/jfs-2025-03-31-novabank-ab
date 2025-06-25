@@ -127,7 +127,7 @@ export function SideBar({ admin }: Props) {
             ></img>
           </summary>
           <a
-            onClick={() => navigate({ to: '/loans/register' })}
+            onClick={() => navigate({ to: '/loans' })}
             className={`flex flex-row my-4 gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
               isActive('/loans')
                 ? 'text-[#FFB20F] hover:opacity-100 underline'
