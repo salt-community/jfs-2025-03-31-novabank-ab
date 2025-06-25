@@ -34,7 +34,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     SELECT t FROM Transaction t
     WHERE (t.fromAccount.id = :accountId OR t.toAccount.id = :accountId)
       AND t.amount BETWEEN :minAmount AND :maxAmount
-      AND (:category IS NULL OR LOWER(t.category) = LOWER(:category))
+      AND (:category IS NULL OR t.category = :category)
 """)
     Page<Transaction> findByAccountAndAmountBetweenAndOptionalCategory(
             @Param("accountId") UUID accountId,
@@ -48,7 +48,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     SELECT t FROM Transaction t
     WHERE (t.fromAccount.id IN :accountIds OR t.toAccount.id IN :accountIds)
       AND t.amount BETWEEN :minAmount AND :maxAmount
-      AND (:category IS NULL OR LOWER(t.category) = LOWER(:category))
+      AND (:category IS NULL OR t.category = :category)
 """)
     Page<Transaction> findByAccountsAndAmountBetweenAndOptionalCategory(
             @Param("accountIds") List<UUID> accountIds,
