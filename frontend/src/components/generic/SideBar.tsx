@@ -16,6 +16,12 @@ import {
   yellowsettingsicon,
   stocksicon,
   pensionicon,
+  usersicon,
+  admindashboardicon,
+  yellowadmindashboardicon,
+  yellowusersicon,
+  yellowloanicon,
+  loanicon,
 } from '@/assets/icons'
 
 type Props = {
@@ -136,6 +142,8 @@ export function SideBar({ admin }: Props) {
       </div>
     </aside>
   )
+
+  //ADMIN SIDEBAR
   const adminSideBar = (
     <aside className="w-70 fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-10 justify-between flex flex-col">
       <a onClick={() => navigate({ to: '/' })}>
@@ -155,7 +163,11 @@ export function SideBar({ admin }: Props) {
           }`}
         >
           <img
-            src={isActive('/admin/dashboard') ? yellowhomeicon : homeicon}
+            src={
+              isActive('/admin/dashboard')
+                ? yellowadmindashboardicon
+                : admindashboardicon
+            }
             alt="Home"
           />
           {t('admin.dashboard')}
@@ -169,9 +181,7 @@ export function SideBar({ admin }: Props) {
               : ''
           }`}
         >
-          <img
-            src={isActive('/admin/users') ? yellowaccounticon : accounticon}
-          />
+          <img src={isActive('/admin/users') ? yellowusersicon : usersicon} />
           {t('admin.users')}
         </a>
 
@@ -209,6 +219,18 @@ export function SideBar({ admin }: Props) {
             }
           />
           {t('admin.applications')}
+        </a>
+
+        <a
+          onClick={() => navigate({ to: '/admin/loans' })}
+          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+            isActive('/admin/loans')
+              ? 'text-[#FFB20F] hover:opacity-100 underline'
+              : ''
+          }`}
+        >
+          <img src={isActive('/admin/loans') ? yellowloanicon : loanicon} />
+          {t('admin.loans')}
         </a>
       </div>
       <div className="mb-10 w-[122px]">
