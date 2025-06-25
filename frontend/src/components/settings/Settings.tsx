@@ -7,7 +7,7 @@ import type { UserSettings } from '@/types'
 import Spinner from '../generic/Spinner'
 import { toast } from 'react-toastify'
 
-const Settings = () => {
+export default function Settings() {
   const { t } = useTranslation('settings')
 
   const {
@@ -97,7 +97,7 @@ const Settings = () => {
 
       if (whatToUpdate === 'email') {
         if (!isValidEmail(emailField)) {
-          setEmailError('Invalid email')
+          setEmailError(t('invalidEmail'))
           return reject()
         }
 
@@ -108,7 +108,7 @@ const Settings = () => {
           {
             onSuccess: () => resolve(),
             onError: () => {
-              toast.error('Failed to save email')
+              toast.error(t('failedEmail'))
               reject()
             },
           },
@@ -117,7 +117,7 @@ const Settings = () => {
 
       if (whatToUpdate === 'phonenumber') {
         if (!isValidPhoneNumber(phoneNumberField)) {
-          setPhoneError('Invalid phone number')
+          setPhoneError(t('invalidPhone'))
           return reject()
         }
 
@@ -128,7 +128,7 @@ const Settings = () => {
           {
             onSuccess: () => resolve(),
             onError: () => {
-              toast.error('Failed to save phone number')
+              toast.error(t('failedPhone'))
               reject()
             },
           },
@@ -161,9 +161,8 @@ const Settings = () => {
 
         <div className="max-w-lg w-full shadow-md p-4 mt-5">
           <TabsContent value="personal">
-
             <div className="hover:cursor-default">
-              <h3 className="text-xl md:text-2xl mb-2">Namn</h3>
+              <h3 className="text-xl md:text-2xl mb-2">{t('name')}</h3>
               <div className="flex gap-1">
                 <p className="text-gray-500 text-2xl">
                   {userFromApi.firstName}
@@ -174,7 +173,9 @@ const Settings = () => {
 
             {/* Email Section */}
             <div className="mt-4">
-              <h3 className="text-xl md:text-2xl hover:cursor-default mb-2">{t('email')}</h3>
+              <h3 className="text-xl md:text-2xl hover:cursor-default mb-2">
+                {t('email')}
+              </h3>
               <div className="flex items-center gap-4 mb-2">
                 <input
                   onChange={(e) => setEmailField(e.target.value)}
@@ -192,7 +193,7 @@ const Settings = () => {
                     onClick={() => setEditingEmail(true)}
                     className="text-black hover:opacity-70 hover:cursor-pointer"
                   >
-                    Edit
+                    {t('edit')}
                   </button>
                 ) : (
                   <div className="flex gap-2">
@@ -204,13 +205,13 @@ const Settings = () => {
                       }
                       className="text-black hover:opacity-70 hover:cursor-pointer"
                     >
-                      Save
+                      {t('save')}
                     </button>
                     <button
                       onClick={cancelEmailEdit}
                       className="text-red-500 hover:opacity-70 hover:cursor-pointer"
                     >
-                      Cancel
+                      {t('cancel')}
                     </button>
                   </div>
                 )}
@@ -222,7 +223,9 @@ const Settings = () => {
 
             {/* Phone Section */}
             <div className="mt-4">
-              <h3 className="text-xl md:text-2xl hover:cursor-default mb-2">{t('phoneNumber')}</h3>
+              <h3 className="text-xl md:text-2xl hover:cursor-default mb-2">
+                {t('phoneNumber')}
+              </h3>
               <div className="flex items-center gap-4 mb-2">
                 <input
                   onChange={(e) => setPhoneNumberField(e.target.value)}
@@ -240,7 +243,7 @@ const Settings = () => {
                     onClick={() => setEditingPhone(true)}
                     className="text-black hover:opacity-70 hover:cursor-pointer"
                   >
-                    Edit
+                    {t('edit')}
                   </button>
                 ) : (
                   <div className="flex gap-2">
@@ -252,13 +255,13 @@ const Settings = () => {
                       }
                       className="text-black hover:opacity-70 hover:cursor-pointer"
                     >
-                      Save
+                      {t('save')}
                     </button>
                     <button
                       onClick={cancelPhoneEdit}
                       className="text-red-500 hover:opacity-70 hover:cursor-pointer"
                     >
-                      Cancel
+                      {t('cancel')}
                     </button>
                   </div>
                 )}
@@ -330,5 +333,3 @@ const Settings = () => {
     </>
   )
 }
-
-export default Settings

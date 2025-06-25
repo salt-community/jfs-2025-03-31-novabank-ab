@@ -23,7 +23,7 @@ export default function AccountCard({ account }: AccountCardProps) {
         </div>
         <div>
           <h4 className="text-xl font-semibold" data-testid="account-balance">
-            {account.balance} SEK
+            {account.balance} {t('sek')}
           </h4>
           <p className="text-xs text-gray-500">{t('totalBalanceLowerCase')}</p>
         </div>

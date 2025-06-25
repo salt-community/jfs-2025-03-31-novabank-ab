@@ -66,7 +66,7 @@ export default function Recipient({
             ? `${recipientAccount.type} - ${recipientAccount.accountNumber}`
             : recipientClient
               ? recipientClient
-              : 'Select an account'}
+              : t('selectAnAccount')}
         </button>
 
         <label

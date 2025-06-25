@@ -3,6 +3,7 @@ import { useCancelTransaction } from '@/hooks/useCancelTransaction'
 import { useEffect, useRef, useState } from 'react'
 import TransactionDetailsModal from './TransactionDetailsModal'
 import type { TransactionEntry } from '@/hooks/useFetchEntries'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 type TransactionMenuProps = {
@@ -20,7 +21,7 @@ export default function TransactionMenu({
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [showConfirmCancel, setShowConfirmCancel] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
-
+  const { t } = useTranslation('transactionDetails')
   const cancelTransaction = useCancelTransaction()
 
   useEffect(() => {
@@ -42,11 +43,11 @@ export default function TransactionMenu({
   const handleCancelConfirmed = () => {
     cancelTransaction.mutate(transaction.transactionId, {
       onSuccess: () => {
-        toast.success("Transaction Cancelled")
+        toast.success("Transaction cancelled")
         setShowConfirmCancel(false)
       },
       onError: (error) => {
-        alert(
+        toast.error(
           'Failed: ' + (error instanceof Error ? error.message : String(error)),
         )
         setShowConfirmCancel(false)
@@ -56,10 +57,10 @@ export default function TransactionMenu({
 
   const handleMenuItem = (menuOption: string) => {
     switch (menuOption) {
-      case 'Details':
+      case t('details'):
         setShowDetailsModal(true)
         break
-      case 'Cancel':
+      case t('cancel'):
         setShowConfirmCancel(true)
         break
       default:
@@ -92,17 +93,17 @@ export default function TransactionMenu({
             <div
               className="text-center hover:bg-gray-100"
               style={{ padding: '10px', cursor: 'pointer' }}
-              onClick={() => handleMenuItem('Details')}
+              onClick={() => handleMenuItem(t('details'))}
             >
-              Details
+              {t('details')}
             </div>
             {allowCancel && (
               <div
                 className="text-center hover:bg-gray-100 text-red-600"
                 style={{ padding: '10px', cursor: 'pointer' }}
-                onClick={() => handleMenuItem('Cancel')}
+                onClick={() => handleMenuItem(t('cancel'))}
               >
-                Cancel
+                {t('cancel')}
               </div>
             )}
           </div>
@@ -146,9 +147,7 @@ export default function TransactionMenu({
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                 />
               </svg>
-              <p className="text-lg font-semibold">
-                Are you sure you want to cancel this transaction?
-              </p>
+              <p className="text-lg font-semibold">{t('confirmationMsg')}</p>
             </div>
             <div className="flex justify-center space-x-4 mt-4">
               <button
@@ -156,14 +155,14 @@ export default function TransactionMenu({
                 className="btn  bg-gray-200 border-none hover:bg-gray-300"
                 onClick={() => setShowConfirmCancel(false)}
               >
-                No
+                {t('no')}
               </button>
               <button
                 type="button"
                 className="btn bg-[#FFB20F] border-none hover:bg-[#F5A700]"
                 onClick={handleCancelConfirmed}
               >
-                Yes
+                {t('yes')}
               </button>
             </div>
           </form>
