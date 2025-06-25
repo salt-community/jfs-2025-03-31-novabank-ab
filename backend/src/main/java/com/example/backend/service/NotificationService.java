@@ -37,7 +37,7 @@ public class NotificationService {
         messaging.convertAndSendToUser(
                 userId,
                 "/queue/notifications",
-                new NotificationResponseDto(saved.getId(), saved.getMessage(), saved.getCreatedAt())
+                new NotificationResponseDto(saved.getId(), saved.getMessage(), saved.getCreatedAt(), saved.isRead())
         );
 
         return saved;

@@ -34,7 +34,8 @@ public class NotificationController {
         NotificationResponseDto dto = new NotificationResponseDto(
                 notification.getId(),
                 notification.getMessage(),
-                notification.getCreatedAt()
+                notification.getCreatedAt(),
+                notification.isRead()
         );
 
         return ResponseEntity.ok(dto);
@@ -51,14 +52,16 @@ public class NotificationController {
                 .map(n -> new NotificationResponseDto(
                         n.getId(),
                         n.getMessage(),
-                        n.getCreatedAt()
+                        n.getCreatedAt(),
+                        n.isRead()
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(dtos);
     }
 
-    @PatchMapping("/notifications/read")
+
+    @PatchMapping("/api/notifications/read")
     public ResponseEntity<List<NotificationResponseDto>> markNotificationsRead(
             @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody MarkReadRequestDto req
@@ -68,7 +71,7 @@ public class NotificationController {
 
         List<NotificationResponseDto> dtos = updated.stream()
                 .map(n -> new NotificationResponseDto(
-                        n.getId(), n.getMessage(), n.getCreatedAt()
+                        n.getId(), n.getMessage(), n.getCreatedAt(), n.isRead()
                 ))
                 .collect(Collectors.toList());
 

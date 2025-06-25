@@ -4,7 +4,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record NotificationResponseDto(
-      UUID id,
-      String message,
-      LocalDateTime createdAt
+        UUID id,
+        String message,
+        LocalDateTime createdAt,
+        boolean read
 ) {}
