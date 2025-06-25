@@ -3,6 +3,7 @@ import { useCancelTransaction } from '@/hooks/useCancelTransaction'
 import { useEffect, useRef, useState } from 'react'
 import TransactionDetailsModal from './TransactionDetailsModal'
 import type { TransactionEntry } from '@/hooks/useFetchEntries'
+import { toast } from 'react-toastify'
 
 type TransactionMenuProps = {
   transaction: TransactionEntry
@@ -41,7 +42,7 @@ export default function TransactionMenu({
   const handleCancelConfirmed = () => {
     cancelTransaction.mutate(transaction.transactionId, {
       onSuccess: () => {
-        alert('Transaction canceled!')
+        toast.success("Transaction Cancelled")
         setShowConfirmCancel(false)
       },
       onError: (error) => {
