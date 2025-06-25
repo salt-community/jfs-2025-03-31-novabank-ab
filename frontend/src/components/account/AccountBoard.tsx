@@ -28,17 +28,13 @@ export default function AccountBoard({ account }: AccountBoardProps) {
     account.id,
   )
 
-  // Safe fallback for useFetchEntries
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(transactionEntries)
+  const { entries, isLoading: allLoading } = useFetchEntries(transactionEntries)
 
   if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
 
-  // Get only pending scheduled transactions
-  const scheduledTransactions = transactionEntries.filter(
-    (t) => t.status === 'PENDING',
-  )
+  const scheduledTransactions = entries.filter((t) => t.status === 'PENDING')
+  const regularTransactions = entries.filter((t) => t.status !== 'PENDING')
 
   return (
     <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
@@ -93,10 +89,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div>
         <h2 className="text-2xl mb-4">{t('transactions')}</h2>
         <div className="space-y-2">
-          {allEntries.length === 0 ? (
+          {regularTransactions.length === 0 ? (
             <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           ) : (
-            allEntries.map((tx) => (
+            regularTransactions.map((tx) => (
               <TransactionAccItem
                 key={tx.transactionId}
                 transaction={tx}
