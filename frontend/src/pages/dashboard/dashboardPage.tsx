@@ -4,6 +4,7 @@ import { AccountGallery } from '@/components/dashboard'
 import Spinner from '@/components/generic/Spinner'
 import { useTranslation } from 'react-i18next'
 import { transformToTransactionEntries } from '@/lib/utils'
+import NotificationBell from '@/components/notifications/NotificationBell'
 
 export default function DashboardPage() {
   const { t } = useTranslation('sidebar')
@@ -34,6 +35,9 @@ export default function DashboardPage() {
 
   return (
     <>
+      <div className="absolute top-4 right-4">
+        <NotificationBell />
+      </div>
       <div className="px-4 sm:px-8 py-6 space-y-12">
         <h1 className="text-3xl mb-8 sm:mb-15">{t('admin.dashboard')}</h1>
         <AccountGallery bankAccounts={accounts} />
