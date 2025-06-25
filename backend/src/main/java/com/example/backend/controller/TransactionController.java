@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,11 +64,15 @@ public class TransactionController {
             @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) UUID id
+            @RequestParam(required = false) UUID id,
+            @RequestParam(required = false) BigDecimal minAmount,
+            @RequestParam(required = false) BigDecimal maxAmount,
+            @RequestParam(required = false) String category
     ) {
         String userId = jwt.getSubject();
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(userId, pageable, id);
+        Page<UnifiedTransactionResponseDto> transactions = transactionService.getTransactionsByUser(
+                userId, pageable, id, minAmount, maxAmount, category);
         return ResponseEntity.ok().body(transactions);
     }
 
