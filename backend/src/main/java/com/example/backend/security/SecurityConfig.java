@@ -73,7 +73,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/api/user/application"
+                                "/api/user/application",
+                                "/ws-notifications/**"
                         ).permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -112,7 +113,8 @@ public class SecurityConfig {
                 "http://localhost:80",
                 "http://localhost",
                 "https://novabank-ab-frontend-876198057788.europe-north2.run.app/",
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "/ws-notifications/**"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
