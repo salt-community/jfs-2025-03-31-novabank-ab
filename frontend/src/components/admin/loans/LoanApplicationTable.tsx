@@ -22,7 +22,7 @@ export const LoanApplicationTable: React.FC<Props> = ({
             Amount
           </th>
           <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-            Term
+            Due Date
           </th>
           <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
             Status
@@ -39,11 +39,11 @@ export const LoanApplicationTable: React.FC<Props> = ({
               {app.user.firstName} {app.user.lastName}
             </td>
             <td className="px-4 py-2">{app.amount.toLocaleString()}</td>
-            <td className="px-4 py-2">{app.termMonths} mo</td>
+            <td className="px-4 py-2">{app.requestedDueDate}</td>
             <td className="px-4 py-2">{app.status}</td>
             <td className="px-4 py-2 text-center">
               <button
-                className="px-3 py-1 bg-[#FFB20F] text-black rounded hover:opacity-70 transition"
+                className="px-3 py-1 bg-[#FFB20F] text-black rounded hover:opacity-70 transition hover:cursor-pointer"
                 onClick={() => onReview(app)}
               >
                 Review
