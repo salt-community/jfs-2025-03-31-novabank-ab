@@ -63,6 +63,7 @@
   "previous": "Previous",
   "cancelTransaction": "Cancel transaction",
   "totalBalanceLowerCase": "total balance",
+  "totalBalance":"Total balance",
   "recentTransactions": "Recent transactions",
   "seeAll": "See all",
   "aiAssistant": "AI Search",
