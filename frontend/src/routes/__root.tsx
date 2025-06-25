@@ -104,7 +104,7 @@ export const Route = createRootRoute({
               pt-[60px] pb-[60px] md:pt-0 md:pb-0
               text-black
               box-border max-w-full
-              overflow-y-auto md:overflow-visible
+              overflow-y-auto 
               pt-[60px] pb-[60px] md:pt-0 md:pb-0
             "
           >

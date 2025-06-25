@@ -145,7 +145,7 @@ const Settings = () => {
   }
 
   return (
-    <div className="min-h-screen overflow-y-auto">
+    <>
       <Tabs
         defaultValue="personal"
         onValueChange={(value) => {
@@ -327,7 +327,7 @@ const Settings = () => {
           </TabsContent>
         </div>
       </Tabs>
-    </div>
+    </>
   )
 }
 
