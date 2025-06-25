@@ -12,10 +12,15 @@ import { searchicon } from '@/assets/icons'
 import { transformToTransactionEntries } from '../../lib/utils'
 import { TransactionItem } from '@/components/generic/transaction-items/Transactiontem'
 import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
+import AmountFilterFields from '@/components/transaction/AmountFilterFields'
+import CategoryFilterDropdown from '@/components/transaction/CategoryFilterDropdown'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [minAmount, setMinAmount] = useState('')
+  const [maxAmount, setMaxAmount] = useState('')
   const [page, setPage] = useState(0)
   const pageSize = 10
 
@@ -33,6 +38,9 @@ export default function TransactionsPage() {
     page,
     pageSize,
     selectedAccount?.id,
+    minAmount,
+    maxAmount,
+    selectedCategory ?? undefined,
   )
 
   // const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
@@ -134,6 +142,29 @@ export default function TransactionsPage() {
             selectedAccount={selectedAccount}
             setSelectedAccount={setSelectedAccount}
           />
+          <CategoryFilterDropdown
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+          <AmountFilterFields
+            onApply={(min, max) => {
+              setMinAmount(min)
+              setMaxAmount(max)
+              setPage(0)
+            }}
+          />
+          <button
+            onClick={() => {
+              setSelectedAccount(null)
+              setSelectedCategory(null)
+              setMinAmount('')
+              setMaxAmount('')
+              setPage(0)
+            }}
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-1 rounded-4xl text-sm h-8"
+          >
+            Clear All Filters
+          </button>
         </div>
       </div>
 
