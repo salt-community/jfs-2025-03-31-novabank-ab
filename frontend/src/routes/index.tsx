@@ -53,7 +53,6 @@ function LandingPage() {
                 >
                   {t('registerHere')}
                 </button>
-
               </div>
             </div>
             <div className="">
@@ -99,6 +98,9 @@ function RedirectOnSignIn() {
   useEffect(() => {
     if (user) {
       navigate({ to: '/dashboard' })
+    }
+    if (user?.publicMetadata.role === 'admin') {
+      navigate({ to: '/admin/dashboard' })
     }
   }, [user, navigate])
 

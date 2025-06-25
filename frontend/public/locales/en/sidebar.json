@@ -14,7 +14,8 @@
     "dashboard": "Dashboard",
     "users": "Users",
     "transactions": "Transactions",
-    "applications": "Applicants"
+    "applications": "Applicants",
+    "loans": "Loans"
   },
   "signOut": "Sign out",
   "signIn": "Sign in",

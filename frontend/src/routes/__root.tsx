@@ -71,6 +71,16 @@ export const Route = createRootRoute({
     return (
       <div className="flex min-h-screen font-lato">
         <SignedIn>
+          <ToastContainer
+            position="top-center"
+            transition={SlideInFromRight}
+            hideProgressBar
+            closeOnClick
+            pauseOnHover={false}
+            pauseOnFocusLoss={false}
+            autoClose={2000}
+            closeButton={false}
+          />
           {!isAdmin && (
             <>
               <div className="md:hidden fixed top-0 left-0 right-0 h-[60px] z-50">
@@ -120,16 +130,6 @@ export const Route = createRootRoute({
             )}
           </div>
         </SignedOut>
-        <ToastContainer
-          position="top-center"
-          transition={SlideInFromRight}
-          hideProgressBar
-          closeOnClick
-          pauseOnHover={false}
-          pauseOnFocusLoss={false}
-          autoClose={2000}
-          closeButton={false}
-        />
       </div>
     )
   },
