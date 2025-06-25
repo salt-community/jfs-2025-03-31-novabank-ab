@@ -1,8 +1,29 @@
 package com.example.backend.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
-import com.example.backend.exception.custom.*;
+import com.example.backend.exception.custom.AccountNotAllowedException;
+import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.InsufficientFundsException;
+import com.example.backend.exception.custom.TransactionNotFoundException;
+import com.example.backend.exception.custom.UserUnauthorizedException;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
@@ -12,17 +33,6 @@ import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.*;
 
 @Service
 public class TransactionService {
@@ -150,7 +160,8 @@ public class TransactionService {
                     scheduledTransaction.getDescription(),
                     scheduledTransaction.getUserNote(),
                     scheduledTransaction.getOcrNumber(),
-                    scheduledTransaction.getCategory()
+                    scheduledTransaction.getCategory(),
+                    scheduledTransaction.getStatus() == TransactionStatus.PENDING ? TransactionStatus.EXECUTED : TransactionStatus.FAILED
             );
             transactionRepository.save(transaction);
             scheduledTransaction.setStatus(TransactionStatus.EXECUTED);
@@ -266,7 +277,8 @@ public class TransactionService {
                     dto.description(),
                     dto.userNote(),
                     dto.ocrNumber(),
-                    category
+                    category,
+                    TransactionStatus.EXECUTED
             );
             transactionRepository.save(transaction);
         }

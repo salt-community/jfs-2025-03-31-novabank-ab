@@ -4,6 +4,7 @@ import com.example.backend.model.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,7 +25,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // note: this one is for dev and h2-console, for prod scroll down
@@ -46,6 +47,7 @@ public class SecurityConfig {
                                 "/h2-console/**",
                                 "/api/user/application"
                         ).permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -70,8 +72,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/api/user/application"
                         ).permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -87,7 +91,9 @@ public class SecurityConfig {
 
         converter.setPrincipalClaimName("sub"); // Clerk userId
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            System.out.println(">>> JWT claims = " + jwt.getClaims());
             Role role = securityUtil.extractRoleFromJWT(jwt);
+            System.out.println("role = " + role);
             return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
         });
 

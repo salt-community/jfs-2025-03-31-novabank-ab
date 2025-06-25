@@ -6,10 +6,11 @@ import {
   useGetTransactionsFromIdsGivenByAi,
 } from '@/hooks'
 import Spinner from '@/components/generic/Spinner'
-import { TransactionItem } from '@/components/generic/transaction-items/TransactionItem'
 import type { Account, Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
 import { searchicon } from '@/assets/icons'
+import { transformToTransactionEntries } from '../../lib/utils'
+import { TransactionItem } from '@/components/generic/transaction-items/Transactiontem'
 import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
 import AmountFilterFields from '@/components/transaction/AmountFilterFields'
 import CategoryFilterDropdown from '@/components/transaction/CategoryFilterDropdown'
@@ -23,8 +24,7 @@ export default function TransactionsPage() {
   const [page, setPage] = useState(0)
   const pageSize = 10
 
-  const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
-    useState<Array<Transaction>>([])
+  const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] = useState<Array<Transaction>>([])
 
   const [heightAiDiv, setHeightAiDiv] = useState<string>('max-h-0')
 
@@ -32,8 +32,7 @@ export default function TransactionsPage() {
   const sendIdsAndGetTransactions = useGetTransactionsFromIdsGivenByAi()
 
   const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
-  const [aiSearchBarInputContent, setAiSearchBarInputContent] =
-    useState<string>('')
+  const [aiSearchBarInputContent, setAiSearchBarInputContent] = useState<string>('')
 
   const { data, isLoading, isError } = useGetAllTransactions(
     page,
@@ -55,11 +54,11 @@ export default function TransactionsPage() {
   // Provide fallback array to always call hook safely
   const transactionsData = data?.content ?? []
 
-  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(
-    transactionsFromIdsGivenByAi,
-  )
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(transactionsData)
+  const aiTransformed = transformToTransactionEntries(transactionsFromIdsGivenByAi)
+  const allTransformed = transformToTransactionEntries(transactionsData)
+
+  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(aiTransformed)
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(allTransformed)
 
   if (isError) {
     return (
@@ -192,16 +191,7 @@ export default function TransactionsPage() {
               ) : (
                 AIEntries.map((tx) => {
                   return (
-                    <TransactionItem
-                      key={tx.key}
-                      description={tx.description}
-                      theAccount={tx.theAccount}
-                      accountNoType={tx.accountNoType}
-                      amount={tx.amount}
-                      time={tx.time}
-                      direction={tx.direction}
-                      category={tx.category}
-                    />
+                    <TransactionItem key={tx.transactionId} transaction={tx} />
                   )
                 })
               )}
@@ -229,16 +219,7 @@ export default function TransactionsPage() {
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
           allEntries.map((tx) => (
-            <TransactionItem
-              key={tx.key}
-              description={tx.description}
-              theAccount={tx.theAccount}
-              accountNoType={tx.accountNoType}
-              amount={tx.amount}
-              time={tx.time}
-              direction={tx.direction}
-              category={tx.category}
-            />
+            <TransactionItem key={tx.transactionId} transaction={tx} />
           ))
         )}
       </div>

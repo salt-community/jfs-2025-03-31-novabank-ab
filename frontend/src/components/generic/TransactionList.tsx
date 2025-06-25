@@ -1,27 +1,24 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
-import { TransactionItem } from './transaction-items/TransactionItem'
-import type { Transaction } from '@/types'
 import Spinner from '@/components/generic/Spinner'
-import useFetchEntries from '@/hooks/useFetchEntries'
+import useFetchEntries, { type TransactionEntry } from '@/hooks/useFetchEntries'
+import { TransactionItem } from './transaction-items/Transactiontem'
 
 type TransactionListProps = {
-  transactions: Array<Transaction>
+  transactions: Array<TransactionEntry>
 }
 
 export function TransactionList({ transactions }: TransactionListProps) {
   const { t } = useTranslation('accounts')
   const navigate = useNavigate()
 
-  // Always call with a fallback array
   const { entries = [], isLoading } = useFetchEntries(transactions)
 
   if (isLoading) return <Spinner />
 
-  // Defensive sort: use timestamps, handle invalid/missing dates
   const sortedEntries = [...entries].sort((a, b) => {
-    const timeA = new Date(a?.time ?? 0).getTime()
-    const timeB = new Date(b?.time ?? 0).getTime()
+    const timeA = new Date(a?.date ?? 0).getTime()
+    const timeB = new Date(b?.date ?? 0).getTime()
     return timeB - timeA
   })
 
@@ -44,16 +41,7 @@ export function TransactionList({ transactions }: TransactionListProps) {
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
           latestThree.map((tx) => (
-            <TransactionItem
-              key={tx.key}
-              description={tx.description}
-              theAccount={tx.theAccount}
-              accountNoType={tx.accountNoType}
-              amount={tx.amount}
-              time={tx.time}
-              direction={tx.direction}
-              category={tx.category}
-            />
+            <TransactionItem key={tx.transactionId} transaction={tx} />
           ))
         )}
       </div>

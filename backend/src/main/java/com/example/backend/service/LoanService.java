@@ -6,6 +6,7 @@ import com.example.backend.exception.custom.ApplicationNotFoundException;
 import com.example.backend.exception.custom.LoanNotFoundException;
 import com.example.backend.model.Loan;
 import com.example.backend.model.LoanApplication;
+import com.example.backend.model.UserApplication;
 import com.example.backend.model.enums.ApplicationStatus;
 import com.example.backend.model.enums.LoanStatus;
 import com.example.backend.repository.LoanApplicationRepository;
@@ -14,14 +15,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,17 +35,19 @@ public class LoanService {
 
     private final String API_URL;
     private final String API_KEY;
+    private final LoanApplicationRepository loanApplicationRepository;
 
 
     public LoanService(LoanRepository loanRepository,
                        LoanApplicationRepository applicationRepository,
                        @Value("${RIKSBANK_API_URL}") String apiUrl,
-                       @Value("${RIKSBANK_API_KEY}") String apiKey) {
+                       @Value("${RIKSBANK_API_KEY}") String apiKey, LoanApplicationRepository loanApplicationRepository) {
         this.loanRepository = loanRepository;
         this.applicationRepository = applicationRepository;
         this.restTemplate = new RestTemplate();
         this.API_URL = apiUrl;
         this.API_KEY = apiKey;
+        this.loanApplicationRepository = loanApplicationRepository;
     }
 
     private RiksbankRateResponseDto fetchPolicyRate(RiksbankRateRequestDto requestDto) {
@@ -72,7 +75,6 @@ public class LoanService {
         return responseDto;
     }
 
-    @Transactional
     public Loan createLoanFromApplication(UUID applicationId) {
         LoanApplication application = applicationRepository.findById(applicationId)
                 .orElseThrow(ApplicationNotFoundException::new);
@@ -118,4 +120,22 @@ public class LoanService {
         return applicationRepository.findById(id)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
     }
+
+    public void updateLoanApplication(LoanApplication application, ApplicationStatus status) {
+        switch (status) {
+            case ApplicationStatus.APPROVED -> {
+                application.setStatus(ApplicationStatus.APPROVED);
+                application.setUpdatedAt(LocalDateTime.now());
+                createLoanFromApplication(application.getId());
+            }
+            case ApplicationStatus.DISAPPROVED -> application.setStatus(ApplicationStatus.DISAPPROVED);
+            default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status: " + status);
+        }
+        loanApplicationRepository.save(application);
+    }
+
+    public Page<LoanApplication> getAllLoanApplications(Pageable pageable) {
+        return loanApplicationRepository.findAll(pageable);
+    }
+
 }
