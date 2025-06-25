@@ -6,7 +6,9 @@
     "transactions": "Transaktioner",
     "transfer": "Överföring",
     "stocks": "Aktier",
-    "pension": "Pension"
+    "pension": "Pension",
+    "myPages": "My pages",
+    "services": "Services"
   },
   "admin": {
     "dashboard": "Översikt",

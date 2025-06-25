@@ -80,6 +80,45 @@ export default function ApplicantStatusCards() {
     lastMonthData.rejectedLastMonthCount,
   )
 
+  function getFineText(
+    percentageDiff: string,
+    cardType: 'approved' | 'pending' | 'rejected',
+  ) {
+    const isPositive = percentageDiff.charAt(0) === '+'
+    const isNegative = percentageDiff.charAt(0) === '-'
+    const isNeutral = !isNegative && !isPositive
+    const absValue = parseInt(
+      percentageDiff.replace('%', '').replace('+', '').replace('-', ''),
+    )
+
+    if (isNeutral || absValue === 0) {
+      return 'No significant change from last month'
+    }
+
+    switch (cardType) {
+      case 'approved':
+        if (isPositive)
+          return `Great! Approvals increased by ${percentageDiff} compared to last month.`
+        if (isNegative)
+          return `Warning: Approvals decreased by ${percentageDiff} compared to last month.`
+        return ''
+      case 'pending':
+        if (isPositive)
+          return `More pending applications (${percentageDiff}) than last month.`
+        if (isNegative)
+          return `Fewer pending applications (${percentageDiff}) than last month.`
+        return ''
+      case 'rejected':
+        if (isPositive)
+          return `Caution: Rejections increased by ${percentageDiff} compared to last month.`
+        if (isNegative)
+          return `Good news! Rejections decreased by ${percentageDiff} compared to last month.`
+        return ''
+      default:
+        return ''
+    }
+  }
+
   return (
     <div className="grid grid-cols-3 gap-4">
       <SectionCard
@@ -87,7 +126,7 @@ export default function ApplicantStatusCards() {
         label={t('label.approved')}
         value={approved.length.toString()}
         trajectory={approvedPercent}
-        fineText="Acqusition needs attention"
+        fineText={getFineText(approvedPercent, 'approved')}
         redirectLink="admin/applications"
       />
       <SectionCard
@@ -95,7 +134,7 @@ export default function ApplicantStatusCards() {
         label={t('label.pending')}
         value={pending.length.toString()}
         trajectory={pendingPercent}
-        fineText="Acqusition needs attention"
+        fineText={getFineText(pendingPercent, 'pending')}
         redirectLink="admin/applications"
       />
 
@@ -104,7 +143,7 @@ export default function ApplicantStatusCards() {
         label={t('label.rejected')}
         value={rejected.length.toString()}
         trajectory={rejectedPercent}
-        fineText="Acqusition needs attention"
+        fineText={getFineText(rejectedPercent, 'rejected')}
         redirectLink="admin/applications"
       />
     </div>

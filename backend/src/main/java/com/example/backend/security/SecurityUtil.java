@@ -35,6 +35,10 @@ public class SecurityUtil {
         String userId = jwt.getSubject();
         return clerkService.getUserRole(userId);
     }
+    public String extractEmailFromJWT(Jwt jwt) {
+        Object emailObj = jwt.getClaims().get("email");
+        return emailObj != null ? emailObj.toString() : null;
+    }
 
     private boolean metadataContainsRole(Map<String,?> metadata) {
         return metadata != null && metadata.get("role") instanceof String;

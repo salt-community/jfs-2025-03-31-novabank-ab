@@ -18,10 +18,11 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User loginUser(String userId, Role role) {
+    public User loginUser(String userId, Role role, String email) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         user.setRole(role);
         user.setLastLogin(LocalDateTime.now());
+        user.setEmail(email);
         return user;
     }
 }

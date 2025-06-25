@@ -6,13 +6,16 @@
     "transactions": "Transactions",
     "transfer": "Transfer",
     "stocks": "Stocks",
-    "pension": "Pension"
+    "pension": "Pension",
+    "myPages": "My pages",
+    "services": "Services"
   },
   "admin": {
     "dashboard": "Dashboard",
     "users": "Users",
     "transactions": "Transactions",
-    "applications": "Applicants"
+    "applications": "Applicants",
+    "loans": "Loans"
   },
   "signOut": "Sign out",
   "signIn": "Sign in",

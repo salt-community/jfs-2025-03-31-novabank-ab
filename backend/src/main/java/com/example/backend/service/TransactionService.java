@@ -1,8 +1,29 @@
 package com.example.backend.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.backend.dto.transactionDto.request.TransactionRequestDto;
 import com.example.backend.dto.transactionDto.response.UnifiedTransactionResponseDto;
-import com.example.backend.exception.custom.*;
+import com.example.backend.exception.custom.AccountNotAllowedException;
+import com.example.backend.exception.custom.AccountNotFoundException;
+import com.example.backend.exception.custom.InsufficientFundsException;
+import com.example.backend.exception.custom.TransactionNotFoundException;
+import com.example.backend.exception.custom.UserUnauthorizedException;
 import com.example.backend.model.Account;
 import com.example.backend.model.ScheduledTransaction;
 import com.example.backend.model.Transaction;
@@ -12,16 +33,6 @@ import com.example.backend.model.enums.TransactionStatus;
 import com.example.backend.repository.AccountRepository;
 import com.example.backend.repository.ScheduledTransactionRepository;
 import com.example.backend.repository.TransactionRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.*;
 
 @Service
 public class TransactionService {
@@ -159,17 +170,36 @@ public class TransactionService {
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
-    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId) {
+    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(
+            String userId,
+            Pageable pageable,
+            UUID accountId,
+            BigDecimal minAmount,
+            BigDecimal maxAmount,
+            String category
+    ) {
+        BigDecimal effectiveMin = minAmount != null ? minAmount : BigDecimal.ZERO;
+        BigDecimal effectiveMax = maxAmount != null ? maxAmount : new BigDecimal("999999999");
+
         if (accountId != null) {
-           Page<Transaction>  transactions = transactionRepository.findByFromAccount_IdOrToAccount_Id(accountId, accountId, pageable);
-          return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
+            Page<Transaction> transactions = transactionRepository
+                    .findByAccountAndAmountBetweenAndOptionalCategory(
+                            accountId, effectiveMin, effectiveMax, category, pageable
+                    );
+            return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
         }
+
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
+
         Page<Transaction> transactions = transactionRepository
-                .findByFromAccount_IdInOrToAccount_IdIn(accountIds, accountIds, pageable);
+                .findByAccountsAndAmountBetweenAndOptionalCategory(
+                        accountIds, effectiveMin, effectiveMax, category, pageable
+                );
+
         return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
+
 
     public List<Transaction> getAllTransactionsByUserNoPagination(String userId) {
         List<Account> accounts = accountService.getAllUserAccounts(userId);
