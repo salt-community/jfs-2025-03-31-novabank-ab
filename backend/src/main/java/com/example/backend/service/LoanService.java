@@ -99,7 +99,7 @@ public class LoanService {
         loan.setStartDate(LocalDate.now());
         loan.setDueDate(LocalDate.now().plusMonths(application.getRepaymentMonths()));
         loan.setStatus(LoanStatus.ACTIVE);
-        
+
         accountService.updateBalance(
                 application.getUser().getAccounts().getFirst().getId(),
                 application.getUser().getId(),
