@@ -52,15 +52,28 @@ export default function TransactionsPage() {
 
   const transactionsData = data?.content ?? []
 
+  const filteredTransactions = selectedAccount
+    ? transactionsData.filter(
+        (tx) =>
+          tx.fromAccountId === selectedAccount.id ||
+          tx.toAccountId === selectedAccount.id,
+      )
+    : transactionsData
+
   const aiTransformed = transformToTransactionEntries(
     transactionsFromIdsGivenByAi,
   )
-  const allTransformed = transformToTransactionEntries(transactionsData)
+  const allTransformed = transformToTransactionEntries(
+    filteredTransactions,
+    selectedAccount?.id,
+  )
 
   const { entries: AIEntries, isLoading: aiLoading } =
     useFetchEntries(aiTransformed)
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(allTransformed)
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
+    allTransformed,
+    selectedAccount?.id,
+  )
 
   const searchBarRef = useRef<HTMLDivElement>(null)
   const amountFilterRef = useRef<HTMLDivElement>(null)
@@ -68,10 +81,7 @@ export default function TransactionsPage() {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node
-      if (
-        searchBarRef.current &&
-        !searchBarRef.current.contains(target)
-      ) {
+      if (searchBarRef.current && !searchBarRef.current.contains(target)) {
         setSearchBarOpen(false)
       }
 
@@ -187,10 +197,12 @@ export default function TransactionsPage() {
             sendIdsAndGetTransactions.isError ||
             (transactionsFromIdsGivenByAi.length > 0 &&
               transactionsFromIdsGivenByAi[0].description === 'ERROR') ? (
-              <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
+              <div className="p-4 text-gray-500">
+                {t('noTransactionsFound')}
+              </div>
             ) : (
-              AIEntries.map((tx) => (
-                <TransactionItem key={tx.transactionId} transaction={tx} />
+              AIEntries.map((tx, index) => (
+                <TransactionItem key={index} transaction={tx} />
               ))
             )}
 
@@ -230,7 +242,11 @@ export default function TransactionsPage() {
           >
             <div className="flex justify-between items-center">
               {t('amountFilter')}
-              <img src={filtericon} className="w-4 ml-4 h-4" alt="filter icon" />
+              <img
+                src={filtericon}
+                className="w-4 ml-4 h-4"
+                alt="filter icon"
+              />
             </div>
           </button>
           {showAmountFilter && (
@@ -253,9 +269,9 @@ export default function TransactionsPage() {
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
-          allEntries.map((tx) => (
-            <TransactionItem key={tx.transactionId} transaction={tx} />
-          ))
+          allEntries.map((tx, index) => {
+            return <TransactionItem key={index} transaction={tx} />
+          })
         )}
       </div>
 
