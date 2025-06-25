@@ -38,9 +38,9 @@ export default function AccountFilterDropdown({
         <option value="" className="text-gray-400 text-sm">
           {t('allAccounts')}
         </option>
-        {bankAccounts.map((account) => (
+        {bankAccounts.map((account, index) => (
           <option
-            key={account.accountNumber}
+            key={index}
             value={account.accountNumber}
             className="text-black"
           >
