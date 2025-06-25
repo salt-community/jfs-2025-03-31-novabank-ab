@@ -20,7 +20,7 @@ export function UserBottomNav() {
   const isActive = (path: string) => location.pathname.startsWith(path)
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-[#151515] text-white py-3 border-t border-gray-700 md:hidden">
+    <nav className="sticky bottom-0 left-0 right-0 z-50 flex justify-around items-center bg-[#151515] text-white py-3 border-t border-gray-700 md:hidden">
       <a onClick={() => navigate({ to: '/dashboard' })}>
         <img
           src={isActive('/dashboard') ? yellowhomeicon : homeicon}

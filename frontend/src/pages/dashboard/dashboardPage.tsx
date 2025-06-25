@@ -35,11 +35,12 @@ export default function DashboardPage() {
 
   return (
     <>
-      <div className="absolute top-4 right-4">
-        <NotificationBell />
-      </div>
       <div className="px-4 sm:px-8 py-6 space-y-12">
-        <h1 className="text-3xl mb-8 sm:mb-15">{t('admin.dashboard')}</h1>
+        <div className="flex items-center justify-between mb-8 sm:mb-15">
+          <h1 className="text-3xl">{t('admin.dashboard')}</h1>
+          <NotificationBell />
+        </div>
+
         <AccountGallery bankAccounts={accounts} />
         <TransactionList transactions={transactionEntries} />
       </div>

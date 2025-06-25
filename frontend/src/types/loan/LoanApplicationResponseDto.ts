@@ -15,6 +15,8 @@ export interface LoanApplicationResponseDto {
   status: LoanApplicationStatus
   createdAt: string
   updatedAt: string
+  note: string
+  requestedDueDate: string
 }
 
 export interface ListLoanApplicationResponseDto {

@@ -38,8 +38,8 @@ export default function CategoryFilterDropdown({
         <option value="" className="text-gray-400 text-sm">
           {t('allCategories')}
         </option>
-        {CATEGORY_OPTIONS.map((category) => (
-          <option key={category} value={category} className="text-black">
+        {CATEGORY_OPTIONS.map((category, index) => (
+          <option key={index} value={category} className="text-black">
             {t(category)}
           </option>
         ))}
