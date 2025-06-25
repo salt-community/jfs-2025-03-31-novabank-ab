@@ -83,12 +83,14 @@ public class LoanService {
             throw new IllegalStateException("Application must be approved to create a loan.");
         }
 
-        RiksbankRateRequestDto requestDto = new RiksbankRateRequestDto("SECBREPOEFF");
-        RiksbankRateResponseDto responseDto = fetchPolicyRate(requestDto);
+        double min = 3.0;
+        double max = 4.8;
+        double interestRate = min + Math.random() * (max - min);
 
         Loan loan = new Loan();
         loan.setAccount(application.getUser().getAccounts().getFirst());
-        loan.setInterestRate(responseDto.value());
+        loan.setUser(application.getUser());
+        loan.setInterestRate(interestRate);
         loan.setOriginalAmount(application.getRequestedAmount());
         loan.setRemainingAmount(application.getRequestedAmount());
         loan.setStartDate(LocalDate.now());
@@ -122,6 +124,7 @@ public class LoanService {
     }
 
     public void updateLoanApplication(LoanApplication application, ApplicationStatus status) {
+        System.out.println("status = " + status);
         switch (status) {
             case ApplicationStatus.APPROVED -> {
                 application.setStatus(ApplicationStatus.APPROVED);

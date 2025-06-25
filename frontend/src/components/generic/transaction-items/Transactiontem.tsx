@@ -1,5 +1,6 @@
 import type { TransactionEntry } from '@/hooks/useFetchEntries'
 import TransactionMenu from './TransactionMenu'
+import { useTranslation } from 'react-i18next'
 
 type TransactionItemProps = {
   transaction: TransactionEntry
@@ -10,8 +11,9 @@ export function TransactionItem({
   transaction,
   variant = 'regular',
 }: TransactionItemProps) {
-  const isScheduled = variant === 'scheduled'
-  const isIncoming = transaction.direction === 'in'
+  const { t } = useTranslation('transactionDetails')
+  const isScheduled = variant === t('scheduled')
+  const isIncoming = transaction.direction === t('in')
 
   // Format the date
   const dateToUse = isScheduled
@@ -20,13 +22,13 @@ export function TransactionItem({
 
   const formattedDate = dateToUse
     ? new Date(dateToUse).toISOString().slice(0, 10)
-    : 'Unknown'
+    : t('unknown')
 
   // Capitalize the category
   const capitalizedCategory = transaction.category
     ? transaction.category.charAt(0).toUpperCase() +
       transaction.category.slice(1).toLowerCase()
-    : 'No category'
+    : t('noCategory')
 
   // Choose amount format
   const formattedAmount = isIncoming
@@ -44,7 +46,7 @@ export function TransactionItem({
         <span className="text-xs text-gray-500">{capitalizedCategory}</span>
         {!isScheduled && (
           <span className="text-xs text-gray-500">
-            {isIncoming ? 'To ' : 'From '} {transaction.accountType}
+            {isIncoming ? t('to') : t('from')} {transaction.accountType}
           </span>
         )}
       </div>
@@ -54,12 +56,12 @@ export function TransactionItem({
             {formattedAmount}
           </span>
           <span className="text-xs text-gray-400">
-            {isScheduled ? 'Scheduled for' : ''} {formattedDate}
+            {isScheduled ? t('scheduledFor') : ''} {formattedDate}
           </span>
         </div>
         <TransactionMenu
           transaction={transaction}
-          allowCancel={variant === 'scheduled'}
+          allowCancel={variant === t('scheduled')}
           variant={variant}
         />
       </div>
