@@ -190,7 +190,7 @@ export default function TransactionsPage() {
       )}
 
       {/* Filters */}
-      <div className="flex gap-2 text-sm mb-10">
+      <div className="flex flex-col items-center sm:flex-row gap-2 text-sm mb-10">
         <AccountFilterDropdown
           selectedAccount={selectedAccount}
           setSelectedAccount={setSelectedAccount}
