@@ -10,6 +10,8 @@ import {
   yellowtransactionicon,
   yellowtransfericon,
   yellowsettingsicon,
+  yellowloanicon,
+  loanicon,
 } from '@/assets/icons'
 
 export function UserBottomNav() {
@@ -42,6 +44,12 @@ export function UserBottomNav() {
           src={
             isActive('/transactions') ? yellowtransactionicon : transactionicon
           }
+          className="w-6 h-6"
+        />
+      </a>
+      <a onClick={() => navigate({ to: '/loans/register' })}>
+        <img
+          src={isActive('/loans/register') ? yellowloanicon : loanicon}
           className="w-6 h-6"
         />
       </a>
