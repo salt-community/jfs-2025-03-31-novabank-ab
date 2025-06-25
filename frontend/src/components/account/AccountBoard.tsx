@@ -28,7 +28,7 @@ export default function AccountBoard({ account }: AccountBoardProps) {
     account.id,
   )
 
-  const { entries, isLoading: allLoading } = useFetchEntries(transactionEntries)
+  const { entries, isLoading: allLoading } = useFetchEntries(transactionEntries, account.id)
 
   if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
@@ -73,9 +73,9 @@ export default function AccountBoard({ account }: AccountBoardProps) {
         <h2 className="text-2xl mb-4">{t('scheduledTransasctions')}</h2>
         <div className="space-y-2">
           {scheduledTransactions.length > 0 ? (
-            scheduledTransactions.map((t) => (
+            scheduledTransactions.map((t, index) => (
               <TransactionItem
-                key={t.transactionId}
+                key={index}
                 transaction={t}
                 variant="scheduled"
               />
@@ -92,9 +92,9 @@ export default function AccountBoard({ account }: AccountBoardProps) {
           {regularTransactions.length === 0 ? (
             <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           ) : (
-            regularTransactions.map((tx) => (
+            regularTransactions.map((tx, index) => (
               <TransactionAccItem
-                key={tx.transactionId}
+                key={index}
                 transaction={tx}
                 variant="regular"
               />
