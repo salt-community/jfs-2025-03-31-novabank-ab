@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useGetAllTransactions,
@@ -63,6 +63,29 @@ export default function TransactionsPage() {
   const { entries: allEntries, isLoading: allLoading } =
     useFetchEntries(allTransformed)
 
+  // Ref for the AI search bar container
+  const searchBarRef = useRef<HTMLDivElement>(null);
+
+  // Close search bar when clicking outside of it
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target as Node)
+      ) {
+        setSearchBarOpen(false)
+      }
+    }
+    if (searchBarOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [searchBarOpen])
+
   if (isError) {
     return (
       <div className="p-8 text-red-500">{t('failedToLoadTransactions')}</div>
@@ -84,6 +107,7 @@ export default function TransactionsPage() {
       {/* AI Search Bar */}
       <div className="flex justify-start mb-6">
         <div
+          ref={searchBarRef}
           className={`
             bg-white border border-black/70 rounded-4xl flex items-center px-3
             w-full
@@ -163,9 +187,7 @@ export default function TransactionsPage() {
             sendIdsAndGetTransactions.isError ||
             (transactionsFromIdsGivenByAi.length > 0 &&
               transactionsFromIdsGivenByAi[0].description === 'ERROR') ? (
-              <div className="p-4 text-gray-500">
-                {t('noTransactionsFound')}
-              </div>
+              <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
             ) : (
               AIEntries.map((tx) => (
                 <TransactionItem key={tx.transactionId} transaction={tx} />

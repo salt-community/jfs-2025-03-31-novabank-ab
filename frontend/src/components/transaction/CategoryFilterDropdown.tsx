@@ -6,13 +6,13 @@ type CategoryFilterProps = {
 }
 
 const CATEGORY_OPTIONS = [
-  'food',
-  'leisure',
-  'utilities',
-  'rent',
-  'salary',
-  'travel',
-  'other',
+  'Food',
+  'Leisure',
+  'Utilities',
+  'Rent',
+  'Salary',
+  'Travel',
+  'Other',
 ]
 
 export default function CategoryFilterDropdown({
