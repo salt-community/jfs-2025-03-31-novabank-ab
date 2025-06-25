@@ -28,10 +28,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt) {
         String userId = jwt.getSubject();
-        String email = securityUtil.extractEmailFromJWT(jwt);
         Role role = securityUtil.extractRoleFromJWT(jwt);
-        User user = authService.loginUser(userId, role, email);
-        log.info("User with ID: {} and Role: {} logging in with email: {}", userId, role, email);
+        User user = authService.loginUser(userId, role);
+        log.info("User with ID: {} and Role: {} logging in" , userId, role);
         return ResponseEntity.ok(LoginResponseDto.fromUser(user));
     }
 
