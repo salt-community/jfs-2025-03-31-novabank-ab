@@ -22,7 +22,6 @@ export default function AdminApplicationsPage() {
   const reject = useRejectApplication()
   const [selected, setSelected] = useState<Application | null>(null)
   const [filter, setFilter] = useState<'ALL' | ApplicationStatus>('ALL')
-
   if (isLoading)
     return (
       <div className="p-20 flex justify-center text-5xl items-center">
@@ -66,8 +65,8 @@ export default function AdminApplicationsPage() {
         <ApplicationModal
           app={selected}
           onClose={() => setSelected(null)}
-          onApprove={approve.mutate}
-          onReject={reject.mutate}
+          approve={approve}
+          reject={reject}
           isLoadingApprove={approve.isPending}
           isLoadingReject={reject.isPending}
         />
