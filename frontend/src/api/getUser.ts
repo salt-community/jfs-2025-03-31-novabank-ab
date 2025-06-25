@@ -2,8 +2,8 @@ import type { UserType } from '@/types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
-export async function getUser(token: string, id: string): Promise<UserType> {
-  const res = await fetch(BASE_URL.concat('user/', id), {
+export async function getUser(token: string): Promise<UserType> {
+  const res = await fetch(BASE_URL.concat('user/'), {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,

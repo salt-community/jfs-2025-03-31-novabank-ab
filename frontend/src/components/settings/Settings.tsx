@@ -2,10 +2,10 @@ import { useTranslation } from 'react-i18next'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useGetUser, useUpdateUser, useGetUserSettings } from '@/hooks'
 import { useUpdateUserSettings } from '@/hooks/useUpdateUserNotifications'
-import { useUser } from '@clerk/clerk-react'
 import { useState } from 'react'
 import type { UserSettings } from '@/types'
 import Spinner from '../generic/Spinner'
+import { toast } from 'react-toastify'
 
 const Settings = () => {
   const { t } = useTranslation('settings')
@@ -20,12 +20,11 @@ const Settings = () => {
       language: 'en',
       smsNotifications: false,
     })
-  const { user } = useUser()
   const {
     data: userFromApi,
     isLoading: userFromApiLoading,
     isError: userFromApiError,
-  } = useGetUser(user?.id)
+  } = useGetUser()
   const {
     data: userSettingsFromApi,
     isLoading: userSettingsLoading,
@@ -65,7 +64,14 @@ const Settings = () => {
   }
 
   const updateUserSettings = () => {
-    updateUserNotifications.mutate(userNotificationSettings)
+    updateUserNotifications.mutate(userNotificationSettings, {
+      onSuccess: () => {
+        toast.success(t('saved'))
+      },
+      onError: () => {
+        toast.error(t('failed'))
+      },
+    })
   }
 
   return (
