@@ -69,6 +69,7 @@ export default function TransactionsPage() {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node
       if (
+        window.innerWidth > 768 &&
         searchBarRef.current &&
         !searchBarRef.current.contains(target)
       ) {
@@ -170,6 +171,51 @@ export default function TransactionsPage() {
           />
           <img src={searchicon} alt="Search" className="h-5 w-5" />
         </div>
+        {searchBarOpen && (
+          <button
+            onClick={() => {
+              sendQueryToAi.mutate(
+                { query: aiSearchBarInputContent },
+                {
+                  onSuccess(data) {
+                    sendIdsAndGetTransactions.mutate(data, {
+                      onSuccess(data) {
+                        if (data.length > 0) {
+                          setTransactionsFromIdsGivenByAi(data)
+                        } else {
+                          setTransactionsFromIdsGivenByAi([
+                            {
+                              amount: 0,
+                              category: '',
+                              date: 'null',
+                              description: 'ERROR',
+                              fromAccountId: 'null',
+                              ocrNumber: 'null',
+                              status: 'null',
+                              toAccountId: 'null',
+                              transactionId: 'null',
+                              type: 'INTERNAL_TRANSFER',
+                              userNote: 'null',
+                            },
+                          ])
+                        }
+                        setTimeout(() => {
+                          setHeightAiDiv('max-h-[2000px]')
+                        }, 200)
+                      },
+                    })
+                  },
+                },
+              )
+              setAiSearchBarInputContent('')
+              setSearchBarOpen(false)
+            }}
+            type="submit"
+            className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-fit text-black shadow-md py-2 px-3 rounded-md transition-colors block md:hidden ml-3"
+          >
+            {t('search')}
+          </button>
+        )}
       </div>
 
       {/* AI Search Results */}
