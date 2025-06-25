@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -158,15 +159,19 @@ public class TransactionService {
         scheduledTransactionRepository.saveAll(scheduledTransactions);
     }
 
-    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId) {
+    public Page<UnifiedTransactionResponseDto> getTransactionsByUser(String userId, Pageable pageable, UUID accountId, BigDecimal minAmount, BigDecimal maxAmount) {
+        BigDecimal effectiveMin = minAmount != null ? minAmount : BigDecimal.ZERO;
+        BigDecimal effectiveMax = maxAmount != null ? maxAmount : new BigDecimal("999999999");
         if (accountId != null) {
-           Page<Transaction>  transaction = transactionRepository.findByFromAccount_IdOrToAccount_Id(accountId, accountId, pageable);
-          return transaction.map(UnifiedTransactionResponseDto::fromTransaction);
+            Page<Transaction> transaction = transactionRepository
+                    .findByAccountAndAmountBetween(accountId, effectiveMin, effectiveMax, pageable);
+            return transaction.map(UnifiedTransactionResponseDto::fromTransaction);
         }
+
         List<Account> accounts = accountService.getAllUserAccounts(userId);
         List<UUID> accountIds = accounts.stream().map(Account::getId).toList();
         Page<Transaction> transactions = transactionRepository
-                .findByFromAccount_IdInOrToAccount_IdIn(accountIds, accountIds, pageable);
+                .findByAccountsAndAmountBetween(accountIds, effectiveMin, effectiveMax, pageable);
         return transactions.map(UnifiedTransactionResponseDto::fromTransaction);
     }
 

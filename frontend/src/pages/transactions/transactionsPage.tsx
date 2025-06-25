@@ -11,10 +11,13 @@ import type { Account, Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
 import { searchicon } from '@/assets/icons'
 import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
+import AmountFilterFields from '@/components/transaction/AmountFilterFields'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
+  const [minAmount, setMinAmount] = useState('')
+  const [maxAmount, setMaxAmount] = useState('')
   const [page, setPage] = useState(0)
   const pageSize = 10
 
@@ -34,6 +37,8 @@ export default function TransactionsPage() {
     page,
     pageSize,
     selectedAccount?.id,
+    minAmount,
+    maxAmount,
   )
 
   // const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
@@ -134,6 +139,13 @@ export default function TransactionsPage() {
           <AccountFilterDropdown
             selectedAccount={selectedAccount}
             setSelectedAccount={setSelectedAccount}
+          />
+          <AmountFilterFields
+            onApply={(min, max) => {
+              setMinAmount(min)
+              setMaxAmount(max)
+              setPage(0)
+            }}
           />
         </div>
       </div>
