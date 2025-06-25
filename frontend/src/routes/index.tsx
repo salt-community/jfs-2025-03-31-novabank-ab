@@ -55,7 +55,7 @@ function LandingPage() {
                 </button>
               </div>
             </div>
-            <div className="">
+            <div className="hidden sm:block">
               <img
                 src="/PhonePlaceholder.png"
                 alt="Landing Page Illustration"
