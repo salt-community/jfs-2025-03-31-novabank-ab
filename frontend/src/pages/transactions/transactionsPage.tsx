@@ -8,13 +8,12 @@ import {
 import Spinner from '@/components/generic/Spinner'
 import type { Account, Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
-import { searchicon } from '@/assets/icons'
+import { searchicon, filtericon } from '@/assets/icons'
 import { transformToTransactionEntries } from '../../lib/utils'
 import { TransactionItem } from '@/components/generic/transaction-items/Transactiontem'
 import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
 import AmountFilterFields from '@/components/transaction/AmountFilterFields'
 import CategoryFilterDropdown from '@/components/transaction/CategoryFilterDropdown'
-import { filtericon } from '@/assets/icons'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -63,28 +62,32 @@ export default function TransactionsPage() {
   const { entries: allEntries, isLoading: allLoading } =
     useFetchEntries(allTransformed)
 
-  // Ref for the AI search bar container
-  const searchBarRef = useRef<HTMLDivElement>(null);
+  const searchBarRef = useRef<HTMLDivElement>(null)
+  const amountFilterRef = useRef<HTMLDivElement>(null)
 
-  // Close search bar when clicking outside of it
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node
       if (
         searchBarRef.current &&
-        !searchBarRef.current.contains(event.target as Node)
+        !searchBarRef.current.contains(target)
       ) {
         setSearchBarOpen(false)
       }
+
+      if (
+        amountFilterRef.current &&
+        !amountFilterRef.current.contains(target)
+      ) {
+        setShowAmountFilter(false)
+      }
     }
-    if (searchBarOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [searchBarOpen])
+  }, [])
 
   if (isError) {
     return (
@@ -94,7 +97,6 @@ export default function TransactionsPage() {
 
   if (isLoading || aiLoading || allLoading) return <Spinner />
 
-  // Safe pagination fallbacks
   const currentPage = data?.number ?? 0
   const totalPages = data?.totalPages ?? 1
   const isFirstPage = data?.first ?? true
@@ -105,15 +107,13 @@ export default function TransactionsPage() {
       <h1 className="text-3xl mb-8 sm:mb-15">{t('transactions')}</h1>
 
       {/* AI Search Bar */}
-      <div className="flex justify-start mb-6">
+      <div className="flex justify-start mb-2">
         <div
           ref={searchBarRef}
           className={`
             bg-white border border-black/70 rounded-4xl flex items-center px-3
-            w-full
-            sm:max-w-none
-            transition-[width] duration-300 ease-in-out
-            ${searchBarOpen ? 'w-full' : 'sm:w-56'}
+            sm:max-w-none transition-[width] duration-300 ease-in-out
+            ${searchBarOpen ? 'w-full' : 'w-40 sm:w-56'}
           `}
         >
           <input
@@ -212,7 +212,7 @@ export default function TransactionsPage() {
       )}
 
       {/* Filters */}
-      <div className="flex flex-col items-center sm:flex-row gap-2 text-sm mb-10">
+      <div className="flex flex-col sm:flex-row gap-2 text-sm mb-10">
         <AccountFilterDropdown
           selectedAccount={selectedAccount}
           setSelectedAccount={setSelectedAccount}
@@ -221,21 +221,16 @@ export default function TransactionsPage() {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
-        <div className="relative w-40">
+        <div className="relative w-40" ref={amountFilterRef}>
           <button
             className={`
-                  outline outline-black cursor-pointer rounded-4xl px-3  w-full  
-                  text-left h-8 w-full
-                `}
+              outline outline-black cursor-pointer rounded-4xl px-3 text-left h-8 w-full
+            `}
             onClick={() => setShowAmountFilter((v) => !v)}
           >
             <div className="flex justify-between items-center">
               {t('amountFilter')}
-              <img
-                src={filtericon}
-                className="w-4 ml-4 h-4"
-                alt="filter icon"
-              />
+              <img src={filtericon} className="w-4 ml-4 h-4" alt="filter icon" />
             </div>
           </button>
           {showAmountFilter && (
@@ -255,7 +250,6 @@ export default function TransactionsPage() {
 
       <div className="shadow-md p-4">
         <h1 className="text-2xl">{t('allTransactions')}</h1>
-        {/* Transactions List */}
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
