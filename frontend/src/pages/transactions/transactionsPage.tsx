@@ -47,15 +47,10 @@ export default function TransactionsPage() {
     selectedCategory ?? undefined,
   )
 
-  // const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
-
-  // const myAccountIds = new Set(accounts?.map((a) => a.id))
   useEffect(() => {
     setPage(0)
   }, [selectedAccount])
 
-  //if (isLoading || accountsLoading) return <Spinner />
-  // Provide fallback array to always call hook safely
   const transactionsData = data?.content ?? []
 
   const aiTransformed = transformToTransactionEntries(

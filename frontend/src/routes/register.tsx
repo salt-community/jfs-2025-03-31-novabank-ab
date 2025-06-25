@@ -14,9 +14,7 @@ function RouteComponent() {
         <RedirectOnSignIn />
       </SignedIn>
       <SignedOut>
-        <div className="">
-          <RegisterApplicationForm />
-        </div>
+        <RegisterApplicationForm />
       </SignedOut>
     </>
   )

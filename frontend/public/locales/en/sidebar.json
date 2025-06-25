@@ -20,5 +20,7 @@
   "signOut": "Sign out",
   "signIn": "Sign in",
   "register": "Register",
-  "loans": "Loans"
+  "loans": "Loans",
+  "failedLoadingAccounts":"Failed to load accounts",
+  "failedLoadingTransactions":"Failed to load transactions"
 }

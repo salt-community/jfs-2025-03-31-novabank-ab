@@ -1,6 +1,5 @@
 import Settings from '@/components/settings/Settings'
 import { useTranslation } from 'react-i18next'
-// import { UserButton } from '@clerk/clerk-react'
 
 export default function SettingsPage() {
   const { t } = useTranslation('sidebar')

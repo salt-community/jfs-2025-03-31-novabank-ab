@@ -1,5 +1,6 @@
 import type { TransactionEntry } from '@/hooks/useFetchEntries'
 import TransactionMenu from './TransactionMenu'
+import { useTranslation } from 'react-i18next'
 
 type TransactionAccItemProps = {
   transaction: TransactionEntry
@@ -10,17 +11,18 @@ export function TransactionAccItem({
   transaction,
   variant = 'regular',
 }: TransactionAccItemProps) {
-  const isIncoming = transaction.direction === 'in'
+  const { t } = useTranslation('transactionDetails')
+  const isIncoming = transaction.direction === t('in')
 
   const formattedDate = transaction.date
     ? new Date(transaction.date).toISOString().slice(0, 10)
-    : 'Unknown'
+    : t('unknown')
 
   // Capitalize the category
   const capitalizedCategory = transaction.category
     ? transaction.category.charAt(0).toUpperCase() +
       transaction.category.slice(1).toLowerCase()
-    : 'No category'
+    : t('noCategory')
 
   // Choose amount format
   const formattedAmount = isIncoming
@@ -42,9 +44,7 @@ export function TransactionAccItem({
           <span className={`text-base font-medium ${amountColor}`}>
             {formattedAmount}
           </span>
-          <span className="text-xs text-gray-400">
-            {formattedDate}
-          </span>
+          <span className="text-xs text-gray-400">{formattedDate}</span>
         </div>
         <TransactionMenu
           transaction={transaction}

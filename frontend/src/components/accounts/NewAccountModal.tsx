@@ -138,7 +138,7 @@ export default function NewAccountModal({
                 {t('selectCurrencyOnly')}
               </option>
               <option className="text-black" value="SEK">
-                SEK
+                {t('sek')}
               </option>
             </select>
             <label
@@ -159,8 +159,6 @@ export default function NewAccountModal({
               <p className="text-red-600 text-sm mt-1">{errors.currency}</p>
             )}
           </div>
-
-          {/* Continue Button */}
           <div className="flex justify-end mt-6">
             <button
               type="button"

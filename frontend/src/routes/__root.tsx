@@ -17,6 +17,7 @@ import { cssTransition } from 'react-toastify'
 export const Route = createRootRoute({
   component: () => {
     const { i18n } = useTranslation()
+    const { t } = useTranslation('landingPage')
     const { location } = useRouterState()
     const isIndex = location.pathname === '/'
     const isRegister = location.pathname === '/register'
@@ -123,9 +124,7 @@ export const Route = createRootRoute({
               <>
                 <Header />
                 <div className="flex justify-center mx-auto w-full text-center bg-white mt-40 text-4xl">
-                  <h1 className="" style={{ fontFamily: "'Lato', sans-serif" }}>
-                    Please sign in to access this page
-                  </h1>
+                  <h1>{t('signInToAccess')}</h1>
                 </div>
               </>
             )}
