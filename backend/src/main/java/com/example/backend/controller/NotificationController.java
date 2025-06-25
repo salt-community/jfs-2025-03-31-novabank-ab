@@ -1,11 +1,19 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.notificationDto.request.MarkReadRequestDto;
 import com.example.backend.dto.notificationDto.response.NotificationResponseDto;
 import com.example.backend.model.Notification;
 import com.example.backend.service.NotificationService;
+import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class NotificationController {
@@ -26,9 +34,47 @@ public class NotificationController {
         NotificationResponseDto dto = new NotificationResponseDto(
                 notification.getId(),
                 notification.getMessage(),
-                notification.getCreatedAt()
+                notification.getCreatedAt(),
+                notification.isRead()
         );
 
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/api/notifications")
+    public ResponseEntity<List<NotificationResponseDto>> getAllNotificationsForUser(
+            @Parameter(hidden = true) @AuthenticationPrincipal Jwt jwt
+    ) {
+        String userId = jwt.getSubject();
+        List<Notification> notifs = service.getUserNotifications(userId);
+
+        List<NotificationResponseDto> dtos = notifs.stream()
+                .map(n -> new NotificationResponseDto(
+                        n.getId(),
+                        n.getMessage(),
+                        n.getCreatedAt(),
+                        n.isRead()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
+
+    @PatchMapping("/api/notifications/read")
+    public ResponseEntity<List<NotificationResponseDto>> markNotificationsRead(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody MarkReadRequestDto req
+    ) {
+        String userId = jwt.getSubject();
+        List<Notification> updated = service.markAsRead(userId, req.notificationIds());
+
+        List<NotificationResponseDto> dtos = updated.stream()
+                .map(n -> new NotificationResponseDto(
+                        n.getId(), n.getMessage(), n.getCreatedAt(), n.isRead()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
     }
 }

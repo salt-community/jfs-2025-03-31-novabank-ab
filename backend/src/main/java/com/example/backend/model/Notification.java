@@ -36,5 +36,4 @@ public class Notification {
         read = false;
     }
 
-    // ... getters and setters ...
 }
