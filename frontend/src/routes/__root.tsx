@@ -87,7 +87,7 @@ export const Route = createRootRoute({
               <SideBar admin={isAdmin} />
             </aside>
           </div>
-          <main className="flex-1 mx-[20px] md:mx-[30px] lg:mx-[100px] xl:mx-[150px] 2xl:mx-[200px] text-black">
+          <main className="flex-1 mx-[20px] md:mx-[30px] lg:mx-[100px] xl:mx-[150px] 2xl:mx-[200px] text-black pt-[60px] pb-[60px] md:pt-0 md:pb-0">
             <Outlet />
           </main>
         </SignedIn>
