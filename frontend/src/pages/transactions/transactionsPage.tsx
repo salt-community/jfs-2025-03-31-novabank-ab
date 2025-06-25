@@ -113,7 +113,7 @@ export default function TransactionsPage() {
           className={`
             bg-white border border-black/70 rounded-4xl flex items-center px-3
             sm:max-w-none transition-[width] duration-300 ease-in-out
-            ${searchBarOpen ? 'w-full' : 'w-40 sm:w-56'}
+            ${searchBarOpen ? 'w-full' : 'w-40'}
           `}
         >
           <input
