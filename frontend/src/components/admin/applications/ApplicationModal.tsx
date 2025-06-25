@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Application } from '@/types/Application'
 import type { UseMutationResult } from '@tanstack/react-query'
+import { Badge } from '@/components/ui/badge'
 
 interface Props {
   app: Application
@@ -78,9 +79,22 @@ export const ApplicationModal: React.FC<Props> = ({
               <p>
                 <strong>Phone Number:</strong> {app.phoneNumber}
               </p>
+              {app.status === 'APPROVED' && (
+                <Badge className="bg-green-500 text-white">Approved</Badge>
+              )}
+              {app.status === 'DISAPPROVED' && (
+                <Badge className="bg-red-500 text-white">Rejected</Badge>
+              )}
             </div>
           )}
         </div>
+
+        {approve.isSuccess && (
+          <Badge className="bg-green-500 text-white">Approved</Badge>
+        )}
+        {reject.isSuccess && (
+          <Badge className="bg-red-500 text-white">Rejected</Badge>
+        )}
 
         <div className="mt-6 flex justify-end space-x-3">
           <button
