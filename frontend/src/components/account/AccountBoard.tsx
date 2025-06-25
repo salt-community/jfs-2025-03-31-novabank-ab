@@ -23,18 +23,18 @@ export default function AccountBoard({ account }: AccountBoardProps) {
     isError,
   } = useAccountTransactions(account.id)
 
-  const transactionEntries = transformToTransactionEntries(transactions, account.id)
+  const transactionEntries = transformToTransactionEntries(
+    transactions,
+    account.id,
+  )
 
-  // Safe fallback for useFetchEntries
-  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(transactionEntries)
+  const { entries, isLoading: allLoading } = useFetchEntries(transactionEntries)
 
   if (isLoading || allLoading) return <Spinner />
   if (isError) return <div>{t('errorLoadingTransactions')}</div>
 
-  // Get only pending scheduled transactions
-  const scheduledTransactions = transactionEntries.filter(
-    (t) => t.status === 'PENDING',
-  )
+  const scheduledTransactions = entries.filter((t) => t.status === 'PENDING')
+  const regularTransactions = entries.filter((t) => t.status !== 'PENDING')
 
   return (
     <div className="px-4 sm:px-8 py-6 space-y-12" data-testid="account-board">
@@ -45,23 +45,23 @@ export default function AccountBoard({ account }: AccountBoardProps) {
         {t('goBack')}
         <img src={yellowgoback} className="ml-2 w-6 h-6" />
       </a>
-      <h1 className="text-4xl mb-20">{account.type}</h1>
+      <h1 className="text-3xl mb-8 sm:mb-15">{account.type}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div>
-          <p className="mt-4 text-gray-600 text2xl">{t('totalBalance')}</p>
+          <p className="text-md text-gray-500">{t('totalBalance')}</p>
           <p className="text-4xl font-bold">
             {account.balance}&nbsp;{account.currency}
           </p>
           <button
             onClick={() => navigate({ to: '/transfer' })}
-            className="mt-4 cursor-pointer px-4 py-2 bg-[#FFB20F] hover:bg-[#F5A700] rounded-md text-md shadow"
+            className="mt-4 cursor-pointer py-2 px-3 bg-[#FFB20F] hover:bg-[#F5A700] rounded-md shadow-md"
           >
             + {t('newTransfer')}
           </button>
         </div>
 
-        <div className="border-l pl-8">
+        <div className="border-transparent sm:border-l sm:border-gray-300 sm:pl-8">
           <p className="text-md text-gray-500">{t('accountStatus')}</p>
           <p className="text-2xl ">{account.status}</p>
           <p className="mt-4 text-md text-gray-500">{t('accountNumber')}</p>
@@ -89,10 +89,10 @@ export default function AccountBoard({ account }: AccountBoardProps) {
       <div>
         <h2 className="text-2xl mb-4">{t('transactions')}</h2>
         <div className="space-y-2">
-          {allEntries.length === 0 ? (
+          {regularTransactions.length === 0 ? (
             <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
           ) : (
-            allEntries.map((tx) => (
+            regularTransactions.map((tx) => (
               <TransactionAccItem
                 key={tx.transactionId}
                 transaction={tx}
