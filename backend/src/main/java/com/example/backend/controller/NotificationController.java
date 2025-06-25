@@ -1,9 +1,11 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.notificationDto.request.MarkReadRequestDto;
 import com.example.backend.dto.notificationDto.response.NotificationResponseDto;
 import com.example.backend.model.Notification;
 import com.example.backend.service.NotificationService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -50,6 +52,23 @@ public class NotificationController {
                         n.getId(),
                         n.getMessage(),
                         n.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    @PatchMapping("/notifications/read")
+    public ResponseEntity<List<NotificationResponseDto>> markNotificationsRead(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody MarkReadRequestDto req
+    ) {
+        String userId = jwt.getSubject();
+        List<Notification> updated = service.markAsRead(userId, req.notificationIds());
+
+        List<NotificationResponseDto> dtos = updated.stream()
+                .map(n -> new NotificationResponseDto(
+                        n.getId(), n.getMessage(), n.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
 

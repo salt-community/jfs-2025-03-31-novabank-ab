@@ -4,6 +4,7 @@ import com.example.backend.dto.notificationDto.response.NotificationResponseDto;
 import com.example.backend.model.Notification;
 import com.example.backend.model.User;
 import com.example.backend.repository.NotificationRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,12 @@ public class NotificationService {
 
     public List<Notification> getUserNotifications(String userId) {
         return repo.findAllByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    @Transactional
+    public List<Notification> markAsRead(String userId, List<UUID> notificationIds) {
+        List<Notification> toMark = repo.findAllByIdInAndUserId(notificationIds, userId);
+        toMark.forEach(n -> n.setRead(true));
+        return repo.saveAll(toMark);
     }
 }
