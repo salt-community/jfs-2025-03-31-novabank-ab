@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import TransactionFormAccItem from './TransactionFormAccItem'
 import type { Account } from '@/types'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs' // import tabs here
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 type RecipientsModalProps = {
   bankAccounts: Array<Account>
@@ -26,8 +26,8 @@ export default function RecipientsModal({
   setRecipientClient,
 }: RecipientsModalProps) {
   const { t } = useTranslation('accounts')
-  const savedRecipients = 'saved' // key for tabs
-  const newRecipient = 'new' // key for tabs
+  const savedRecipients = 'saved'
+  const newRecipient = 'new'
 
   const dialogRef = useRef<HTMLDialogElement | null>(null)
   const [newRec, setNewRec] = useState<string | null>('')
@@ -117,7 +117,6 @@ export default function RecipientsModal({
     onClose()
   }
 
-  // State to control Tabs active tab
   const [viewMode, setViewMode] = useState<string>(savedRecipients)
 
   return (
@@ -130,7 +129,21 @@ export default function RecipientsModal({
         }
       }}
     >
-      <div className="modal-box max-h-[90vh] bg-white rounded-lg shadow-lg relative px-6 py-8 max-w-3xl sm:max-w-xl text-[#141414]">
+      <div
+        className="
+          modal-box
+          max-h-[90vh]
+          bg-white
+          rounded-lg
+          shadow-lg
+          relative
+          sm:px-8
+          sm:py-8
+          max-w-full sm:max-w-lg 
+          text-[#141414]
+          overflow-auto
+        "
+      >
         <button
           type="button"
           onClick={handleCancel}
@@ -145,7 +158,7 @@ export default function RecipientsModal({
           onValueChange={setViewMode}
           defaultValue={savedRecipients}
         >
-          <TabsList className="mx-auto">
+          <TabsList className="mx-auto mt-3">
             <TabsTrigger value={savedRecipients} className="w-1/2">
               {t('savedRecipients')}
             </TabsTrigger>
@@ -154,9 +167,9 @@ export default function RecipientsModal({
             </TabsTrigger>
           </TabsList>
 
-          <div className="h-100 space-y-2 p-10">
+          <div className="h-100 space-y-2 p-2 sm:p-8">
             <TabsContent value={savedRecipients}>
-              <p className="mb-4 text-xl">{t('myBankAccounts')}</p>
+              <p className="mb-4 text-xl mt-4 sm:mt-0">{t('myBankAccounts')}</p>
               {bankAccounts.map((account) => {
                 const isDisabled =
                   sender?.accountNumber === account.accountNumber
@@ -187,7 +200,7 @@ export default function RecipientsModal({
             </TabsContent>
 
             <TabsContent value={newRecipient}>
-              <div className="space-y-5">
+              <div className="space-y-5 mt-10 sm:mt-0">
                 <div className="relative w-full">
                   <input
                     id="newAccount"
@@ -196,13 +209,25 @@ export default function RecipientsModal({
                     onChange={(e) => setNewRec(e.target.value)}
                     className={`peer hover:cursor-pointer text-black rounded-md shadow-md
                           p-4 w-full text-left bg-white outline focus:outline-2
-                          ${errors.recipientError ? 'outline-red-600 focus:outline-red-600' : 'outline-gray-200 focus:outline-black'}`}
+                          ${
+                            errors.recipientError
+                              ? 'outline-red-600 focus:outline-red-600'
+                              : 'outline-gray-200 focus:outline-black'
+                          }`}
                   />
                   <label
                     htmlFor="newAccount"
                     className={`absolute hover:cursor-pointer left-4 px-1 transition-all duration-200 bg-white rounded-lg
-                          ${newRec ? '-top-2.5 text-sm text-black font-semibold' : 'top-4 text-base text-gray-400 bg-transparent'}
-                          ${errors.recipientError ? 'peer-focus:text-red-600' : 'peer-focus:text-black'}
+                          ${
+                            newRec
+                              ? '-top-2.5 text-sm text-black font-semibold'
+                              : 'top-4 text-base text-gray-400 bg-transparent'
+                          }
+                          ${
+                            errors.recipientError
+                              ? 'peer-focus:text-red-600'
+                              : 'peer-focus:text-black'
+                          }
                           peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:bg-white`}
                   >
                     {t('accountNumber')}
@@ -242,11 +267,19 @@ export default function RecipientsModal({
                   <label
                     htmlFor="accNoType"
                     className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
-                ${accNoType ? '-top-2.5 font-semibold text-sm text-black' : 'top-4 text-base text-gray-400 bg-transparent pr-20'}
-                ${errors.accNoTypeError ? 'peer-focus:text-red-600' : 'peer-focus:text-black'}
+                ${
+                  accNoType
+                    ? '-top-2.5 font-semibold text-sm text-black'
+                    : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+                }
+                ${
+                  errors.accNoTypeError
+                    ? 'peer-focus:text-red-600'
+                    : 'peer-focus:text-black'
+                }
                 peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black peer-focus:bg-white`}
                   >
-                    {t('Account number type')}
+                    {t('accountNumberType')}
                   </label>
                   {errors.accNoTypeError && (
                     <p className="text-red-600 text-sm mt-1">
@@ -259,7 +292,7 @@ export default function RecipientsModal({
                   <button
                     type="button"
                     onClick={() => handleRecipientSubmit(recipientClient)}
-                    className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md px-5 py-2 rounded-md transition-colors"
+                    className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 rounded-md transition-colors"
                   >
                     {t('done')}
                   </button>

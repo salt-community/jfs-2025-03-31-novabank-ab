@@ -19,7 +19,7 @@ export default function CategoryFilterDropdown({
   selectedCategory,
   setSelectedCategory,
 }: CategoryFilterProps) {
-  const { t } = useTranslation('accounts') // or 'transactions' if that's better scoped
+  const { t } = useTranslation('accounts')
 
   return (
     <div className="w-40">
@@ -31,7 +31,7 @@ export default function CategoryFilterDropdown({
           setSelectedCategory(value === '' ? null : value)
         }}
         className={`
-          border-1 border-black cursor-pointer rounded-4xl px-2 w-full  
+          border-r-10 border-transparent outline outline-black cursor-pointer rounded-4xl px-2 w-full  
           text-left bg-white h-8
         `}
       >

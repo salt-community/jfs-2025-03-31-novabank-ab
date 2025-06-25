@@ -50,9 +50,9 @@ export function RequestLoanForm() {
     )
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-3xl mb-8">Apply for a Loan</h2>
-      <form onSubmit={onSubmit} className="space-y-4">
+    <div className="max-w-md p-6">
+      <h2 className="text-3xl mb-8">Loan application</h2>
+      <form onSubmit={onSubmit} className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12">
         {/* Account */}
         <div>
           <label htmlFor="accountId" className="block text-sm font-medium mb-1">
@@ -109,7 +109,7 @@ export function RequestLoanForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full py-2 px-3 bg-[#FFB20F] text-black rounded hover:opacity-70 transition disabled:opacity-50 hover:cursor-pointer"
+          className="w-full py-2 px-3 bg-[#FFB20F] text-black rounded-lg hover:opacity-70 transition disabled:opacity-50 hover:cursor-pointer"
         >
           {isPending ? 'Submitting…' : 'Send Application'}
         </button>

@@ -1,6 +1,7 @@
 import AccountBoard from '@/components/account/AccountBoard'
 import Spinner from '@/components/generic/Spinner'
 import { useAccount } from '@/hooks'
+import { useTranslation } from 'react-i18next'
 
 type AccountPageProps = {
   id: string
@@ -8,23 +9,14 @@ type AccountPageProps = {
 
 export default function AccountPage({ id }: AccountPageProps) {
   const { data: account, isLoading, isError } = useAccount(id)
+  const { t } = useTranslation('accounts')
 
   if (isLoading) return <Spinner />
   if (isError)
-    return (
-      <div className="p-8 text-red-500">Failed loading account details</div>
-    )
+    return <div className="p-8 text-red-500">{t('failedLoadingAccount')}</div>
 
-  // TODO later on this will change to specifik hook, getAccountById
-  // const account = accountDetails.find((acc) => acc.accountNumber === id)
-
-  // TODO is this really how we gonna handle this?
   if (account === undefined) {
-    return (
-      <div className="p-8 text-red-500">
-        Could not find specific account number
-      </div>
-    )
+    return <div className="p-8 text-red-500">{t('failedFindingAccNo')}</div>
   }
 
   return <AccountBoard account={account} />
