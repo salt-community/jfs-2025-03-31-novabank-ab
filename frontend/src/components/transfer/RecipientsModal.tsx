@@ -76,10 +76,10 @@ export default function RecipientsModal({
           return /^\d{7,8}$/.test(cleaned)
         }
       case t('otherAccount'): {
-        if (hasHyphen) return false
+        const isOurBank = /^1337-\d{9}$/.test(cleaned)
         const isPlainNumber = /^\d{4,30}$/.test(cleaned)
         const isSwedishIBAN = /^SE\d{10}$/.test(upper)
-        return isPlainNumber || isSwedishIBAN
+        return isPlainNumber || isSwedishIBAN || isOurBank
       }
       default:
         return false
