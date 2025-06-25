@@ -26,6 +26,8 @@ export default function AdminTransactions() {
   }
   return (
     <div>
+      <h1 className="text-3xl m-6">All Transactions</h1>
+
       <AdminTransactionsTable
         setModalOpen={setModalOpen}
         setModalData={setModalData}
