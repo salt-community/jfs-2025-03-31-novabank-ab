@@ -43,7 +43,9 @@ public class LoanService {
     public LoanService(LoanRepository loanRepository,
                        LoanApplicationRepository applicationRepository,
                        @Value("${RIKSBANK_API_URL}") String apiUrl,
-                       @Value("${RIKSBANK_API_KEY}") String apiKey, LoanApplicationRepository loanApplicationRepository, AccountService accountService) {
+                       @Value("${RIKSBANK_API_KEY}") String apiKey,
+                       LoanApplicationRepository loanApplicationRepository,
+                       AccountService accountService) {
         this.loanRepository = loanRepository;
         this.applicationRepository = applicationRepository;
         this.accountService = accountService;
