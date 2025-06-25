@@ -3,6 +3,7 @@ import { TransactionList } from '@/components/generic'
 import { AccountGallery } from '@/components/dashboard'
 import Spinner from '@/components/generic/Spinner'
 import { useTranslation } from 'react-i18next'
+import { transformToTransactionEntries } from '@/lib/utils'
 
 export default function DashboardPage() {
   const { t } = useTranslation('sidebar')
@@ -18,6 +19,9 @@ export default function DashboardPage() {
     isError: isTransactionsError,
   } = useGetAllTransactions()
 
+  const transactionsData = transactions?.content ?? []
+  const transactionEntries = transformToTransactionEntries(transactionsData)
+
   if (isAccountsLoading) return <Spinner />
   if (isTransactionsLoading) return <Spinner />
 
@@ -31,7 +35,7 @@ export default function DashboardPage() {
       <div className="px-4 sm:px-8 py-6 space-y-12">
         <h1 className="text-3xl mb-20">{t('admin.dashboard')}</h1>
         <AccountGallery bankAccounts={accounts} />
-        <TransactionList transactions={transactions?.content ?? []} />
+        <TransactionList transactions={transactionEntries} />
       </div>
     </>
   )
