@@ -43,15 +43,10 @@ export default function TransactionsPage() {
     selectedCategory ?? undefined,
   )
 
-  // const { data: accounts = [], isLoading: accountsLoading } = useAccounts()
-
-  // const myAccountIds = new Set(accounts?.map((a) => a.id))
   useEffect(() => {
     setPage(0)
   }, [selectedAccount])
 
-  //if (isLoading || accountsLoading) return <Spinner />
-  // Provide fallback array to always call hook safely
   const transactionsData = data?.content ?? []
 
   const aiTransformed = transformToTransactionEntries(transactionsFromIdsGivenByAi)
@@ -163,7 +158,7 @@ export default function TransactionsPage() {
             }}
             className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-1 rounded-4xl text-sm h-8"
           >
-            Clear All Filters
+            {t('clearFilters')}
           </button>
         </div>
       </div>

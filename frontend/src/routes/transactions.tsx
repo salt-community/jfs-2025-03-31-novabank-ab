@@ -6,10 +6,5 @@ export const Route = createFileRoute('/transactions')({
 })
 
 function RouteComponent() {
-
-
-  
-  return (
-    <TransactionsPage />
-  )
+  return <TransactionsPage />
 }

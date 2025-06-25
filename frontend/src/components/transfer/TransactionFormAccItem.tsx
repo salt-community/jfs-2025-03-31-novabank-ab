@@ -1,4 +1,5 @@
 import type { Account } from '@/types'
+import { useTranslation } from 'react-i18next'
 
 type TransactionFormAccItem = {
   account: Account
@@ -9,6 +10,7 @@ export default function TransactionFormAccItem({
   account,
   isDisabled,
 }: TransactionFormAccItem) {
+  const { t } = useTranslation('transactionDetails')
   return (
     <div
       className={`border-1 flex items-center justify-between px-4 py-3 shadow-md bg-white duration-200
@@ -32,7 +34,7 @@ export default function TransactionFormAccItem({
 
         {isDisabled && (
           <div className="text-xs text-red-500 sm:inline-block">
-            (Selected as sender)
+            ({t('selectedAsSender')})
           </div>
         )}
       </div>

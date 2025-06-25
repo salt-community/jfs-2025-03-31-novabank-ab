@@ -2,8 +2,7 @@
   "errorLoading": "Failed loading user details",
   "personal": "Personal",
   "general": "General",
-  "firstName": "First name",
-  "lastName": "Last name",
+  "name": "Name",
   "email": "Email",
   "smsNotifications": "SMS notifications",
   "emailNotifications": "Email notifications",
@@ -16,5 +15,12 @@
   "swedish": "Swedish",
   "savePreferences": "Save Preferences",
   "saved": "Changes Saved",
-  "failed": "Failed to save"
+  "failed": "Failed to save",
+  "invalidEmail": "Invalid email",
+  "failedEmail": "Failed to save email",
+  "invalidPhone": "Invalid phone number",
+  "failedPhone": "Failed to save phone number",
+  "edit":"Edit",
+  "save":"Save",
+  "cancel":"Cancel"
 }

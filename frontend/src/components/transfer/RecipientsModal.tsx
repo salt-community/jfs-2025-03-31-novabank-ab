@@ -279,7 +279,7 @@ export default function RecipientsModal({
                 }
                 peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black peer-focus:bg-white`}
                   >
-                    {t('Account number type')}
+                    {t('accountNumberType')}
                   </label>
                   {errors.accNoTypeError && (
                     <p className="text-red-600 text-sm mt-1">
