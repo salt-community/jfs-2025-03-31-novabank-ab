@@ -41,9 +41,6 @@ export const LoanApplicationModal: React.FC<Props> = ({
               <strong>Amount:</strong> {app.amount.toLocaleString()}
             </p>
             <p>
-              <strong>Term:</strong> {app.termMonths} months
-            </p>
-            <p>
               <strong>Rate:</strong> {app.interestRate}%
             </p>
             <p>
@@ -53,13 +50,20 @@ export const LoanApplicationModal: React.FC<Props> = ({
               <strong>Submitted:</strong>{' '}
               {new Date(app.createdAt).toLocaleString()}
             </p>
+            <p>
+              <strong>Requested due date:</strong>{' '}
+              {new Date(app.requestedDueDate).toLocaleString()}
+            </p>
+            <p>
+              <strong>Note:</strong> {app.note}
+            </p>
           </div>
         )}
 
         <div className="mt-6 flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:opacity-70 transition"
+            className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:opacity-70 transition hover:cursor-pointer"
           >
             Close
           </button>
@@ -70,14 +74,14 @@ export const LoanApplicationModal: React.FC<Props> = ({
               <button
                 onClick={() => onReject(app.id)}
                 disabled={isLoadingReject}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:opacity-70 transition"
+                className="px-4 py-2 bg-red-500 text-white rounded hover:opacity-70 transition hover:cursor-pointer"
               >
                 Reject
               </button>
               <button
                 onClick={() => onApprove(app.id)}
                 disabled={isLoadingApprove}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:opacity-70 transition"
+                className="px-4 py-2 bg-green-500 text-white rounded hover:opacity-70 transition hover:cursor-pointer"
               >
                 Approve
               </button>
