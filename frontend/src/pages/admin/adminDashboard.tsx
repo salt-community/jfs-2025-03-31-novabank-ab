@@ -27,7 +27,9 @@ export default function AdminDashboard() {
             <TotalTransactionsAreaChart />
           </TabsContent>
         </Tabs>
+        <h1 className="text-2xl my-6">Applications</h1>
         <ApplicantStatusCards />
+        <h1 className="text-2xl my-6">Last Transactions</h1>
       </div>
     </>
   )

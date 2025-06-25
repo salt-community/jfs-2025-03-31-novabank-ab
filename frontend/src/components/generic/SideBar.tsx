@@ -190,7 +190,9 @@ export function SideBar({ admin }: Props) {
           src={novabankicon}
           className="w-10 h-10 xl:h-20 xl:w-20 mb-15  hover:cursor-pointer"
         />
-        <Badge variant={'secondary'}>ADMIN</Badge>
+        <Badge className="bg-[#FFB20F]" variant={'secondary'}>
+          ADMIN
+        </Badge>
       </a>
 
       <div className="flex gap-8 flex-col list-none ">
