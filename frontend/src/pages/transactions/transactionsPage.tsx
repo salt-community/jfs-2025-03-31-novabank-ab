@@ -14,6 +14,7 @@ import { TransactionItem } from '@/components/generic/transaction-items/Transact
 import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
 import AmountFilterFields from '@/components/transaction/AmountFilterFields'
 import CategoryFilterDropdown from '@/components/transaction/CategoryFilterDropdown'
+import { filtericon } from '@/assets/icons'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -24,7 +25,8 @@ export default function TransactionsPage() {
   const [page, setPage] = useState(0)
   const pageSize = 10
 
-  const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] = useState<Array<Transaction>>([])
+  const [transactionsFromIdsGivenByAi, setTransactionsFromIdsGivenByAi] =
+    useState<Array<Transaction>>([])
 
   const [heightAiDiv, setHeightAiDiv] = useState<string>('max-h-0')
 
@@ -32,7 +34,9 @@ export default function TransactionsPage() {
   const sendIdsAndGetTransactions = useGetTransactionsFromIdsGivenByAi()
 
   const [searchBarOpen, setSearchBarOpen] = useState<boolean>(false)
-  const [aiSearchBarInputContent, setAiSearchBarInputContent] = useState<string>('')
+  const [aiSearchBarInputContent, setAiSearchBarInputContent] =
+    useState<string>('')
+  const [showAmountFilter, setShowAmountFilter] = useState(false)
 
   const { data, isLoading, isError } = useGetAllTransactions(
     page,
@@ -54,11 +58,15 @@ export default function TransactionsPage() {
   // Provide fallback array to always call hook safely
   const transactionsData = data?.content ?? []
 
-  const aiTransformed = transformToTransactionEntries(transactionsFromIdsGivenByAi)
+  const aiTransformed = transformToTransactionEntries(
+    transactionsFromIdsGivenByAi,
+  )
   const allTransformed = transformToTransactionEntries(transactionsData)
 
-  const { entries: AIEntries, isLoading: aiLoading } = useFetchEntries(aiTransformed)
-  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(allTransformed)
+  const { entries: AIEntries, isLoading: aiLoading } =
+    useFetchEntries(aiTransformed)
+  const { entries: allEntries, isLoading: allLoading } =
+    useFetchEntries(allTransformed)
 
   if (isError) {
     return (
@@ -78,93 +86,66 @@ export default function TransactionsPage() {
     <div className="px-4 sm:px-8 py-6 space-y-12">
       <h1 className="text-3xl mb-8 sm:mb-15">{t('transactions')}</h1>
       <div className="flex h-8 justify-between">
-        <div
-          className={`${
-            searchBarOpen ? 'w-[40%]' : 'w-36'
-          } transition-[width] duration-300 ease-in-out bg-white border-1 border-black/70 rounded-4xl flex items-center px-2`}
-        >
-          <input
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                sendQueryToAi.mutate(
-                  { query: aiSearchBarInputContent },
-                  {
-                    onSuccess(data) {
-                      sendIdsAndGetTransactions.mutate(data, {
-                        onSuccess(data) {
-                          if (data.length > 0) {
-                            setTransactionsFromIdsGivenByAi(data)
-                          } else {
-                            setTransactionsFromIdsGivenByAi([
-                              {
-                                amount: 0,
-                                category: '',
-                                date: 'null',
-                                description: 'ERROR',
-                                fromAccountId: 'null',
-                                ocrNumber: 'null',
-                                status: 'null',
-                                toAccountId: 'null',
-                                transactionId: 'null',
-                                type: 'INTERNAL_TRANSFER',
-                                userNote: 'null',
-                              },
-                            ])
-                          }
-                          setTimeout(() => {
-                            setHeightAiDiv('max-h-[2000px]')
-                          }, 200)
-                        },
-                      })
-                    },
-                  },
-                )
-                setAiSearchBarInputContent('')
-                setSearchBarOpen(false)
-              }
-              if (e.key === 'Escape') {
-                setAiSearchBarInputContent('')
-                setSearchBarOpen(false)
-              }
-            }}
-            onChange={(e) => setAiSearchBarInputContent(e.target.value)}
-            className="w-full bg-transparent outline-none p-1"
-            onClick={() => setSearchBarOpen(true)}
-            placeholder={
-              searchBarOpen ? t('whatDoYouWantToFindToday') : t('aiAssistant')
-            }
-            value={aiSearchBarInputContent}
-          />
-          <img src={searchicon} alt="Search" className=" " />
-        </div>
-        <div>
-          <AccountFilterDropdown
-            selectedAccount={selectedAccount}
-            setSelectedAccount={setSelectedAccount}
-          />
-          <CategoryFilterDropdown
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
-          <AmountFilterFields
-            onApply={(min, max) => {
-              setMinAmount(min)
-              setMaxAmount(max)
-              setPage(0)
-            }}
-          />
-          <button
-            onClick={() => {
-              setSelectedAccount(null)
-              setSelectedCategory(null)
-              setMinAmount('')
-              setMaxAmount('')
-              setPage(0)
-            }}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-1 rounded-4xl text-sm h-8"
+        <div className="flex flex-col">
+          <div
+            className={`${
+              searchBarOpen ? 'w-80' : 'w-56'
+            } transition-[width] duration-300 ease-in-out bg-white border-1 border-black/70 rounded-4xl flex items-center px-2`}
           >
-            Clear All Filters
-          </button>
+            <input
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  sendQueryToAi.mutate(
+                    { query: aiSearchBarInputContent },
+                    {
+                      onSuccess(data) {
+                        sendIdsAndGetTransactions.mutate(data, {
+                          onSuccess(data) {
+                            if (data.length > 0) {
+                              setTransactionsFromIdsGivenByAi(data)
+                            } else {
+                              setTransactionsFromIdsGivenByAi([
+                                {
+                                  amount: 0,
+                                  category: '',
+                                  date: 'null',
+                                  description: 'ERROR',
+                                  fromAccountId: 'null',
+                                  ocrNumber: 'null',
+                                  status: 'null',
+                                  toAccountId: 'null',
+                                  transactionId: 'null',
+                                  type: 'INTERNAL_TRANSFER',
+                                  userNote: 'null',
+                                },
+                              ])
+                            }
+                            setTimeout(() => {
+                              setHeightAiDiv('max-h-[2000px]')
+                            }, 200)
+                          },
+                        })
+                      },
+                    },
+                  )
+                  setAiSearchBarInputContent('')
+                  setSearchBarOpen(false)
+                }
+                if (e.key === 'Escape') {
+                  setAiSearchBarInputContent('')
+                  setSearchBarOpen(false)
+                }
+              }}
+              onChange={(e) => setAiSearchBarInputContent(e.target.value)}
+              className="w-full bg-transparent outline-none p-1"
+              onClick={() => setSearchBarOpen(true)}
+              placeholder={
+                searchBarOpen ? t('whatDoYouWantToFindToday') : t('aiAssistant')
+              }
+              value={aiSearchBarInputContent}
+            />
+            <img src={searchicon} alt="Search" className=" " />
+          </div>
         </div>
       </div>
 
@@ -213,8 +194,49 @@ export default function TransactionsPage() {
           )
         )}
       </div>
-      <div className="px-5 border-1 border-gray-100 shadow-sm p-1">
-        <h1 className="text-2xl mt-5 mb-3">{t('allTransactions')}</h1>
+      <div className="px-5 border-1 border-gray-100 shadow-sm">
+        <div className="flex mt-6 mb-4 justify-between my-2">
+          <div className="flex items-center">
+            <h1 className="text-2xl">{t('allTransactions')}</h1>
+          </div>
+          <div>
+            <div className="flex justify-right gap-2">
+              <AccountFilterDropdown
+                selectedAccount={selectedAccount}
+                setSelectedAccount={setSelectedAccount}
+              />
+              <CategoryFilterDropdown
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
+              <div>
+                <div className="relative">
+                  <button
+                    className="bg-white flex justify-between cursor-pointer px-4 py-1 rounded-4xl border-1 border-black transition-colors"
+                    onClick={() => setShowAmountFilter((v) => !v)}
+                  >
+                    <div className="flex items-center">
+                      {t('amountFilter')}
+                      <img src={filtericon} className="w-4 ml-4 h-4"></img>
+                    </div>
+                  </button>
+                  {showAmountFilter && (
+                    <div className="absolute left-1/2 -translate-x-1/2 flex justify-center mt-2 bg-white border shadow-sm rounded-xl shadow-lg p-4 min-w-30 z-10">
+                      <AmountFilterFields
+                        onApply={(min, max) => {
+                          setMinAmount(min)
+                          setMaxAmount(max)
+                          setPage(0)
+                          setShowAmountFilter(false)
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (

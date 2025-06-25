@@ -68,5 +68,11 @@
   "failedToCreateTransaction": "Misslyckades att skapa transaktion",
   "createdTransaction": "Transaktion skapad",
   "accountCreated": "account created",
-  "failedToCreateAccount": "NO ACCOUNT CREATED"
+  "failedToCreateAccount": "NO ACCOUNT CREATED",
+  "allCategories": "Alla kategorier",
+  "minAmount": "Min",
+  "maxAmount": "Max",
+  "search": "Sök",
+  "clear": "Rensa",
+  "amountFilter": "Filtrera belopp"
 }
