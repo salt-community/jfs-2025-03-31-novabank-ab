@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-react'
 import { useTranslation } from 'react-i18next'
+import { frontpagephone } from '@/assets/icons'
 
 export const Route = createFileRoute('/')({
   component: LandingPage,
@@ -57,7 +58,7 @@ function LandingPage() {
             </div>
             <div className="">
               <img
-                src="/PhonePlaceholder.png"
+                src={frontpagephone}
                 alt="Landing Page Illustration"
                 className="w-full animate-fade-in-up h-120 max-w-md mx-auto"
               />
