@@ -4,7 +4,10 @@ import com.example.backend.model.Transaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,4 +21,40 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
     Page<Transaction> findByFromAccount_IdOrToAccount_Id(UUID fromAccount, UUID toAccount, Pageable pageable);
 
     List<Transaction> findByIdIn(List<UUID> ids);
+
+    Page<Transaction> findByFromAccount_IdInOrToAccount_IdInAndAmountBetween(
+            List<UUID> fromIds,
+            List<UUID> toIds,
+            BigDecimal minAmount,
+            BigDecimal maxAmount,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT t FROM Transaction t
+    WHERE (t.fromAccount.id = :accountId OR t.toAccount.id = :accountId)
+      AND t.amount BETWEEN :minAmount AND :maxAmount
+      AND (:category IS NULL OR LOWER(t.category) = LOWER(:category))
+""")
+    Page<Transaction> findByAccountAndAmountBetweenAndOptionalCategory(
+            @Param("accountId") UUID accountId,
+            @Param("minAmount") BigDecimal minAmount,
+            @Param("maxAmount") BigDecimal maxAmount,
+            @Param("category") String category,
+            Pageable pageable
+    );
+
+    @Query("""
+    SELECT t FROM Transaction t
+    WHERE (t.fromAccount.id IN :accountIds OR t.toAccount.id IN :accountIds)
+      AND t.amount BETWEEN :minAmount AND :maxAmount
+      AND (:category IS NULL OR LOWER(t.category) = LOWER(:category))
+""")
+    Page<Transaction> findByAccountsAndAmountBetweenAndOptionalCategory(
+            @Param("accountIds") List<UUID> accountIds,
+            @Param("minAmount") BigDecimal minAmount,
+            @Param("maxAmount") BigDecimal maxAmount,
+            @Param("category") String category,
+            Pageable pageable
+    );
 }

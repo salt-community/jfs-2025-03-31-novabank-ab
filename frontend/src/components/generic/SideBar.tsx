@@ -16,6 +16,11 @@ import {
   yellowsettingsicon,
   stocksicon,
   pensionicon,
+  yellowloanicon,
+  loanicon,
+  mypagesicon,
+  arrowdownicon,
+  servicesicon
 } from '@/assets/icons'
 
 type Props = {
@@ -30,8 +35,8 @@ export function SideBar({ admin }: Props) {
   const isActive = (path: string) => location.pathname.startsWith(path)
 
   const userSideBar = (
-    <aside className="items-center hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
-      <a onClick={() => navigate({ to: '/' })}>
+    <aside className="items-left hidden md:flex fixed h-full bg-[#151515] text-white text-xs lg:text-md xl:text-lg p-4 justify-between flex-col w-[70px] lg:w-70 transition-all duration-300">
+      <a className="flex justify-center"onClick={() => navigate({ to: '/' })}>
         <img
           src={novabankicon}
           className="w-10 h-10 xl:h-20 xl:w-20 mb-15  hover:cursor-pointer"
@@ -54,63 +59,98 @@ export function SideBar({ admin }: Props) {
           <span className="hidden lg:inline">{t('user.dashboard')}</span>
         </a>
 
-        <a
-          onClick={() => navigate({ to: '/accounts' })}
-          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
-            isActive('/accounts')
-              ? 'text-[#FFB20F] hover:opacity-100 underline'
-              : ''
-          }`}
-        >
-          <img src={isActive('/accounts') ? yellowaccounticon : accounticon} />
-          <span className="hidden lg:inline">{t('user.accounts')}</span>
-        </a>
+        <details className="group">
+          <summary className="flex flex-row gap-8 items-center cursor-pointer select-none">
+            <img src={mypagesicon} className="w-6 h-6"></img>
+            <span className="font-semibold">{t('user.myPages')}</span>
+            <span className="flex-1"></span>
+            <img
+              className="w-8 h-8 transition-transform duration-200 group-open:rotate-180"
+              src={arrowdownicon}
+            ></img>
+          </summary>
+          <a
+            onClick={() => navigate({ to: '/accounts' })}
+            className={`flex flex-row my-4 gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+              isActive('/accounts')
+                ? 'text-[#FFB20F] hover:opacity-100 underline'
+                : ''
+            }`}
+          >
+            <img
+              src={isActive('/accounts') ? yellowaccounticon : accounticon}
+            />
+            <span className="hidden lg:inline">{t('user.accounts')}</span>
+          </a>
 
-        <a
-          onClick={() => navigate({ to: '/transactions' })}
-          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
-            isActive('/transactions')
-              ? 'text-[#FFB20F] hover:opacity-100 underline'
-              : ''
-          }`}
-        >
-          <img
-            src={
+          <a
+            onClick={() => navigate({ to: '/transactions' })}
+            className={`flex flex-row my-4 gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
               isActive('/transactions')
-                ? yellowtransactionicon
-                : transactionicon
-            }
-          />
-          <span className="hidden lg:inline"> {t('user.transactions')}</span>
-        </a>
+                ? 'text-[#FFB20F] hover:opacity-100 underline'
+                : ''
+            }`}
+          >
+            <img
+              src={
+                isActive('/transactions')
+                  ? yellowtransactionicon
+                  : transactionicon
+              }
+            />
+            <span className="hidden lg:inline"> {t('user.transactions')}</span>
+          </a>
 
-        <a
-          onClick={() => navigate({ to: '/transfer' })}
-          className={`flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
-            isActive('/transfer')
-              ? 'text-[#FFB20F] hover:opacity-100 underline'
-              : ''
-          }`}
-        >
-          <img
-            src={isActive('/transfer') ? yellowtransfericon : transfericon}
-          />
-          <span className="hidden lg:inline">{t('user.transfer')}</span>
-        </a>
+          <a
+            onClick={() => navigate({ to: '/transfer' })}
+            className={`flex flex-row my-4 gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+              isActive('/transfer')
+                ? 'text-[#FFB20F] hover:opacity-100 underline'
+                : ''
+            }`}
+          >
+            <img
+              src={isActive('/transfer') ? yellowtransfericon : transfericon}
+            />
+            <span className="hidden lg:inline">{t('user.transfer')}</span>
+          </a>
+        </details>
 
-        <a
-          className={`flex flex-row gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
-        >
-          <img src={stocksicon} />
-          <span className="hidden lg:inline">{t('user.stocks')}</span>
-        </a>
+        <details className="group">
+          <summary className="flex flex-row gap-8 items-center cursor-pointer select-none">
+            <img src={servicesicon} className="w-6 h-6"></img>
+            <span className="font-semibold">{t('user.services')}</span>
+            <span className="flex-1"></span>
+            <img
+              className="w-8 h-8 transition-transform duration-200 group-open:rotate-180"
+              src={arrowdownicon}
+            ></img>
+          </summary>
+          <a
+            onClick={() => navigate({ to: '/loans' })}
+            className={`flex flex-row my-4 gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70 ${
+              isActive('/loans')
+                ? 'text-[#FFB20F] hover:opacity-100 underline'
+                : ''
+            }`}
+          >
+            <img src={isActive('/loans') ? yellowloanicon : loanicon} />
+            <span className="hidden lg:inline">{t('loans')}</span>
+          </a>
+          <a
+            className={`flex flex-row my-4 gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
+          >
+            <img src={stocksicon} />
+            <span className="hidden lg:inline">{t('user.stocks')}</span>
+          </a>
 
-        <a
-          className={`flex flex-row gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
-        >
-          <img src={pensionicon} />
-          <span className="hidden lg:inline">{t('user.pension')}</span>
-        </a>
+          <a
+            className={`flex flex-row my-4 gap-8 hover:cursor-not-allowed underline-offset-5 opacity-50`}
+          >
+            <img src={pensionicon} />
+            <span className="hidden lg:inline">{t('user.pension')}</span>
+          </a>
+        </details>
 
         <a
           onClick={() => navigate({ to: '/settings' })}
@@ -126,7 +166,7 @@ export function SideBar({ admin }: Props) {
           <span className="hidden lg:inline">{t('user.settings')}</span>
         </a>
       </div>
-      <div className=" mb-10 w-[122px]  ">
+      <div className="">
         <SignOutButton>
           <a className="flex flex-row gap-8 hover:cursor-pointer underline-offset-5 opacity-100 hover:opacity-70">
             <img src={signouticon} />

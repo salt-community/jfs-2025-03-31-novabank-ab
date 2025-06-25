@@ -20,7 +20,7 @@ export default function AccountFilterDropdown({
     return <div className="p-4 text-red-500">{t('failedToLoadAccounts')}</div>
 
   return (
-    <div className="w-40">
+    <div className="w-40 ">
       <select
         id="accountFilter"
         value={selectedAccount?.accountNumber || ''}
@@ -31,7 +31,7 @@ export default function AccountFilterDropdown({
           setSelectedAccount(selected || null)
         }}
         className={`
-          border-1 border-black cursor-pointer rounded-4xl px-2 w-full  
+          border-r-10 border-transparent outline outline-black cursor-pointer rounded-4xl px-2 w-full  
           text-left bg-white h-8
         `}
       >
