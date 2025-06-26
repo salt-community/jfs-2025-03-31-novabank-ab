@@ -3,8 +3,8 @@ import {
   getApplications,
   approveApplication,
   rejectApplication,
+  sendRegisterApplication,
 } from '@/api/application'
-import { sendRegisterApplication } from '@/api/application'
 import { useAuth } from '@clerk/clerk-react'
 import type {
   ApplicantsResponse,
@@ -66,15 +66,11 @@ export function useRejectApplication() {
 }
 
 export function useRegisterApplication() {
-  return useMutation<void, Error, ApplicationRequestDto, unknown>({
-    mutationFn: async (dto) => {
-      return sendRegisterApplication(dto)
-    },
+  const qc = useQueryClient()
+  return useMutation<void, Error, ApplicationRequestDto>({
+    mutationFn: sendRegisterApplication,
     onSuccess: () => {
-      alert('Application submitted successfully!')
-    },
-    onError: (error) => {
-      alert('Error submitting application: ' + error.message)
+      qc.invalidateQueries({ queryKey: ['applications'] })
     },
   })
 }

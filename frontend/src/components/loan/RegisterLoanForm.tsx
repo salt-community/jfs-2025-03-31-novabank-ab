@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify' // + lagt till för toasts
+import { useTranslation } from 'react-i18next' // + lagt till för i18n
 import { useCreateLoanApplication } from '@/hooks/useLoans'
 import { useAccounts } from '@/hooks/useAccounts'
 import type { LoanApplicationRequestDto } from '@/types/loan/LoanApplicationRequestDto'
-import { Feedback } from '../register/Feedback'
 import { LabeledInput } from '../register/LabeledInput'
 import Spinner from '../generic/Spinner'
 
 export function RequestLoanForm() {
-  const { mutate, isPending, isError, isSuccess, error } =
-    useCreateLoanApplication()
+  const { t } = useTranslation('loans')
+  const { mutate, isPending } = useCreateLoanApplication()
   const { data: accounts = [], isLoading, isError: loadError } = useAccounts()
 
   const [form, setForm] = useState<LoanApplicationRequestDto>({
@@ -18,27 +19,31 @@ export function RequestLoanForm() {
     requestedMonths: 12,
   })
 
+  const resetForm = () =>
+    setForm({ accountId: '', amount: 0, note: '', requestedMonths: 12 })
+
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
-    setForm(
-      (f) =>
-        ({
-          ...f,
-          [name]: type === 'number' ? parseFloat(value) || 0 : value,
-        }) as Pick<LoanApplicationRequestDto, keyof LoanApplicationRequestDto>,
-    )
-  }
-
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setForm((f) => ({
       ...f,
-      accountId: e.target.value,
+      [name]: type === 'number' ? parseFloat(value) || 0 : value,
     }))
   }
 
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, accountId: e.target.value }))
+
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    mutate(form)
+    mutate(form, {
+      onSuccess: () => {
+        toast.success(t('loanApplicationSubmitted'))
+        resetForm()
+      },
+      onError: () => {
+        toast.error(t('failedToSubmitLoanApplication'))
+      },
+    })
   }
 
   if (isLoading) return <Spinner />
@@ -51,9 +56,12 @@ export function RequestLoanForm() {
 
   return (
     <div className="max-w-md p-6">
-      <h2 className="text-3xl mb-8">Loan application</h2>
-      <form onSubmit={onSubmit} className="space-y-5 max-w-3xl shadow-sm px-4 sm:px-8 py-6 space-y-12">
-        {/* Account */}
+      <h2 className="text-3xl mb-8">{t('applyForLoanPromise')}</h2>
+
+      <form
+        onSubmit={onSubmit}
+        className="space-y-12 max-w-3xl shadow-sm px-4 sm:px-8 py-6"
+      >
         <div>
           <label htmlFor="accountId" className="block text-sm font-medium mb-1">
             Account
@@ -67,7 +75,7 @@ export function RequestLoanForm() {
             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
           >
             <option value="" disabled>
-              — select account —
+              — {t('selectAnAccount')} —
             </option>
             {accounts.map((acc) => (
               <option key={acc.accountNumber} value={acc.accountNumber}>
@@ -77,17 +85,15 @@ export function RequestLoanForm() {
           </select>
         </div>
 
-        {/* Amount */}
         <LabeledInput
           id="amount"
-          label="Amount"
+          label={t('amount')}
           type="number"
           value={form.amount.toString()}
           onChange={onInputChange}
           required
         />
 
-        {/* Requested term */}
         <LabeledInput
           id="requestedMonths"
           label="Repayment Term (months)"
@@ -97,10 +103,9 @@ export function RequestLoanForm() {
           required
         />
 
-        {/* Note */}
         <LabeledInput
           id="note"
-          label="Note"
+          label={t('notes')}
           type="text"
           value={form.note}
           onChange={onInputChange}
@@ -109,18 +114,12 @@ export function RequestLoanForm() {
         <button
           type="submit"
           disabled={isPending}
-          className="w-full py-2 px-3 bg-[#FFB20F] text-black rounded-lg hover:opacity-70 transition disabled:opacity-50 hover:cursor-pointer"
+          className="w-full py-2 px-3 bg-[#FFB20F] text-black rounded-lg transition
+                     disabled:opacity-50 hover:bg-[#F5A700]"
         >
-          {isPending ? 'Submitting…' : 'Send Application'}
+          {isPending ? `${t('processing')}…` : t('submit')}
         </button>
       </form>
-
-      <Feedback
-        isError={isError}
-        errorMsg={error?.message}
-        isSuccess={isSuccess}
-        successMsg="Application submitted!"
-      />
     </div>
   )
 }
