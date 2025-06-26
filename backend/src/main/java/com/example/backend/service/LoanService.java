@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.accountDto.request.BalanceUpdateRequestDto;
 import com.example.backend.dto.loanDto.request.RiksbankRateRequestDto;
 import com.example.backend.dto.loanDto.response.RiksbankRateResponseDto;
 import com.example.backend.exception.custom.ApplicationNotFoundException;
@@ -28,6 +29,7 @@ import java.util.UUID;
 @Service
 public class LoanService {
 
+    private final AccountService accountService;
     private final LoanRepository loanRepository;
     private final LoanApplicationRepository applicationRepository;
 
@@ -41,9 +43,12 @@ public class LoanService {
     public LoanService(LoanRepository loanRepository,
                        LoanApplicationRepository applicationRepository,
                        @Value("${RIKSBANK_API_URL}") String apiUrl,
-                       @Value("${RIKSBANK_API_KEY}") String apiKey, LoanApplicationRepository loanApplicationRepository) {
+                       @Value("${RIKSBANK_API_KEY}") String apiKey,
+                       LoanApplicationRepository loanApplicationRepository,
+                       AccountService accountService) {
         this.loanRepository = loanRepository;
         this.applicationRepository = applicationRepository;
+        this.accountService = accountService;
         this.restTemplate = new RestTemplate();
         this.API_URL = apiUrl;
         this.API_KEY = apiKey;
@@ -96,6 +101,13 @@ public class LoanService {
         loan.setStartDate(LocalDate.now());
         loan.setDueDate(LocalDate.now().plusMonths(application.getRepaymentMonths()));
         loan.setStatus(LoanStatus.ACTIVE);
+
+        accountService.updateBalance(
+                application.getUser().getAccounts().getFirst().getId(),
+                application.getUser().getId(),
+                application.getRequestedAmount(),
+                BalanceUpdateRequestDto.UpdateType.DEPOSIT
+        );
 
         return loanRepository.save(loan);
     }

@@ -1,11 +1,13 @@
 import React from 'react'
 import type { Application } from '@/types/Application'
+import type { UseMutationResult } from '@tanstack/react-query'
+import { Badge } from '@/components/ui/badge'
 
 interface Props {
   app: Application
   onClose: () => void
-  onApprove: (id: string) => void
-  onReject: (id: string) => void
+  approve: UseMutationResult<void, Error, string, unknown>
+  reject: UseMutationResult<void, Error, string, unknown>
   isLoadingApprove?: boolean
   isLoadingReject?: boolean
 }
@@ -13,12 +15,33 @@ interface Props {
 export const ApplicationModal: React.FC<Props> = ({
   app,
   onClose,
-  onApprove,
-  onReject,
+  approve,
+  reject,
   isLoadingApprove = false,
   isLoadingReject = false,
 }) => {
   const isFinal = app.status === 'APPROVED' || app.status === 'DISAPPROVED'
+
+  function handleStatusChange(appId: string, type: 'reject' | 'approve') {
+    switch (type) {
+      case 'approve':
+        approve.mutate(appId)
+        break
+
+      case 'reject':
+        reject.mutate(appId)
+        break
+
+      default:
+        break
+    }
+  }
+
+  function handleClose() {
+    approve.reset()
+    reject.reset()
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-40 backdrop-blur-sm">
@@ -56,29 +79,42 @@ export const ApplicationModal: React.FC<Props> = ({
               <p>
                 <strong>Phone Number:</strong> {app.phoneNumber}
               </p>
+              {app.status === 'APPROVED' && (
+                <Badge className="bg-green-500 text-white">Approved</Badge>
+              )}
+              {app.status === 'DISAPPROVED' && (
+                <Badge className="bg-red-500 text-white">Rejected</Badge>
+              )}
             </div>
           )}
         </div>
 
+        {approve.isSuccess && (
+          <Badge className="bg-green-500 text-white">Approved</Badge>
+        )}
+        {reject.isSuccess && (
+          <Badge className="bg-red-500 text-white">Rejected</Badge>
+        )}
+
         <div className="mt-6 flex justify-end space-x-3">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:opacity-70 transition hover:cursor-pointer disabled:opacity-50"
           >
             Close
           </button>
 
-          {!isFinal && (
+          {!isFinal && !approve.isSuccess && !reject.isSuccess && (
             <>
               <button
-                onClick={() => onReject(app.id)}
+                onClick={() => handleStatusChange(app.id, 'reject')}
                 disabled={isLoadingReject}
                 className="px-4 py-2 bg-red-500 text-white rounded hover:opacity-70 transition hover:cursor-pointer disabled:opacity-50"
               >
                 Dissapprove
               </button>
               <button
-                onClick={() => onApprove(app.id)}
+                onClick={() => handleStatusChange(app.id, 'approve')}
                 disabled={isLoadingApprove}
                 className="px-4 py-2 bg-green-500 text-white rounded hover:opacity-70 transition hover:cursor-pointer disabled:opacity-50"
               >

@@ -3,10 +3,13 @@ import {
   getApplications,
   approveApplication,
   rejectApplication,
+  sendRegisterApplication,
 } from '@/api/application'
-import { sendRegisterApplication } from '@/api/application'
 import { useAuth } from '@clerk/clerk-react'
-import type { ApplicantsResponse, ApplicationRequestDto } from '@/types/ApplicationRequestDto'
+import type {
+  ApplicantsResponse,
+  ApplicationRequestDto,
+} from '@/types/ApplicationRequestDto'
 
 export function useApplications() {
   const { getToken } = useAuth()
@@ -32,7 +35,10 @@ export function useApproveApplication() {
       return approveApplication(token, id)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['applications'] })
+      queryClient.invalidateQueries({
+        queryKey: ['applications'],
+        refetchType: 'active',
+      })
     },
     onError: (error) => {
       alert('Error approving application:' + error)
@@ -60,15 +66,11 @@ export function useRejectApplication() {
 }
 
 export function useRegisterApplication() {
-  return useMutation<void, Error, ApplicationRequestDto, unknown>({
-    mutationFn: async (dto) => {
-      return sendRegisterApplication(dto)
-    },
+  const qc = useQueryClient()
+  return useMutation<void, Error, ApplicationRequestDto>({
+    mutationFn: sendRegisterApplication,
     onSuccess: () => {
-      alert('Application submitted successfully!')
-    },
-    onError: (error) => {
-      alert('Error submitting application: ' + error.message)
+      qc.invalidateQueries({ queryKey: ['applications'] })
     },
   })
 }

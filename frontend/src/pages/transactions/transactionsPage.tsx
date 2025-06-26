@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
   useGetAllTransactions,
@@ -8,13 +8,12 @@ import {
 import Spinner from '@/components/generic/Spinner'
 import type { Account, Transaction } from '@/types'
 import useFetchEntries from '@/hooks/useFetchEntries'
-import { searchicon } from '@/assets/icons'
+import { searchicon, filtericon } from '@/assets/icons'
 import { transformToTransactionEntries } from '../../lib/utils'
 import { TransactionItem } from '@/components/generic/transaction-items/Transactiontem'
 import AccountFilterDropdown from '@/components/transaction/AccountfilterDropdown'
 import AmountFilterFields from '@/components/transaction/AmountFilterFields'
 import CategoryFilterDropdown from '@/components/transaction/CategoryFilterDropdown'
-import { filtericon } from '@/assets/icons'
 
 export default function TransactionsPage() {
   const { t } = useTranslation('accounts')
@@ -53,15 +52,56 @@ export default function TransactionsPage() {
 
   const transactionsData = data?.content ?? []
 
+  const filteredTransactions = selectedAccount
+    ? transactionsData.filter(
+        (tx) =>
+          tx.fromAccountId === selectedAccount.id ||
+          tx.toAccountId === selectedAccount.id,
+      )
+    : transactionsData
+
   const aiTransformed = transformToTransactionEntries(
     transactionsFromIdsGivenByAi,
   )
-  const allTransformed = transformToTransactionEntries(transactionsData)
+  const allTransformed = transformToTransactionEntries(
+    filteredTransactions,
+    selectedAccount?.id,
+  )
 
   const { entries: AIEntries, isLoading: aiLoading } =
     useFetchEntries(aiTransformed)
-  const { entries: allEntries, isLoading: allLoading } =
-    useFetchEntries(allTransformed)
+  const { entries: allEntries, isLoading: allLoading } = useFetchEntries(
+    allTransformed,
+    selectedAccount?.id,
+  )
+
+  const searchBarRef = useRef<HTMLDivElement>(null)
+  const amountFilterRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node
+      if (
+        window.innerWidth > 768 &&
+        searchBarRef.current &&
+        !searchBarRef.current.contains(target)
+      ) {
+        setSearchBarOpen(false)
+      }
+
+      if (
+        amountFilterRef.current &&
+        !amountFilterRef.current.contains(target)
+      ) {
+        setShowAmountFilter(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   if (isError) {
     return (
@@ -71,7 +111,6 @@ export default function TransactionsPage() {
 
   if (isLoading || aiLoading || allLoading) return <Spinner />
 
-  // Safe pagination fallbacks
   const currentPage = data?.number ?? 0
   const totalPages = data?.totalPages ?? 1
   const isFirstPage = data?.first ?? true
@@ -82,14 +121,13 @@ export default function TransactionsPage() {
       <h1 className="text-3xl mb-8 sm:mb-15">{t('transactions')}</h1>
 
       {/* AI Search Bar */}
-      <div className="flex justify-start mb-6">
+      <div className="flex justify-start mb-2">
         <div
+          ref={searchBarRef}
           className={`
             bg-white border border-black/70 rounded-4xl flex items-center px-3
-            w-full
-            sm:max-w-none
-            transition-[width] duration-300 ease-in-out
-            ${searchBarOpen ? 'w-full' : 'sm:w-56'}
+            sm:max-w-none transition-[width] duration-300 ease-in-out
+            ${searchBarOpen ? 'w-full' : 'w-40'}
           `}
         >
           <input
@@ -146,6 +184,51 @@ export default function TransactionsPage() {
           />
           <img src={searchicon} alt="Search" className="h-5 w-5" />
         </div>
+        {searchBarOpen && (
+          <button
+            onClick={() => {
+              sendQueryToAi.mutate(
+                { query: aiSearchBarInputContent },
+                {
+                  onSuccess(data) {
+                    sendIdsAndGetTransactions.mutate(data, {
+                      onSuccess(data) {
+                        if (data.length > 0) {
+                          setTransactionsFromIdsGivenByAi(data)
+                        } else {
+                          setTransactionsFromIdsGivenByAi([
+                            {
+                              amount: 0,
+                              category: '',
+                              date: 'null',
+                              description: 'ERROR',
+                              fromAccountId: 'null',
+                              ocrNumber: 'null',
+                              status: 'null',
+                              toAccountId: 'null',
+                              transactionId: 'null',
+                              type: 'INTERNAL_TRANSFER',
+                              userNote: 'null',
+                            },
+                          ])
+                        }
+                        setTimeout(() => {
+                          setHeightAiDiv('max-h-[2000px]')
+                        }, 200)
+                      },
+                    })
+                  },
+                },
+              )
+              setAiSearchBarInputContent('')
+              setSearchBarOpen(false)
+            }}
+            type="submit"
+            className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-fit text-black shadow-md py-2 px-3 rounded-md transition-colors block md:hidden ml-3"
+          >
+            {t('search')}
+          </button>
+        )}
       </div>
 
       {/* AI Search Results */}
@@ -167,8 +250,8 @@ export default function TransactionsPage() {
                 {t('noTransactionsFound')}
               </div>
             ) : (
-              AIEntries.map((tx) => (
-                <TransactionItem key={tx.transactionId} transaction={tx} />
+              AIEntries.map((tx, index) => (
+                <TransactionItem key={index} transaction={tx} />
               ))
             )}
 
@@ -190,7 +273,7 @@ export default function TransactionsPage() {
       )}
 
       {/* Filters */}
-      <div className="flex flex-col items-center sm:flex-row gap-2 text-sm mb-10">
+      <div className="flex flex-col sm:flex-row gap-2 text-sm mb-10">
         <AccountFilterDropdown
           selectedAccount={selectedAccount}
           setSelectedAccount={setSelectedAccount}
@@ -199,12 +282,11 @@ export default function TransactionsPage() {
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
         />
-        <div className="relative w-40">
+        <div className="relative w-40" ref={amountFilterRef}>
           <button
             className={`
-                  outline outline-black cursor-pointer rounded-4xl px-3  w-full  
-                  text-left h-8 w-full
-                `}
+              outline outline-black cursor-pointer rounded-4xl px-3 text-left h-8 w-full
+            `}
             onClick={() => setShowAmountFilter((v) => !v)}
           >
             <div className="flex justify-between items-center">
@@ -233,13 +315,12 @@ export default function TransactionsPage() {
 
       <div className="shadow-md p-4">
         <h1 className="text-2xl">{t('allTransactions')}</h1>
-        {/* Transactions List */}
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
-          allEntries.map((tx) => (
-            <TransactionItem key={tx.transactionId} transaction={tx} />
-          ))
+          allEntries.map((tx, index) => {
+            return <TransactionItem key={index} transaction={tx} />
+          })
         )}
       </div>
 
