@@ -20,7 +20,7 @@ export default function AccountFilterDropdown({
     return <div className="p-4 text-red-500">{t('failedToLoadAccounts')}</div>
 
   return (
-    <div className="w-40 ">
+    <div className="w-40">
       <select
         id="accountFilter"
         value={selectedAccount?.accountNumber || ''}
@@ -38,9 +38,9 @@ export default function AccountFilterDropdown({
         <option value="" className="text-gray-400 text-sm">
           {t('allAccounts')}
         </option>
-        {bankAccounts.map((account) => (
+        {bankAccounts.map((account, index) => (
           <option
-            key={account.accountNumber}
+            key={index}
             value={account.accountNumber}
             className="text-black"
           >

@@ -40,8 +40,8 @@ export function TransactionList({ transactions }: TransactionListProps) {
         {latestThree.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
-          latestThree.map((tx) => (
-            <TransactionItem key={tx.transactionId} transaction={tx} />
+          latestThree.map((tx, index) => (
+            <TransactionItem key={index} transaction={tx} />
           ))
         )}
       </div>

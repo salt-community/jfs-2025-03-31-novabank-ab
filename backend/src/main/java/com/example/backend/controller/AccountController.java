@@ -10,6 +10,7 @@ import com.example.backend.dto.accountDto.response.NicknameResponseDto;
 import com.example.backend.model.Account;
 import com.example.backend.model.Currency;
 import com.example.backend.model.User;
+import com.example.backend.model.enums.CurrencyAbbrevation;
 import com.example.backend.service.AccountService;
 import com.example.backend.service.CurrencyService;
 import com.example.backend.service.UserService;

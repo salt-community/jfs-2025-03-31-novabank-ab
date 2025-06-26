@@ -31,6 +31,7 @@ export default function RecipientsModal({
 
   const dialogRef = useRef<HTMLDialogElement | null>(null)
   const [newRec, setNewRec] = useState<string | null>('')
+
   const [accNoType, setAccNoTypeLocal] = useState('')
   const [errors, setErrors] = useState<{
     accNoTypeError?: string
@@ -64,22 +65,18 @@ export default function RecipientsModal({
 
     switch (type) {
       case 'Plusgiro':
-        if (hasHyphen) {
-          return /^\d{2,7}-\d{1}$/.test(asciiValue)
-        } else {
-          return /^\d{2,8}$/.test(cleaned)
-        }
+        return hasHyphen
+          ? /^\d{2,7}-\d{1}$/.test(asciiValue)
+          : /^\d{2,8}$/.test(cleaned)
       case 'Bankgiro':
-        if (hasHyphen) {
-          return /^\d{3,4}-\d{4}$/.test(asciiValue)
-        } else {
-          return /^\d{7,8}$/.test(cleaned)
-        }
+        return hasHyphen
+          ? /^\d{3,4}-\d{4}$/.test(asciiValue)
+          : /^\d{7,8}$/.test(cleaned)
       case t('otherAccount'): {
-        if (hasHyphen) return false
+        const isOurBank = /^1337-\d{9}$/.test(cleaned)
         const isPlainNumber = /^\d{4,30}$/.test(cleaned)
         const isSwedishIBAN = /^SE\d{10}$/.test(upper)
-        return isPlainNumber || isSwedishIBAN
+        return isPlainNumber || isSwedishIBAN || isOurBank
       }
       default:
         return false
@@ -129,21 +126,7 @@ export default function RecipientsModal({
         }
       }}
     >
-      <div
-        className="
-          modal-box
-          max-h-[90vh]
-          bg-white
-          rounded-lg
-          shadow-lg
-          relative
-          sm:px-8
-          sm:py-8
-          max-w-full sm:max-w-lg 
-          text-[#141414]
-          overflow-auto
-        "
-      >
+      <div className="modal-box max-h-[90vh] bg-white rounded-lg shadow-lg relative sm:px-8 sm:py-8 max-w-full sm:max-w-lg text-[#141414] overflow-auto">
         <button
           type="button"
           onClick={handleCancel}
@@ -153,11 +136,7 @@ export default function RecipientsModal({
           &times;
         </button>
 
-        <Tabs
-          value={viewMode}
-          onValueChange={setViewMode}
-          defaultValue={savedRecipients}
-        >
+        <Tabs value={viewMode} onValueChange={setViewMode}>
           <TabsList className="mx-auto mt-3">
             <TabsTrigger value={savedRecipients} className="w-1/2">
               {t('savedRecipients')}
@@ -201,34 +180,30 @@ export default function RecipientsModal({
 
             <TabsContent value={newRecipient}>
               <div className="space-y-5 mt-10 sm:mt-0">
+                {/* Account Number Input */}
                 <div className="relative w-full">
                   <input
                     id="newAccount"
                     value={newRec || ''}
                     type="text"
                     onChange={(e) => setNewRec(e.target.value)}
-                    className={`peer hover:cursor-pointer text-black rounded-md shadow-md
-                          p-4 w-full text-left bg-white outline focus:outline-2
-                          ${
-                            errors.recipientError
-                              ? 'outline-red-600 focus:outline-red-600'
-                              : 'outline-gray-200 focus:outline-black'
-                          }`}
+                    className={`peer hover:cursor-pointer text-black rounded-md shadow-md p-4 w-full text-left bg-white outline focus:outline-2 ${
+                      errors.recipientError
+                        ? 'outline-red-600 focus:outline-red-600'
+                        : 'outline-gray-200 focus:outline-black'
+                    }`}
                   />
                   <label
                     htmlFor="newAccount"
-                    className={`absolute hover:cursor-pointer left-4 px-1 transition-all duration-200 bg-white rounded-lg
-                          ${
-                            newRec
-                              ? '-top-2.5 text-sm text-black font-semibold'
-                              : 'top-4 text-base text-gray-400 bg-transparent'
-                          }
-                          ${
-                            errors.recipientError
-                              ? 'peer-focus:text-red-600'
-                              : 'peer-focus:text-black'
-                          }
-                          peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:bg-white`}
+                    className={`absolute hover:cursor-pointer left-4 px-1 transition-all duration-200 bg-white rounded-lg ${
+                      newRec
+                        ? '-top-2.5 text-sm text-black font-semibold'
+                        : 'top-4 text-base text-gray-400 bg-transparent'
+                    } ${
+                      errors.recipientError
+                        ? 'peer-focus:text-red-600'
+                        : 'peer-focus:text-black'
+                    } peer-focus:-top-2.5 peer-focus:text-sm peer-focus:font-semibold peer-focus:bg-white`}
                   >
                     {t('accountNumber')}
                   </label>
@@ -239,17 +214,18 @@ export default function RecipientsModal({
                   )}
                 </div>
 
-                <div className="relative w-full">
+                {/* Account Number Type Select */}
+                <div className="relative w-full flex items-center">
                   <select
                     id="accNoType"
                     name="accNoTypes"
                     value={accNoType || ''}
                     onChange={(e) => setAccNoTypeLocal(e.target.value)}
-                    className={`peer hover:cursor-pointer rounded-md shadow-md p-4 pb-5 w-full outline outline-gray-200
-                                focus:outline-2 focus:outline-black text-left bg-white
-                                ${errors.accNoTypeError ? 'outline-red-600 focus:outline-red-600' : ''}
-                                border-r-15 border-transparent
-                                ${accNoType ? 'text-black' : 'text-gray-400'}`}
+                    className={`appearance-none peer hover:cursor-pointer rounded-md shadow-md p-4 pr-10 w-full outline outline-gray-200
+      focus:outline-2 focus:outline-black bg-white text-left
+      ${errors.accNoTypeError ? 'outline-red-600 focus:outline-red-600' : ''}
+      ${accNoType ? 'text-black' : 'text-gray-400'}`}
+                    style={{ paddingRight: '2.5rem' }} // Keep space for arrow
                   >
                     <option value="" className="text-gray-400">
                       {t('selectAnAccountNumberType')}
@@ -264,35 +240,54 @@ export default function RecipientsModal({
                       {t('otherAccount')}
                     </option>
                   </select>
+
+                  {/* Label */}
                   <label
                     htmlFor="accNoType"
-                    className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg
-                ${
-                  accNoType
-                    ? '-top-2.5 font-semibold text-sm text-black'
-                    : 'top-4 text-base text-gray-400 bg-transparent pr-20'
-                }
-                ${
-                  errors.accNoTypeError
-                    ? 'peer-focus:text-red-600'
-                    : 'peer-focus:text-black'
-                }
-                peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black peer-focus:bg-white`}
+                    className={`absolute left-4 px-1 transition-all duration-200 bg-white pointer-events-none rounded-lg ${
+                      accNoType
+                        ? '-top-2.5 font-semibold text-sm text-black'
+                        : 'top-4 text-base text-gray-400 bg-transparent pr-20'
+                    } ${
+                      errors.accNoTypeError
+                        ? 'peer-focus:text-red-600'
+                        : 'peer-focus:text-black'
+                    } peer-focus:-top-2.5 peer-focus:font-semibold peer-focus:px-1 peer-focus:text-sm peer-focus:text-black peer-focus:bg-white`}
                   >
                     {t('accountNumberType')}
                   </label>
+
+                  {/* Custom dropdown arrow */}
+                  <div className="pointer-events-none absolute right-3 flex items-center h-full text-gray-500">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Error message below select */}
                   {errors.accNoTypeError && (
-                    <p className="text-red-600 text-sm mt-1">
+                    <p className="text-red-600 text-sm mt-1 absolute bottom-[-1.25rem] left-0">
                       {errors.accNoTypeError}
                     </p>
                   )}
                 </div>
 
+                {/* Submit Button */}
                 <div className="flex justify-end mt-4">
                   <button
                     type="button"
                     onClick={() => handleRecipientSubmit(recipientClient)}
-                    className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 rounded-md transition-colors"
+                    className="bg-[#FFB20F] hover:bg-[#F5A700] hover:cursor-pointer w-full text-black shadow-md py-2 px-3 mt-4 rounded-md transition-colors"
                   >
                     {t('done')}
                   </button>
