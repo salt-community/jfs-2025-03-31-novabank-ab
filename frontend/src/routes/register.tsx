@@ -23,10 +23,13 @@ function RouteComponent() {
 function RedirectOnSignIn() {
   const { user } = useUser()
   const navigate = useNavigate()
+  const isAdmin = user?.publicMetadata?.role === 'admin'
 
   useEffect(() => {
-    if (user) {
+    if (!isAdmin) {
       navigate({ to: '/dashboard' })
+    } else if (isAdmin) {
+      navigate({ to: '/admin/dashboard' })
     }
   }, [user, navigate])
 
