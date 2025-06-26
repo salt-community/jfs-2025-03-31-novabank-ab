@@ -14,5 +14,7 @@
   "direction": "Riktning",
   "incoming": "Ingående",
   "outgoing": "Utgående",
-  "close": "Stäng"
+  "close": "Stäng",
+  "details": "Mer",
+  "cancel": "Avbryt"
 }
