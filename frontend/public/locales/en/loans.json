@@ -1,4 +1,7 @@
 {
+  "loanApplicationSubmitted": "Loan application sent",
+  "failedToSubmitLoanApplication": "Could not send loan application",
+
   "loanTitle": "Mortgage loans – everything about home loans and mortgage interest rates",
   "individualInterest": "Individual interest rate that you can influence yourself",
   "personalAdvice": "Personal advice and service",
