@@ -272,49 +272,50 @@ export default function TransactionsPage() {
         )
       )}
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-2 text-sm mb-10">
-        <AccountFilterDropdown
-          selectedAccount={selectedAccount}
-          setSelectedAccount={setSelectedAccount}
-        />
-        <CategoryFilterDropdown
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
-        <div className="relative w-40" ref={amountFilterRef}>
-          <button
-            className={`
+      <div className="shadow-md mt-10 p-4">
+        <div className='flex flex-col sm:flex-row flex sm:justify-between'>
+          <h1 className="text-2xl">{t('allTransactions')}</h1>
+          {/* Filters */}
+          <div className="flex flex-col mt-5 sm:flex-row gap-2 text-sm mb-5 sm:mb-10 sm:mt-0">
+            <AccountFilterDropdown
+              selectedAccount={selectedAccount}
+              setSelectedAccount={setSelectedAccount}
+            />
+            <CategoryFilterDropdown
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
+            <div className="relative w-40" ref={amountFilterRef}>
+              <button
+                className={`
               outline outline-black cursor-pointer rounded-4xl px-3 text-left h-8 w-full
             `}
-            onClick={() => setShowAmountFilter((v) => !v)}
-          >
-            <div className="flex justify-between items-center">
-              {t('amountFilter')}
-              <img
-                src={filtericon}
-                className="w-4 ml-4 h-4"
-                alt="filter icon"
-              />
+                onClick={() => setShowAmountFilter((v) => !v)}
+              >
+                <div className="flex justify-between items-center">
+                  {t('amountFilter')}
+                  <img
+                    src={filtericon}
+                    className="w-4 ml-4 h-4"
+                    alt="filter icon"
+                  />
+                </div>
+              </button>
+              {showAmountFilter && (
+                <div className="absolute left-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border shadow-sm rounded-xl shadow-lg p-4 min-w-[200px] max-w-xs w-full z-10">
+                  <AmountFilterFields
+                    onApply={(min, max) => {
+                      setMinAmount(min)
+                      setMaxAmount(max)
+                      setPage(0)
+                      setShowAmountFilter(false)
+                    }}
+                  />
+                </div>
+              )}
             </div>
-          </button>
-          {showAmountFilter && (
-            <div className="absolute left-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 bg-white border shadow-sm rounded-xl shadow-lg p-4 min-w-[200px] max-w-xs w-full z-10">
-              <AmountFilterFields
-                onApply={(min, max) => {
-                  setMinAmount(min)
-                  setMaxAmount(max)
-                  setPage(0)
-                  setShowAmountFilter(false)
-                }}
-              />
-            </div>
-          )}
+          </div>
         </div>
-      </div>
-
-      <div className="shadow-md p-4">
-        <h1 className="text-2xl">{t('allTransactions')}</h1>
         {allEntries.length === 0 ? (
           <div className="p-4 text-gray-500">{t('noTransactionsFound')}</div>
         ) : (
