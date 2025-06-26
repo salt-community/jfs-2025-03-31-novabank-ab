@@ -8,7 +8,7 @@
   "smsNotifications": "SMS-notiser",
   "emailNotifications": "E-postnotiser",
   "cardTransactionNotifications": "Korttransaktionsnotiser",
-  "ATMWithdrawalsNotifications": "Bankomatuttagsnotiser",
+  "atmWithdrawalNotifications": "Bankomatuttagsnotiser",
   "depositNotifications": "Insättningsnotiser",
   "phoneNumber": "Telefonnummer",
   "language": "Språk",
