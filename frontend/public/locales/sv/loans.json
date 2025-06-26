@@ -13,5 +13,10 @@
   "loanContextInfo2": "Du hittar också information om våra boräntor, hur bolån fungerar och vårt gröna bolån.",
   "loanContextInfo3": "Behöver du råd eller få svar på dina frågor om bolån så finns vår kundservice på telefon och kan hjälpa dig alla vardagar mellan klockan 8 och 18.",
   "threeMonthsAgoInfo": "Bolån 3 månader snittränta (maj)",
-  "threeMonthsListedRate": "Bolån 3 månader listränta"
+  "threeMonthsListedRate": "Bolån 3 månader listränta",
+  "selectAnAccount": "Välj ett konto",
+  "amount": "Mängd",
+  "notes": "Anteckningar",
+  "account": "Konto",
+  "term": "Amorteringstid (månader)"
 }

@@ -64,7 +64,7 @@ export function RequestLoanForm() {
       >
         <div>
           <label htmlFor="accountId" className="block text-sm font-medium mb-1">
-            Account
+            {t('account')}
           </label>
           <select
             id="accountId"
@@ -96,7 +96,7 @@ export function RequestLoanForm() {
 
         <LabeledInput
           id="requestedMonths"
-          label="Repayment Term (months)"
+          label={t('term')}
           type="number"
           value={form.requestedMonths.toString()}
           onChange={onInputChange}

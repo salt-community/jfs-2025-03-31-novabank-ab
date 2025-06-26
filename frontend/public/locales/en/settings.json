@@ -7,7 +7,7 @@
   "smsNotifications": "SMS notifications",
   "emailNotifications": "Email notifications",
   "cardTransactionNotifications": "Card transaction notifications",
-  "ATMWithdrawalsNotifications": "ATM withdrawal notifications",
+  "atmWithdrawalNotifications": "ATM withdrawal notifications",
   "depositNotifications": "Deposit notifications",
   "phoneNumber": "Phone number",
   "language": "Language",
