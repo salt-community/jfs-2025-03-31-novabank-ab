@@ -1,4 +1,7 @@
 {
+  "loanApplicationSubmitted": "Låneansökan skickad",
+  "failedToSubmitLoanApplication": "Kunde inte skicka låneansökan",
+
   "loanTitle": "Bolån – allt om bostadslån och boräntor",
   "individualInterest": "Individuell ränta som du själv kan påverka",
   "personalAdvice": "Personlig rådgivning och service",

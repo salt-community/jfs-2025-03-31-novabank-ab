@@ -1,4 +1,15 @@
 {
+  "userApplicationSubmitted": "Ansökan skickad",
+  "failedToSubmitUserApplication": "Kunde inte skicka ansökan",
+  "applyForNovaBank": "Ansök till Nova Bank",
+  "firstName": "Förnamn",
+  "lastName": "Efternamn",
+  "email": "E-post",
+  "personalNumber": "Personnummer",
+
+  "failedToApproveApplication": "Kunde inte godkänna ansökan",
+  "failedToRejectApplication": "Kunde inte avslå ansökan",
+
   "myBankAccounts": "Mina bankkonton",
   "openNewAccount": "Öppna nytt konto",
   "selectAccountType": "Välj kontotyp",
