@@ -1,0 +1,108 @@
+@startuml
+
+skinparam TitleFontSize 40
+
+
+
+!$backend_color = "#c1ffb8"
+!$frontend_color = "#b8fbff"
+!$domain_color = "#f8ffb8"
+!$db_color = "#eab8ff"
+!$clerk_color = "#8a8a8a"
+!$external_color = "#fab4d9"
+
+title NovaBank - Architecture
+
+actor "End User" as User
+actor "Admin" as Admin
+
+rectangle "Frontend" as Browser $frontend_color {
+    component "React App\n(Vite, React 19, TS)" as ReactApp
+    component "Data Fetching\n(@tanstack/react-query)" as TanstackRQ
+    component "Router\n(@tanstack/react-router)" as TanstackRouter
+    component "Clerk (@clerk/clerk-react)" as ClerkSDK
+}
+
+rectangle "Identity & Auth" as Auth $clerk_color {
+  component "Clerk" as Clerk
+}
+
+rectangle "Backend (Spring Boot 3.5 / Java 21)" as Backend $backend_color {
+  component "API Controllers\n(REST)" as Controllers
+  component "Security\n(Resource Server JWT)" as Security
+  component "Services\n(Request Processing Logic)" as Services
+  component "OpenAPI UI\n(Swagger-UI)" as OpenAPI
+  component "Clerk Integration\n(ClerkService)" as ClerkSvc
+  component "AI/Gemini Integration\n(GeminiService)" as AiSvc
+  component "Spring Data JPA\n(Repositories)" as JPA
+  database "PostgreSQL\n(Supabase)" as DB $db_color
+
+  package "Domain (Data Model)" as Domain $domain_color{
+    component domain_user as "Users & Roles"
+    component domain_accounts as "Accounts & Balances"
+    component domain_transactions as "Transactions (Scheduled and Direct)"
+    component domain_loans_applications as "Loans & Applications"
+    component domain_settings_notifications as "Notifications & Settings"
+  }
+}
+
+rectangle "External Services" as External $external_color {
+  component "Gemini API" as GeminiApi
+}
+
+' Relationships
+Browser -[hidden]right- Backend
+ReactApp -right-> TanstackRouter: uses
+ReactApp -right-> TanstackRQ: uses
+TanstackRouter -[hidden]down- TanstackRQ
+
+User -down-> ReactApp : Uses via Browser
+Admin -down-> ReactApp : Uses via Browser
+
+ReactApp --> ClerkSDK : Sign-in/Sign-up,\nJWT retrieval
+ClerkSDK -down-> Clerk : Hosted Auth & JWT Issuer
+
+TanstackRQ -right-> Controllers : REST over HTTPS\n(Authorization: Bearer <JWT>)
+
+Controllers -left-> Security : Validate JWT via Clerk Issuer
+Security -left-> Clerk : Validate JWT (issuer, keys)
+
+Controllers --> Services : Delegates actions
+Services --> JPA : Persistence operations
+JPA --> DB : CRUD domain entities
+
+
+Services -left-> AiSvc : AI-driven features
+AiSvc --> GeminiApi : API calls with API Key
+
+Services --> ClerkSvc : User role management
+ClerkSvc -left-> Clerk : Create/update user, roles
+
+OpenAPI --> Controllers
+
+' Domain Relations
+JPA .right. Domain
+
+' Domain layout
+domain_user -[hidden]down- domain_accounts
+domain_accounts -[hidden]down- domain_transactions
+domain_transactions -[hidden]down- domain_loans_applications
+domain_loans_applications -[hidden]down- domain_settings_notifications
+
+' Notes and Flows
+note bottom of Clerk
+  - Acts as JWT issuer
+  - Frontend obtains session/JWT
+  - Backend validates JWT (issuer-uri)
+  - Public metadata holds role (e.g., user/admin)
+end note
+
+note right of Controllers
+  - REST endpoints for accounts, transactions, loans, users, notifications
+end note
+
+note bottom of External
+  - Gemini API: AI assistant/search features
+end note
+
+@enduml
